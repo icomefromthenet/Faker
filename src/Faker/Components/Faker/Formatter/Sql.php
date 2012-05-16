@@ -277,7 +277,12 @@ class Sql implements FormatterInterface
         
         
         $column_values = array_map(function($value){
-              return var_export($value,true);
+            
+            if(is_string($value)) {
+                $value = "'" . str_replace("'","''",$value) . "'";
+            }
+              
+            return $value;
         }, array_values($values));
         
         if(count($column_keys) !== count($column_values)) {

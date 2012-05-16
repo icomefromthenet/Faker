@@ -30,13 +30,13 @@ class AlphaNumeric extends Type
 
     public function toXml()
     {
-       $str =  '<datatype name="'.$this->getId().'"></datatype>' . PHP_EOL;
+       $str =  '<datatype name="'.$this->getId().'">' . PHP_EOL;
        
        foreach($this->options as $name => $option) {
             $str .= '<option name="'.$name.'" value="'.$option.'" />' . PHP_EOL;
        }
        
-       return $str;
+       return $str . '</datatype>' . PHP_EOL;
     }
     
     //  -------------------------------------------------------------------------

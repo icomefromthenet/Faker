@@ -37,7 +37,7 @@ class Range extends Type
             $this->last_value = $min;
         }
         
-        return $this->last_value;
+        return ($this->last_value +0);
     }
 
     

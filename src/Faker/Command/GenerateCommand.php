@@ -77,8 +77,6 @@ class GenerateCommand extends Command
 
         # start execution of the generate
         $composite->generate(1,array());
-        
-        parent::execute($input,$output);
     }
 
 
