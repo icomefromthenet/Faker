@@ -31,7 +31,8 @@ class Writer
     {
 
         #setup new config entity
-        $entity = new Entity($config);
+        $entity = new Entity();
+        $entity->merge($config);
 
         #write to file
         $file = <<<EOF

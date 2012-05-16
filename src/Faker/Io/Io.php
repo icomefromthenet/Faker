@@ -116,7 +116,7 @@ class Io implements IoInterface
       */
     public function isEmpty($path ='')
     {
-        $path = $this->path($folders);
+        $path = $this->path($path);
         $empty = true;
         
         # exist and has permissions.        
@@ -124,8 +124,10 @@ class Io implements IoInterface
             throw new DirectoryNotExistException("Dir at $path not exist or not have correct permissions");            
         }
         
+        $files = scandir($path);
+        
         # files are found set to false.
-        if (($files = scandir($path) && (count($files) > 2))) {
+        if (((count($files) > 2))) {
             $empty = false;
         }
         

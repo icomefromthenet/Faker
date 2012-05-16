@@ -1,12 +1,11 @@
 <?php
 namespace Faker\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-
-use Faker\Io\Io as BaseIo;
-use Faker\Command\Base\Command;
+use Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Output\OutputInterface,
+    Symfony\Component\Console\Input\InputArgument,
+    Faker\Io\Io as BaseIo,
+    Faker\Command\Base\Command;
 
 class InitProjectCommand extends Command
 {
@@ -25,17 +24,17 @@ class InitProjectCommand extends Command
         $project_folder = new BaseIo($this->getApplication()->getProject()->getPath()->get());
         $skelton_folder = new BaseIo($skelton);
 
-        
         # ask for confirmation if dir is not empty
         if($project_folder->isEmpty() === false) {
             # as for confirmation
             $dialog = $this->getHelperSet()->get('dialog');
-            if (!$dialog->askConfirmation($output, '<question>Folder is not empty continue?</question>', false) === false) {
+            if (!$dialog->askConfirmation($output, '<question>Folder is not empty continue? [y|n]</question>', false)) {
                 return;
             }
         }
         
         $this->getApplication()->getProject()->build($project_folder,$skelton_folder,$output);
+       
     }
 
 

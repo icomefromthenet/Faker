@@ -1,56 +1,15 @@
 <?php
 namespace Faker\Command\Base;
 
-use Symfony\Component\Console\Command\Command as BaseCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Faker\Project;
-use Faker\Exception as FakerException;
+use Symfony\Component\Console\Command\Command as BaseCommand,
+    Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Output\OutputInterface,
+    Symfony\Component\Console\Input\InputOption,
+    Faker\Project,
+    Faker\Exception as FakerException;
 
 class Command extends BaseCommand
 {
-
-    /**
-     * Returns the Basic header.
-     *
-     * @return string the header string
-     */
-    public function getHeader()
-    {
-       return <<<EOF
-         _______    ___       __  ___  _______ .______           _______  _______ .__   __. 
-        |   ____|  /   \     |  |/  / |   ____||   _  \         /  _____||   ____||  \ |  | 
-        |  |__    /  ^  \    |  '  /  |  |__   |  |_)  |       |  |  __  |  |__   |   \|  | 
-        |   __|  /  /_\  \   |    <   |   __|  |      /        |  | |_ | |   __|  |  . `  | 
-        |  |    /  _____  \  |  .  \  |  |____ |  |\  \----.   |  |__| | |  |____ |  |\   | 
-        |__|   /__/     \__\ |__|\__\ |_______|| _| `._____|    \______| |_______||__| \__|
-
-EOF;
-
-}
-
-
-
-  /**
-     * Returns the Basic footer.
-     *
-     * @return string the footer string
-     */
-      
-  public function getFooter()
-    {
-        return <<<EOF
-
-<info>
-Finished.  
-</info>
-
-
-EOF;
-
-}
-
 
     /**
      * Configures the current command.
@@ -127,23 +86,6 @@ EOF;
 
         }
         
-        # Write Header
-
-        $output->writeLn($this->getHeader());
-
-    }
-
-
-    //  -------------------------------------------------------------------------
-    
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        
-        # Footer
-
-        $output->writeLn($this->getFooter());
-
-   
     }
     
 }

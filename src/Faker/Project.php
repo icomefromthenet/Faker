@@ -139,6 +139,13 @@ class Project extends Pimple
 
             }
             
+          #make sources folder
+          $sources_path = $folder->getBase() . DIRECTORY_SEPARATOR . 'sources';
+          if (mkdir($dump_path,$mode) === TRUE) {
+               $output->writeln('<info>Created Sources Folder</info>');
+
+          }
+            
 
     }
 
@@ -276,7 +283,7 @@ class Project extends Pimple
       */
     public function getConfigName()
     {
-        return $this['config_name'];
+        return  \Faker\Components\Config\Loader::DEFAULTNAME . \Faker\Components\Config\Loader::EXTENSION;
     }
 
 
@@ -352,6 +359,11 @@ class Project extends Pimple
         
         #check for extension
         if(is_dir($path . DIRECTORY_SEPARATOR . 'extension') === false) {
+            return false;
+        }
+        
+         #check for sources
+        if(is_dir($path . DIRECTORY_SEPARATOR . 'sources') === false) {
             return false;
         }
 

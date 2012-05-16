@@ -1,18 +1,18 @@
 <?php
 namespace Faker\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Helper\DialogHelper;
-use Symfony\Component\Console\Output\OutputInterface;
-use Faker\Command\Base\Command;
-use Faker\Components\Faker\DebugOutputter;
-use Faker\Components\Faker\ProgressBarOutputter;
-use Faker\Parser\FileFactory;
-use Faker\Parser\ParseOptions;
-use Zend\ProgressBar\ProgressBar;
-use Zend\ProgressBar\Adapter\Console as ZendConsoleAdapter;
-use Faker\Command\Base\FakerCommand;
+use Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Helper\DialogHelper,
+    Symfony\Component\Console\Output\OutputInterface,
+    Faker\Command\Base\Command,
+    Faker\Components\Faker\DebugOutputter,
+    Faker\Components\Faker\ProgressBarOutputter,
+    Faker\Parser\FileFactory,
+    Faker\Parser\ParseOptions,
+    Faker\Command\Base\FakerCommand,
+    Zend\ProgressBar\ProgressBar,
+    Zend\ProgressBar\Adapter\Console as ZendConsoleAdapter;
 
 class GenerateCommand extends Command
 {
@@ -37,7 +37,7 @@ class GenerateCommand extends Command
         
         $source_io = $project['source_io'];
         if($source_io->exists($schema_file) === false) {
-            throw new \RuntimeException("File $file not found under project/source");   
+            throw new \RuntimeException("File $schema_file not found under /source");   
         }
         
         $file =  $source_io->load($schema_file,'',true);          

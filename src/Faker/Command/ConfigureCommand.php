@@ -1,15 +1,14 @@
 <?php
 namespace Faker\Command;
 
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\DialogHelper;
-
-use Faker\Command\Base\Command;
-use Faker\Components\Config\Io as ConfigIo;
-use Faker\Components\Config\Manager;
-use Faker\Io\FileExistException;
+use Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Output\OutputInterface,
+    Symfony\Component\Console\Helper\DialogHelper,
+    Faker\Command\Base\Command,
+    Faker\Components\Config\Io as ConfigIo,
+    Faker\Components\Config\Manager,
+    Faker\Io\FileExistException;
 
 class ConfigureCommand extends Command
 {
@@ -31,25 +30,25 @@ class ConfigureCommand extends Command
         $answers =  array();
 
         # Ask for the database type
-        $answers['db_type'] =  strtolower($dialog->ask($output,'Which Database does this belong? [mysql|mssql|oracle|posgsql]: ','mysql'));
+        $answers['db_type'] =  strtolower($dialog->ask($output,'<question>Which Database does this belong? [mysql|mssql|oracle|posgsql]: </question>','mysql'));
 
         # apply format of the Doctrine DBAL
         $answers['db_type'] = ($answers['db_type'] !== 'oci8') ? $answers['db_type'] = 'pdo_' . $answers['db_type'] : $answers['db_type'];        
         
         # Ask Database Schema Name
-        $answers['db_schema'] =  $dialog->ask($output,'What is the Database schema name? : ');
+        $answers['db_schema'] =  $dialog->ask($output,'<question>What is the Database schema name? : </question>');
 
         #Database user Name
-        $answers['db_user'] =  $dialog->ask($output,'What is the Database user name? : ');
+        $answers['db_user'] =  $dialog->ask($output,'<question>What is the Database user name? : </question>');
 
         #Database user Password
-        $answers['db_password'] =  $dialog->ask($output,'What is the Database users password? : ');
+        $answers['db_password'] =  $dialog->ask($output,'<question>What is the Database users password? : </question>');
 
         #Database host
-        $answers['db_host'] =  $dialog->ask($output,'What is the Database host name? [localhost] : ','localhost');
+        $answers['db_host'] =  $dialog->ask($output,'<question>What is the Database host name? [localhost] : </question>','localhost');
 
         #Database port
-        $answers['db_port'] =  $dialog->ask($output,'What is the Database port? [3306] : ',3306);
+        $answers['db_port'] =  $dialog->ask($output,'<question>What is the Database port? [3306] :</question> ',3306);
 
         # Store answers for the execute method
         $this->answers = $answers;
@@ -74,7 +73,7 @@ class ConfigureCommand extends Command
         try {
 
             #Write config file to the project
-            $manager->getWriter()->write($this->answers,'config');
+            $manager->getWriter()->write($this->answers,$project->getConfigName());
 
         }
         catch(FileExistException $e) {
@@ -84,7 +83,7 @@ class ConfigureCommand extends Command
 
             if($answer) {
                 #Write config file to the project
-                $manager->getWriter()->write($this->answers,$this->alias,true);
+                $manager->getWriter()->write($this->answers,$project->getConfigName(),true);
 
             }
 

@@ -1,28 +1,18 @@
 <?php
 namespace Faker\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Helper\DialogHelper;
-use Symfony\Component\Console\Output\OutputInterface;
-use Faker\Command\Base\Command;
+use Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Helper\DialogHelper,
+    Symfony\Component\Console\Output\OutputInterface,
+    Faker\Io\FileExistException,
+    Faker\Command\Base\Command;
 
 class AnalyseCommand extends Command
 {
 
 
-    /**
-     * Interacts with the user.
-     *
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
-     */
-    protected function interact(InputInterface $input, OutputInterface $output)
-    {
-        
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output)
     {
            # get the di container 
            $project  = $this->getApplication()->getProject();
@@ -44,18 +34,33 @@ class AnalyseCommand extends Command
            #run the analyser
            $schema = $schema_analyser->analyse($project['database'],$faker_manager->getCompositeBuilder());
     
-           # write the scheam file to the project folder
-           $faker_io = $faker_manager->getIo();
+           # write the scheam file to the project folder (sources)
+           $sources_io = $project['source_io'];
            
            $formatted_xml = $schema_analyser->format($schema->toXml());
            
-           # write the file to the hdd
-           if($faker_io->write($out_file_name,'',$formatted_xml,$overrite = FALSE)) {
            
-              $output->writeLn('Writing Schema to file <info>dump/'. $out_file_name .'</info>');
-           }
+         try {
 
-           parent::execute($input,$output);             
+            #Write config file to the project
+           $sources_io->write($out_file_name,'',$formatted_xml,$overrite = false);
+           $output->writeLn('<comment>++</comment> <info>sources/'. $out_file_name .'</info>');
+           
+
+         }
+         catch(FileExistException $e) {
+            #ask if they want to overrite
+           $dialog = new DialogHelper();
+           $answer = $dialog->askConfirmation($output,"<question>$out_file_name already exists do you want to Overrite? [y|n]</question>:",false);
+
+            if($answer) {
+                #Write config file to the project
+                  $sources_io->write($out_file_name,'',$formatted_xml,$overrite = true);
+                  $output->writeLn('<comment>++</comment> <info>sources/'. $out_file_name .'</info>');
+           
+            }
+
+         }
     }
 
 

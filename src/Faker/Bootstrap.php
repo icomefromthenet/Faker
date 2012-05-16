@@ -135,7 +135,7 @@ set_exception_handler(array($project['error'],'exceptionHandler'));
 //
 //--------------------------------------------------------------
 
-$project['config_name'] = 'config';
+
 $project['database'] = $project->share(function($project){
 
     $config_manager = $project->getConfigManager();
@@ -145,7 +145,7 @@ $project['database'] = $project->share(function($project){
     }
 
     # if config name not set that we use the default
-    $config_name = ($project->getConfigName() === null) ?  'config.php' : $project->getConfigName(). '.php';
+    $config_name = $project->getConfigName();
 
         # is the dsn set
     if(isset($project['dsn_command']) === true) {
@@ -164,7 +164,7 @@ $project['database'] = $project->share(function($project){
         }
 
         # load the config file
-        $entity = $config_manager->getLoader()->load($config_name,new Faker\Components\Config\Entity());
+        $entity = $config_manager->getLoader()->load($config_name,new \Faker\Components\Config\Entity());
 
         $connectionParams = array(
         'dbname' => $entity->getSchema(),
