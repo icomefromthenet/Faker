@@ -96,7 +96,7 @@ EOF;
         }
 
         # path exists does it have a project
-        if(Project::detect((string)$path) === false && $this->getName() !== 'project') {
+        if(Project::detect((string)$path) === false && $this->getName() !== 'init') {
             throw new \RuntimeException('Project Folder does not contain the correct folder heirarchy');
         }
 

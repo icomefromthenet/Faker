@@ -3,6 +3,7 @@ namespace Faker\Tests\Faker\Type;
 
 use Faker\Components\Faker\Type\ConstantNumber,
     Faker\Components\Faker\Type\ConstantString,
+    Faker\Components\Faker\Utilities,
     Faker\Tests\Base\AbstractProject;
 
 

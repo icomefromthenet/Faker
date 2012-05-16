@@ -15,7 +15,7 @@ a2enmod php5
 /etc/init.d/apache2 restart
 
 # Install Extras
-apt-get -q -y install php5-curl php-pear php5-xdebug curl php5-mcrypt
+apt-get -q -y install php5-curl php-pear php5-xdebug curl php5-mcrypt php5-sqlite
 #php5-gd php5-gmp php5-imap php5-ldap php5-mhash php5-ming php5-odbc php5-pspell php5-snmp php5-sybase php5-tidy libwww-perl imagemagick
 
 exit 0;

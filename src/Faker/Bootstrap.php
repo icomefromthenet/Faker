@@ -1,13 +1,10 @@
 <?php
 namespace Faker;
 
-use Faker\Command\Base\Application;
-use Faker\Project;
-use Faker\Path;
-use Faker\Bootstrap\Log as BootLog;
-use Faker\Bootstrap\Error as BootError;
-use Faker\Bootstrap\Database as BootDatabase;
-use Faker\Autoload;
+use Faker\Command\Base\Application,
+    Faker\Project,
+    Faker\Path,
+    Faker\Autoload;
 
 //---------------------------------------------------------------
 // Setup Global Error Levels
@@ -25,8 +22,8 @@ ini_set('display_errors', 1);
 //--------------------------------------------------------------
 
 
-define('COREPATH',   __DIR__.'/..'     .DIRECTORY_SEPARATOR);
-define('VENDORPATH', __DIR__.'/Vendor' .DIRECTORY_SEPARATOR);
+define('COREPATH',   __DIR__. DIRECTORY_SEPARATOR . '..'     . DIRECTORY_SEPARATOR);
+define('VENDORPATH', __DIR__. DIRECTORY_SEPARATOR . 'Vendor' . DIRECTORY_SEPARATOR);
 
 
 //------------------------------------------------------------------------------
@@ -34,8 +31,8 @@ define('VENDORPATH', __DIR__.'/Vendor' .DIRECTORY_SEPARATOR);
 //
 //------------------------------------------------------------------------------
 
-require_once VENDORPATH .'Symfony' .DIRECTORY_SEPARATOR. 'Component' .DIRECTORY_SEPARATOR. 'ClassLoader' .DIRECTORY_SEPARATOR.'UniversalClassLoader.php';
-require_once COREPATH .'Faker' .DIRECTORY_SEPARATOR. 'Autoload.php';
+require_once VENDORPATH .'Symfony' . DIRECTORY_SEPARATOR . 'Component' . DIRECTORY_SEPARATOR . 'ClassLoader' . DIRECTORY_SEPARATOR .'UniversalClassLoader.php';
+require_once COREPATH   .'Faker'   . DIRECTORY_SEPARATOR . 'Autoload.php';
 
 $symfony_auto_loader = new Autoload();
 $symfony_auto_loader->registernamespaces(

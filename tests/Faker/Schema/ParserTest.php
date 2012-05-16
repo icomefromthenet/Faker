@@ -471,7 +471,7 @@ class ParserTest extends AbstractProjectWithDb
     //  -------------------------------------------------------------------------
     # Tests Schema Parser on Analyser Ouput
     
-    public function testParserUsinhAnalyserOutput()
+    public function testParserUsingAnalyserOutput()
     {
         $project = $this->getProject();
         

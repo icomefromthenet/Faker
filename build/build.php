@@ -1,4 +1,4 @@
-#!/opt/lampp/bin/php
+#!/usr/bin/env php
 <?php
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -383,12 +383,11 @@ $parse_countries->setCode(function(InputInterface $input, ConsoleOutputInterface
 // Run the App
 //--------------------------------------------------------------------
 
-$build_command = new Command('build');
+$build_command = new Command('make');
 $build_command->setDescription('Parse all date setup database and make pear release');
 $build_command->setCode(function(InputInterface $input, ConsoleOutputInterface $output) use ($project){
 
     $project->getConsole()->find('database')->run($input,$output);
-    
     $project->getConsole()->find('cities')->run($input,$output);
     $project->getConsole()->find('names')->run($input,$output);
     $project->getConsole()->find('countries')->run($input,$output);

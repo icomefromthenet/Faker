@@ -8,8 +8,8 @@ class AbstractProjectWithDb extends AbstractProject
     
     public function buildDb()
     {
-        exec('/opt/lampp/bin/mysql -u root -pvagrant < '.__DIR__ .'/sakila-schema.sql');  
-        exec('/opt/lampp/bin/mysql -u root -pvagrant < '.__DIR__ .'/sakila-data.sql');  
+        exec('mysql -u root -pvagrant < '.__DIR__ .'/sakila-schema.sql');  
+        exec('mysql -u root -pvagrant < '.__DIR__ .'/sakila-data.sql');  
     }
     
     //  -------------------------------------------------------------------------

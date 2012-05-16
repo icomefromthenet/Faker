@@ -2,6 +2,7 @@
 namespace Faker\Tests\Faker\Type;
 
 use Faker\Components\Faker\Type\Country,
+    Faker\Components\Faker\Utilities,
     Faker\Tests\Base\AbstractProject;
 
 class CountryTest extends AbstractProject
@@ -64,7 +65,7 @@ class CountryTest extends AbstractProject
         $id = 'table_two';
         $project = $this->getProject();
        
-        $utilities = new Faker\Components\Faker\Utilities($project);
+        $utilities = new Utilities($project);
         
         
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')

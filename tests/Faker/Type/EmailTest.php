@@ -1,7 +1,8 @@
 <?php
 namespace Faker\Tests\Faker\Type;
 
-use Faker\Components\Faker\Type\Email
+use Faker\Components\Faker\Type\Email,
+    Faker\Components\Faker\Utilities,
     Faker\Tests\Base\AbstractProject;    
 
 class EmailTest extends AbstractProject
@@ -92,7 +93,7 @@ class EmailTest extends AbstractProject
         $id = 'table_two';
         $project = $this->getProject();
        
-        $utilities = new Faker\Components\Faker\Utilities($project);
+        $utilities = new Utilities($project);
         
         
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')

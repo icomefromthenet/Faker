@@ -22,9 +22,9 @@ class AbstractProject extends PHPUnit_Framework_TestCase
     public function __construct()
     {
         # remove Faker project directory
-        $path = __DIR__ . '/../' . $this->faker_dir;
+        $path = '/var/tmp/' . $this->faker_dir;
 
-        self::recursiveRemoveDirectory($path);
+        self::recursiveRemoveDirectory($path,true);
     }
 
 
@@ -44,9 +44,9 @@ class AbstractProject extends PHPUnit_Framework_TestCase
     {
 
         #remove Faker project directory
-        $path = __DIR__ . '/../' . $this->faker_dir;
+        $path = '/var/tmp/' . $this->faker_dir;
 
-        self::recursiveRemoveDirectory($path);
+        self::recursiveRemoveDirectory($path,true);
 
     }
 
@@ -57,7 +57,7 @@ class AbstractProject extends PHPUnit_Framework_TestCase
         # but for testing its a global variable
         global $project;
 
-        $path = $project->getPath()->parse((string)__DIR__.'/../myproject');
+        $path = $project->getPath()->parse((string)'/var/tmp/'.$this->faker_dir);
        
         $project['loader']->setExtensionNamespace(
                'Faker\\Components\\Extension' , $project->getPath()->get()
@@ -88,20 +88,10 @@ class AbstractProject extends PHPUnit_Framework_TestCase
 
     public function createProject(Project $project,Io $skelton_folder)
     {
-
-
-        $path = __DIR__.'/../'.$this->faker_dir;
-
         # Setup new project folder since our build method does not
-        mkdir($path);
-
-        $project_folder = new Io($path);
-
-
+        mkdir($project->getPath()->get());
+        $project_folder = new Io($project->getPath()->get());
         $project->build($project_folder,$skelton_folder,new NullOutput());
-
-
-
     }
 
 
@@ -116,7 +106,7 @@ class AbstractProject extends PHPUnit_Framework_TestCase
       *  @access public
       *  @source http://lixlpixel.org/recursive_function/php/recursive_directory_delete/
       */
-    public static function recursiveRemoveDirectory($directory, $empty=FALSE)
+    public static function recursiveRemoveDirectory($directory, $empty = false)
     {
             // if the path has a slash at the end we remove it here
             if(substr($directory,-1) == '/') {
@@ -126,12 +116,12 @@ class AbstractProject extends PHPUnit_Framework_TestCase
             // if the path is not valid or is not a directory ...
             if(!file_exists($directory) || !is_dir($directory)) {
                     // ... we return false and exit the function
-                    return FALSE;
+                    return false;
 
             // ... if the path is not readable
             } elseif(!is_readable($directory)) {
                     // ... we return false and exit the function
-                    return FALSE;
+                    return false;
 
             // ... else if the path is readable
             } else {
@@ -150,7 +140,7 @@ class AbstractProject extends PHPUnit_Framework_TestCase
                                     // if the new path is a directory
                                     if(is_dir($path)) {
                                             // we call this function with the new path
-                                            self::recursiveRemoveDirectory($path);
+                                            self::recursiveRemoveDirectory($path,$empty);
 
                                     // if the new path is a file
                                     } else{
@@ -163,15 +153,15 @@ class AbstractProject extends PHPUnit_Framework_TestCase
                     closedir($handle);
 
                     // if the option to empty is not set to true
-                    if($empty == FALSE) {
+                    if($empty == true) {
                             // try to delete the now empty directory
                             if(!rmdir($directory)) {
                                     // return false if not possible
-                                    return FALSE;
+                                    return false;
                             }
                     }
                     // return success
-                    return TRUE;
+                    return true;
             }
     }
 
@@ -179,7 +169,7 @@ class AbstractProject extends PHPUnit_Framework_TestCase
 
     protected function getMockedPath()
     {
-        return new Path(__DIR__.'/../myproject');
+        return new Path('/var/tmp/'.$this->faker_dir);
 
     }
 
@@ -197,36 +187,7 @@ class AbstractProject extends PHPUnit_Framework_TestCase
             );
     }
 
-    protected function createMockFakers()
-    {
-        $path = $this->getMockedPath();
-
-        $faker_path = $path->get() .
-                        DIRECTORY_SEPARATOR .
-                        'Faker' .
-                        DIRECTORY_SEPARATOR .
-                        'default';
-
-        if(is_dir($Faker_path) === false) {
-            throw new RuntimeException('Schema folder is missing can not create test Fakers');
-        }
-
-        # create the directories
-
-        $Fakers = array(
-            '2012_01_02_22_33_33_faker.php',
-            '2012_01_03_22_33_33_faker.php',
-            '2012_01_04_22_33_33_faker.php',
-            '2012_01_05_22_33_33_faker.php',
-            'schema.php',
-            'test_data.php'
-        );
-
-        foreach($fakers as $mig) {
-              touch($faker_path . DIRECTORY_SEPARATOR .$mig);
-        }
-
-    }
+   
 
     //  -------------------------------------------------------------------------
     # Get Mock OuputInterface
@@ -257,19 +218,5 @@ class AbstractProject extends PHPUnit_Framework_TestCase
     
     }
     
-    //  -------------------------------------------------------------------------
-
-    public function getMockCollection()
-    {
-        $log    = $this->getMockLog();
-        $io     = new \Faker\Components\Faker\Io($this->getMockedPath()->get());
-        $latest = null;
-        $event  = new EventDispatcher();
-        $output = $this->getMockOuput();
-
-        return new Collection($output,$log,$io,$event,$latest);
-    }
-
-
 }
 /* End of File */

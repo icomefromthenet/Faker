@@ -101,6 +101,17 @@ class Phpunit implements FormatterInterface
         return $this->column_map;
     }
     
+     /**
+      *  Set the column map
+      *
+      *  @access public
+      *  @param mixed[] $map
+      */
+    public function setColumnMap($map)
+    {
+        $this->column_map = $map;
+    }
+    
     /**
       *  Process a column with the map 
       */

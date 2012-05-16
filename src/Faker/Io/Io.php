@@ -106,6 +106,31 @@ class Io implements IoInterface
         }
     }
 
+    //----------------------------------------------------------------------
+
+    /**
+      *  Check if dir is empty of files
+      *
+      *  @param string $path to add to default
+      *  @return boolean true if dir is empty false otherwise
+      */
+    public function isEmpty($path ='')
+    {
+        $path = $this->path($folders);
+        $empty = true;
+        
+        # exist and has permissions.        
+        if(is_dir($path) === false) {
+            throw new DirectoryNotExistException("Dir at $path not exist or not have correct permissions");            
+        }
+        
+        # files are found set to false.
+        if (($files = scandir($path) && (count($files) > 2))) {
+            $empty = false;
+        }
+        
+        return $empty;
+    }
 
     //----------------------------------------------------------------------
 

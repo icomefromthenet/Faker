@@ -1,20 +1,21 @@
-#!/opt/lampp/bin/php
+#!/usr/bin/env php
 <?php
-use Faker\Project;
-use Faker\Command\Application;
-use Faker\Command\GenerateCommand;
-use Faker\Command\AnalyseCommand;
-use Faker\Command\ConfigureCommand
+namespace Faker;
 
+use Faker\Project,
+    Faker\Path,
+    Faker\Command\Application,
+    Faker\Command\GenerateCommand,
+    Faker\Command\AnalyseCommand,
+    Faker\Command\ConfigureCommand,
+    Faker\Command\InitProjectCommand;
 
 if(strpos('@PHP-BIN@', '@PHP-BIN@') === 0) {
-    //not a pear install run normally
-
-  require __DIR__ .'/../src/Faker/Bootstrap.php';
-
+    // stand-alone version is running
+  require __DIR__ . DIRECTORY_SEPARATOR .'..' DIRECTORY_SEPARATOR . 'src'. DIRECTORY_SEPARATOR .'Faker'. DIRECTORY_SEPARATOR .'Bootstrap.php';
 }
 else {
-   require '@PEAR-DIR@/Faker/Bootstrap.php';
+   require '@PEAR-DIR@'. DIRECTORY_SEPARATOR .'Faker'. DIRECTORY_SEPARATOR .'Bootstrap.php';
 }
 
 //---------------------------------------------------------------------
@@ -24,10 +25,10 @@ else {
 
 if(strpos('@PHP-BIN@', '@PHP-BIN@') === 0) {
     //not a pear install run normally
-  $project['data_path'] = new \Faker\Path(__DIR__ .'/../data');
+  $project['data_path'] = new Path(__DIR__ . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'data');
 }
 else {
-   $project['data_path'] = new \Faker\Path('@PEAR-DATA@');
+   $project['data_path'] = new Path('@PEAR-DATA@');
 }
 
 //---------------------------------------------------------------------
@@ -38,6 +39,7 @@ else {
 $project->getConsole()->add(new GenerateCommand('generate'));
 $project->getConsole()->add(new AnalyseCommand('analyse'));
 $project->getConsole()->add(new AnalyseCommand('configure'));
+$project->getConsole()->add(new InitProjectCommand('init'));
 
 
 //--------------------------------------------------------------------

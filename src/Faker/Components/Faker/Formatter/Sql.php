@@ -103,6 +103,17 @@ class Sql implements FormatterInterface
     }
     
     /**
+      *  Set the column map
+      *
+      *  @access public
+      *  @param mixed[] $map
+      */
+    public function setColumnMap($map)
+    {
+        $this->column_map = $map;
+    }
+    
+    /**
       *  Process a column with the map 
       */
     public function processColumnWithMap($key,$value)
