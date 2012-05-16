@@ -141,7 +141,7 @@ class Project extends Pimple
             
           #make sources folder
           $sources_path = $folder->getBase() . DIRECTORY_SEPARATOR . 'sources';
-          if (mkdir($dump_path,$mode) === TRUE) {
+          if (mkdir($sources_path,$mode) === TRUE) {
                $output->writeln('<info>Created Sources Folder</info>');
 
           }

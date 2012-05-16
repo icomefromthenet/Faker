@@ -115,7 +115,7 @@ class SqlTest extends AbstractProject
                                                            ->method('setBody')
                                                            ->with('table_1');
                                                            
-        $this->formatter_mock->getWriter()->expects($this->exactly(7))->method('write');                                                   
+        $this->formatter_mock->getWriter()->expects($this->exactly(10))->method('write');                                                   
                                                            
         $composite   = $this->getBuilderWithBasicComposite();
         $tables      = $composite->getChildren();
@@ -170,7 +170,7 @@ class SqlTest extends AbstractProject
         
         $this->formatter_mock->setColumnMap($map);
         $look = $this->formatter_mock->onRowEnd($generate_event_row);
-        $this->assertContains("INSERT INTO `schema_1` (`column_1`,`column_2`) VALUES ('a first value',5);",$look);
+        $this->assertContains("INSERT INTO `table_1` (`column_1`,`column_2`) VALUES ('a first value',5);",$look);
         
     }
     

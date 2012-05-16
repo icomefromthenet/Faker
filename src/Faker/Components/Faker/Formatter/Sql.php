@@ -209,6 +209,10 @@ class Sql implements FormatterInterface
        $this->writer->write('--'.PHP_EOL);
        $this->writer->write(PHP_EOL);
        $this->writer->write(PHP_EOL);
+       
+       $this->writer->write('USE '.$event->getType()->getParent()->getId().';');        
+       $this->writer->write(PHP_EOL);
+       $this->writer->write(PHP_EOL);
 
     }
     
@@ -266,8 +270,8 @@ class Sql implements FormatterInterface
         
         # build insert statement 
         
-        $q     = $this->platform->getIdentifierQuoteCharacter();
-        $table = $event->getType()->getParent()->getId();
+        $q      = $this->platform->getIdentifierQuoteCharacter();
+        $table  = $event->getType()->getId();
         
         # column names add quotes to them
         
