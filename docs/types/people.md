@@ -1,4 +1,4 @@
-##People Type
+#People Type
 
 The people type will select from 16,000 unique names one random set per loop iteration. A format can be passed into the type to control the order.
 

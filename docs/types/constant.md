@@ -1,4 +1,4 @@
-##Constant_String and Constant_Number Type
+#Constant_String and Constant_Number Type
 
 As their names suggests a constant will return the same value for every loop. The ConstantString will always return a string the ConstantNumber will return a numeric value.
 

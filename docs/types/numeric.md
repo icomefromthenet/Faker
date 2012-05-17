@@ -1,4 +1,4 @@
-##Numeric Type
+#Numeric Type
 
 The numeric type can be used to represet numbers in specify formats. It will generate a random integer for each placeholder. Please be mindful of formats that are not valid PHP int, floats, doubles. Values that exceed the rangae offered by php should be generated with the alphanumeric which will cast value as string.
 

@@ -15,10 +15,9 @@ class InitProjectCommand extends Command
     {
         if(strpos('@PHP-BIN@','@PHP-BIN@') === 0) {
             $skelton = realpath(__DIR__ .'/../../../skelton');
-
         }
         else {
-            $skelton = '@DATA-DIR@/skelton/';
+            $skelton = '@PEAR-DIR@'. DIRECTORY_SEPARATOR .'Faker'. DIRECTORY_SEPARATOR .'skelton';
         }
 
         $project_folder = new BaseIo($this->getApplication()->getProject()->getPath()->get());

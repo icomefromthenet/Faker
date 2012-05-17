@@ -1,4 +1,4 @@
-##Country Type
+#Country Type
 
 The country type will return a random country, an optional list of The country codes using the two letter [ISO_3166-1](http://en.wikipedia.org/wiki/ISO_3166-1) format can be passed to restrict the country returned.
 

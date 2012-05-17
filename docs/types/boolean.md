@@ -1,4 +1,4 @@
-##Boolean Type
+#Boolean Type
 
 The boolean type returns true for false, the doctine datbase platform will convert the value into correct database representation.
 

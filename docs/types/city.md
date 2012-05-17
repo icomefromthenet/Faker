@@ -1,4 +1,4 @@
-##City Type
+#City Type
 
 The city type will provide city names parsed from [GeoNames](http://download.geonames.org), I have used the cities with population > [150000 file](http://download.geonames.org/export/dump/cities15000.zip), each city is real, a futher list of country codes may be passed into the type to restrict the city list.
 

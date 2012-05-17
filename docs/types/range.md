@@ -1,4 +1,4 @@
-##Range Type
+#Range Type
 
 The range is suited to generate a series of values that increase linearly, where the auto increment type will continue to grow indefinitely the range accepts a max and will restart when achieved.
 
@@ -15,7 +15,6 @@ Please be aware of perision issues with [floating point numbers](http://php.net/
 **To declare a range use the following format:**
 
 ```xml
-
 <datatype name="range">
     <option name="max" value="100" />
     <option name="min" value="1" />

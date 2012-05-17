@@ -1,4 +1,4 @@
-##Email Type
+#Email Type
 
 The email type uses first and last names from the database to build email address, you may pass in a list of domains and custom named params for numeric and alphnumeric subsections.
 

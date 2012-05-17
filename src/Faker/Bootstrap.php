@@ -182,8 +182,17 @@ $project['database'] = $project->share(function($project){
 $project['faker_database'] =  $project->share(function($project){
 
    
+        if(strpos('@PHP-BIN@', '@PHP-BIN@') === 0) {
+         // stand-alone version is running
+         $path = $project->getDataPath()->get() . DIRECTORY_SEPARATOR . 'faker.sqlite';
+        }
+        else {
+         $path = $project->getDataPath()->get() . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'faker.sqlite';
+        }
+   
+   
         $connectionParams = array(
-        'path' => $project->getDataPath()->get() . DIRECTORY_SEPARATOR . 'faker.sqlite',
+        'path' => $path,
         'user' => 'faker',
         'password' => '',
         'driver' => 'pdo_sqlite',

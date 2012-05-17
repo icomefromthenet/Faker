@@ -1,4 +1,4 @@
-## ULL Type
+# NULL Type
 
 The null type is used when a column can contain null values, and you wish
 to simulate this behaviour also can effective placeholder placeholder.

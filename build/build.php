@@ -84,85 +84,93 @@ $pear_task->setCode(function(InputInterface $input, ConsoleOutputInterface $outp
     $inputDir = realpath(dirname(__FILE__) . '/../');
     
     $e = $pack->setOptions(array(
+        
         'baseinstalldir' => '/',
+        
         'packagedirectory' => $inputDir,
+        
         'ignore' => array(
-            'build/', 'tests/', 'docs/',
-            '*.tgz', 'bin/release',
+            'bin/faker',
+            'bin/release.sh',
+            'build/',
+            'tests/',
+            'docs/',
+            '*.tgz',
+            'bin/release',
+            'manifests/',
+            'readme.md',
+            '.vagrant'
+            ,'Vagrantfile',
+            'faker.komodoproject',
         ),
+        
         'outputdirectory' => $outputDir,
+        
         'simpleoutput' => true,
+        
         'roles' => array(
-            'textile' => 'doc'
+            'md' => 'doc'
         ),
+        
         'dir_roles' => array(
-            'Faker' => 'php',
-            'skeleton' => 'data',
-            'tests' => 'test',
+            'src/Faker' => 'php',
+            'skeleton'  => 'data',
+            'tests'     => 'test',
+            'data'      => 'data'
         ),
+        
         'exceptions' => array(
-            'bin/migrate-init.php' => 'script',
-            'bin/migrate-shell' => 'script',
-            'LICENSE' => 'doc',
+            'bin/faker.php' => 'script',
+            'LICENSE'       => 'doc',
         ),
+        
         'installexceptions' => array(
         ),
+        
         'clearchangelog' => true,
     ));
     
     $pack->setPackage('Faker');
-    $pack->setSummary("SQL Fakers for PHP 5.3.x");
-    $pack->setDescription("Generate and deploy Fakers for your PHP 5.3.x projects");
+    $pack->setSummary("Database Faker PHP 5.3.x");
+    $pack->setDescription("Database Faker for PHP 5.3.x projects");
     
     $pack->setChannel('icomefromthenet.github.com/pear');
+    
     $pack->setPackageType('php'); // this is a PEAR-style php script package
     
-    $pack->setReleaseVersion('0.1');
-    $pack->setAPIVersion('0.1');
+    $pack->setReleaseVersion('1.0.1');
+    $pack->setAPIVersion('1.0.1');
     
-    $pack->setReleaseStability('alpha');
-    $pack->setAPIStability('alpha');
+    $pack->setReleaseStability('stable');
+    $pack->setAPIStability('stable');
     
     $pack->setNotes('
-    * The first public release of SQL Fakers for  PHP 5.3.x
+    * The first release of Faker for PHP 5.3.x
     ');
+
     $pack->setLicense('Apache License, Version 2.0', 'http://www.apache.org/licenses/LICENSE-2.0');
     
     $pack->addMaintainer('lead', 'icomefromthenet', 'Lewis Dyer', 'getintouch@icomefromthenet.com');
     
     $pack->addRelease();
-    $pack->addInstallAs('bin/migrate-init.php', 'migrate-init');
-    $pack->addInstallAs('bin/migrate.php', 'migrate-shell');
-    
+    $pack->addInstallAs('bin/faker.php', 'faker');
+        
     // core dependencies
-    $pack->setPhpDep('5.3.0');
+    $pack->setPhpDep('5.3.2');
     $pack->setPearinstallerDep('1.4.6');
     
     // package dependencies
     #none;
     
-    $pack->addReplacement('bin/phrozn.php', 'pear-config', '/usr/bin/env php', 'php_bin');
-    $pack->addReplacement('bin/phrozn.php', 'pear-config', '@PHP-BIN@', 'php_bin');
-    $pack->addReplacement('bin/phrozn.php', 'pear-config', '@DATA-DIR@', 'data_dir');
-    $pack->addReplacement('bin/phrozn.php', 'pear-config', '@PEAR-DIR@', 'php_dir');
+    $pack->addReplacement('bin/faker.php', 'pear-config', '@PHP-BIN@',   'php_bin');
+    $pack->addReplacement('bin/faker.php', 'pear-config', '@PEAR-DATA@', 'data_dir');
+    $pack->addReplacement('bin/faker.php', 'pear-config', '@PEAR-DIR@',  'php_dir');
     
-    $pack->addReplacement('bin/migrate-init.php', 'pear-config', '/opt/lampp/bin/php', 'php_bin');
-    $pack->addReplacement('bin/migrate-shell.php', 'pear-config', '/opt/lampp/bin/php', 'php_bin');
+    $pack->addReplacement('src/Faker/Command/InitProjectCommand.php', 'pear-config','@PHP-BIN@','php_bin');
+    $pack->addReplacement('src/Faker/Command/InitProjectCommand.php', 'pear-config','@PEAR-DIR@','php_dir');
     
+    $pack->addReplacement('src/Faker/Bootstrap.php', 'pear-config', '@PHP-BIN@',   'php_bin');
     
-    $pack->addReplacement('bin/migrate-init.php', 'pear-config', '@PHP-BIN@', 'php_bin');
-    $pack->addReplacement('bin/migrate-shell.php', 'pear-config', '@PHP-BIN@', 'php_bin');
-    
-    $pack->addReplacement('bin/migrate-init.php', 'pear-config', '@PEAR-DIR@', 'php_dir');
-    $pack->addReplacement('bin/migrate-shell.php', 'pear-config', '@PEAR-DIR@', 'php_dir');
-    
-    $pack->addReplacement('Faker/Command/InitProject.php'. 'pear-config','@PHP-BIN@','php_bin');
-    $pack->addReplacement('Faker/Command/InitProject.php'. 'pear-config','@DATA-DIR@','data_dir');
-    
-    
-    $pack->addReplacement('Phrozn/Autoloader.php', 'pear-config', '@PHP-BIN@', 'php_bin');
-    $pack->addReplacement('Phrozn/Autoloader.php', 'pear-config', '@DATA-DIR@', 'data_dir');
-    $pack->addReplacement('Phrozn/Autoloader.php', 'pear-config', '@PEAR-DIR@', 'php_dir');
     
     $pack->generateContents();
     

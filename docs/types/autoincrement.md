@@ -1,4 +1,4 @@
-##AutoIncrement Type
+#AutoIncrement Type
 
 The AutoIncrement type is perfect for representing auto-incrementing primary keys, it also can be used for other numeric ranges. The type will return a numeric value. Unlike the range type there is no setting for upper limit.
 
