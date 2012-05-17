@@ -64,16 +64,7 @@ class Project extends Pimple
         $mode = 0777;
 
         #check if root folder exists
-        if(is_dir($folder->getBase()) === TRUE) {
-            # check if folder is empty
-            $files = $folder->iterator();
-
-            foreach($files as $file) {
-                throw new FakerException('Root Directory must be EMPTY');
-            }
-
-        } else {
-
+        if(is_dir($folder->getBase()) === false) {
             throw new FakerException('Root directory does not exist');
         }
 

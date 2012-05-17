@@ -16,17 +16,17 @@ use Faker\Project,
 //--------------------------------------------------------------------
     
     
-if(strpos('@PHP-BIN@', '@PHP-BIN@') === 0) {
-    // stand-alone version is running
-  require __DIR__ . DIRECTORY_SEPARATOR .'..' . DIRECTORY_SEPARATOR . 'src'. DIRECTORY_SEPARATOR .'Faker'. DIRECTORY_SEPARATOR .'Bootstrap.php';
-  
-   //not a pear install run normally
-   $project['data_path'] = new Path(__DIR__ . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'data');
+if(strpos('@PHP-BIN@', '@PHP-BIN') === 0) { // stand-alone version is running
+
+   set_include_path(dirname(__FILE__) . '/../' . PATH_SEPARATOR . get_include_path());
+   require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
+   $project['data_path'] = new Path(__DIR__ . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'data');      
+
+}else {
+   require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
+   $project['data_path'] = new Path('@PEAR-DATA@' . DIRECTORY_SEPARATOR .'Faker');   
 }
-else {
-   require '@PEAR-DIR@'. . DIRECTORY_SEPARATOR . 'Faker' . DIRECTORY_SEPARATOR .'Faker'. DIRECTORY_SEPARATOR .'Bootstrap.php';
-   $project['data_path'] = new Path('@PEAR-DATA@' . DIRECTORY_SEPARATOR .'Faker');
-}
+
 
 
 //---------------------------------------------------------------------

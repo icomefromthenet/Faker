@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
 # load the bootstrap file
-require __DIR__ .'/../src/Faker/Bootstrap.php';
+require __DIR__ .'/../Faker/Bootstrap.php';
 
 # set the data path
 
@@ -113,7 +113,7 @@ $pear_task->setCode(function(InputInterface $input, ConsoleOutputInterface $outp
         ),
         
         'dir_roles' => array(
-            'src/Faker' => 'php',
+            'Faker' => 'php',
             'skeleton'  => 'data',
             'tests'     => 'test',
             'data'      => 'data'
@@ -164,12 +164,13 @@ $pear_task->setCode(function(InputInterface $input, ConsoleOutputInterface $outp
     
     $pack->addReplacement('bin/faker.php', 'pear-config', '@PHP-BIN@',   'php_bin');
     $pack->addReplacement('bin/faker.php', 'pear-config', '@PEAR-DATA@', 'data_dir');
-    $pack->addReplacement('bin/faker.php', 'pear-config', '@PEAR-DIR@',  'php_dir');
+    $pack->addReplacement('bin/faker.php', 'pear-config', '/usr/bin/env php', 'php_bin');
+    //$pack->addReplacement('bin/faker.php', 'pear-config', '@PEAR-DIR@',  'php_dir');
     
-    $pack->addReplacement('src/Faker/Command/InitProjectCommand.php', 'pear-config','@PHP-BIN@','php_bin');
-    $pack->addReplacement('src/Faker/Command/InitProjectCommand.php', 'pear-config','@PEAR-DIR@','php_dir');
+    $pack->addReplacement('Faker/Bootstrap.php', 'pear-config', '@PHP-BIN@',   'php_bin');
     
-    $pack->addReplacement('src/Faker/Bootstrap.php', 'pear-config', '@PHP-BIN@',   'php_bin');
+    $pack->addReplacement('Faker/Command/InitProjectCommand.php', 'pear-config','@PHP-BIN@','php_bin');
+    $pack->addReplacement('Faker/Command/InitProjectCommand.php', 'pear-config','@PEAR-DATA@','data_dir');
     
     
     $pack->generateContents();

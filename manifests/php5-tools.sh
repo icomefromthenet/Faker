@@ -29,6 +29,11 @@ pear install XML_Serializer
 pear install PEAR_PackageFileManager2
 
 
+# install prium
+
+pear channel-discover pear.pirum-project.org
+pear install pirum/Pirum
+
 # Discover my own pear channel
 
 pear channel-discover icomefromthenet.github.com/pear

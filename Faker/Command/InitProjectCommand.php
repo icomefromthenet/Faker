@@ -13,15 +13,17 @@ class InitProjectCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if(strpos('@PHP-BIN@','@PHP-BIN@') === 0) {
+        if(strpos('@PHP-BIN@','@PHP-BIN') === 0) {
             $skelton = realpath(__DIR__ .'/../../../skelton');
         }
         else {
-            $skelton = '@PEAR-DIR@'. DIRECTORY_SEPARATOR .'Faker'. DIRECTORY_SEPARATOR .'skelton';
+            $skelton = '@PEAR-DATA@'. DIRECTORY_SEPARATOR .'Faker'. DIRECTORY_SEPARATOR .'skelton';
         }
 
         $project_folder = new BaseIo($this->getApplication()->getProject()->getPath()->get());
         $skelton_folder = new BaseIo($skelton);
+        
+        
 
         # ask for confirmation if dir is not empty
         if($project_folder->isEmpty() === false) {

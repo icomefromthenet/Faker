@@ -1,6 +1,6 @@
 <?php
 # load the application autolader
-require(__DIR__.'/../src/Faker/Bootstrap.php');
+require(__DIR__.'/../Faker/Bootstrap.php');
 
 # register the test autoloader
 spl_autoload_register( function ($className)
