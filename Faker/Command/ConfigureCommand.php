@@ -10,15 +10,24 @@ use Symfony\Component\Console\Input\InputArgument,
     Faker\Components\Config\Manager,
     Faker\Io\FileExistException;
 
+use Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Output\OutputInterface,
+    Symfony\Component\Console\Helper\DialogHelper,
+    Migration\Command\Base\Command,
+    Migration\Components\Config\Io as ConfigIo,
+    Migration\Components\Config\Manager,
+    Migration\Io\FileExistException,
+    Migration\Components\Config\Entity;
+
 class ConfigureCommand extends Command
 {
 
 
     protected $answers;
 
-    protected $alias = "default";
-
-     /**
+    
+    /**
      * Interacts with the user.
      *
      * @param InputInterface  $input  An InputInterface instance
@@ -30,26 +39,16 @@ class ConfigureCommand extends Command
         $answers =  array();
 
         # Ask for the database type
-        $answers['db_type'] =  strtolower($dialog->ask($output,'<question>Which Database does this belong? [mysql|mssql|oracle|posgsql]: </question>','mysql'));
+        $answers['type'] =  strtolower($dialog->ask($output,'<question>Which Database does this belong? [mysql|mssql|oracle|posgsql|oci8|sqlite]: </question>','mysql'));
 
         # apply format of the Doctrine DBAL
-        $answers['db_type'] = ($answers['db_type'] !== 'oci8') ? $answers['db_type'] = 'pdo_' . $answers['db_type'] : $answers['db_type'];        
+        $answers['type'] = ($answers['type'] !== 'oci8') ? $answers['type'] = 'pdo_' . $answers['type'] : $answers['type'];        
         
-        # Ask Database Schema Name
-        $answers['db_schema'] =  $dialog->ask($output,'<question>What is the Database schema name? : </question>');
+        # fetch interact from the Config/Driver/CLI
+        $questions_driver = $this->getApplication()->getProject()->getConfigManager()->getCLIFactory()->create($answers['type']);
 
-        #Database user Name
-        $answers['db_user'] =  $dialog->ask($output,'<question>What is the Database user name? : </question>');
-
-        #Database user Password
-        $answers['db_password'] =  $dialog->ask($output,'<question>What is the Database users password? : </question>');
-
-        #Database host
-        $answers['db_host'] =  $dialog->ask($output,'<question>What is the Database host name? [localhost] : </question>','localhost');
-
-        #Database port
-        $answers['db_port'] =  $dialog->ask($output,'<question>What is the Database port? [3306] :</question> ',3306);
-
+        $answers = $questions_driver->interact($dialog,$output,$answers);
+        
         # Store answers for the execute method
         $this->answers = $answers;
 
@@ -60,20 +59,20 @@ class ConfigureCommand extends Command
     //  -------------------------------------------------------------------------
     # Execute
 
-
-
-
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
         $project = $this->getApplication()->getProject();
-    
         $manager = $project['config_manager'];
 
         try {
 
+            # get the CLI Config Driver
+            $driver = $project->getConfigManager()->getCLIFactory()->create($this->answers['type']);
+            $entity = $driver->merge(new Entity(),$this->answers);
+        
             #Write config file to the project
-            $manager->getWriter()->write($this->answers,$project->getConfigName());
+            $manager->getWriter()->write($entity,$project->getConfigName());
 
         }
         catch(FileExistException $e) {
@@ -83,14 +82,16 @@ class ConfigureCommand extends Command
 
             if($answer) {
                 #Write config file to the project
-                $manager->getWriter()->write($this->answers,$project->getConfigName(),true);
+                $manager->getWriter()->write($entity,$project->getConfigName(),true);
 
             }
-
         }
 
+        # reload the config file (needed in shell mode)
+        $project['config_file'];
+        
         # tell them the file was written
-        $output->writeln(sprintf("++ Writing <comment>config file</comment>  %s.php",$this->alias));
+        $output->writeln(sprintf("++ Writing <comment>config file</comment>  %s",$project->getConfigName()));
 
     }
 
@@ -103,18 +104,16 @@ Write a <info>new configuration file</info> to the project folder:
 
 Example
 
->> configure
+>> migration:configure
 
-Will as you the following questions. 
+Will as you the following questions which can include: 
 
-Type of Database [mysql | oracle  | mssql]?
+Type of Database [mysql|oracle|mssql|pgsql|sqlite|oci8]?
 Database Schema Name?
 Database user Password?
 Database user Name?
 EOF
 );
-
-
 
         parent::configure();
     }

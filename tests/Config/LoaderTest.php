@@ -1,9 +1,8 @@
 <?php
-
 namespace Faker\Test\Config;
 
 use Faker\Io\Io,
-    Faker\Components\Config\Entity,
+    Faker\Components\Config\EntityInterface,
     Faker\Components\Config\Loader,
     Faker\Tests\Base\AbstractProject;
 
@@ -63,13 +62,13 @@ class LoaderTest extends AbstractProject
     public function testLoadFails()
     {
         $io = $this->getMockBuilder('\Faker\Components\Config\Io')->disableOriginalConstructor()->getMock();    
-        
+        $ent = $this->getMockBuilder('\Faker\Components\Config\EntityInterface')->getMock();
         $io->expects($this->once())
            ->method('load') 
            ->will($this->returnValue(null));
         
         $loader = new Loader($io);
-        $this->assertEquals(null,$loader->load('myconfig.php',new Entity()));
+        $this->assertEquals(null,$loader->load('myconfig.php',$ent));
     }
     
     /**
@@ -78,14 +77,15 @@ class LoaderTest extends AbstractProject
     public function testLoadDefaultName()
     {
         $io = $this->getMockBuilder('\Faker\Components\Config\Io')->disableOriginalConstructor()->getMock();    
-        
+        $ent = $this->getMockBuilder('\Faker\Components\Config\EntityInterface')->getMock();
+         
         $io->expects($this->once())
            ->method('load') 
            ->with($this->equalTo(Loader::DEFAULTNAME . Loader::EXTENSION),$this->equalTo(null))
            ->will($this->returnValue(null));
         
         $loader = new Loader($io);
-        $this->assertEquals(null,$loader->load('',new Entity()));
+        $this->assertEquals(null,$loader->load('',$ent));
         
     }
     
@@ -96,16 +96,39 @@ class LoaderTest extends AbstractProject
     public function testLoad()
     {
         $io = $this->getMockBuilder('\Faker\Components\Config\Io')->disableOriginalConstructor()->getMock();    
-        $ent = $this->getMockBuilder('Faker\Components\Config\Entity')->getMock();
+        $ent = $this->getMockBuilder('\Faker\Components\Config\EntityInterface')->getMock();
         
-        $ent->expects($this->once())
-            ->method('merge')
-            ->with($this->equalTo($this->getMockConfigEntityParm()));
+        
+           
+        $data = array(
+            'type'            => 'pdo_mysql',
+            'schema'          => 'sakila',
+            'user'            => 'root',
+            'password'        => 'vagrant',
+            'host'            => 'localhost',
+            'port'            => '3306',
+            'socket'          => false,
+            'path'            => false,
+            'memory'          => false,
+            'charset'         => false,
+        );
+        
+        $ent->expects($this->once())->method('setType')->with($this->equalTo('pdo_mysql'));
+        $ent->expects($this->once())->method('setSchema')->with($this->equalTo('sakila'));
+        $ent->expects($this->once())->method('setUser')->with($this->equalTo('root'));
+        $ent->expects($this->once())->method('setPassword')->with($this->equalTo('vagrant'));
+        $ent->expects($this->once())->method('setHost')->with($this->equalTo('localhost'));
+        $ent->expects($this->once())->method('setPort')->with($this->equalTo('3306'));
+        $ent->expects($this->once())->method('setUnixSocket')->with($this->equalTo(false));
+        $ent->expects($this->once())->method('setPath')->with($this->equalTo(false));
+        $ent->expects($this->once())->method('setMemory')->with($this->equalTo(false));
+        $ent->expects($this->once())->method('setCharset')->with($this->equalTo(false));
+            
         
         $io->expects($this->once())
            ->method('load') 
            ->with($this->equalTo('myconfig.php'),$this->equalTo(null))
-           ->will($this->returnValue($this->getMockConfigEntityParm()));
+           ->will($this->returnValue($data));
         
         $loader = new Loader($io);
         $this->assertSame($ent,$loader->load('myconfig.php',$ent));

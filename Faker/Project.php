@@ -256,17 +256,6 @@ class Project extends Pimple
     # Config Name
 
     /**
-      * function setConfigName
-      *
-      * @access public
-      * @param string $name the name of config file to use
-      */
-    public function setConfigName($name = 'default')
-    {
-        $this['config_name'] = $name;
-    }
-
-    /**
       * function getConfigName
       *
       * @access public
@@ -278,31 +267,24 @@ class Project extends Pimple
     }
 
 
-    //  -------------------------------------------------------------------------
-    # Schema Name
+     //------------------------------------------------------------------
 
-    /**
-      * function setSchemaName
-      *
-      * @access public
-      * @param string $name;
-      */
-    public function setSchemaName($name)
-    {
-        $this['schema_name'] = $name;
-    }
-
-    /**
-      *  function getSchemaName
+     /**
+      *  Function getConfigFile
       *
       *  @access public
-      *  @return string schema name;
-      */
-    public function getSchemaName()
+      *  @return \Migration\Components\Config\Entity
+      */ 
+    public function getConfigFile()
     {
-        return $this['schema_name'];
+          return $this['config_file'];
     }
-
+    
+    public function hasConfigSet()
+    {
+          return $this['has_config'];
+    }
+   
     //  -------------------------------------------------------------------------
     # Symfony Console
 

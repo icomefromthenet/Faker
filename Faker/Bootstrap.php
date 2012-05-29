@@ -130,75 +130,138 @@ set_error_handler(array($project['error'],'errorHandler'));
 #set global exception handler
 set_exception_handler(array($project['error'],'exceptionHandler'));
 
-//---------------------------------------------------------------
-// Setup Database (lazy loaded)
-//
-//--------------------------------------------------------------
+$project['has_config'] = function($project) {
+   
+   # test for a dsn
+   if(isset($project['dsn_command']) === true) {
+      return true;
+    }
+   
+   # test if config provided 
+   $config_manager = $project->getConfigManager();
+   $config_name = $project->getConfigName();
+    
+   if($config_manager->getLoader()->exists($config_name) === false) {
+     return false;
+   }
+   
+   return true;
+};
 
 
-$project['database'] = $project->share(function($project){
-
-    $config_manager = $project->getConfigManager();
+$project['config_file'] = $project->share(function($project){
+   
+   $config_manager = $project->getConfigManager();
 
     if($config_manager === null) {
         throw new \RuntimeException('Config Manager not loaded, must be loaded before booting the database');
     }
 
-    # if config name not set that we use the default
-    $config_name = $project->getConfigName();
-
-        # is the dsn set
+    $entity = new \Faker\Components\Config\Entity();
+    
+    # is the dsn set
+    # e.g mysql://root:vagrant@localhost:3306/sakila?migration_table=migrations_data
     if(isset($project['dsn_command']) === true) {
+      $dsn_parser      = new \Faker\Components\Config\DSNParser();
 
-        $dsn =  $project['dsn_command'];
-        $user = $project['username_command'];
-        $password = $project['password_command'];
+      # attempt to parse dsn for detials
+      $parsed          = $dsn_parser->parse($project['dsn_command']);
+      $db_type         = ($parsed['phptype'] !== 'oci8') ? $parsed['phptype'] = 'pdo_' . $parsed['phptype'] : $parsed['phptype'];
 
-        $connectionParams = array('pdo' => new \PDO($dsn,$user,$password));
-
+      # parse the dsn config data using the DSN driver.
+      $project['config_dsn_factory']->create($parsed['phptype'])->merge($entity,$parsed);
+         
+         
     } else {
 
+       # if config name not set that we use the default
+       $config_name = $project->getConfigName();
+    
         # check if we can load the config given
         if($config_manager->getLoader()->exists($config_name) === false) {
-           throw new \RuntimeException(sprintf('Missing database config at %s ',$config_name));
+            throw new \RuntimeException(sprintf('Missing database config at %s ',$config_name));
         }
 
         # load the config file
-        $entity = $config_manager->getLoader()->load($config_name,new \Faker\Components\Config\Entity());
-
-        $connectionParams = array(
-        'dbname' => $entity->getSchema(),
-        'user' => $entity->getUser(),
-        'password' => $entity->getPassword(),
-        'host' => $entity->getHost(),
-        'driver' => $entity->getType(),
-        );
-
+        $config_manager->getLoader()->load($config_name,$entity);
     }
+    
+    # store the global config for later access
+    return $entity;
 
-    return \Doctrine\DBAL\DriverManager::getConnection($connectionParams, new \Doctrine\DBAL\Configuration());
 });
+
+//---------------------------------------------------------------
+// Setup Database (lazy loaded)
+//
+//--------------------------------------------------------------
+
+$project['database'] = $project->share(function($project){
+
+   $entity   = $project['config_file'];
+   $platform = $project['platform_factory'];
+   
+   $connectionParams = array(
+        'dbname'      => $entity->getSchema(),
+        'user'        => $entity->getUser(),
+        'password'    => $entity->getPassword(),
+        'host'        => $entity->getHost(),
+        'driver'      => $entity->getType(),
+        'platform'    => $platform->createFromDriver($entity->getType()),
+   );
+   
+   if($entity->getUnixSocket() != false) {
+      $connectionParams['unix_socket'] = $entity->getUnixSocket();
+   }
+   
+   if($entity->getCharset() != false) {
+      $connectionParams['charset']     = $entity->getCharset();
+   }
+   
+   if($entity->getPath() != false) {
+       $connectionParams['path']       = $entity->getPath();
+   }
+   
+   if($entity->getMemory() != false) {
+      $connectionParams['memory']     = $entity->getMemory();
+   }
+   
+   return \Doctrine\DBAL\DriverManager::getConnection($connectionParams, new \Doctrine\DBAL\Configuration());
+   
+});
+
+$project['platform_factory'] = $project->share(function($project){
+   return new \Faker\PlatformFactory();
+});
+
+
+$project['column_factory'] = $project->share(function($project){
+   return new \Faker\ColumnTypeFactory();
+});
+
 
 $project['faker_database'] =  $project->share(function($project){
 
-   
-        if(strpos('@PHP-BIN@', '@PHP-BIN') === 0) {
-         // stand-alone version is running
-         $path = $project->getDataPath()->get() . DIRECTORY_SEPARATOR . 'faker.sqlite';
-        }
-        else {
-         $path = $project->getDataPath()->get() . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'faker.sqlite';
-        }
-   
-   
-        $connectionParams = array(
-        'path' => $path,
-        'user' => 'faker',
-        'password' => '',
-        'driver' => 'pdo_sqlite',
-        );
+   $platform = $project['platform_factory'];
+    
+   if(strpos('@PHP-BIN@', '@PHP-BIN') === 0) {
+      // stand-alone version is running
+      $path = $project->getDataPath()->get() . DIRECTORY_SEPARATOR . 'faker.sqlite';
+   }
+   else {
+      $path = $project->getDataPath()->get() . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'faker.sqlite';
+   }
+        
+   $connectionParams = array(
+      'path' => $path,
+      'user' => 'faker',
+      'password' => '',
+      'driver' => 'pdo_sqlite',
+      'platform'    => $platform->createFromDriver('pdo_sqlite'),
+   );
 
-    return \Doctrine\DBAL\DriverManager::getConnection($connectionParams, new \Doctrine\DBAL\Configuration());
+   return \Doctrine\DBAL\DriverManager::getConnection($connectionParams, new \Doctrine\DBAL\Configuration());
+   
 });
 
 //---------------------------------------------------------------
@@ -213,22 +276,6 @@ $project['config_manager'] = $project->share(function($project){
 
     # instance the manager, no database needed here
     return new \Faker\Components\Config\Manager($io,$project);
-});
-
-
-//---------------------------------------------------------------
-// Setup Faker Manager (lazy loaded)
-//
-//---------------------------------------------------------------
-
-$project['schema_name'] = 'default';
-
-$project['Faker_manager'] = $project->share(function($project){
-    $io = new \Faker\Components\Faker\Io($project->getPath()->get());
-    $io->setProjectFolder('Faker'. DIRECTORY_SEPARATOR . $project['schema_name']);
-  
-    # instance the manager, no database needed here
-    return new \Faker\Components\Faker\Manager($io,$project);
 });
 
 
@@ -278,7 +325,7 @@ $project['writer_manager'] = $project->share(function($project)
 
 $project['faker_manager'] = $project->share(function($project)
 {
-    $io = new \Faker\Components\Faker\Io($project->getPath()->get());    $event = $project['event_dispatcher'];
+    $io = new \Faker\Components\Faker\Io($project->getPath()->get());
    
     return new \Faker\Components\Faker\Manager($io,$project);
    

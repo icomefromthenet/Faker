@@ -51,13 +51,5 @@ class ComponentTest extends AbstractProject
         return $writer;
     }
 
-    
-
-    
-
-    
-
-
-
 }
 /* End of File */

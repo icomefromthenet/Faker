@@ -19,7 +19,7 @@ class Manager implements ManagerInterface
     protected $io;
     
     /**
-      *  @var Faker\Project 
+      *  @var Migration\Project 
       */   
     protected $project;
 
@@ -46,7 +46,7 @@ class Manager implements ManagerInterface
       *  config files under the config directory of your project
       *
       *  @access public
-      *  @return \Faker\Components\Config\Loader
+      *  @return \Migration\Components\Config\Loader
       */
     public function getLoader()
     {
@@ -67,7 +67,7 @@ class Manager implements ManagerInterface
       * config files into the project directory
       *
       * @access public
-      * @return \Faker\Components\Config\Writer
+      * @return \Migration\Components\Config\Writer
       */
     public function getWriter()
     {
@@ -79,6 +79,19 @@ class Manager implements ManagerInterface
     }
 
     //  -------------------------------------------------------------------------
-
+    
+    public function getCLIFactory()
+    {
+        return $this->project['config_cli_factory'];
+    }
+    
+    
+    public function getDSNFactory()
+    {
+        
+        return $this->project['config_dsn_factory'];
+    }
+    
+    //---------------------------------------------------------------------------
 }
 /* End of File */

@@ -16,12 +16,11 @@ class Command extends BaseCommand
      */
     protected function configure()
     {
-
-        $this->addOption('--schema','', InputOption::VALUE_OPTIONAL,'the database schema folder to use',false);
         $this->addOption('--path','-p',     InputOption::VALUE_OPTIONAL,'the project folder path',false);
+        
+        # mysql://root:vagrant@tcp(localhost:3306)/sakila
+        # http://pear.php.net/manual/en/package.database.db.intro-dsn.php
         $this->addOption('--dsn', '',   InputOption::VALUE_OPTIONAL,'DSN to connect to db',false);
-        $this->addOption('--username','',    InputOption::VALUE_OPTIONAL,'The Username',false);
-        $this->addOption('--password','',    InputOption::VALUE_OPTIONAL,'The Password',false);
     }
 
 
@@ -55,7 +54,7 @@ class Command extends BaseCommand
         }
 
         # path exists does it have a project
-        if(Project::detect((string)$path) === false && $this->getName() !== 'init') {
+        if(Project::detect((string)$path) === false && $this->getName() !== 'faker:init') {
             throw new \RuntimeException('Project Folder does not contain the correct folder heirarchy');
         }
 
@@ -66,24 +65,8 @@ class Command extends BaseCommand
         }
 
         # Test for DSN
-
-         if (true === $input->hasParameterOption(array('--dsn'))) {
-            $project = $this->getApplication()->getProject();
-
-            $project['dsn_command'] =  $input->getOption('dsn');
-
-            if (false === $input->hasParameterOption(array('--username'))) {
-                throw new \InvalidArgumentException('A DSN must have a username set');
-            }
-
-            $project['username_command'] =  $input->getOption('username');
-
-            if (false === $input->hasParameterOption(array('--password'))) {
-                throw new \InvalidArgumentException('A DSN must have a password set');
-            }
-
-            $project['password_command'] =  $input->getOption('password');
-
+        if (true === $input->hasParameterOption(array('--dsn'))) {
+            $project['dsn_command'] = $input->getOption('dsn');
         }
         
     }

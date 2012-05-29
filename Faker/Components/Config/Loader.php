@@ -1,7 +1,7 @@
 <?php
 namespace Faker\Components\Config;
 
-use Faker\Components\Config\Entity;
+use Faker\Components\Config\EntityInterface;
 
 /*
  * class Loader
@@ -23,6 +23,11 @@ class Loader
       */
     const EXTENSION   = '.php';
 
+    /**
+      *  @var \Migration\Components\Config\Entity 
+      */
+    protected $config;
+
     /*
      * __construct()
      *
@@ -43,7 +48,7 @@ class Loader
      * @param string $name the file name
      * @return Entity a config entity
      */
-    public function load($name = '', Entity $ent)
+    public function load($name = '', EntityInterface $ent)
     {
        
         if (empty($name)) {
@@ -56,7 +61,16 @@ class Loader
         if ($config_ary === NULL) {
             return NULL;
         } else {
-            $ent->merge($config_ary);
+            $ent->setType($config_ary['type']);
+            $ent->setCharset($config_ary['charset']);
+            $ent->setHost($config_ary['host']);
+            $ent->setMemory($config_ary['memory']);
+            $ent->setPassword($config_ary['password']);
+            $ent->setPath($config_ary['path']);
+            $ent->setPort($config_ary['port']);
+            $ent->setSchema($config_ary['schema']);
+            $ent->setUnixSocket($config_ary['socket']);
+            $ent->setUser($config_ary['user']);
         }
        
         return $ent;
@@ -98,8 +112,7 @@ class Loader
     *
     * @return Io
     */
-    public function getIo()
-    {
+    public function getIo(){
         return $this->io;
     }
 
@@ -108,12 +121,13 @@ class Loader
     *
     *  @param Io $io
     */
-    public function setIo(Io $io)
-    {
+    public function setIo(Io $io) {
         $this->io = $io;
 
         return $this;
     }
 
+
+    //---------------------------------------------------------------------
 }
 /* End of File */

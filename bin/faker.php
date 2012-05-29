@@ -34,10 +34,10 @@ if(strpos('@PHP-BIN@', '@PHP-BIN') === 0) { // stand-alone version is running
 //
 //--------------------------------------------------------------------
 
-$project->getConsole()->add(new GenerateCommand('generate'));
-$project->getConsole()->add(new AnalyseCommand('analyse'));
-$project->getConsole()->add(new ConfigureCommand('configure'));
-$project->getConsole()->add(new InitProjectCommand('init'));
+$project->getConsole()->add(new GenerateCommand('faker:generate'));
+$project->getConsole()->add(new AnalyseCommand('faker:analyse'));
+$project->getConsole()->add(new ConfigureCommand('faker:configure'));
+$project->getConsole()->add(new InitProjectCommand('faker:init'));
 
 
 //--------------------------------------------------------------------

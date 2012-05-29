@@ -60,7 +60,7 @@ class TemplateComponentTest extends AbstractProject
         $this->assertInstanceOf('Faker\Components\Templating\Io',$loader->getIo());
 
         # test template load for valid file
-        $template = $loader->getSource('test_data.twig');
+        $template = $loader->getSource('sql/mysql/header_template.twig');
 
         $this->assertNotEmpty($template);
     }
@@ -88,7 +88,7 @@ class TemplateComponentTest extends AbstractProject
       */
     public function testTemplateLoader(Loader $loader)
     {
-        $template = $loader->load('test_data.twig');
+        $template = $loader->load('sql/mysql/header_template.twig');
 
         $this->assertInstanceOf('\Faker\Components\Templating\Template',$template);
 
@@ -101,7 +101,7 @@ class TemplateComponentTest extends AbstractProject
     {
         $vars = array('one' => 1, 'two' => 2);
  
-        $template = $loader->load('test_data.twig',$vars);
+        $template = $loader->load('sql/mysql/header_template.twig',$vars);
 
         $this->assertInstanceOf('\Faker\Components\Templating\Template',$template);
     

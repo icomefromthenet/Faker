@@ -3,6 +3,11 @@
 # Upgrades PEAR.
 pear upgrade PEAR
 
+# setup symfony components YAML Required by phpunit
+
+pear channel-discover pear.symfony-project.com
+pear install symfony/YAML
+
 # PHPUnit.
 pear config-set auto_discover 1
 pear channel-discover pear.phpunit.de
@@ -10,6 +15,9 @@ pear install phpunit/PHPUnit
 
 # PPW, PHPCPD, PHPLOC.
 pear channel-discover components.ez.no
+
+# Dbunit
+pear install phpunit/DbUnit
 
 # PPW.
 pear install phpunit/ppw

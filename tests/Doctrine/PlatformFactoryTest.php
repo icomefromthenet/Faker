@@ -25,7 +25,7 @@ class PlatformFactoryTest extends AbstractProject
 
     
     /**
-      *  @expectedException Faker\Components\Faker\Exception 
+      *  @expectedException Faker\Exception 
       */
     public function testFactoryCreateBadKey()
     {
