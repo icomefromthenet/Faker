@@ -278,6 +278,21 @@ $project['config_manager'] = $project->share(function($project){
     return new \Faker\Components\Config\Manager($io,$project);
 });
 
+//---------------------------------------------------------------
+//  Config CLI and DSN Driver Factories
+//
+//---------------------------------------------------------------
+
+$project['config_cli_factory'] = $project->share(function($project){
+
+    return new \Faker\Components\Config\Driver\CLIFactory();
+});
+
+
+$project['config_dsn_factory'] = $project->share(function($project){
+
+    return new \Faker\Components\Config\Driver\DsnFactory();
+});
 
 //---------------------------------------------------------------
 // Setup Templating Manager (lazy loaded)

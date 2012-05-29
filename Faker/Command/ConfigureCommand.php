@@ -8,17 +8,8 @@ use Symfony\Component\Console\Input\InputArgument,
     Faker\Command\Base\Command,
     Faker\Components\Config\Io as ConfigIo,
     Faker\Components\Config\Manager,
-    Faker\Io\FileExistException;
-
-use Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Helper\DialogHelper,
-    Migration\Command\Base\Command,
-    Migration\Components\Config\Io as ConfigIo,
-    Migration\Components\Config\Manager,
-    Migration\Io\FileExistException,
-    Migration\Components\Config\Entity;
+    Faker\Io\FileExistException,
+    Faker\Components\Config\Entity;
 
 class ConfigureCommand extends Command
 {
