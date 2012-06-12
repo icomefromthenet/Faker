@@ -7,7 +7,7 @@ use Faker\Components\Faker\Formatter\GenerateEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 
-class Swap implements CompositeInterface
+class Swap implements CompositeInterface , SelectorInterface
 {
     
     /**

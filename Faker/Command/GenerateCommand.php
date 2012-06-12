@@ -88,11 +88,11 @@ Parse the given schema and generate data.
 
 Example
 
-generate schema.xml      <info>Parse schema.xml in sources dir.</info>
+faker:generate schema.xml      <info>Parse schema.xml in sources dir.</info>
 
-generate schema.xml true <info>Use the debug outputter.</info>
+faker:generate schema.xml true <info>Use the debug outputter.</info>
 
-generate                 <info>Parse schema.xml (default) in sources dir.</info>
+faker:generate                 <info>Parse schema.xml (default) in sources dir.</info>
 
 EOF
         );

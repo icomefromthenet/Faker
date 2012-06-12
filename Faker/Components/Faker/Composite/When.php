@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
   *
   *  need to specify at which row to switch
   */
-class When implements CompositeInterface
+class When implements CompositeInterface, SelectorInterface
 {
     
     /**

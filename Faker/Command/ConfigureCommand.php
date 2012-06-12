@@ -95,7 +95,7 @@ Write a <info>new configuration file</info> to the project folder:
 
 Example
 
->> migration:configure
+>> faker:configure
 
 Will as you the following questions which can include: 
 

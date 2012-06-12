@@ -76,10 +76,10 @@ you can specify the name of the output file as show below.
 Example:
 
 <comment>Will create schema called myschema.xml</comment>
->> analyse myschema
+>> faker:analyse myschema
 
 <comment>Will default schema to schema.xml</comment>
->> analyse 
+>> faker:analyse 
 
 EOF
     );

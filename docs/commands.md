@@ -9,45 +9,36 @@ This is the first command that should be run, it will copy the skelton of a proj
 
     projects/myproject$ mkdir database
     projects/myproject$ cd database
-    projects/myproject/database$ faker init
+    projects/myproject/database$ faker:init
 
 
-Will setup a project under the /home/lewis/projects/myproject/database/ folder but
-
-    myproject/database$ mkdir myfaker
-    myproject/database$ faker init -p myfaker
-
-Will setup a project folder under /home/lewis/projects/myproject/database/myfaker , in both cases the folder must exist first.
+Will setup a project under the projects/myproject/database/. 
 
 ## Configue.
-This is the second command that should be run, it will ask a series of question about your database and create a config file, for connection to it. There is only one config file per project and running the command will overrite that file (will ask for confirmation first).
+This is the second command that should be run, it will ask a series of question about your database and create a config file, for connection to it. There is only one config file per project and running the command will overrite that file (will ask for confirmation first). Each platform has a custom set of questions, given different options supported by Doctrine DBAL.
 
-
-    myproject/database faker configure
+    myproject/database faker:configure
     Which Database does this belong? [mysql|mssql|oracle|posgsql]: mysql
     What is the Database schema name? : sakila
     What is the Database user name? : root
-    What is the Database users password? : vagrant
-    What is the Database host name? [localhost] : localhost
-    What is the Database port? [3306]: 3306
+    etc ....
 
-
-Will write a config file to config folder inside the project directory.
+This will write a config file to config folder inside the project directory.
 
 ## Analyse.
 
-This is a helpful method to get started with an existing schema, it will output a file called schema.xml to the sources directory under the project. This schema will have all tables in the database listed as well as a default writter setup ready to use. A filler type will be applied to each column (alpahnumeric). 
+This is a helpful method to get started with an existing schema, it will output a file called schema.xml to the sources directory. This schema will have all tables in the database listed as well as a default writter setup ready to use. The alphanumeric filler type will be applied to each column (alpahnumeric). 
 
+    myproject/database faker:analyse
 
-    myproject/database faker analyse
-
-Will output schema.xml to sources directory under the project. 
+Don't run generate yet, columns like dates and times require, specialised data types so generate will fail, customize first. 
 
 ## Generate.
 
 The last of the commands and the most important, once a schema is defined you will want to run this command to generate your test data.
 
 
-    myproject/database faker generate
+    myproject/database faker:generate 
+    myproject/database faker:generate other_schema.xml
 
-
+uses schema.xml by default, different schema can be specified using the first argument.

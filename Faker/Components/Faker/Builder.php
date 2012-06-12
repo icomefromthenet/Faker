@@ -1,52 +1,39 @@
 <?php
 namespace Faker\Components\Faker;
 
-use Faker\Components\Faker\Composite\Column;
-use Faker\Components\Faker\Composite\Schema;
-use Faker\Components\Faker\Composite\Table;
-use Faker\Components\Faker\Composite\Alternate;
-use Faker\Components\Faker\Composite\Pick;
-use Faker\Components\Faker\Composite\Random;
-use Faker\Components\Faker\Composite\Swap;
-use Faker\Components\Faker\Composite\When;
-
-use Faker\Components\Faker\Exception as FakerException;
-
-use Faker\PlatformFactory;
-use Faker\ColumnTypeFactory;
-use Faker\Components\Faker\Formatter\FormatterFactory;
-use Faker\Components\Faker\Formatter\FormatterInterface;
-use Faker\Components\Faker\TypeFactory;
-use Faker\Components\Writer\WriterInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Faker\Components\Faker\Composite\Column,
+    Faker\Components\Faker\Composite\Schema,
+    Faker\Components\Faker\Composite\Table,
+    Faker\Components\Faker\Composite\Alternate,
+    Faker\Components\Faker\Composite\Pick,
+    Faker\Components\Faker\Composite\Random,
+    Faker\Components\Faker\Composite\Swap,
+    Faker\Components\Faker\Composite\When,
+    Faker\Components\Faker\Composite\CompositeInterface,
+    Faker\Components\Faker\Composite\SelectorInterface,
+    Faker\Components\Faker\Exception as FakerException,
+    Faker\Components\Faker\TypeInterface,
+    Faker\PlatformFactory,
+    Faker\ColumnTypeFactory,
+    Faker\Components\Faker\Formatter\FormatterFactory,
+    Faker\Components\Faker\Formatter\FormatterInterface,
+    Faker\Components\Faker\TypeFactory,
+    Faker\Components\Writer\WriterInterface,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Builder
 {
-    /**
-      *  @var Faker\Components\Faker\Composite\Column  
-      */
-    protected $current_column;
     
     /**
-      *  @var Faker\Components\Faker\Composite\Table 
+      *  @var Faker\Components\Faker\Composite\CompositeInterface; 
       */
-    protected $current_table;
+    protected $head;
     
     /**
       *  @var Faker\Components\Faker\Composite\Schema 
       */
     protected $current_schema;
-    
-    /**
-      *  @var Migraation\Components\Faker\CompositeInterface
-      *  the most rescent selector Alternate|Randmom|Pick|Swap
-      */
-    protected $current_selector;
-    
-    /**
-      *  @var Faker\Components\Faker\TypeInterface 
-      */
-    protected $current_type;
+   
     
     /**
       *  @var  Faker\PlatformFactory
@@ -122,16 +109,13 @@ class Builder
             throw new FakerException('Schema must have a name');
         }
        
-        # nullify children for consistency
-       
-       $this->current_type     = null;
-       $this->current_selector = null;
-       $this->current_column   = null;
-       $this->current_table    = null;
-        
         # create the new schema
         
         $this->current_schema = new Schema($name,null,$this->event);
+        
+        # assign schema as our head
+        
+        $this->head = $this->current_schema;
         
         return $this;
     }
@@ -143,7 +127,7 @@ class Builder
     {
         # check if schema exist
         
-        if($this->current_schema === null) {
+        if(!$this->head instanceof Schema) {
             throw new FakerException('Must add a scheam first before adding a table');
         }
         
@@ -157,20 +141,16 @@ class Builder
             throw new FakerException('Table requires rows to generate');
         }
         
-        # null the current table,column,selector and type ie the children
-        
-        $this->current_type     = null;
-        $this->current_selector = null;
-        $this->current_column   = null;
-        $this->current_table    = null;
-        
         # create the new table
         
-        $this->current_table = new Table($name,$this->current_schema,$this->event,(integer)$options['generate']);
-    
+        $table = new Table($name,$this->current_schema,$this->event,(integer)$options['generate']);
+        
         # add table to schema
         
-        $this->current_schema->addChild($this->current_table);
+        $this->head->addChild($table);
+        
+        #assign table as head
+        $this->head = $table;
     
         return $this;
     }
@@ -181,7 +161,7 @@ class Builder
     {
         # schema and table exist
         
-        if($this->current_schema === null OR $this->current_table === null) {
+        if(!$this->head instanceof Table) {
            throw new FakerException('Can not add new column without first setting a table and schema'); 
         }
     
@@ -194,22 +174,16 @@ class Builder
         }
     
         # find the doctine column type
-        
         $doctrine = $this->column_factory->create($options['type']);
         
-        # remove column,selector,type
-        
-        $this->current_type     = null;
-        $this->current_selector = null;
-        $this->current_column   = null;
         
         # create new column
-
-        $this->current_column = new Column($name,$this->current_table,$this->event,$doctrine);
+        $current_column = new Column($name,$this->head,$this->event,$doctrine);
         
         # add the column to the table
+        $this->head->addChild($current_column);
         
-        $this->current_table->addChild($this->current_column);
+        $this->head = $current_column;
         
         return $this;
     }
@@ -220,7 +194,7 @@ class Builder
     {
         # check if schem,table,column exist
        
-        if($this->current_schema === null OR $this->current_table === null OR $this->current_column === null) {
+        if(!($this->head instanceof Column OR $this->head instanceof SelectorInterface)) {
            throw new FakerException('Can not add new Selector without first setting a table, schema and column'); 
         }
     
@@ -237,16 +211,16 @@ class Builder
                     throw new FakerException('Alternate type needs step');
                 }
                 
-                $this->current_selector = new Alternate(
+                $current_selector = new Alternate(
                                 $name,
-                                $this->current_column,
+                                $this->head,
                                 $this->event,
                                 (int)$options['step']
                 );
                 
-                $this->current_column->addChild($this->current_selector);
-
-                $this->current_type = null;
+                $this->head->addChild($current_selector);
+                
+                $this->head = $current_selector;
           
             break;
         
@@ -255,43 +229,43 @@ class Builder
                     throw new FakerException('Pick type needs a probability');
                 } 
                 
-                $this->current_selector = new Pick($name,$this->current_column,$this->event,$options['probability']);
+                $current_selector = new Pick($name,$this->head,$this->event,$options['probability']);
                 
-                $this->current_column->addChild($this->current_selector);
+                $this->head->addChild($current_selector);
+                
+                $this->head = $current_selector;
 
-                $this->current_type = null;
-          
             break;    
             
             case 'random' :
-                $this->current_selector = new Random(
+                $current_selector = new Random(
                                     $name,
-                                    $this->current_column,
+                                    $this->head,
                                     $this->event
                 );
                 
-                $this->current_column->addChild($this->current_selector);
-
-                $this->current_type = null;
+                $this->head->addChild($current_selector);
+                
+                $this->head = $current_selector;
 
             break;
         
             case 'swap' :
-                $this->current_selector = new Swap(
+                $current_selector = new Swap(
                                     $name,
-                                    $this->current_column,
+                                    $this->head,
                                     $this->event
                 );
 
-                $this->current_column->addChild($this->current_selector);
-
-                $this->current_type = null;
+                $this->head->addChild($current_selector);
+                
+                $this->head = $current_selector;
 
             break;
         
             case 'when' :
                 
-                if($this->current_selector instanceof Swap === false) {
+                if(!$this->head instanceof Swap) {
                     throw new FakerException('When type must have a swap parent');
                 }
                 
@@ -301,15 +275,15 @@ class Builder
                 
                 $when =  new When(
                                     $name,
-                                    $this->current_selector,
+                                    $this->head,
                                     $this->event,
                                     $options['switch']
                 );
                 
-                $this->current_selector->addChild($when);
-                $this->current_selector = $when;
+                $this->head->addChild($when);
+
+                $this->head = $when;
                 
-                $this->current_type = null;
                 
             break;
             
@@ -327,7 +301,7 @@ class Builder
         
         # check if schema, table , column exist
        
-        if($this->current_schema === null OR $this->current_table === null OR $this->current_column === null) {
+        if(!($this->head instanceof Column OR $this->head instanceof SelectorInterface)) {
            throw new FakerException('Can not add new Selector without first setting a table and schema or column'); 
         }
     
@@ -339,19 +313,12 @@ class Builder
     
         # instance the type config
     
-        if($this->current_selector !== null) {
-      
-            $this->current_type = $this->type_factory->create($name,$this->current_selector);    
-      
-            $this->current_selector->addChild($this->current_type);
-      
-        } else {
-      
-            $this->current_type = $this->type_factory->create($name,$this->current_column);    
+        $current_type = $this->type_factory->create($name,$this->head);    
         
-            $this->current_column->addChild($this->current_type);    
-        }
+        $this->head->addChild($current_type);
         
+        $this->head = $current_type;
+    
         return $this;
     }
 
@@ -361,11 +328,11 @@ class Builder
     {
         #schema,table,column and type exist  
         
-        if($this->current_type === null) {
+        if(!$this->head instanceof TypeInterface) {
             throw new FakerException('Type has not been set, can not accept option '. $key);
         }
         
-        $this->current_type->setOption($key,$value);
+        $this->head->setOption($key,$value);
         
         return $this;
     }
@@ -409,16 +376,29 @@ class Builder
       */    
     public function clear()
     {
-        $this->current_column = null;
-        $this->current_selector = null;
-        $this->current_table = null;
+        $this->head = null;
         $this->current_schema = null;
         $this->formatters = null;
-        
         
         return $this;
     }
     
     //  -------------------------------------------------------------------------
+    
+    /**
+      *  Set the head to the parent
+      *
+      *  @return $this;
+      *  @access public
+      */
+    public function end()
+    {
+        $this->head = $this->head->getParent();
+        
+        return $this;
+    }
+    
+    //------------------------------------------------------------------
+    
 }
 /* End of File */

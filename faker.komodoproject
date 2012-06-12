@@ -2,6 +2,6 @@
 <!-- Komodo Project File - DO NOT EDIT -->
 <project id="ff518c84-3bfa-4490-b69e-a59c64956c2f" kpf_version="5" name="faker.komodoproject">
 <preference-set idref="ff518c84-3bfa-4490-b69e-a59c64956c2f">
-  <string id="mappedPaths">file://192.168.0.101/vagrant/bin##file:///home/lewis/Projects/faker/bin::file://192.168.0.101/vagrant/build##file:///home/lewis/Projects/faker/build::file://192.168.0.101/vagrant/tests##file:///home/lewis/Projects/faker/tests::file://192.168.0.101/vagrant/src/Faker##file:///home/lewis/Projects/faker/src/Faker</string>
+  <string id="mappedPaths">file://192.168.0.101/vagrant/bin##file:///home/lewis/Projects/faker/bin::file://192.168.0.101/vagrant/build##file:///home/lewis/Projects/faker/build::file://192.168.0.101/vagrant/tests##file:///home/lewis/Projects/faker/tests::file://192.168.0.101/vagrant/Faker##file:///home/lewis/Projects/faker/Faker</string>
 </preference-set>
 </project>

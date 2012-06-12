@@ -122,7 +122,20 @@ class SchemaParser extends BaseXMLParser
       */
     protected function xmlEndTag($parser, $name)
     {
-      
+        switch($name) {
+            case 'column':    
+            case 'table':    
+            case 'schema':    
+            case 'datatype': 
+            case 'alternate';
+            case 'pick';
+            case 'random';
+            case 'when':
+            case 'swap':    
+                $this->builder->end();
+            break;
+        }
+        
     }
 
     //  ----------------------------------------------------------------------------

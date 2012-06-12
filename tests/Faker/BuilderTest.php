@@ -3,7 +3,9 @@ namespace Faker\Tests\Faker;
 
 use Faker\Components\Faker\Builder,
     Faker\Tests\Base\AbstractProject;
+    Faker\Components\Faker\Type\Type;
 
+    
 class BuilderTest extends AbstractProject
 {
     
@@ -34,7 +36,7 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $id = 'myschema';
-        $builder->addSchema($id,array());
+        $builder->addSchema($id,array())->end();
    
         $this->assertTrue(true);     
     }
@@ -70,7 +72,8 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('myschema',array())
-                ->addWriter($platform,$formatter);
+                    ->addWriter($platform,$formatter)
+                ->end();
         
     
     }
@@ -91,7 +94,7 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $id = 'myschema';
-        $builder->addSchema($id,array());
+        $builder->addSchema($id,array())->end();
         
         $builder->build();     
     }
@@ -110,7 +113,7 @@ class BuilderTest extends AbstractProject
     
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
-        $builder->addSchema('',array());
+        $builder->addSchema('',array())->end();
         
     }
     
@@ -149,7 +152,9 @@ class BuilderTest extends AbstractProject
         
         $id = 'myschema';
         $builder->addSchema($id,array())
-                ->addTable('table1',array('generate' => 100));
+                    ->addTable('table1',array('generate' => 100))
+                    ->end()
+                ->end();
         
         $this->assertTrue(true);
          
@@ -178,7 +183,12 @@ class BuilderTest extends AbstractProject
     
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
-        $builder->addSchema('schema_1',array())->addTable('table_1',array('generate' => 100))->addColumn('column_1',array('type'=>'integer'));
+        $builder->addSchema('schema_1',array())
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array('type'=>'integer'))
+                        ->end()
+                    ->end()
+                ->end();
     }
     
     //  -------------------------------------------------------------------------
@@ -199,7 +209,7 @@ class BuilderTest extends AbstractProject
     
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
-        $builder->addSelector('alternate',array());
+        $builder->addSelector('alternate',array())->end();
         
     }
     
@@ -219,7 +229,9 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addSelector('alternate',array());
+                    ->addSelector('alternate',array())
+                    ->end()
+                ->end();
         
     }
 
@@ -239,8 +251,11 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addTable('table_1',array('generate' =>100))
-                ->addSelector('alternate',array());
+                    ->addTable('table_1',array('generate' =>100))
+                        ->addSelector('alternate',array())
+                        ->end()
+                    ->end()
+                ->end();
     }
 
     
@@ -265,9 +280,13 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addTable('table_1',array('generate' => 100))
-                ->addColumn('column_1',array('type'=>'integer'))
-                ->addSelector('alternate',array('step' => 1));
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array('type'=>'integer'))
+                            ->addSelector('alternate',array('step' => 1))
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
     }
    
     /**
@@ -293,9 +312,13 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addTable('table_1',array('generate' => 100))
-                ->addColumn('column_1',array('type'=>'integer'))
-                ->addSelector('a',array());
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array('type'=>'integer'))
+                            ->addSelector('a',array())
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
     }
     
      /**
@@ -321,9 +344,13 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addTable('table_1',array('generate' => 100))
-                ->addColumn('column_1',array('type' => 'integer'))
-                ->addSelector('alternate',array());
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array('type' => 'integer'))
+                            ->addSelector('alternate',array())
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
     }
     
     /**
@@ -349,9 +376,13 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addTable('table_1',array('generate' => 100))
-                ->addColumn('column_1',array('type' =>'integer'))
-                ->addSelector('pick',array());
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array('type' =>'integer'))
+                            ->addSelector('pick',array())
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
     }
    
 
@@ -378,9 +409,13 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addTable('table_1',array('generate' => 100))
-                ->addColumn('column_1',array('type'=>'integer'))
-                ->addSelector('when',array());
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array('type'=>'integer'))
+                            ->addSelector('when',array())
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
     }
   
     
@@ -405,10 +440,15 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addTable('table_1',array('generate' => 100))
-                ->addColumn('column_1',array('type'=>'integer'))
-                ->addSelector('swap',array())
-                ->addSelector('when',array('switch' => 1));
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array('type'=>'integer'))
+                            ->addSelector('swap',array())
+                                ->addSelector('when',array('switch' => 1))
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
         
         
      }
@@ -436,10 +476,15 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addTable('table_1',array('generate' => 100))
-                ->addColumn('column_1',array('type'=>'integer'))
-                ->addSelector('swap',array())
-                ->addSelector('when',array());
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array('type'=>'integer'))
+                            ->addSelector('swap',array())
+                                ->addSelector('when',array())
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
         
         
      }
@@ -462,7 +507,7 @@ class BuilderTest extends AbstractProject
     
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
-        $builder->addType('alternate',array());
+        $builder->addType('alternate',array())->end();
         
     }
     
@@ -482,7 +527,9 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addType('alphanumeric',array());
+                    ->addType('alphanumeric',array())
+                    ->end()
+                ->end();
         
     }
 
@@ -502,8 +549,11 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addTable('table_1',array('generate' => 100))
-                ->addType('alternate',array());                    
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addType('alternate',array())
+                        ->end()
+                    ->end()
+                ->end();
     }
     
     
@@ -524,6 +574,11 @@ class BuilderTest extends AbstractProject
                             ->will($this->returnValue($column_type));
     
         $type_mock           = $this->getMockBuilder('Faker\Components\Faker\Type\Type')->disableOriginalConstructor()->getMockForAbstractClass();   
+        
+        $type_mock->expects($this->any())
+                  ->method('getParent')
+                  ->will($this->returnValue($type_mock));
+        
         $type_factory        = $this->getMockBuilder('Faker\Components\Faker\TypeFactory')->disableOriginalConstructor()->getMock();        
         
         $type_factory->expects($this->once())
@@ -537,9 +592,13 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addTable('table_1',array('generate' => 100))
-                ->addColumn('column_1',array('type'=>'integer'))
-                ->addType('alphanumeric',array());
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array('type'=>'integer'))
+                            ->addType('alphanumeric',array())
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
     
     }
     
@@ -570,11 +629,17 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addTable('table_1',array('generate' => 100))
-                ->addColumn('column_1',array( 'type' =>'integer'))
-                ->addSelector('random',array())
-                ->addType('alphanumeric',array())
-                ->addType('alphanumeric',array());    
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array( 'type' =>'integer'))
+                            ->addSelector('random',array())
+                                ->addType('alphanumeric',array())
+                                ->end()
+                                ->addType('alphanumeric',array())
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
     }
    
     public function testAddTypeToSwapSelector()
@@ -604,11 +669,17 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addTable('table_1',array('generate' => 100))
-                ->addColumn('column_1',array('type' =>'integer'))
-                ->addSelector('swap',array())
-                ->addSelector('when',array('switch' => 10))
-                ->addType('alphanumeric',array());
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array('type' =>'integer'))
+                            ->addSelector('swap',array())
+                                ->addSelector('when',array('switch' => 10))
+                                    ->addType('alphanumeric',array())
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
     }
     
     
@@ -639,11 +710,16 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addTable('table_1',array('generate' => 100))
-                ->addColumn('column_1',array( 'type' =>'integer'))
-                ->addSelector('swap',array())
-                ->addSelector('when',array('switch' => 10))
-                ->setTypeOption('op1','po2');
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array( 'type' =>'integer'))
+                            ->addSelector('swap',array())
+                                ->addSelector('when',array('switch' => 10))
+                                    ->setTypeOption('op1','po2')
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
     }
     
    
@@ -693,13 +769,19 @@ class BuilderTest extends AbstractProject
             
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
 
-        $builder->addSchema('schema_1',array());
-        $builder->addTable('table_1',array('generate' => 100));
-        $builder->addColumn('column_1',array('type' =>'integer'));
-        $builder->addSelector('swap',array());
-        $builder->addSelector('when',array('switch' => 10));
-        $builder->addType('alphanumeric',array());
-        $builder->setTypeOption('op1','op2');  
+        $builder->addSchema('schema_1',array())
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array('type' =>'integer'))
+                            ->addSelector('swap',array())
+                                ->addSelector('when',array('switch' => 10))
+                                    ->addType('alphanumeric',array())
+                                        ->setTypeOption('op1','op2')
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
     }
    
     
@@ -756,12 +838,18 @@ class BuilderTest extends AbstractProject
         $builder = new Builder($event,$platform_factory,$column_type_factory,$type_factory,$formatter_factory);       
         
         $builder->addSchema('schema_1',array())
-                ->addWriter($platform,$formatter)
-                ->addTable('table_1',array('generate' => 100))
-                ->addColumn('column_1',array('type' => 'integer'))
-                ->addSelector('swap',array())
-                ->addSelector('when',array('switch' => 10))
-                ->addType('alphanumeric',array());
+                    ->addWriter($platform,$formatter)
+                    ->addTable('table_1',array('generate' => 100))
+                        ->addColumn('column_1',array('type' => 'integer'))
+                            ->addSelector('swap',array())
+                                ->addSelector('when',array('switch' => 10))
+                                    ->addType('alphanumeric',array())
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end();
     
         $schema = $builder->build();    
      

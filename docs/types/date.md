@@ -15,7 +15,7 @@ Do not use this type for a timestamp, use timestamp type instead.
 today = date and time that the generate command was run.
 
 ```xml
-    <datatype>
+    <datatype name="date">
         <option name="start" value="today" />
         <option name="modify" value="+1 week" />
         <option name="max" value="today +10 weeks" />
@@ -25,7 +25,7 @@ today = date and time that the generate command was run.
 The above would give the starting date as today would increment the date by 1 week on each loop and when date becomes greater than 10 weeks it will reset back to today.
 
 ```xml
-    <datatype>
+    <datatype name="date">
         <option name="start" value="today" />
         <option name="modify" value="+1 week" />
     </datatype>
@@ -36,7 +36,7 @@ The above would contine to increment with no max set.
 Be careful when not specifing a max, example if the the number of rows to generte increases from 100 to 1 million then the last row would have a date of 1 million +weeks into the future. 
 
 ```xml
-    <datatype>
+    <datatype name="date">
         <option name="start" value="today" />
     </datatype>
 ```

@@ -27,7 +27,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
   * 
   *
   */
-class Alternate implements CompositeInterface
+class Alternate implements CompositeInterface , SelectorInterface
 {
     
     /**

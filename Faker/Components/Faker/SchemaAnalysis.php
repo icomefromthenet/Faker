@@ -25,6 +25,8 @@ class SchemaAnalysis
         # add schema element                
         $builder->addSchema($db->getDatabase(),array());
         
+        # add writer for the platform
+        $builder->addWriter($db->getDatabasePlatform()->getName(),'sql');
         
         # iterate over the table
         $tables = $sm->listTables();    
@@ -34,17 +36,18 @@ class SchemaAnalysis
             $builder->addTable($table->getName(),array('generate' => 0));    
                    
             foreach ($table->getColumns() as $column) {
-               $builder->addColumn($column->getName(),
-                                   array('type' => $column->getType()->getName())
-                                   );
-               $builder->addType('alphanumeric',array());
-               $builder->setTypeOption('format' ,'ccccc');
+               
+               $builder->addColumn($column->getName(),array('type' => $column->getType()->getName()))
+                            ->addType('alphanumeric',array())
+                                ->setTypeOption('format' ,'ccccc')
+                            ->end()
+                        ->end();
             }
+            
+            $builder->end();
         }
         
-        
-        # add writer for the platform
-        $builder->addWriter($db->getDatabasePlatform()->getName(),'sql');
+        $builder->end();
         
         return $builder->build();
     
