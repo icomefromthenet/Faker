@@ -1,21 +1,15 @@
 <?php
 namespace Faker\Components\Faker;
 
-use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Faker\Components\Faker\OptionInterface;
 
-interface TypeConfigInterface extends ConfigurationInterface
+
+interface TypeConfigInterface extends OptionInterface 
 {
-    
-    
-    public function merge($config);
     
     public function getUtilities();
     
     public function setUtilities(Utilities $util);
-    
-    public function setOption($name,$option);
-    
-    public function getOption($name);
     
 }
 /* End of File */

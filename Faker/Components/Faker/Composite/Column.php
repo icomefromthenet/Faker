@@ -1,14 +1,15 @@
 <?php
 namespace Faker\Components\Faker\Composite;
 
-use Faker\Components\Faker\Exception as FakerException;
-use Faker\Components\Faker\Formatter\FormatEvents;
-use Faker\Components\Faker\Formatter\GenerateEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Doctrine\DBAL\Types\Type as ColumnType;
+use Faker\Components\Faker\Exception as FakerException,
+    Faker\Components\Faker\Formatter\FormatEvents,
+    Faker\Components\Faker\Formatter\GenerateEvent,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface,
+    Symfony\Component\Config\Definition\Builder\TreeBuilder,
+    Doctrine\DBAL\Types\Type as ColumnType;
 
 
-class Column implements CompositeInterface
+class Column extends BaseComposite 
 {
     
     /**
@@ -44,12 +45,13 @@ class Column implements CompositeInterface
       *  @param string $id the schema name
       *  @param CompositeInterface $parent 
       */
-    public function __construct($id, CompositeInterface $parent, EventDispatcherInterface $event, ColumnType $column)
+    public function __construct($id, CompositeInterface $parent, EventDispatcherInterface $event, ColumnType $column,$options = array())
     {
         $this->id = $id;
         $this->setParent($parent);
         $this->event = $event;
         $this->column_type = $column;
+        $this->options = $options;
     }
     
     /**
@@ -196,7 +198,10 @@ class Column implements CompositeInterface
 
     public function validate()
     {
-       # ask children to validate themselves
+        # validate internal config
+        $this->options = $this->merge($this->options);
+        
+        # ask children to validate themselves
         
         foreach($this->getChildren() as $child) {
         
@@ -215,5 +220,39 @@ class Column implements CompositeInterface
     }
 
     //  -------------------------------------------------------------------------
+    # Option Interface
+    
+    /**
+     * Generates the configuration tree builder.
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
+     */
+    public function getConfigTreeBuilder()
+    {
+        $treeBuilder = new TreeBuilder();
+        $rootNode    = $treeBuilder->root('config');
+
+        $rootNode
+            ->children()
+                ->scalarNode('locale')
+                    ->treatNullLike('en')
+                    ->defaultValue('en')
+                    ->setInfo('The Default Local for this schema')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new \Faker\Components\Faker\Exception('Column::Locale not in valid list');
+                        })
+                    ->end()
+                ->end()
+            ->end();
+            
+        return $treeBuilder;
+    }
+    
+    //  ------------------------------------------------------------------------- 
+    
 }
 /* End of File */

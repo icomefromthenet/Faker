@@ -34,6 +34,15 @@ class Builder
       */
     protected $current_schema;
    
+   /**
+      *  @var Faker\Components\Faker\Composite\Table 
+      */
+    protected $current_table;
+    
+    /**
+      *  @var Faker\Components\Faker\Composite\Column 
+      */
+    protected $current_column;
     
     /**
       *  @var  Faker\PlatformFactory
@@ -97,7 +106,12 @@ class Builder
         
     public function addSchema($name,$options)
     {
-         # check if schema already set as we can have only one
+        # merge options with default
+        $options = array_merge(array(
+                    'locale' => null
+                    ),$options);
+        
+        # check if schema already set as we can have only one
         
         if($this->current_schema !== null) {
             throw new FakerException('Scheam already added only have one');
@@ -111,7 +125,7 @@ class Builder
        
         # create the new schema
         
-        $this->current_schema = new Schema($name,null,$this->event);
+        $this->current_schema = new Schema($name,null,$this->event,array('locale' => $options['locale']));
         
         # assign schema as our head
         
@@ -125,12 +139,13 @@ class Builder
     
     public function addTable($name,$options)
     {
+        
         # check if schema exist
         
         if(!$this->head instanceof Schema) {
             throw new FakerException('Must add a scheam first before adding a table');
         }
-        
+    
         # validate the name for empty string
         
         if(empty($name)) {
@@ -141,9 +156,16 @@ class Builder
             throw new FakerException('Table requires rows to generate');
         }
         
+        
+        # merge options with default
+        $options = array_merge(array(
+                    'locale' => $this->head->getOption('locale')
+                    ),$options);
+        
+        
         # create the new table
         
-        $table = new Table($name,$this->current_schema,$this->event,(integer)$options['generate']);
+        $table = new Table($name,$this->current_schema,$this->event,(integer)$options['generate'],array('locale' => $options['locale']));
         
         # add table to schema
         
@@ -151,6 +173,7 @@ class Builder
         
         #assign table as head
         $this->head = $table;
+        $this->current_table = $this->head;
     
         return $this;
     }
@@ -159,6 +182,12 @@ class Builder
     
     public function addColumn($name,$options)
     {
+        # merge options with default
+        $options = array_merge(array(
+                    'locale' => null
+                    ),$options);
+        
+        
         # schema and table exist
         
         if(!$this->head instanceof Table) {
@@ -172,18 +201,23 @@ class Builder
         if(isset($options['type']) === false) {
             throw new FakerException('Column requires a doctrine type');
         }
-    
-        # find the doctine column type
+        
+         # find the doctine column type
         $doctrine = $this->column_factory->create($options['type']);
         
-        
+        # merge options with defaults        
+        $options = array_merge(array(
+                    'locale' => $this->head->getOption('locale')
+                    ),$options);
+    
         # create new column
-        $current_column = new Column($name,$this->head,$this->event,$doctrine);
+        $current_column = new Column($name,$this->head,$this->event,$doctrine,array('locale' => $options['locale']));
         
         # add the column to the table
         $this->head->addChild($current_column);
         
         $this->head = $current_column;
+        $this->current_column = $this->head;
         
         return $this;
     }
@@ -318,6 +352,9 @@ class Builder
         $this->head->addChild($current_type);
         
         $this->head = $current_type;
+        
+        # set the default locale
+        $this->setTypeOption('locale',$this->current_column->getOption('locale'));
     
         return $this;
     }
@@ -376,9 +413,11 @@ class Builder
       */    
     public function clear()
     {
-        $this->head = null;
+        $this->head           = null;
         $this->current_schema = null;
-        $this->formatters = null;
+        $this->formatters     = null;
+        $this->current_column = null;
+        $this->current_table  = null;
         
         return $this;
     }

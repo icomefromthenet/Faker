@@ -42,6 +42,7 @@ class ColumnTypeFactory implements ExtensionInterface
     /**
       *  Resolve a Dcotrine DataType Class
       *
+      *  @param string the column type name
       *  @access public
       *  @return Doctrine\DBAL\Types\Type
       *  @throws Faker\Components\Faker\Exception

@@ -1,14 +1,13 @@
 <?php
 namespace Faker\Components\Faker\Composite;
 
-use Faker\Components\Faker\Exception as FakerException;
-use Faker\Components\Faker\Formatter\FormatEvents;
-use Faker\Components\Faker\Formatter\GenerateEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Faker\Components\Faker\Exception as FakerException,
+    Faker\Components\Faker\Formatter\FormatEvents,
+    Faker\Components\Faker\Formatter\GenerateEvent,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface,
+    Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
-
-
-class Schema implements CompositeInterface
+class Schema extends BaseComposite 
 {
     
     /**
@@ -36,7 +35,6 @@ class Schema implements CompositeInterface
       */
     protected $writers = array();
     
-    
     /**
       *  Class construtor
       *
@@ -45,10 +43,11 @@ class Schema implements CompositeInterface
       *  @param string $id the schema name
       *  @param CompositeInterface $parent (Optional for this object)
       */
-    public function __construct($id , CompositeInterface $parent = null, EventDispatcherInterface $event)
+    public function __construct($id , CompositeInterface $parent = null, EventDispatcherInterface $event,$options = array())
     {
         $this->id = $id;
         $this->event = $event;
+        $this->options = $options;    
             
         if($parent !== null) {
             $this->setParent($parent);
@@ -151,6 +150,9 @@ class Schema implements CompositeInterface
           return $this->event;
     }
     
+    /**
+      *  @inheritdoc
+      */
     public function toXml()
     {
           # schema declaration
@@ -174,10 +176,15 @@ class Schema implements CompositeInterface
           return $str;
     }
     
+     
     //  -------------------------------------------------------------------------
      
      public function validate()
      {
+        # validate internal config
+        $this->options = $this->merge($this->options);
+        
+        
         # ask children to validate themselves
         
         foreach($this->getChildren() as $child) {
@@ -199,6 +206,39 @@ class Schema implements CompositeInterface
         return true;          
      }
 
+    //  -------------------------------------------------------------------------
+    # Option Interface
+    
+    /**
+     * Generates the configuration tree builder.
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
+     */
+    public function getConfigTreeBuilder()
+    {
+        $treeBuilder = new TreeBuilder();
+        $rootNode = $treeBuilder->root('config');
+
+        $rootNode
+            ->children()
+                ->scalarNode('locale')
+                    ->treatNullLike('en')
+                    ->defaultValue('en')
+                    ->setInfo('The Default Local for this schema')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new \Faker\Components\Faker\Exception('Schema::Locale not in valid list');
+                        })
+                    ->end()
+                ->end()
+            ->end();
+            
+        return $treeBuilder;
+    }
+    
     //  -------------------------------------------------------------------------
 }
 /* End of File */

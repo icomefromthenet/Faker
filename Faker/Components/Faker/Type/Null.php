@@ -27,5 +27,10 @@ class Null extends Type
     }
 
     //  -------------------------------------------------------------------------
+    
+    public function getConfigExtension(ArrayNodeDefinition $rootNode)
+    {
+	return $rootNode;
+    }
 }
 /* End of class */

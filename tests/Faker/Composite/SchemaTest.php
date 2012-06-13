@@ -18,7 +18,11 @@ class SchemaTest extends AbstractProject
         $schema = new Schema($id,null,$event);
         
         $this->assertInstanceOf('Faker\Components\Faker\Composite\CompositeInterface',$schema);
+        $this->assertInstanceOf('Faker\Components\Faker\Composite\BaseComposite',$schema);
     }
+    
+    
+   
     
     public function testSchemaDispatchesEvent()
     {
@@ -58,6 +62,17 @@ class SchemaTest extends AbstractProject
    
     }
     
+     public function testOptionsProperties()
+    {
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+     
+        $schema = new Schema($id,null,$event);
+        
+        $schema->setOption('locale','en');
+        $this->assertEquals($schema->getOption('locale'),'en');
+        
+    }
     
     public function testToXml()
     {
@@ -125,7 +140,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event);
+        $schema = new Schema($id,null,$event,array());
         $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -134,7 +149,30 @@ class SchemaTest extends AbstractProject
         $schema->setWriters(array($writer));
         
         $schema->validate();
+        
+        # test the default option was parsed
+        $this->assertEquals($schema->getOption('locale'),'en');
      
+    }
+    
+     /**
+      *  @expectedException Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Schema::Locale not in valid list
+      */
+    public function testFailedLocaleValidation()
+    {
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schema = new Schema($id,null,$event,array('locale'=>null));
+
+        $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+          
+        $schema->addChild($child_a);        
+        $schema->setWriters(array($writer));
+        
+        $schema->validate();
+        
     }
     
     

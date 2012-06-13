@@ -1,12 +1,14 @@
 <?php
 namespace Faker\Components\Faker\Type;
 
-use Faker\Components\Faker\Utilities;
-use Faker\Components\Faker\Composite\CompositeInterface;
-use Faker\Components\Faker\Exception as FakerException;
-use Faker\Components\Faker\TypeInterface;
-use Faker\Components\Faker\TypeConfigInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Faker\Components\Faker\Utilities,
+    Faker\Components\Faker\Composite\CompositeInterface,
+    Faker\Components\Faker\Exception as FakerException,
+    Faker\Components\Faker\TypeInterface,
+    Faker\Components\Faker\TypeConfigInterface,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface,
+    Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition,
+    Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 class Type implements CompositeInterface, TypeConfigInterface 
 {
@@ -174,9 +176,36 @@ class Type implements CompositeInterface, TypeConfigInterface
      */
     public function getConfigTreeBuilder()
     {
-	throw new FakerException('not implemented');
+        $treeBuilder = new TreeBuilder();
+        $rootNode = $treeBuilder->root('config');
+	
+	$rootNode->children()
+	      ->scalarNode('locale')
+                    ->treatNullLike('en')
+                    ->defaultValue('en')
+                    ->setInfo('The Default Local for this schema')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new \Faker\Components\Faker\Exception('Schema::Locale not in valid list');
+                        })
+                    ->end()
+                ->end()
+	->end();
+	
+	$this->getConfigExtension($rootNode);
+	
+	return $treeBuilder;
     }
     
     //  -------------------------------------------------------------------------
+    
+    public function getConfigExtension(ArrayNodeDefinition $rootNode)
+    {
+	throw new FakerException('not implemented');
+    }
+    
 }
 /* End of File */

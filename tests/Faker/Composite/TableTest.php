@@ -173,13 +173,55 @@ class TableTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $table = new Table($id,$parent,$event,$rows_generate);
+        $table = new Table($id,$parent,$event,$rows_generate,array('locale' => 'china'));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $table->addChild($child_a);        
         
         $table->validate();
+        
+        $this->assertEquals($table->getOption('locale'),'china');
      
+    }
+    
+    /**
+      *  @expectedException Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage  Table::Locale not in valid list
+      */
+    public function testValidateInvalidLocaleOption()
+    {
+        $id = 'schema_1';
+        $rows_generate = 100;
+       
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+    
+        $table = new Table($id,$parent,$event,$rows_generate,array('locale' => 1));
+     
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $table->addChild($child_a);        
+        
+        $table->validate();
+        
+    }
+    
+    public function testValidationNullLocale()
+    {
+        $id = 'schema_1';
+        $rows_generate = 100;
+       
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+    
+        $table = new Table($id,$parent,$event,$rows_generate,array('locale' => null));
+     
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $table->addChild($child_a);        
+        
+        $table->validate();
+        $this->assertEquals($table->getOption('locale'),'en');
+        
+        
     }
     
 }

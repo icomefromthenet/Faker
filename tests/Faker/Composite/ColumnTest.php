@@ -18,9 +18,9 @@ class ColumnTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
       
-        $Column = new Column($id,$parent,$event,$column_type);
+        $column = new Column($id,$parent,$event,$column_type);
         
-        $this->assertInstanceOf('Faker\Components\Faker\Composite\CompositeInterface',$Column);
+        $this->assertInstanceOf('Faker\Components\Faker\Composite\CompositeInterface',$column);
     
     }
     
@@ -65,7 +65,7 @@ class ColumnTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type);
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=>null));
              
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_a->expects($this->exactly(1))
@@ -83,7 +83,43 @@ class ColumnTest extends AbstractProject
         $column->addChild($child_a);        
         $column->addChild($child_b);        
         
+        $column->validate();
+        
         $column->generate(100,array());
+        
+        # assert default locale
+        $this->assertEquals($column->getOption('locale'),'en');
+   
+    }
+    
+    public function testConfigurationParsed()
+    {
+        $id = 'table_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+       
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+
+        
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $child_a->expects($this->exactly(1))
+                ->method('validate')
+                ->will($this->returnValue(true));
+            
+       
+        $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $child_b->expects($this->exactly(1))
+                ->method('validate')
+                ->will($this->returnValue(true));
+        
+        $column->addChild($child_a);        
+        $column->addChild($child_b);        
+        
+        $column->validate();
+        
+        $this->assertEquals($column->getOption('locale'),'china');
    
     }
     

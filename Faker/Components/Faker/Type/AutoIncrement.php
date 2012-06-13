@@ -51,14 +51,11 @@ class AutoIncrement extends Type
    /**
      * Generates the configuration tree builder.
      *
-     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
+     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition 
      */
-    public function getConfigTreeBuilder()
+    public function getConfigExtension(ArrayNodeDefinition $rootNode)
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('config');
-
-        $rootNode
+        return $rootNode
             ->children()
                 ->scalarNode('increment')
                     ->defaultValue(1)
@@ -81,8 +78,6 @@ class AutoIncrement extends Type
                 ->setInfo('The Value to start with')
                 ->end()
             ->end();
-            
-        return $treeBuilder;
     }
     
     //  -------------------------------------------------------------------------

@@ -50,18 +50,14 @@ class Range extends Type
     
     //  -------------------------------------------------------------------------
 
-    
     /**
      * Generates the configuration tree builder.
      *
-     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
+     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition 
      */
-    public function getConfigTreeBuilder()
+    public function getConfigExtension(ArrayNodeDefinition $rootNode)
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('config');
-
-        $rootNode
+        return $rootNode
             ->children()
                 ->scalarNode('min')
                     ->isRequired()
@@ -103,8 +99,6 @@ class Range extends Type
                     ->end()
                 ->end()
             ->end();
-            
-        return $treeBuilder;
     }
     
     //  -------------------------------------------------------------------------

@@ -64,5 +64,6 @@ interface CompositeInterface extends TypeInterface
       */
     public function validate();
     
+    
 }
 /* End of File */

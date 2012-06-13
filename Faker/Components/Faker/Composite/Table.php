@@ -1,14 +1,15 @@
 <?php
 namespace Faker\Components\Faker\Composite;
 
-use Faker\Components\Faker\Exception as FakerException;
-use Faker\Components\Faker\Formatter\FormatEvents;
-use Faker\Components\Faker\Formatter\GenerateEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Faker\Components\Faker\Composite\CompositeInterface;
+use Faker\Components\Faker\Exception as FakerException,
+    Faker\Components\Faker\Formatter\FormatEvents,
+    Faker\Components\Faker\Formatter\GenerateEvent,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface,
+    Symfony\Component\Config\Definition\Builder\TreeBuilder,
+    Faker\Components\Faker\Composite\CompositeInterface;
 
 
-class Table implements CompositeInterface
+class Table extends BaseComposite
 {
     
     /**
@@ -46,12 +47,14 @@ class Table implements CompositeInterface
       *  @param CompositeInterface $parent
       *  @param EventDispatcherInterface $event
       *  @param integer the number of rows to generate
+      *  @param mixed[] array of extra options
       */
-    public function __construct($id, CompositeInterface $parent, EventDispatcherInterface $event,$rows)
+    public function __construct($id, CompositeInterface $parent, EventDispatcherInterface $event,$rows,$options = array())
     {
         $this->id = $id;
         $this->setParent($parent);
         $this->event = $event;
+        $this->options = $options;
         
         # set the rows to generate
         
@@ -192,6 +195,10 @@ class Table implements CompositeInterface
 
     public function validate()
     {
+        
+        # validate internal config
+        $this->options = $this->merge($this->options);
+        
         # ask children to validate themselves
         
         foreach($this->getChildren() as $child) {
@@ -222,5 +229,37 @@ class Table implements CompositeInterface
     }
     
     //  -------------------------------------------------------------------------
+    # Option Interface
+    
+     /**
+     * Generates the configuration tree builder.
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
+     */
+    public function getConfigTreeBuilder()
+    {
+        $treeBuilder = new TreeBuilder();
+        $rootNode = $treeBuilder->root('config');
+
+        $rootNode
+            ->children()
+                ->scalarNode('locale')
+                    ->treatNullLike('en')
+                    ->defaultValue('en')
+                    ->setInfo('The Default Local for this schema')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new \Faker\Components\Faker\Exception('Table::Locale not in valid list');
+                        })
+                    ->end()
+                ->end()
+            ->end();
+            
+        return $treeBuilder;
+    }
+    
 }
 /* End of File */
