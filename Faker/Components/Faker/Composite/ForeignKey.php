@@ -7,14 +7,18 @@ use Faker\Components\Faker\Exception as FakerException,
     Faker\Components\Faker\CacheInterface,
     Faker\Components\Faker\GeneratorCache,
     Symfony\Component\EventDispatcher\EventDispatcherInterface,
-    Symfony\Component\Config\Definition\Builder\TreeBuilder,
-    Doctrine\DBAL\Types\Type as ColumnType;
+    Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
+/*
+ * class ForeignKey
+ *
+ * @version 1.0.2
+ * @author Lewis Dyer <getintouch@icomefromthenet.com>
+ */
 
-class Column extends BaseComposite implements CacheInterface
+class ForeignKey extends BaseComposite implements CacheInterface
 {
-    
-    /**
+     /**
       *  @var CompositeInterface 
       */
     protected $parent_type;
@@ -30,11 +34,6 @@ class Column extends BaseComposite implements CacheInterface
     protected $id;
     
     /**
-      *  @var Doctrine\DBAL\Types\Type the mapper to convert php types into database representations
-      */
-    protected $column_type;
-    
-    /**
       *  @var Symfony\Component\EventDispatcher\EventDispatcherInterface
       */
     protected $event;
@@ -47,7 +46,8 @@ class Column extends BaseComposite implements CacheInterface
     /**
       *  @var boolean true to use cache class 
       */
-    protected $use_cache = false;
+    protected $use_cache = true;
+    
     
     /**
       *  Class construtor
@@ -57,14 +57,13 @@ class Column extends BaseComposite implements CacheInterface
       *  @param string $id the schema name
       *  @param CompositeInterface $parent 
       */
-    public function __construct($id, CompositeInterface $parent, EventDispatcherInterface $event, ColumnType $column,$options = array())
+    public function __construct($id, CompositeInterface $parent, EventDispatcherInterface $event, $options = array())
     {
         $this->id = $id;
         $this->setParent($parent);
         $this->event = $event;
-        $this->column_type = $column;
         $this->options = $options;
-        $this->use_cache = false;
+        $this->use_cache = true;
     }
     
     /**
@@ -72,50 +71,18 @@ class Column extends BaseComposite implements CacheInterface
       */
     public function generate($rows,$values = array())
     {
-        # dispatch the start event
-        
-        $this->event->dispatch(
-                        FormatEvents::onColumnStart,
-                        new GenerateEvent($this,$values,$this->getId())
-        );
-        
-        # send the generate command to the type
-        $value = array();
-        
-        foreach($this->child_types as $type) {
-                         
-            # if we have many types we concatinate
-            $value[] =$type->generate($rows,$values);
-        
-            # dispatch the generate event
-            $this->event->dispatch(
-                FormatEvents::onColumnGenerate,
-                new GenerateEvent($this,array( $this->getId() => $value ),$this->getId())
-            );
+        # rewind on the first row
+        if($rows === 1) {
+            $this->cache->rewind();
         }
         
-        # assign the value to the struct, check if only one value
-        # if one value we want to keep the type the same
+        # fetch the current value
+        $value = $this->cache->current();
         
-        if(count($value) > 1) {
-            $values[$this->getId()] = implode('',$value); # join as a string 
-        } else {
-            $values[$this->getId()] = $value[0]; 
-        }
+        # iterate to next value
+        $this->cache->next();
         
-        # test if the value needs to be cached
-        if($this->use_cache === true) {
-            $this->cache->add($values[$this->getId()]);
-        }
-        
-        # dispatch the stop event
-        $this->event->dispatch(
-                FormatEvents::onColumnEnd,
-                new GenerateEvent($this,$values,$this->getId())
-        );
-        
-        # return values so they can be grouped in table parent
-        return $values;
+        return $value;
     }
     
     //  -------------------------------------------------------------------------
@@ -183,28 +150,20 @@ class Column extends BaseComposite implements CacheInterface
       */
     public function toXml()
     {
-        $str = '<column name="'.$this->getId().'" type="'.$this->getColumnType()->getName().'">'.PHP_EOL;
+        $str  = '<foreign-key ';
+        $str .= 'name="' . $this->getOption('foreignTable') . '.' .$this->getOption('foreignColumn').'" ';
+        $str .= 'foreignColumn="'.$this->getOption('foreignColumn').'" ';
+        $str .= 'foreignTable="'.$this->getOption('foreignTable').'"';
+        $str.=  '>'.PHP_EOL;
     
         foreach($this->getChildren() as $child) {
             $str .= $child->toXml();
         }
     
-        $str .= '</column>'. PHP_EOL;
+        $str .= '</foreign-key>'. PHP_EOL;
       
         return $str;
         
-    }
-    
-    //  -------------------------------------------------------------------------
-    
-    /**
-      *  Return the doctrine column type
-      *
-      * @return Doctrine\DBAL\Types\Type
-      */
-    public function getColumnType()
-    {
-        return $this->column_type;        
     }
     
     //  -------------------------------------------------------------------------
@@ -215,22 +174,13 @@ class Column extends BaseComposite implements CacheInterface
         $this->options = $this->merge($this->options);
         
         # ask children to validate themselves
-        
         foreach($this->getChildren() as $child) {
-        
           $child->validate(); 
         }
         
-        # check that children have been added
-        
-        if(count($this->getChildren()) === 0) {
-          throw new FakerException('Column must have at least 1 Type');
-        }
-        
-        
-        # test if a cache has been set
-        if($this->use_cache === true && !$this->cache instanceof GeneratorCache ) {
-            throw new FakerException('Column has been told to use cache but none set');
+        # check if cache has been set
+        if(!$this->cache instanceof GeneratorCache) {
+            throw new FakerException('Foreign-key requires a cache to be set');
         }
 
         return true;  
@@ -251,18 +201,15 @@ class Column extends BaseComposite implements CacheInterface
 
         $rootNode
             ->children()
-                ->scalarNode('locale')
-                    ->treatNullLike('en')
-                    ->defaultValue('en')
-                    ->setInfo('The Default Local for this schema')
-                    ->validate()
-                        ->ifTrue(function($v){
-                            return !is_string($v);
-                        })
-                        ->then(function($v){
-                            throw new \Faker\Components\Faker\Exception('Column::Locale not in valid list');
-                        })
-                    ->end()
+                ->scalarNode('foreignTable')
+                    ->isRequired()
+                    ->setInfo('The exact name of the foreign table')
+                    ->cannotBeEmpty()
+                ->end()
+                ->scalarNode('foreignColumn')
+                    ->isRequired()
+                    ->setInfo('Name of the Foreign Column')
+                    ->cannotBeEmpty()
                 ->end()
             ->end();
             

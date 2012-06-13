@@ -100,6 +100,15 @@ class SchemaParser extends BaseXMLParser
                 $this->builder->setTypeOption($attribs['name'],$attribs['value']);
 
             break;
+            case 'foreign-key' :
+                
+                if(isset($attribs['name']) === false) {
+                    throw new FakerException('Foreign-key must have a name unique name try foreignTable.foriegnColumn');
+                }
+                
+                $this->builder->addForeignKey($attribs['name'],$attribs);
+                
+            break;    
             case 'alternate';
             case 'pick';
             case 'random';

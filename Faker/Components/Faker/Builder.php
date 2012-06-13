@@ -2,6 +2,7 @@
 namespace Faker\Components\Faker;
 
 use Faker\Components\Faker\Composite\Column,
+    Faker\Components\Faker\Composite\ForeignKey,
     Faker\Components\Faker\Composite\Schema,
     Faker\Components\Faker\Composite\Table,
     Faker\Components\Faker\Composite\Alternate,
@@ -182,11 +183,6 @@ class Builder
     
     public function addColumn($name,$options)
     {
-        # merge options with default
-        $options = array_merge(array(
-                    'locale' => null
-                    ),$options);
-        
         
         # schema and table exist
         
@@ -222,6 +218,41 @@ class Builder
         return $this;
     }
 
+    //------------------------------------------------------------------
+
+    public function addForeignKey($name,$options)
+    {
+        # merge options with default
+        $options = array_merge(array(
+                    'foreignColumn' => null,
+                    'foreignTable' => null,
+                    ),$options);
+        
+        
+        # schema and table exist
+        
+        if(!$this->head instanceof Column) {
+           throw new FakerException('Can not add a Foreign-Key without first setting a column'); 
+        }
+    
+        if(empty($name)) {
+            throw new FakerException('Foreign-key must have a name unique name try foreignTable.foriegnColumn');
+        }
+        
+        # create new column
+        $foreign_key = new ForeignKey($name,$this->head,$this->event,array(
+                                                                        'foreignTable'  => $options['foreignTable'],
+                                                                        'foreignColumn' => $options['foreignColumn']
+                                                                        )
+                                      );
+        
+        # add the column to the table
+        $this->head->addChild($foreign_key);
+        $this->head = $foreign_key;
+        
+        return $this;
+    }    
+    
     //  -------------------------------------------------------------------------
     
     public function addSelector($name,$options)

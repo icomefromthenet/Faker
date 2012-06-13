@@ -5,6 +5,8 @@ use Faker\Components\Faker\Composite\Column,
     Faker\Components\Faker\Composite\CompositeInterface,
     Faker\Components\Faker\Formatter\FormatEvents,
     Faker\Components\Faker\Formatter\GenerateEvent,
+    Faker\Components\Faker\GeneratorCache,
+    Faker\Components\Faker\CacheInterface,
     Doctrine\DBAL\Types\Type as ColumnType,
     Faker\Tests\Base\AbstractProject;
     
@@ -21,6 +23,7 @@ class ColumnTest extends AbstractProject
         $column = new Column($id,$parent,$event,$column_type);
         
         $this->assertInstanceOf('Faker\Components\Faker\Composite\CompositeInterface',$column);
+        $this->assertInstanceOf('Faker\Components\Faker\CacheInterface',$column);
     
     }
     
@@ -167,6 +170,176 @@ class ColumnTest extends AbstractProject
         $this->assertEquals($parent,$column->getParent());
         $this->assertEquals($id,$column->getId());
         $this->assertSame($column_type,$column->getColumnType());
+    }
+    
+    public function testCacheInterface()
+    {
+         $id = 'table_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+       
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+
+        
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $child_a->expects($this->exactly(1))
+                ->method('validate')
+                ->will($this->returnValue(true));
+            
+       
+        $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $child_b->expects($this->exactly(1))
+                ->method('validate')
+                ->will($this->returnValue(true));
+        
+        $column->addChild($child_a);        
+        $column->addChild($child_b);        
+        
+        $column->validate();
+                
+        
+        # test the default use cache = false
+        $this->assertFalse($column->getUseCache());
+
+        # test the use cache property
+        $column->setUseCache(true);
+        $this->assertTrue($column->getUseCache());
+        
+        # setup cache (not testing validation)
+        $cache = new GeneratorCache();
+        $column->setGeneratorCache($cache);
+        $this->assertSame($column->getGeneratorCache(),$cache);
+                
+        
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Column has been told to use cache but none set
+      */
+    public function testCacheValidateFailsMissingCache()
+    {
+          $id = 'table_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+       
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+
+        
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $child_a->expects($this->exactly(1))
+                ->method('validate')
+                ->will($this->returnValue(true));
+            
+       
+        $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $child_b->expects($this->exactly(1))
+                ->method('validate')
+                ->will($this->returnValue(true));
+        
+        $column->addChild($child_a);        
+        $column->addChild($child_b);        
+        
+        # test the default use cache = false
+        $this->assertFalse($column->getUseCache());
+
+        # test the use cache property
+        $column->setUseCache(true);
+        $this->assertTrue($column->getUseCache());
+        
+        $column->validate();
+        
+    }
+    
+    public function testValidatePassesWithCacheUsed()
+    {
+         $id = 'table_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+       
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+
+        
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $child_a->expects($this->exactly(1))
+                ->method('validate')
+                ->will($this->returnValue(true));
+            
+       
+        $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $child_b->expects($this->exactly(1))
+                ->method('validate')
+                ->will($this->returnValue(true));
+        
+        $column->addChild($child_a);        
+        $column->addChild($child_b);        
+        
+        # test the use cache property
+        $column->setUseCache(true);
+        
+        # setup cache (not testing validation)
+        $cache = new GeneratorCache();
+        $column->setGeneratorCache($cache);
+        
+        $column->validate();        
+        
+    }
+    
+    
+    public function testCacheUsedWithGenerate()
+    {
+         $id = 'table_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+       
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+
+        
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $child_a->expects($this->exactly(1))
+                ->method('validate')
+                ->will($this->returnValue(true));
+        
+        $child_a->expects($this->exactly(2))
+                ->method('generate')
+                ->will($this->returnValue('valuea'));
+            
+       
+        $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $child_b->expects($this->exactly(1))
+                ->method('validate')
+                ->will($this->returnValue(true));
+                
+        $child_b->expects($this->exactly(2))
+                ->method('generate')
+                ->will($this->returnValue('valueb'));        
+        
+        $column->addChild($child_a);        
+        $column->addChild($child_b);        
+        
+        $column->setUseCache(true);
+        $cache = new GeneratorCache();
+        $column->setGeneratorCache($cache);
+        
+        $column->validate(); 
+        
+        $column->generate(1,array());
+        $column->generate(2,array());
+        
+        $this->assertEquals(2,count($cache));
+        $this->assertEquals($cache->current(),'valueavalueb');
+        
+        $cache->next();
+        $this->assertEquals($cache->current(),'valueavalueb');
+        
     }
     
 }
