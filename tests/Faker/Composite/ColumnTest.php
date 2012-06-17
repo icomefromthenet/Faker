@@ -86,7 +86,9 @@ class ColumnTest extends AbstractProject
         $column->addChild($child_a);        
         $column->addChild($child_b);        
         
+        $column->merge();
         $column->validate();
+        
         
         $column->generate(100,array());
         

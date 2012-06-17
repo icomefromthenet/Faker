@@ -5,12 +5,20 @@ use Faker\Components\Faker\Utilities,
     Faker\Components\Faker\Composite\CompositeInterface,
     Faker\Components\Faker\Exception as FakerException,
     Faker\Components\Faker\TypeInterface,
+    Faker\Components\Faker\BaseNode,
+    Faker\Components\Faker\Visitor\CacheInjectorVisitor,
+    Faker\Components\Faker\Visitor\MapBuilderVisitor,
+    Faker\Components\Faker\Visitor\RefCheckVisitor,
+    Faker\Components\Faker\Visitor\BaseVisitor,
     Faker\Components\Faker\TypeConfigInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface,
     Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition,
-    Symfony\Component\Config\Definition\Builder\TreeBuilder;
+    Symfony\Component\Config\Definition\Builder\TreeBuilder,
+    Symfony\Component\Config\Definition\Processor,
+    Symfony\Component\Config\Definition\Exception\InvalidConfigurationException,
+    Faker\Components\Faker\OptionInterface;
 
-class Type implements CompositeInterface, TypeConfigInterface 
+class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
 {
     
     /**
@@ -102,7 +110,7 @@ class Type implements CompositeInterface, TypeConfigInterface
       */
     public function getChildren()
     {
-        throw new FakerException('Not Implemented');
+       return array();
     }
     
     
@@ -136,11 +144,28 @@ class Type implements CompositeInterface, TypeConfigInterface
 	return false;        
     }
 
-    //  ------------------------------------------------------------------------	# Block Name
+    //  ------------------------------------------------------------------------
+    
 
-    public function merge($config)
+    public function merge()
     {
-	throw new FakerException('not implemented');
+	try {
+            
+            $processor = new Processor();
+            $options = $processor->processConfiguration($this, array('config' => $this->options));
+	    foreach($options as $name => $value ) {
+		$this->setOption($name,$value);
+	    }
+	
+	    foreach($this->getChildren() as $child) {
+		$child->merge();
+	    }
+            
+        }catch(InvalidConfigurationException $e) {
+            
+            throw new FakerException($e->getMessage());
+        }
+	
     }
 
     //  -------------------------------------------------------------------------
@@ -156,7 +181,8 @@ class Type implements CompositeInterface, TypeConfigInterface
     }
  
     //  -------------------------------------------------------------------------
-
+    # Option Interface
+  
     public function setOption($name,$option)
     {
 	$this->options[$name] = $option;
@@ -167,8 +193,6 @@ class Type implements CompositeInterface, TypeConfigInterface
 	return $this->options[$name];
     }
     
-    //  -------------------------------------------------------------------------
-
     /**
      * Generates the configuration tree builder.
      *
@@ -200,12 +224,33 @@ class Type implements CompositeInterface, TypeConfigInterface
 	return $treeBuilder;
     }
     
-    //  -------------------------------------------------------------------------
-    
     public function getConfigExtension(ArrayNodeDefinition $rootNode)
     {
 	throw new FakerException('not implemented');
     }
+    
+    //------------------------------------------------------------------
+    # Base Node Interface
+    
+    /**
+      *  Accept a visitor
+      *
+      *  @return void
+      *  @access public
+      *  @param BaseVisitor $visitor the visitor to accept
+      */
+    public function acceptVisitor(BaseVisitor $visitor)
+    {
+        
+	# no processing yet needed.
+	
+	
+	return $visitor;
+    }
+    
+    //------------------------------------------------------------------
+    
+    
     
 }
 /* End of File */

@@ -46,13 +46,10 @@ class DateTest extends AbstractProject
                       ->getMock();
             
         $type = new Date($id,$parent,$event,$utilities);
-        $config = array(
-                        'start'=> '14-01-1983',
-                        ); 
+        $type->setOption('start', '14-01-1983');
+        $type->merge();        
         
-        $options = $type->merge($config);        
-        
-        $this->assertInstanceOf('\DateTime',$options['start']);
+        $this->assertInstanceOf('\DateTime',$type->getOption('start'));
         
     }
     
@@ -77,10 +74,8 @@ class DateTest extends AbstractProject
                       ->getMock();
             
         $type = new Date($id,$parent,$event,$utilities);
-        $config = array('aaaa' => 'bbb'); 
-        
-        $options = $type->merge($config);        
-        
+        $type->setOption('aaaa' , 'bbb'); 
+        $type->merge();        
         
     }
     
@@ -105,9 +100,8 @@ class DateTest extends AbstractProject
                       ->getMock();
             
         $type = new Date($id,$parent,$event,$utilities);
-        $config = array('start' => 'bbb'); 
-        
-        $options = $type->merge($config);        
+        $type->setOption('start' , 'bbb');
+        $type->merge();        
         
         
     }
@@ -133,9 +127,9 @@ class DateTest extends AbstractProject
                       ->getMock();
             
         $type = new Date($id,$parent,$event,$utilities);
-        $config = array('max' => 'bbb','start' =>'1st August 2007'); 
-        
-        $options = $type->merge($config);        
+        $type->setOption('max' , 'bbb');
+        $type->setOption('start' ,'1st August 2007');
+        $type->merge();        
         
         
     }
@@ -163,6 +157,7 @@ class DateTest extends AbstractProject
         # test with start > 0
         $type->setOption('start','today');
         $type->setOption('modify','+ 1 hour');
+        $type->merge();
         $type->validate(); 
          
         $this->assertInstanceOf('\DateTime',$type->generate(1,array()));
@@ -173,6 +168,7 @@ class DateTest extends AbstractProject
         $type->setOption('start','today');
         $type->setOption('modify','+ 1 hour');
         $type->setOption('max','today +3 hours');
+        $type->merge();
         $type->validate(); 
         
        $dte1 = $type->generate(1,array());

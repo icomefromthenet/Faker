@@ -211,13 +211,8 @@ class Column extends BaseComposite implements CacheInterface
 
     public function validate()
     {
-        # validate internal config
-        $this->options = $this->merge($this->options);
-        
         # ask children to validate themselves
-        
         foreach($this->getChildren() as $child) {
-        
           $child->validate(); 
         }
         

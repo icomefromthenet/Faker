@@ -20,6 +20,10 @@ use Faker\Components\Faker\Composite\Column,
     Faker\Components\Faker\Formatter\FormatterInterface,
     Faker\Components\Faker\TypeFactory,
     Faker\Components\Writer\WriterInterface,
+    Faker\Components\Faker\Compiler\Compiler,
+    Faker\Components\Faker\Compiler\Pass\CircularRefPass,
+    Faker\Components\Faker\Compiler\Pass\CacheInjectorPass,
+    Faker\Components\Faker\Compiler\Pass\KeysExistPass,
     Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Builder
@@ -405,6 +409,23 @@ class Builder
         return $this;
     }
     
+    //------------------------------------------------------------------
+    # Merge
+    
+    /**
+      *  Bind config to the composite
+      *
+      *  @access public
+      *  @return Builder
+      */
+    public function merge()
+    {
+        $this->current_schema->merge();
+        
+        return $this;
+    }
+    
+    
     //  -------------------------------------------------------------------------
     
     /**
@@ -421,8 +442,17 @@ class Builder
         
         $this->current_schema->setWriters($this->formatters);
         
+        # merge config with there nodes in the composite
+        $this->merge();
+        
+        # run the compiler
+        $compiler = new Compiler();
+        $compiler->addPass(new KeysExistPass());
+        $compiler->addPass(new CacheInjectorPass());
+        $compiler->addPass(new CircularRefPass());
+        $compiler->compile($this->current_schema);
+        
         # validate the composite
-
         $this->current_schema->validate();
         
         $schema = $this->current_schema;
@@ -470,5 +500,11 @@ class Builder
     
     //------------------------------------------------------------------
     
+    public function getSchema()
+    {
+        return $this->current_schema;
+    }
+    
+    //------------------------------------------------------------------
 }
 /* End of File */

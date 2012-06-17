@@ -46,11 +46,8 @@ class AlphaNumericTest extends AbstractProject
                       ->getMock();
             
         $type = new AlphaNumeric($id,$parent,$event,$utilities);
-        $config = array('format' =>'xxxx'); 
-        
-        $options = $type->merge($config);        
-        
-        
+        $type->setOption('format','xxxx'); 
+        $type->merge();        
     }
     
     //  -------------------------------------------------------------------------
@@ -74,9 +71,7 @@ class AlphaNumericTest extends AbstractProject
                       ->getMock();
             
         $type = new AlphaNumeric($id,$parent,$event,$utilities);
-        $config = array(); 
-        
-        $options = $type->merge($config);        
+        $type->merge();        
         
         
     }
@@ -105,6 +100,7 @@ class AlphaNumericTest extends AbstractProject
             
         $type = new AlphaNumeric($id,$parent,$event,$utilities);
         $type->setOption('format','ccCC');
+        $type->merge();
         $type->validate(); 
          
         $this->assertEquals('dgHJ',$type->generate(1,array()));

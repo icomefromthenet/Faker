@@ -1,17 +1,17 @@
 <?php
 namespace Faker\Components\Faker\Composite;
 
-use Faker\Components\Faker\Exception as FakerException;
-use Faker\Components\Faker\Formatter\FormatEvents;
-use Faker\Components\Faker\Formatter\GenerateEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Faker\Components\Faker\Exception as FakerException,
+    Faker\Components\Faker\Formatter\FormatEvents,
+    Faker\Components\Faker\Formatter\GenerateEvent,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
   *  Child to Switch
   *
   *  need to specify at which row to switch
   */
-class When implements CompositeInterface, SelectorInterface
+class When extends BaseComposite implements CompositeInterface, SelectorInterface
 {
     
     /**

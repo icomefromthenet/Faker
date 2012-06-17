@@ -48,18 +48,16 @@ class UniqueTest extends AbstractProject
                       ->getMock();
             
         $type = new UniqueString($id,$parent,$event,$utilities);
-        $config = array('format' =>'xxxx'); 
-        $options = $type->merge($config);        
-        $this->assertSame($options['format'],'xxxx');
+        $type->setOption('format', 'xxxx');
+        $type->merge();        
+        $this->assertSame('xxxx',$type->getOption('format'));
         
         $type = new UniqueNumber($id,$parent,$event,$utilities);
-        $config = array('format' =>'xxxx'); 
-        $options = $type->merge($config);        
-        $this->assertSame($options['format'],'xxxx');
+        $type->setOption('format', 'xxxx');
+        $type->merge();        
+        $this->assertSame('xxxx',$type->getOption('format'));
         
     }
-    
-    //  -------------------------------------------------------------------------
     
     //  -------------------------------------------------------------------------
     
@@ -85,6 +83,8 @@ class UniqueTest extends AbstractProject
             
         $type = new UniqueString($id,$parent,$event,$utilities);
         $type->setOption('format','ccCC');
+        
+        $type->merge();        
         $type->validate(); 
          
         $this->assertEquals('dgHJ',$type->generate(1,array()));
@@ -115,6 +115,7 @@ class UniqueTest extends AbstractProject
             
         $type = new UniqueString($id,$parent,$event,$utilities);
         $type->setOption('format','XXxx');
+        $type->merge(); 
         $type->validate(); 
          
         $this->assertEquals(1207,$type->generate(1,array()));

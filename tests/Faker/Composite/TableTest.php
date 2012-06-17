@@ -161,6 +161,7 @@ class TableTest extends AbstractProject
     
         $table = new Table($id,$parent,$event,$rows_generate);
      
+        $table->merge();
         $table->validate();
      
     }
@@ -178,9 +179,10 @@ class TableTest extends AbstractProject
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $table->addChild($child_a);        
         
+        $table->merge();
         $table->validate();
         
-        $this->assertEquals($table->getOption('locale'),'china');
+        $this->assertEquals('china',$table->getOption('locale'));
      
     }
     
@@ -201,6 +203,7 @@ class TableTest extends AbstractProject
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $table->addChild($child_a);        
         
+        $table->merge();
         $table->validate();
         
     }
@@ -218,8 +221,9 @@ class TableTest extends AbstractProject
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $table->addChild($child_a);        
         
+        $table->merge();
         $table->validate();
-        $this->assertEquals($table->getOption('locale'),'en');
+        $this->assertEquals('en',$table->getOption('locale'));
         
         
     }

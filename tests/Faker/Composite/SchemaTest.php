@@ -132,6 +132,7 @@ class SchemaTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $schema = new Schema($id,null,$event);
      
+        $schema->merge();
         $schema->validate();
      
     }
@@ -148,18 +149,16 @@ class SchemaTest extends AbstractProject
         $schema->addChild($child_a);        
         $schema->setWriters(array($writer));
         
+        $schema->merge();
         $schema->validate();
         
         # test the default option was parsed
-        $this->assertEquals($schema->getOption('locale'),'en');
+        $this->assertEquals('en',$schema->getOption('locale'));
      
     }
     
-     /**
-      *  @expectedException Faker\Components\Faker\Exception
-      *  @expectedExceptionMessage Schema::Locale not in valid list
-      */
-    public function testFailedLocaleValidation()
+     
+    public function testDefaultLocaleSetNullPass()
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
@@ -171,7 +170,10 @@ class SchemaTest extends AbstractProject
         $schema->addChild($child_a);        
         $schema->setWriters(array($writer));
         
-        $schema->validate();
+        $schema->merge();
+        
+         # test the default option was parsed
+        $this->assertEquals('en',$schema->getOption('locale'));
         
     }
     

@@ -41,6 +41,7 @@ class ForeignKeyTest extends AbstractProject
         $cache = new GeneratorCache();
         $foreign->setGeneratorCache($cache);
         
+        $foreign->merge();
         $foreign->validate();        
     }
     
@@ -117,6 +118,7 @@ class ForeignKeyTest extends AbstractProject
 
         $this->assertTrue($foreign->getUseCache());
         
+        $foreign->merge();
         $foreign->validate();
         
     }
@@ -136,6 +138,7 @@ class ForeignKeyTest extends AbstractProject
 
         $this->assertTrue($foreign->getUseCache());
         
+        $foreign->merge();
         $foreign->validate();
         
     }
@@ -155,6 +158,7 @@ class ForeignKeyTest extends AbstractProject
 
         $this->assertTrue($foreign->getUseCache());
         
+        $foreign->merge();
         $foreign->validate();
         
     }
@@ -176,6 +180,7 @@ class ForeignKeyTest extends AbstractProject
         $cache = new GeneratorCache();
         $foreign->setGeneratorCache($cache);
         
+        $foreign->merge();
         $foreign->validate();        
         
     }
@@ -198,6 +203,7 @@ class ForeignKeyTest extends AbstractProject
         
         # set cache and validate        
         $foreign->setGeneratorCache($cache);
+        $foreign->merge();
         $foreign->validate(); 
         
         # generate (fetch from cache)

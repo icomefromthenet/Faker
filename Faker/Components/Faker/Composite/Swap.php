@@ -1,13 +1,13 @@
 <?php
 namespace Faker\Components\Faker\Composite;
 
-use Faker\Components\Faker\Exception as FakerException;
-use Faker\Components\Faker\Formatter\FormatEvents;
-use Faker\Components\Faker\Formatter\GenerateEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Faker\Components\Faker\Exception as FakerException,
+    Faker\Components\Faker\Formatter\FormatEvents,
+    Faker\Components\Faker\Formatter\GenerateEvent,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 
-class Swap implements CompositeInterface , SelectorInterface
+class Swap extends BaseComposite implements CompositeInterface , SelectorInterface
 {
     
     /**

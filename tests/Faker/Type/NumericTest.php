@@ -46,11 +46,8 @@ class NumericTest extends AbstractProject
                       ->getMock();
             
         $type = new Numeric($id,$parent,$event,$utilities);
-        $config = array('format' =>'xxxx'); 
-        
-        $options = $type->merge($config);        
-        
-        
+        $type->setOption('format' ,'xxxx'); 
+        $type->merge();        
     }
     
     //  -------------------------------------------------------------------------
@@ -74,9 +71,7 @@ class NumericTest extends AbstractProject
                       ->getMock();
             
         $type = new Numeric($id,$parent,$event,$utilities);
-        $config = array(); 
-        
-        $options = $type->merge($config);        
+        $type->merge();        
         
         
     }
@@ -105,6 +100,7 @@ class NumericTest extends AbstractProject
             
         $type = new Numeric($id,$parent,$event,$utilities);
         $type->setOption('format','xxxx');
+        $type->merge();
         $type->validate(); 
          
         $this->assertEquals(1234,$type->generate(1,array()));
@@ -131,6 +127,7 @@ class NumericTest extends AbstractProject
             
         $type = new Numeric($id,$parent,$event,$utilities);
         $type->setOption('format','xxxx.xx');
+        $type->merge();
         $type->validate(); 
          
         $this->assertEquals(1234.22,$type->generate(1,array()));

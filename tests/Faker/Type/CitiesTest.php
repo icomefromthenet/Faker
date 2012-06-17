@@ -47,12 +47,10 @@ class CitiesTest extends AbstractProject
                       ->getMock();
             
         $type = new Cities($id,$parent,$event,$utilities);
-        $config = array('countries' =>'AU,US,UK');
+        $type->setOption('countries' ,'AU,US,UK');
+        $type->merge();        
         
-        
-        $options = $type->merge($config);        
-        
-        $this->assertSame($options['countries'],array('AU','US','UK'));
+        $this->assertSame($type->getOption('countries'),array('AU','US','UK'));
     }
     
     //  -------------------------------------------------------------------------
@@ -73,6 +71,7 @@ class CitiesTest extends AbstractProject
             
         $type = new Cities($id,$parent,$event,$utilities);
         $type->setOption('countries','AU');
+        $type->merge();
         $type->validate(); 
          
         $value = $type->generate(1,array());
