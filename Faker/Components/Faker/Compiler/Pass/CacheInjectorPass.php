@@ -2,7 +2,7 @@
 
 namespace Faker\Components\Faker\Compiler\Pass;
 
-use Faker\Components\Faker\CompilerPassInterface,
+use Faker\Components\Faker\Compiler\CompilerPassInterface,
     Faker\Components\Faker\Composite\CompositeInterface,
     Faker\Components\Faker\Visitor\Relationships,
     Faker\Components\Faker\GeneratorCache,
@@ -39,7 +39,7 @@ class CacheInjectorPass implements CompilerPassInterface
             $cache          = new GeneratorCache();
 
             # inject cache into foreign reference (where key originates)
-            $foreign_cache_injector = new ForeignCacheInjectorVisitor(
+            $foreign_cache_injector = new ColumnCacheInjectorVisitor(
                                                                       $cache,
                                                                       $relationship->getForeign()->getTable(),
                                                                       $relationship->getForeign()->getColumn()
@@ -49,7 +49,7 @@ class CacheInjectorPass implements CompilerPassInterface
             # inject same cache into the local container.
             # container is used to allow multiple containers per column for composite keys.
             # not good design to combine keys into single column but still done on occasion.
-            $local_cache_injector   = new ColumnCacheInjectorVisitor(
+            $local_cache_injector   = new ForeignCacheInjectorVisitor(
                                                                      $cache,
                                                                      $relationship->getLocal()->getTable(),
                                                                      $relationship->getLocal()->getColumn(),

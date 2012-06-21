@@ -429,6 +429,42 @@ class Builder
     //  -------------------------------------------------------------------------
     
     /**
+      *  Build the compiler
+      *
+      *  @access public
+      *  @return Builder
+      */
+    public function compile()
+    {
+        # run the compiler
+        $compiler = new Compiler();
+        $compiler->addPass(new KeysExistPass());
+        $compiler->addPass(new CacheInjectorPass());
+        $compiler->addPass(new CircularRefPass());
+        $compiler->compile($this->current_schema);
+        
+        return $this;
+    }
+    
+    
+    //  -------------------------------------------------------------------------
+    
+    /**
+      *  Run validation on the composite
+      *
+      *  @return Builder
+      *  @access public
+      */
+    public function validate()
+    {
+        $this->current_schema->validate();
+        
+        return $this;
+    }
+    
+    //  -------------------------------------------------------------------------
+    
+    /**
       *  Return a completed 'Composite of Types'
       *  
       */ 
@@ -439,26 +475,20 @@ class Builder
         }
         
         # add the writers to the composite
-        
         $this->current_schema->setWriters($this->formatters);
         
         # merge config with there nodes in the composite
         $this->merge();
         
-        # run the compiler
-        $compiler = new Compiler();
-        $compiler->addPass(new KeysExistPass());
-        $compiler->addPass(new CacheInjectorPass());
-        $compiler->addPass(new CircularRefPass());
-        $compiler->compile($this->current_schema);
+        # compile the composite (inject cache and check foreign keys)
+        $this->compile();
         
         # validate the composite
-        $this->current_schema->validate();
+        $this->validate();
         
         $schema = $this->current_schema;
         
         # reset the builder
-        
         $this->clear();
         
         return $schema;

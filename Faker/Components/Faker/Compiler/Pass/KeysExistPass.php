@@ -3,7 +3,7 @@ namespace Faker\Components\Faker\Compiler\Pass;
 
 use Faker\Components\Faker\Composite\CompositeInterface,
     Faker\Components\Faker\Exception as FakerException,
-    Faker\Components\Faker\Compilder\CompilerPassInterface,
+    Faker\Components\Faker\Compiler\CompilerPassInterface,
     Faker\Components\Faker\Visitor\MapBuilderVisitor,
     Faker\Components\Faker\Visitor\Relationships,
     Faker\Components\Faker\Visitor\RefCheckVisitor;
@@ -36,7 +36,7 @@ class KeysExistPass implements CompilerPassInterface
             
             # foreign tables in this context ref to table/column where the key was generated and cached.
             if($exists->getFoundColumn() === null) {
-                throw new FakerException($relationship->getForeign()->getTable() .'.'.$relationship->getForeign()->getColumn(), ' not found in composite');
+                throw new FakerException($relationship->getForeign()->getTable() .'.'.$relationship->getForeign()->getColumn(). ' not found in composite');
             }
         }
     }

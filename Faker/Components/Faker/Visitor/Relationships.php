@@ -57,6 +57,65 @@ class Relationships implements \IteratorAggregate , \Countable
         return $foreign;
     }
     
+    
+    public function getForeignRelationsByTable($table)
+    {
+        $foreign = array();
+        
+        foreach($this->relationships as $relationship) {
+            if($relationship->getForeign()->getTable() === $table) {
+                $foreign[] = $relationship->getForeign();    
+            }
+            
+        }
+        
+        return $foreign;
+        
+    }
+    
+    public function getLocalRelationsByTable($table)
+    {
+         $local = array();
+        
+        foreach($this->relationships as $relationship) {
+            if($relationship->getLocal()->getTable() === $table) {
+                $local[] = $relationship->getLocal();
+            }
+        }
+        
+        return $local;
+    }
+    
+    
+    public function filterByLocaleTable($table)
+    {
+        $local = array();
+        
+        foreach($this->relationships as $relationship) {
+            if($relationship->getLocal()->getTable() === $table) {
+                $local[] = $relationship;
+            }
+        }
+        
+        return $local;
+    }
+        
+    public function filterByForeignTable($table)
+    {
+        $foreign = array();
+        
+        foreach($this->relationships as $relationship) {
+            if($relationship->getForeign()->getTable() === $table) {
+                $foreign[] = $relationship;    
+            }
+            
+        }
+        
+        return $foreign;
+        
+    }
+    
+    
     //------------------------------------------------------------------
     # IteratorAggregate Interface
     
@@ -73,5 +132,7 @@ class Relationships implements \IteratorAggregate , \Countable
         return count($this->relationships);
     }
 
+    
+    //------------------------------------------------------------------
 }
 /* End of File */

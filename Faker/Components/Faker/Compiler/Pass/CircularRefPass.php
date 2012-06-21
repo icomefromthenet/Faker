@@ -2,10 +2,12 @@
 
 namespace Faker\Components\Faker\Compiler\Pass;
 
-use Faker\Components\Faker\CompilerPassInterface,
+use Faker\Components\Faker\Compiler\CompilerPassInterface,
     Faker\Components\Faker\Composite\CompositeInterface,
     Faker\Components\Faker\Visitor\Relationships,
+    Faker\Components\Faker\Exception as FakerException,
     Faker\Components\Faker\Visitor\MapBuilderVisitor;
+    
 
 /*
  * class CacheInjectorPass
@@ -37,9 +39,27 @@ class CircularRefPass implements CompilerPassInterface
         
         
         # make sure table have no bi-directional dependecies (b requires a and a requires b) 
+        $tables_require_key = $map->getLocalRelations();
         
-        foreach($map as $relationship) {
-    
+        foreach($tables_require_key as $relation) {
+          
+            # fetch tables that provide keys to this local table
+            $tables_that_provide_keys = $map->filterByForeignTable($relation->getTable());
+            
+            # Check that above tables have no foreign keys that point back to the table defined in the current relation.
+            $remaining = array_filter($tables_that_provide_keys,
+                                      function($element) use ($relation){
+                                        if($element->getForeign()->getTable() === $relation->getTable()) {
+                                          return true;
+                                        }
+                                        
+                                        return false;
+                                    });
+            
+            if(count($remaining) > 0) {
+                # throw an exception
+                throw new FakerException(sprintf('Is a Bad Dependency between Relationships %s and %s',$relation->getTable(),$remaining[0]->getLocal()->getTable()));
+            }
             
         }
         
