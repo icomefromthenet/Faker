@@ -47,11 +47,9 @@ class NamesTest extends AbstractProject
                       ->getMock();
             
         $type = new Names($id,$parent,$event,$utilities);
-        $config = array('format' =>'xxxx'); 
-        
-        $options = $type->merge($config);        
-        
-        $this->assertEquals($options['format'],$config['format']);
+        $type->setOption('format','xxxx'); 
+        $type->merge();        
+        $this->assertEquals('xxxx',$type->getOption('format'));
         
     }
     
@@ -76,11 +74,7 @@ class NamesTest extends AbstractProject
                       ->getMock();
             
         $type = new Names($id,$parent,$event,$utilities);
-        $config = array(); 
-        
-        $options = $type->merge($config);        
-        
-        
+        $type->merge();        
     }
     
     //  -------------------------------------------------------------------------
@@ -100,32 +94,38 @@ class NamesTest extends AbstractProject
             
         $type = new Names($id,$parent,$event,$utilities);
         $type->setOption('format','{fname} {lname}');
+        $type->merge();
         $type->validate(); 
          
         $this->assertStringMatchesFormat('%s %s',$type->generate(1,array()));
     
     
         $type->setOption('format','{fname} {inital} {lname}');
+        $type->merge();
         $type->validate(); 
          
         $this->assertStringMatchesFormat('%s %s %s',$type->generate(1,array()));
     
         $type->setOption('format','{fname},{inital} {lname}');
+        $type->merge();
         $type->validate(); 
          
         $this->assertStringMatchesFormat('%s,%s %s',$type->generate(1,array()));
         
         $type->setOption('format','{fname},{lname} {inital}');
+        $type->merge();
         $type->validate(); 
          
         $this->assertStringMatchesFormat('%s,%s %s',$type->generate(1,array()));
         
         $type->setOption('format','{lname}');
+        $type->merge();
         $type->validate(); 
          
         $this->assertStringMatchesFormat('%s',$type->generate(1,array()));
         
         $type->setOption('format','{fname},{lname} {inital}');
+        $type->merge();
         $type->validate(); 
          
     }

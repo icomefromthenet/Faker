@@ -46,13 +46,14 @@ class RangeTest extends AbstractProject
                       ->getMock();
             
         $type = new Range($id,$parent,$event,$utilities);
-        $config = array('min' => 1 , 'max' => 100,'step' => 1); 
+        $type->setOption('min', 1 );
+        $type->setOption('max', 100);
+        $type->setOption('step', 1);
+        $type->merge();        
         
-        $options = $type->merge($config);        
-        
-        $this->assertEquals($options['min'],1);
-        $this->assertEquals($options['max'],100);
-        $this->assertEquals($options['step'],1);
+        $this->assertEquals($type->getOption('min'),1);
+        $this->assertEquals($type->getOption('max'),100);
+        $this->assertEquals($type->getOption('step'),1);
         
         
     }
@@ -78,13 +79,9 @@ class RangeTest extends AbstractProject
                       ->getMock();
             
         $type = new Range($id,$parent,$event,$utilities);
-        $config = array(
-                        'max' => 'aaa',
-                        'min' => 1
-                       );
-             
-        $options = $type->merge($config);        
-        
+        $type->setOption('max', 'aaa');
+        $type->setOption('min' ,1);
+        $type->merge();        
         
     }
     
@@ -109,14 +106,9 @@ class RangeTest extends AbstractProject
                       ->getMock();
             
         $type = new Range($id,$parent,$event,$utilities);
-        $config = array(
-                        'max' => 100,
-                        'min' => 'aa'
-                       );
-             
-        $options = $type->merge($config);        
-        
-        
+        $type->setOption('max' , 100);
+        $type->setOption('min' ,'aa');
+        $type->merge();        
     }
     
     //  -------------------------------------------------------------------------
@@ -140,11 +132,10 @@ class RangeTest extends AbstractProject
                       ->getMock();
             
         $type = new Range($id,$parent,$event,$utilities);
-        $config = array('step' => 'bbb','max' => 100, 'min' => 1); 
-        
-        $options = $type->merge($config);        
-        
-        
+        $type->setOption('step' , 'bbb');
+        $type->setOption('max', 100);
+        $type->setOption('min' , 1);
+        $type->merge();        
     }
     
     //  -------------------------------------------------------------------------

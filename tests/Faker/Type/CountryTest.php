@@ -47,14 +47,14 @@ class CountryTest extends AbstractProject
                       ->getMock();
             
         $type = new Country($id,$parent,$event,$utilities);
-        $config = array('countries' =>'AU,US,UK');
-        $options = $type->merge($config);        
-        $this->assertSame($options['countries'],array('AU','US','UK'));
+        $type->setOption('countries' ,'AU,US,UK');
+        $type->merge();        
+        $this->assertSame(array('AU','US','UK'),$type->getOption('countries'));
         
         # test with no options
         $type = new Country($id,$parent,$event,$utilities);
-        $options = $type->merge(array());        
-        $this->assertSame($options['countries'],null);
+        $type->merge();        
+        $this->assertSame($type->getOption('countries'),null);
    
     }
     
@@ -76,6 +76,7 @@ class CountryTest extends AbstractProject
             
         $type = new Country($id,$parent,$event,$utilities);
         $type->setOption('countries','AU,UK,US');
+        $type->merge();
         $type->validate(); 
          
         $value = $type->generate(1,array());
@@ -87,6 +88,7 @@ class CountryTest extends AbstractProject
         
         # test with no options        
         $type = new Country($id,$parent,$event,$utilities);
+        $type->merge();
         $type->validate(); 
                 
         $value = $type->generate(1,array());

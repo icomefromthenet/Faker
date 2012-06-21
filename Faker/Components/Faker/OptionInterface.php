@@ -14,7 +14,5 @@ interface OptionInterface extends ConfigurationInterface
     
     public function setOption($name,$value);
     
-    public function merge($config);
-    
 }
 /* End of File */

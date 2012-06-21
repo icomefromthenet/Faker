@@ -372,7 +372,7 @@ class ParserTest extends AbstractProjectWithDb
     
     public function testOpeningTagSelectors()
     {
-             $builder = $this->getMockBuilder('Faker\Components\Faker\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Faker\Builder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -387,6 +387,10 @@ class ParserTest extends AbstractProjectWithDb
                                     ),
                     array()
                 );
+        
+        $builder->expects($this->once())
+                ->method('addForeignKey')
+                ->with($this->equalTo('tbl1.clmn1'),$this->equalTo(array('foreignTable'=> 'tbl1', 'foreignColumn' => 'clmn1' , 'name' => 'tbl1.clmn1')));
         
         $parse_options = $this->getMockBuilder('Faker\Parser\ParseOptions')->getMock();
         
@@ -414,6 +418,12 @@ class ParserTest extends AbstractProjectWithDb
         $parser->unregister();
       
         $file = new VFile('<?xml version="1.0"?><schema name="schema_1"><table name="table_1" generate="1000"><column name="column_1" type="integer"><alternate></alternate></column></table></schema>');
+        $parser->register();
+        $parser->parse($file,$parse_options);
+        $parser->unregister();
+        
+        
+        $file = new VFile('<?xml version="1.0"?><schema name="schema_1"><table name="table_1" generate="1000"><column name="column_1" type="integer"><foreign-key name="tbl1.clmn1" foreignTable="tbl1" foreignColumn="clmn1"></foreign-key></column></table></schema>');
         $parser->register();
         $parser->parse($file,$parse_options);
         $parser->unregister();
@@ -495,6 +505,5 @@ class ParserTest extends AbstractProjectWithDb
         $this->assertContains('</schema>',$parsed_composite->toXml());
     }
     
-
 }
 /* End of File */

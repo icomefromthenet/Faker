@@ -46,11 +46,8 @@ class BooleanTest extends AbstractProject
                       ->getMock();
             
         $type = new BooleanType($id,$parent,$event,$utilities);
-        $config = array('value' => true); 
-        
-        $options = $type->merge($config);        
-        
-        
+        $type->setOption('value' , true);
+        $type->merge();        
     }
     
     //  -------------------------------------------------------------------------

@@ -53,19 +53,16 @@ class ConstantTest extends AbstractProject
                       ->getMock();
             
         $type = new ConstantString($id,$parent,$event,$utilities);
-        $config = array('value' =>'xxxx'); 
+        $type->setOption('value' ,'xxxx');
+        $type->merge();        
         
-        $options = $type->merge($config);        
-        
-        $this->assertEquals($options['value'],'xxxx');
+        $this->assertEquals('xxxx',$type->getOption('value'));
         
         $type = new ConstantNumber($id,$parent,$event,$utilities);
-        $config = array('value' =>'xxxx'); 
+        $type->setOption('value','xxxx');
+        $type->merge();
         
-        $options = $type->merge($config);        
-        
-        $this->assertEquals($options['value'],'xxxx');
-        
+        $this->assertEquals('xxxx',$type->getOption('value'));
         
     }
     
@@ -90,10 +87,7 @@ class ConstantTest extends AbstractProject
                       ->getMock();
             
         $type = new ConstantString($id,$parent,$event,$utilities);
-        $config = array(); 
-        
-        $options = $type->merge($config);        
-        
+        $type->merge();        
         
     }
    
@@ -118,9 +112,9 @@ class ConstantTest extends AbstractProject
                       ->getMock();
             
         $type = new ConstantString($id,$parent,$event,$utilities);
-        $config = array('value' => '1','type' => 'none');
-        
-        $options = $type->merge($config);        
+        $type->setOption('value' , '1');
+        $type->setOption('type' , 'none');
+        $type->merge();        
     }
    
     
@@ -143,6 +137,7 @@ class ConstantTest extends AbstractProject
             
         $type = new ConstantString($id,$parent,$event,$utilities);
         $type->setOption('value','ccCC');
+        $type->merge();
         $type->validate(); 
          
         $this->assertEquals('ccCC',$type->generate(1,array()));
@@ -152,11 +147,13 @@ class ConstantTest extends AbstractProject
     
         $type = new ConstantNumber($id,$parent,$event,$utilities);
         $type->setOption('value','123');
+        $type->merge();
         $type->validate(); 
         $this->assertEquals(123,$type->generate(1,array()));
         
         $type = new ConstantString($id,$parent,$event,$utilities);
         $type->setOption('value','1');
+        $type->merge();
         $type->validate(); 
         $this->assertSame('1',$type->generate(1,array()));
        

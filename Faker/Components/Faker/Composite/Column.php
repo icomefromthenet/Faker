@@ -4,12 +4,14 @@ namespace Faker\Components\Faker\Composite;
 use Faker\Components\Faker\Exception as FakerException,
     Faker\Components\Faker\Formatter\FormatEvents,
     Faker\Components\Faker\Formatter\GenerateEvent,
+    Faker\Components\Faker\CacheInterface,
+    Faker\Components\Faker\GeneratorCache,
     Symfony\Component\EventDispatcher\EventDispatcherInterface,
     Symfony\Component\Config\Definition\Builder\TreeBuilder,
     Doctrine\DBAL\Types\Type as ColumnType;
 
 
-class Column extends BaseComposite 
+class Column extends BaseComposite implements CacheInterface
 {
     
     /**
@@ -38,6 +40,16 @@ class Column extends BaseComposite
     protected $event;
     
     /**
+      *  @var GeneratorCache the cache which old all values
+      */
+    protected $cache;
+    
+    /**
+      *  @var boolean true to use cache class 
+      */
+    protected $use_cache = false;
+    
+    /**
       *  Class construtor
       *
       *  @access public
@@ -52,6 +64,7 @@ class Column extends BaseComposite
         $this->event = $event;
         $this->column_type = $column;
         $this->options = $options;
+        $this->use_cache = false;
     }
     
     /**
@@ -70,9 +83,9 @@ class Column extends BaseComposite
         $value = array();
         
         foreach($this->child_types as $type) {
-            
+                         
             # if we have many types we concatinate
-            $value[] = $type->generate($rows,$values);
+            $value[] =$type->generate($rows,$values);
         
             # dispatch the generate event
             $this->event->dispatch(
@@ -90,19 +103,19 @@ class Column extends BaseComposite
             $values[$this->getId()] = $value[0]; 
         }
         
+        # test if the value needs to be cached
+        if($this->use_cache === true) {
+            $this->cache->add($values[$this->getId()]);
+        }
         
         # dispatch the stop event
-        
         $this->event->dispatch(
                 FormatEvents::onColumnEnd,
                 new GenerateEvent($this,$values,$this->getId())
         );
         
-        
         # return values so they can be grouped in table parent
-        
         return $values;
-        
     }
     
     //  -------------------------------------------------------------------------
@@ -198,13 +211,8 @@ class Column extends BaseComposite
 
     public function validate()
     {
-        # validate internal config
-        $this->options = $this->merge($this->options);
-        
         # ask children to validate themselves
-        
         foreach($this->getChildren() as $child) {
-        
           $child->validate(); 
         }
         
@@ -213,10 +221,14 @@ class Column extends BaseComposite
         if(count($this->getChildren()) === 0) {
           throw new FakerException('Column must have at least 1 Type');
         }
+        
+        
+        # test if a cache has been set
+        if($this->use_cache === true && !$this->cache instanceof GeneratorCache ) {
+            throw new FakerException('Column has been told to use cache but none set');
+        }
 
         return true;  
-    
-        
     }
 
     //  -------------------------------------------------------------------------
@@ -253,6 +265,47 @@ class Column extends BaseComposite
     }
     
     //  ------------------------------------------------------------------------- 
+    # CacheInterface
+    
+    /**
+      *  @inheritdoc
+      */
+    public function setGeneratorCache(GeneratorCache $cache)
+    {
+        $this->cache = $cache;
+        return $this;
+    }
+    
+    
+    /**
+      *  @inheritdoc
+      */
+    public function getGeneratorCache()
+    {
+        return $this->cache;
+    }
+    
+    
+    /**
+      *  @inheritdoc
+      */
+    public function setUseCache($bool)
+    {
+        $this->use_cache = $bool;
+        
+        return $this;
+    }
+    
+    
+    /**
+      *  @inheritdoc
+      */
+    public function getUseCache()
+    {
+        return $this->use_cache;
+    }
+    
+    //------------------------------------------------------------------
     
 }
 /* End of File */

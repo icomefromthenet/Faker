@@ -46,11 +46,7 @@ class NullTest extends AbstractProject
                       ->getMock();
             
         $type = new Null($id,$parent,$event,$utilities);
-        $config = array(); 
-        
-        $options = $type->merge($config);        
-        
-        
+        $type->merge();        
     }
     
     //  -------------------------------------------------------------------------
@@ -71,6 +67,7 @@ class NullTest extends AbstractProject
                       ->getMock();
             
         $type = new Null($id,$parent,$event,$utilities);
+        $type->merge();
         $type->validate(); 
          
         $this->assertEquals(null,$type->generate(1,array()));

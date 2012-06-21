@@ -2,6 +2,12 @@
 namespace Faker\Components\Faker\Composite;
 
 use Faker\Components\Faker\OptionInterface,
+    Faker\Components\Faker\BaseNode,
+    Faker\Components\Faker\Visitor\ColumnCacheInjectorVisitor,
+    Faker\Components\Faker\Visitor\ForeignCacheInjectorVisitor,
+    Faker\Components\Faker\Visitor\MapBuilderVisitor,
+    Faker\Components\Faker\Visitor\RefCheckVisitor,
+    Faker\Components\Faker\Visitor\BaseVisitor,
     Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Config\Definition\Exception\InvalidConfigurationException,
     Faker\Components\Faker\Exception as FakerException;
@@ -10,7 +16,7 @@ use Faker\Components\Faker\OptionInterface,
  * class BaseComposite the basic class for composite nodes
  */
 
-abstract class BaseComposite implements OptionInterface, CompositeInterface
+abstract class BaseComposite extends BaseNode implements OptionInterface, CompositeInterface
 {
     
     /**
@@ -26,27 +32,6 @@ abstract class BaseComposite implements OptionInterface, CompositeInterface
     public function getConfigTreeBuilder()
     {
         throw new FakerException('Not Implemented');
-    }
-    
-    
-    /**
-      *  Merge config with the symfony config tree builder
-      *
-      *  @param string[] array config values
-      *  @return void
-      *  @throws Faker\Components\Faker\Exception  when validation fails
-      */
-    public function merge($config)
-    {
-        try {
-            
-            $processor = new Processor();
-            return $processor->processConfiguration($this, array('config' => $config));
-            
-        }catch(InvalidConfigurationException $e) {
-            
-            throw new FakerException($e->getMessage());
-        }
     }
     
     /**
@@ -101,6 +86,73 @@ abstract class BaseComposite implements OptionInterface, CompositeInterface
     public function validate()
     {
         throw new FakerException('Not Implemented');
+    }
+    
+    /**
+      *  Merge config with the symfony config tree builder
+      *
+      *  @param string[] array config values
+      *  @return void
+      *  @throws Faker\Components\Faker\Exception  when validation fails
+      */
+    public function merge()
+    {
+        try {
+            $processor = new Processor();
+            $options = $processor->processConfiguration($this, array('config' => $this->options));
+            
+            foreach($options as $name => $value) {
+                $this->setOption($name,$value);
+            }
+            
+            # call merge on children
+            foreach($this->getChildren() as $child) {
+                $child->merge();
+            }
+            
+        }catch(InvalidConfigurationException $e) {
+            
+            throw new FakerException($e->getMessage());
+        }
+    }
+    
+    //------------------------------------------------------------------
+    # Base Node
+    
+    /**
+      *  Accept a visitor
+      *
+      *  @return void
+      *  @access public
+      *  @param BaseVisitor $visitor the visitor to accept
+      */
+    public function acceptVisitor(BaseVisitor $visitor)
+    {
+       
+       if($visitor instanceof ColumnCacheInjectorVisitor) {
+            $visitor->visitCacheInjector($this);
+       }
+       
+       if($visitor instanceof ForeignCacheInjectorVisitor) {
+            $visitor->visitCacheInjector($this);
+       }
+       
+       if($visitor instanceof MapBuilderVisitor) {
+            $visitor->visitMapBuilder($this);
+       }
+       
+       if($visitor instanceof RefCheckVisitor) {
+            $visitor->visitRefCheck($this);
+       }
+       
+       # send visitor to the children.
+       
+       foreach($this->getChildren() as $child) {
+            $child->acceptVisitor($visitor);
+       }
+       
+       return $visitor;
+       
     }
     
     //------------------------------------------------------------------

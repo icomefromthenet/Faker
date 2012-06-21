@@ -1,7 +1,8 @@
 <?php
 namespace Faker\Components\Faker\Type;
 
-use Faker\Components\Faker\Exception as FakerException;
+use Faker\Components\Faker\Exception as FakerException,
+    Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class Null extends Type
 {
@@ -19,13 +20,6 @@ class Null extends Type
 	return true;        
     }
     
-    //  -------------------------------------------------------------------------
-    
-    public function merge($config)
-    {
-	return true;
-    }
-
     //  -------------------------------------------------------------------------
     
     public function getConfigExtension(ArrayNodeDefinition $rootNode)

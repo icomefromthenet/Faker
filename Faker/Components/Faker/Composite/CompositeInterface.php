@@ -64,6 +64,15 @@ interface CompositeInterface extends TypeInterface
       */
     public function validate();
     
+    /**
+      *  Merge config with the current node
+      *
+      *  @return void
+      *  @access public
+      *  @throws Faker\Components\Faker\Exception when config error occurs
+      */
+    public function merge();
+    
     
 }
 /* End of File */

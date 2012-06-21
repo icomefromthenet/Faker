@@ -47,13 +47,12 @@ class EmailTest extends AbstractProject
                       ->getMock();
             
         $type = new Email($id,$parent,$event,$utilities);
-        $config = array('format' =>'xxxx','domains' => 'au,com.au');
+        $type->setOption('format' ,'xxxx');
+        $type->setOption('domains' , 'au,com.au');
+        $type->merge();        
         
-        
-        $options = $type->merge($config);        
-        
-        $this->assertEquals($options['format'],$config['format']);
-        $this->assertSame($options['domains'],array('au','com.au'));
+        $this->assertEquals('xxxx',$type->getOption('format'));
+        $this->assertSame(array('au','com.au'),$type->getOption('domains'));
     }
     
     //  -------------------------------------------------------------------------
@@ -78,10 +77,7 @@ class EmailTest extends AbstractProject
                       ->getMock();
             
         $type = new Email($id,$parent,$event,$utilities);
-        $config = array(); 
-        
-        $options = $type->merge($config);        
-        
+        $type->merge();        
         
     }
     
@@ -107,7 +103,7 @@ class EmailTest extends AbstractProject
         $type->setOption('alpha1','ccCCC');
         $type->setOption('alpha2','xxxx');
       
-               
+        $type->merge();       
         $type->validate(); 
          
         $value = $type->generate(1,array());

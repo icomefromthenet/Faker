@@ -2,6 +2,7 @@
 namespace Faker\Components\Faker;
 
 use Faker\Components\Faker\Composite\Column,
+    Faker\Components\Faker\Composite\ForeignKey,
     Faker\Components\Faker\Composite\Schema,
     Faker\Components\Faker\Composite\Table,
     Faker\Components\Faker\Composite\Alternate,
@@ -19,6 +20,10 @@ use Faker\Components\Faker\Composite\Column,
     Faker\Components\Faker\Formatter\FormatterInterface,
     Faker\Components\Faker\TypeFactory,
     Faker\Components\Writer\WriterInterface,
+    Faker\Components\Faker\Compiler\Compiler,
+    Faker\Components\Faker\Compiler\Pass\CircularRefPass,
+    Faker\Components\Faker\Compiler\Pass\CacheInjectorPass,
+    Faker\Components\Faker\Compiler\Pass\KeysExistPass,
     Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Builder
@@ -182,11 +187,6 @@ class Builder
     
     public function addColumn($name,$options)
     {
-        # merge options with default
-        $options = array_merge(array(
-                    'locale' => null
-                    ),$options);
-        
         
         # schema and table exist
         
@@ -222,6 +222,41 @@ class Builder
         return $this;
     }
 
+    //------------------------------------------------------------------
+
+    public function addForeignKey($name,$options)
+    {
+        # merge options with default
+        $options = array_merge(array(
+                    'foreignColumn' => null,
+                    'foreignTable' => null,
+                    ),$options);
+        
+        
+        # schema and table exist
+        
+        if(!$this->head instanceof Column) {
+           throw new FakerException('Can not add a Foreign-Key without first setting a column'); 
+        }
+    
+        if(empty($name)) {
+            throw new FakerException('Foreign-key must have a name unique name try foreignTable.foriegnColumn');
+        }
+        
+        # create new column
+        $foreign_key = new ForeignKey($name,$this->head,$this->event,array(
+                                                                        'foreignTable'  => $options['foreignTable'],
+                                                                        'foreignColumn' => $options['foreignColumn']
+                                                                        )
+                                      );
+        
+        # add the column to the table
+        $this->head->addChild($foreign_key);
+        $this->head = $foreign_key;
+        
+        return $this;
+    }    
+    
     //  -------------------------------------------------------------------------
     
     public function addSelector($name,$options)
@@ -374,6 +409,59 @@ class Builder
         return $this;
     }
     
+    //------------------------------------------------------------------
+    # Merge
+    
+    /**
+      *  Bind config to the composite
+      *
+      *  @access public
+      *  @return Builder
+      */
+    public function merge()
+    {
+        $this->current_schema->merge();
+        
+        return $this;
+    }
+    
+    
+    //  -------------------------------------------------------------------------
+    
+    /**
+      *  Build the compiler
+      *
+      *  @access public
+      *  @return Builder
+      */
+    public function compile()
+    {
+        # run the compiler
+        $compiler = new Compiler();
+        $compiler->addPass(new KeysExistPass());
+        $compiler->addPass(new CacheInjectorPass());
+        $compiler->addPass(new CircularRefPass());
+        $compiler->compile($this->current_schema);
+        
+        return $this;
+    }
+    
+    
+    //  -------------------------------------------------------------------------
+    
+    /**
+      *  Run validation on the composite
+      *
+      *  @return Builder
+      *  @access public
+      */
+    public function validate()
+    {
+        $this->current_schema->validate();
+        
+        return $this;
+    }
+    
     //  -------------------------------------------------------------------------
     
     /**
@@ -387,17 +475,20 @@ class Builder
         }
         
         # add the writers to the composite
-        
         $this->current_schema->setWriters($this->formatters);
         
+        # merge config with there nodes in the composite
+        $this->merge();
+        
+        # compile the composite (inject cache and check foreign keys)
+        $this->compile();
+        
         # validate the composite
-
-        $this->current_schema->validate();
+        $this->validate();
         
         $schema = $this->current_schema;
         
         # reset the builder
-        
         $this->clear();
         
         return $schema;
@@ -439,5 +530,11 @@ class Builder
     
     //------------------------------------------------------------------
     
+    public function getSchema()
+    {
+        return $this->current_schema;
+    }
+    
+    //------------------------------------------------------------------
 }
 /* End of File */

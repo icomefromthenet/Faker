@@ -9,12 +9,12 @@ pear install phing/phing
 
 # Composer.
 cd /usr/bin
-wget http://getcomposer.org/composer.phar
+wget -q http://getcomposer.org/composer.phar
 chmod a+x composer.phar
 
 # install phar
 cd /usr/bin
-wget http://pear2.php.net/pyrus.phar
+wget -q http://pear2.php.net/pyrus.phar 
 chmod 755 /usr/bin/pyrus.phar
 
 

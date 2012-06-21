@@ -46,14 +46,14 @@ class TextTest extends AbstractProject
                       ->getMock();
             
         $type = new Text($id,$parent,$event,$utilities);
-        $config = array('paragraphs' => 5, 'maxlines' => 5 , 'minlines' => 1);
+        $type->setOption('paragraphs',5);
+        $type->setOption('maxlines' ,5);
+        $type->setOption('minlines' ,1);
+        $type->merge();        
         
-        
-        $options = $type->merge($config);        
-        
-        $this->assertSame($options['paragraphs'],$config['paragraphs']);
-        $this->assertSame($options['maxlines'],$config['maxlines']);
-        $this->assertSame($options['minlines'],$config['minlines']);
+        $this->assertSame(5,$type->getOption('paragraphs'));
+        $this->assertSame(5,$type->getOption('maxlines'));
+        $this->assertSame(1,$type->getOption('minlines'));
     }
     
     //  -------------------------------------------------------------------------
@@ -77,9 +77,10 @@ class TextTest extends AbstractProject
                       ->getMock();
             
         $type = new Text($id,$parent,$event,$utilities);
-        $config = array('paragraphs' => 'aaaa', 'maxlines' => 5 , 'minlines' => 1);
-        
-        $options = $type->merge($config);        
+        $type->setOption('paragraphs','aaa');
+        $type->setOption('maxlines' ,5);
+        $type->setOption('minlines' ,1);
+        $type->merge();        
         
         
     }
@@ -103,9 +104,10 @@ class TextTest extends AbstractProject
                       ->getMock();
             
         $type = new Text($id,$parent,$event,$utilities);
-        $config = array('paragraphs' => 1, 'maxlines' => 5 , 'minlines' => 'aa');
-        
-        $options = $type->merge($config);        
+        $type->setOption('paragraphs',1);
+        $type->setOption('maxlines' ,5);
+        $type->setOption('minlines' ,'aaa');
+        $type->merge();        
         
         
     }
@@ -129,9 +131,10 @@ class TextTest extends AbstractProject
                       ->getMock();
             
         $type = new Text($id,$parent,$event,$utilities);
-        $config = array('paragraphs' => 1, 'maxlines' => 'aaa' , 'minlines' => 1);
-        
-        $options = $type->merge($config);        
+        $type->setOption('paragraphs',1);
+        $type->setOption('maxlines' ,'aaa');
+        $type->setOption('minlines' ,1);
+        $type->merge();        
         
         
     }
@@ -162,6 +165,7 @@ class TextTest extends AbstractProject
         $type->setOption('paragraphs',5);
         $type->setOption('maxlines',30);
         $type->setOption('minlines',5);
+        $type->merge();
         $type->validate(); 
          
         $type->generate(1,array());

@@ -46,12 +46,10 @@ class AutoIncrementTest extends AbstractProject
                       ->getMock();
             
         $type = new AutoIncrement($id,$parent,$event,$utilities);
-        $config = array(); 
+        $type->merge();        
         
-        $options = $type->merge($config);        
-        
-        $this->assertEquals($options['start'],1);
-        $this->assertEquals($options['increment'],1);
+        $this->assertEquals($type->getOption('start'),1);
+        $this->assertEquals($type->getOption('increment'),1);
         
         
     }
@@ -77,11 +75,8 @@ class AutoIncrementTest extends AbstractProject
                       ->getMock();
             
         $type = new AutoIncrement($id,$parent,$event,$utilities);
-        $config = array('aaaa' => 'bbb'); 
-        
-        $options = $type->merge($config);        
-        
-        
+        $type->setOption('aaaa','bbb'); 
+        $type->merge();        
     }
     
     //  -------------------------------------------------------------------------
@@ -105,11 +100,8 @@ class AutoIncrementTest extends AbstractProject
                       ->getMock();
             
         $type = new AutoIncrement($id,$parent,$event,$utilities);
-        $config = array('increment' => 'bbb'); 
-        
-        $options = $type->merge($config);        
-        
-        
+        $type->setOption('increment' , 'bbb');
+        $type->merge();        
     }
     
     /**
@@ -131,12 +123,8 @@ class AutoIncrementTest extends AbstractProject
                       ->getMock();
             
         $type = new AutoIncrement($id,$parent,$event,$utilities);
-        $config = array('start' => 'bbb'); 
-        
-        $options = $type->merge($config);        
-        
-        
-        
+        $type->setOption('start','bbb');
+        $type->merge();        
     }
     
     

@@ -1,14 +1,10 @@
 <?php
 namespace Faker\Components\Faker\Type;
 
-use Faker\Components\Faker\Exception as FakerException;
-use Faker\Components\Faker\Utilities;
-
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Faker\Components\Faker\Exception as FakerException,
+    Faker\Components\Faker\Utilities,
+    Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition,
+    Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 class Text extends Type
 {
@@ -284,25 +280,9 @@ class Text extends Type
     }
     
     //  -------------------------------------------------------------------------
-
-    public function merge($config)
-    {
-        try {
-            
-            $processor = new Processor();
-            return $processor->processConfiguration($this, array('config' => $config));
-            
-        }catch(InvalidConfigurationException $e) {
-            
-            throw new FakerException($e->getMessage());
-        }
-    }
-    
-    //  -------------------------------------------------------------------------
     
     public function validate()
     {
-        $this->options = $this->merge($this->options);
         return true;
     }
     
