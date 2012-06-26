@@ -24,7 +24,7 @@ class FactoryTest extends AbstractProject
     }
     
     
-    public function testCreate()
+    public function testCreateNoOptons()
     {
        
         $formatter_full = '\\Faker\\Components\\Faker\\Formatter\\Sql';
@@ -57,12 +57,12 @@ class FactoryTest extends AbstractProject
         
         $factory = new FormatterFactory($event,$writer_manager);
         
-        $this->assertInstanceOf($formatter_full,$factory->create($formatter_key,$platform));
+        $this->assertInstanceOf($formatter_full,$factory->create($formatter_key,$platform,array()));
         
     }
     
      
-    public function testPhpunitFormatterCreate()
+    public function testPhpunitFormatterCreateWithOptions()
     {
         $formatter_full = '\\Faker\\Components\\Faker\\Formatter\\Phpunit';
         $formatter_key = 'Phpunit';
@@ -74,7 +74,7 @@ class FactoryTest extends AbstractProject
         $writer_instance = $this->getMockBuilder('\Faker\Components\Writer\WriterInterface')->getMock();
         
         
-        $writer_manager   = $this->getMockBuilder('\Faker\Components\Writer\Manager')
+        $writer_manager  = $this->getMockBuilder('\Faker\Components\Writer\Manager')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -94,12 +94,16 @@ class FactoryTest extends AbstractProject
         
         $factory = new FormatterFactory($event,$writer_manager);
         
-        $this->assertInstanceOf($formatter_full,$factory->create($formatter_key,$platform));
+        $this->assertInstanceOf($formatter_full,$instance = $factory->create($formatter_key,$platform,array('opt1' => '1', 'opt2' => 2)));
+        
+        # assert Options passed
+        $this->assertEquals('1',$instance->getOption('opt1'));
+        $this->assertEquals( 2,$instance->getOption('opt2'));
         
     }
     
     
-    public function testCreateLowercaseKey()
+    public function testCreateLowercaseKeyWithOptions()
     {
         $formatter_full = '\\Faker\\Components\\Faker\\Formatter\\phpunit';
         $formatter_key = 'phpunit';
@@ -132,8 +136,11 @@ class FactoryTest extends AbstractProject
         
         $factory = new FormatterFactory($event,$writer_manager);
         
-        $this->assertInstanceOf($formatter_full,$factory->create($formatter_key,$platform));
+        $this->assertInstanceOf($formatter_full,$instance = $factory->create($formatter_key,$platform,array('opt1' => '1', 'opt2' => 2)));
         
+        # assert Options passed
+        $this->assertEquals('1',$instance->getOption('opt1'));
+        $this->assertEquals( 2,$instance->getOption('opt2'));
     }
     
     /**
@@ -154,7 +161,7 @@ class FactoryTest extends AbstractProject
         
         $factory = new FormatterFactory($event,$writer_manager);
         
-        $factory->create($formatter_key,$platform);
+        $factory->create($formatter_key,$platform,array());
         
     }
     

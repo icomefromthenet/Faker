@@ -194,6 +194,18 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
     }
     
     /**
+      *  Check if the option is set
+      *
+      *  @param string $name the option name
+      *  @return boolean true if set
+      *  @access public
+      */
+    public function hasOption($name)
+    {
+         return isset($this->options[$name]);
+    }
+    
+    /**
      * Generates the configuration tree builder.
      *
      * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder

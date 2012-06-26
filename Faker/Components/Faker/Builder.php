@@ -94,14 +94,14 @@ class Builder
     //  -------------------------------------------------------------------------
     
     
-    public function addWriter($platform,$formatter)
+    public function addWriter($platform,$formatter,$options = array())
     {
         # instance a platform
         
         $platform_instance = $this->platform_factory->create($platform);
         
         $this->formatters[] = $this->formatter_factory
-                                   ->create($formatter,$platform_instance); 
+                                   ->create($formatter,$platform_instance,$options); 
         
         return $this;
     }
@@ -421,6 +421,10 @@ class Builder
     public function merge()
     {
         $this->current_schema->merge();
+        
+        foreach($this->formatters as $formatter) {
+            $formatter->merge();
+        }
         
         return $this;
     }

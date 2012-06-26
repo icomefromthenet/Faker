@@ -1,88 +1,8 @@
 <?php
 namespace Faker\Components\Faker\Formatter;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Faker\Components\Writer\WriterInterface;
-
-
-interface FormatterInterface extends EventSubscriberInterface
+interface FormatterInterface
 {
-    
-    # example of EventSubscriberInterface
-    /*  
-    static public function getSubscribedEvents()
-    {
-        return array(
-            'kernel.response' => array(
-                array('onKernelResponsePre', 10),
-                array('onKernelResponseMid', 5),
-                array('onKernelResponsePost', 0),
-            ),
-            'store.order'     => array('onStoreOrder', 0),
-        );
-    }
-    */
-    
-    
-    /**
-      *  Sets the event dispatcher dependency 
-      */
-    public function setEventDispatcher(EventDispatcherInterface $event);
-    
-    
-    /**
-      *  Sets the write to send formatted string to
-      *
-      *  @param Faker\Components\Writer\WriterInterface
-      */
-    public function setWriter(WriterInterface $writer);
-    
-    /**
-      *  Fetches the writer
-      *
-      *  @return Faker\Components\Writer\WriterInterface
-      */
-    public function getWriter();
-    
-    /**
-      *  Fetch a associative array column id => Doctrine\DBAL\Types\Type
-      *
-      *  @return \Doctrine\DBAL\Types\Type[]
-      */
-    public function getColumnMap();
-    
-    /**
-      *   Process a single column with the column map
-      *   convert the php type into a database representaion for the given platform
-      *   assigned to the formatter
-      */
-    public function processColumnWithMap($key,$value);
-    
-    /**
-      *  Return the assigned platform
-      *
-      *  @access public
-      *  @return Doctrine\DBAL\Platforms\AbstractPlatform
-      */
-    public function getPlatform();
-    
-    /**
-      *  Fetch the formatters Name
-      *
-      *  @access public
-      *  @return string the unique name
-      */
-    public function getName();
-    
-    /**
-      *  Return this object serialised to xml
-      *
-      *  @return string xml string
-      *  @access public
-      */
-    public function toXml();
-    
     
     
     /**

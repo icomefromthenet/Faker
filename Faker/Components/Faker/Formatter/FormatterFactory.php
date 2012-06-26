@@ -43,7 +43,7 @@ class FormatterFactory implements ExtensionInterface
     }
  
  
-    public function create($formatter, Platform $platform)
+    public function create($formatter, Platform $platform,$options = array())
     {
         $formatter = strtolower($formatter);
         
@@ -53,7 +53,9 @@ class FormatterFactory implements ExtensionInterface
        
         $class = new self::$formatters[$formatter]($this->event,
                                                    $this->writer->getWriter($platform->getName(),$formatter),
-                                                   $platform);
+                                                   $platform,
+                                                   $options
+                                                   );
        
         # register this formatter as a subscriber 
         $this->event->addSubscriber($class); 

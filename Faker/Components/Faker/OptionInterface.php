@@ -14,5 +14,7 @@ interface OptionInterface extends ConfigurationInterface
     
     public function setOption($name,$value);
     
+    public function hasOption($name);
+    
 }
 /* End of File */

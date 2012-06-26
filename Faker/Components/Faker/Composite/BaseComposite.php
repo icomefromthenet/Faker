@@ -49,6 +49,18 @@ abstract class BaseComposite extends BaseNode implements OptionInterface, Compos
     {
         return $this->options[$name];
     }
+    
+    /**
+      *  Check if the option is set
+      *
+      *  @param string $name the option name
+      *  @return boolean true if set
+      *  @access public
+      */
+    public function hasOption($name)
+    {
+         return isset($this->options[$name]);
+    }
    
     //------------------------------------------------------------------
     # Composite Interface (overriden in child interfaces)

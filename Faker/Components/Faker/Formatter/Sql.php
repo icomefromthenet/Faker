@@ -1,55 +1,22 @@
 <?php
 namespace Faker\Components\Faker\Formatter;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Faker\Components\Writer\WriterInterface;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Faker\Components\Faker\Exception as FakerException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface,
+    Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition,
+    Doctrine\DBAL\Platforms\AbstractPlatform,
+    Faker\Components\Writer\WriterInterface,
+    Faker\Components\Faker\Exception as FakerException;
 
-class Sql implements FormatterInterface
+class Sql extends BaseFormatter implements FormatterInterface
 {
     
-    /**
-      *  @var  Symfony\Component\EventDispatcher\EventDispatcherInterface
-      */
-    protected $event_dispatcher;
+    const MAX_LINES = 1000;
     
-    /**
-      *  @var Faker\Components\Writer\WriterInterface 
-      */
-    protected $writer;
+    const SINGLE_FILE_MODE = false;
     
-    /**
-      *  @var use Doctrine\DBAL\Platforms\AbstractPlatform;
-      */
-    protected $platform;
+    const CONFIG_OPTION_MAX_LINES = 'maxLines';
     
-    /**
-      *  @var \Doctrine\DBAL\Types\Type[] 
-      */
-    protected $column_map = array();
-    
-    /**
-      *  Fetch Format Event to listen to
-      *
-      *  @return mixed[]
-      *  @access public
-      */
-    static public function getSubscribedEvents()
-    {
-        return array(
-            FormatEvents::onSchemaStart    => array('onSchemaStart', 0),
-            FormatEvents::onSchemaEnd       => array('onSchemaEnd', 0),
-            FormatEvents::onTableStart     => array('onTableStart',0),
-            FormatEvents::onTableEnd       => array('onTableEnd',0),
-            FormatEvents::onRowStart       => array('onRowStart',0),
-            FormatEvents::onRowEnd         => array('onRowEnd',0),
-            FormatEvents::onColumnStart    => array('onColumnStart',0),
-            FormatEvents::onColumnGenerate => array('onColumnGenerate',0),
-            FormatEvents::onColumnEnd      => array('onColumnEnd',0),
-        
-        );
-    }
+    const CONFIG_OPTION_SINGLE_FILE_MODE = 'singleFileMode';
     
     //  -------------------------------------------------------------------------
     # Constructor
@@ -60,77 +27,14 @@ class Sql implements FormatterInterface
       *  @param EventDispatcherInterface $event
       *  @param WriterInterface $writer
       *  @param AbstractPlatform $platform the doctine platform class
+      *  @param mixed[] array of options
       */
-    public function __construct(EventDispatcherInterface $event, WriterInterface $writer, AbstractPlatform $platform)
+    public function __construct(EventDispatcherInterface $event, WriterInterface $writer, AbstractPlatform $platform,$options = array())
     {
         $this->setEventDispatcher($event);
         $this->setWriter($writer);
-        $this->platform = $platform;
-    }
-    
-    
-    /**
-      *  Sets the event dispatcher dependency 
-      */
-    public function setEventDispatcher(EventDispatcherInterface $event)
-    {
-        $this->event_dispatcher = $event;
-    }
-    
-     
-    /**
-      *  Sets the write to send formatted string to 
-      */
-    public function setWriter(WriterInterface $writer)
-    {
-        $this->writer = $writer;
-    }
-    
-    public function getWriter()
-    {
-        return $this->writer;
-    }
-    
-    /**
-      *  Returns the column map
-      *
-      *  @access public
-      *  @return \Doctrine\DBAL\Types\Type[]
-      */
-    public function getColumnMap()
-    {
-        return $this->column_map;
-    }
-    
-    /**
-      *  Set the column map
-      *
-      *  @access public
-      *  @param mixed[] $map
-      */
-    public function setColumnMap($map)
-    {
-        $this->column_map = $map;
-    }
-    
-    /**
-      *  Process a column with the map 
-      */
-    public function processColumnWithMap($key,$value)
-    {
-        $map = $this->getColumnMap();
-        
-        if(isset($map[$key]) === false) {
-            throw new FakerException('Unknown column mapping at key::'.$key);
-        }
-        
-        return $map[$key]->convertToDatabaseValue($value,$this->getPlatform());
-    }
-    
-    
-    public function getPlatform()
-    {
-        return $this->platform;
+        $this->setPlatform($platform);
+        $this->options = $options;
     }
     
     public function getName()
@@ -138,6 +42,10 @@ class Sql implements FormatterInterface
         return 'sql';
     }
     
+    public function getOuputFileFormat()
+    {
+        return '{prefix}_{body}_{suffix}_{seq}.{ext}';
+    }
     
     //  -------------------------------------------------------------------------
     # Format Events
@@ -237,7 +145,9 @@ class Sql implements FormatterInterface
        $this->writer->write(PHP_EOL);
        
        # flush the writer for next table
-       $this->writer->flush();
+       if($this->getOption(self::CONFIG_OPTION_SPLIT_ON_TABLE) === true) {
+            $this->writer->flush(); 
+       }
        
     }
     
@@ -338,12 +248,87 @@ class Sql implements FormatterInterface
     }
     
     //  -------------------------------------------------------------------------
-
+    
+    /**
+      *  Convert the formatter to xml representation
+      *
+      *  @return string the xml rep
+      *  @access public
+      */  
     public function toXml()
     {
         return '<writer platform="'.$this->getPlatform()->getName().'" format="'.$this->getName().'" />' . PHP_EOL;
     }
 
     //  -------------------------------------------------------------------------
+    
+    /**
+      *  Overrides the base class merge to configure the writer
+      *  after the definitions are merged.
+      */
+    public function merge()
+    {
+        parent::merge();
+        
+        if(! $this->writer instanceof WriterInterface) {
+            throw new FakerException('Writter not been set can not finish merging config');
+        }
+        
+        if($this->getOption(self::CONFIG_OPTION_SINGLE_FILE_MODE) === true) {
+            
+            # reverse the split on table and remove line limit to keep single file mode. 
+            $this->setOption(self::CONFIG_OPTION_SPLIT_ON_TABLE,false);
+            $this->setOption(self::CONFIG_OPTION_MAX_LINES,null);
+            $this->getWriter()->getStream()->getLimit()->changeLimit(null);
+        }
+        else {
+            # set the maxLines
+            $this->getWriter()->getStream()->getLimit()->changeLimit($this->getOption(self::CONFIG_OPTION_MAX_LINES));
+        }
+        
+        # set output format
+        $this->writer->getStream()->getSequence()->setFormat($this->getOption(self::CONFIG_OPTION_OUT_FILE_FORMAT));
+        
+    }
+    
+    
+    /**
+      *  Will fetch config extensions used in child formatters that
+      *  want to extends the default config tree
+      *
+      *  @return ArrayNodeDefinition
+      *  @access public
+      */
+    public function getConfigExtension(ArrayNodeDefinition $rootNode)
+    {
+	# overridden the splitOnTable to default to true.
+        
+        $rootNode->children()
+                    ->booleanNode(self::CONFIG_OPTION_SPLIT_ON_TABLE)
+                        ->treatNullLike(true)
+                        ->defaultValue(true)
+                        ->setInfo('Start a new file when a table has finished generating')
+                    ->end()
+                    ->scalarNode(self::CONFIG_OPTION_MAX_LINES)
+                        ->treatNullLike(self::MAX_LINES)
+                        ->defaultValue(self::MAX_LINES)
+                        ->validate()
+                            ->ifTrue(function($v){
+                                return ! is_integer($v);                                
+                            })
+                            ->thenInvalid('maxLines must be an integer')
+                        ->end()
+                    ->end()
+                    ->booleanNode(self::CONFIG_OPTION_SINGLE_FILE_MODE)
+                        ->treatNullLike(self::SINGLE_FILE_MODE)
+                        ->defaultValue(self::SINGLE_FILE_MODE)
+                        ->setInfo('Generate into a sinlge file not splitting on new table or maxlines')
+                    ->end()
+                 ->end();
+        
+        return $rootNode;
+    }
+    
+    //  ----------------------------------------------------------------------------
 }
 /* End of File */

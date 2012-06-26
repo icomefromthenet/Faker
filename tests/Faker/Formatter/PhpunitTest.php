@@ -5,10 +5,10 @@ use Faker\Components\Faker\Builder,
     Faker\Components\Faker\Formatter\GenerateEvent,
     Faker\Components\Faker\Formatter\FormatterInterface,
     Doctrine\DBAL\Platforms\MySqlPlatform,
-    Faker\Components\Faker\Formatter\Sql,
+    Faker\Components\Faker\Formatter\Phpunit,
     Faker\Tests\Base\AbstractProject;
 
-class SqlTest extends AbstractProject
+class PhpunitTest extends AbstractProject
 {
     
     
@@ -52,7 +52,7 @@ class SqlTest extends AbstractProject
         $event      = $this->getMockBuilder('\Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $writer     = $this->getMockBuilder('Faker\Components\Writer\WriterInterface')->setMethods(array('getStream','flush','write'))->getMock();
         $platform   =  new MySqlPlatform();
-        $formatter  =  new Sql($event,$writer,$platform);
+        $formatter  =  new Phpunit($event,$writer,$platform);
     
         $this->formatter_mock = $formatter; 
         
@@ -99,7 +99,7 @@ class SqlTest extends AbstractProject
         
         $this->formatter_mock->getWriter()->getStream()->getSequence()->expects($this->once())
                  ->method('setExtension')
-                 ->with('sql');                           
+                 ->with('xml');                           
         
         $header_template = $this->getMockBuilder('Faker\Components\Templating\Template')->disableOriginalConstructor()->getMock();
 
@@ -124,11 +124,7 @@ class SqlTest extends AbstractProject
       */
     public function testonTableStart()
     {
-        $this->formatter_mock->getWriter()->getStream()->getSequence()->expects($this->once())
-                                                           ->method('setBody')
-                                                           ->with('table_1');
-                                                           
-        $this->formatter_mock->getWriter()->expects($this->exactly(10))->method('write');                                                   
+        $this->formatter_mock->getWriter()->expects($this->exactly(3))->method('write');                                                   
         
         $this->formatter_mock->merge();
                                                            
@@ -165,7 +161,7 @@ class SqlTest extends AbstractProject
     public function testonRowEnd()
     {
         $this->formatter_mock->merge();
-        $this->formatter_mock->getWriter()->expects($this->any())
+        $this->formatter_mock->getWriter()->expects($this->once())
                ->method('write')
                ->with($this->isType('string'));
         
@@ -185,7 +181,38 @@ class SqlTest extends AbstractProject
         
         $this->formatter_mock->setColumnMap($map);
         $look = $this->formatter_mock->onRowEnd($generate_event_row);
-        $this->assertContains("INSERT INTO `table_1` (`column_1`,`column_2`) VALUES ('a first value',5);",$look);
+        
+        
+    }
+    
+    /**
+      *  @depends testonRowEnd
+      */
+    public function testonColumnEnd()
+    {
+        $this->formatter_mock->merge();
+        
+        # make sure that null values get converted to string
+        $this->formatter_mock->getWriter()->expects($this->any())
+               ->method('write')
+               ->with($this->isType('string'));
+        
+        $composite   = $this->getBuilderWithBasicComposite();
+        $tables      = $composite->getChildren();
+
+        $generate_event_row      = new GenerateEvent($tables[0],array(
+                                                      'column_1' => 'a first value',
+                                                      'column_2' => null
+                                                      ),'row_1');
+        
+        # need a column map (normally be done in on Row start event)
+        $map = array();
+        foreach($tables[0]->getChildren() as $column) {
+            $map[$column->getId()] = $column->getColumnType();
+        }
+        
+        $this->formatter_mock->setColumnMap($map);
+        $look = $this->formatter_mock->onRowEnd($generate_event_row);
         
     }
     
@@ -196,17 +223,15 @@ class SqlTest extends AbstractProject
     public function testonTableEnd()
     {
         $this->formatter_mock->merge();
-        $this->formatter_mock->getWriter()->expects($this->once())
-                               ->method('Flush');    
-    
+         $this->formatter_mock->getWriter()->expects($this->once())
+                               ->method('write')
+                               ->with($this->equalTo('</table>'. PHP_EOL));
+        
         $composite   = $this->getBuilderWithBasicComposite();
         $tables    = $composite->getChildren();
 
         $generate_event = new GenerateEvent($tables[0],array(),$tables[0]->getId());
         $this->formatter_mock->onTableEnd($generate_event);
-        
-        # was column map nulled
-        $this->assertEquals(null,$this->formatter_mock->getColumnMap());
     }
     
     
@@ -218,7 +243,10 @@ class SqlTest extends AbstractProject
     {
         $this->formatter_mock->merge();
         $this->formatter_mock->getWriter()->expects($this->once())
-                               ->method('Flush');
+                               ->method('Flush');    
+        $this->formatter_mock->getWriter()->expects($this->once())
+                               ->method('write')
+                               ->with($this->equalTo('</dataset>'. PHP_EOL));
         
         $generate_event    = new GenerateEvent($this->getBuilderWithBasicComposite(),array(),'schema_1');
         $this->formatter_mock->onSchemaEnd($generate_event);

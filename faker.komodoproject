@@ -23,7 +23,7 @@
   <boolean id="lint_python_with_pyflakes">0</boolean>
   <boolean id="lint_python_with_pylint">0</boolean>
   <boolean id="lint_python_with_standard_python">1</boolean>
-  <string id="mappedPaths">file://192.168.0.105/vagrant/bin##file:///home/lewis/Projects/faker/bin::file://192.168.0.105/vagrant/build##file:///home/lewis/Projects/faker/build::file://192.168.0.105/vagrant/tests##file:///home/lewis/Projects/faker/tests::file://192.168.0.105/vagrant/Faker##file:///home/lewis/Projects/faker/Faker</string>
+  <string id="mappedPaths">file://192.168.0.105/vagrant/bin##file:///home/lewis/netbeans-projects/Faker/bin::file://192.168.0.105/vagrant/build##file:///home/lewis/netbeans-projects/Faker/build::file://192.168.0.105/vagrant/tests##file:///home/lewis/netbeans-projects/Faker/tests::file://192.168.0.105/vagrant/Faker##file:///home/lewis/netbeans-projects/Faker/Faker</string>
   <string id="perl_lintOption">cw</string>
   <string id="perl_lintOption_perlCriticLevel">off</string>
   <string id="pychecker_checking_rcfile"></string>

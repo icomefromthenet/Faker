@@ -31,18 +31,16 @@ class Limit
     public function __construct($limit)
     {
 
-        if (is_null($limit) === TRUE) {
-            return $this; //no restrictions , default setting
-        }
-
-        if (is_integer($limit) === FALSE) {
+        if (is_null($limit) !== TRUE) {
+            
+            if (is_integer($limit) === FALSE) {
             throw new \InvalidArgumentException('Write limit must be and integer');
+            }
+    
+            if ($limit < 0) {
+                throw new \InvalidArgumentException('Write limit must be above zero');
+            }
         }
-
-        if ($limit < 0) {
-            throw new \InvalidArgumentException('Write limit must be above zero');
-        }
-
 
         $this->write_limit = $limit;
         $this->current_at = 0;
@@ -125,13 +123,16 @@ class Limit
     /**
       *  Change the limit
       *
-      *  @param integer $limit
+      *  @param integer $limit use null to set no limit
       */
     public function changeLimit($limit)
     {
-        if(is_integer($limit) === false){
-            throw new WriterException('Limit must be an integer');            
+        if($limit !== null) {
+            if(is_integer($limit) === false){
+                throw new WriterException('Limit must be an integer');            
+            }    
         }
+        
         $this->write_limit = $limit;
         $this->reset();
     }

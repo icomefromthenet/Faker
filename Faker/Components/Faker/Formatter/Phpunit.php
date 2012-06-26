@@ -1,56 +1,14 @@
 <?php
 namespace Faker\Components\Faker\Formatter;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Faker\Components\Writer\WriterInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface,
+    Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition,
+    Doctrine\DBAL\Platforms\AbstractPlatform,
+    Faker\Components\Writer\WriterInterface,
+    Faker\Components\Faker\Exception as FakerException;
 
-class Phpunit implements FormatterInterface
+class Phpunit extends BaseFormatter implements FormatterInterface
 {
-    
-    /**
-      *  @var  Symfony\Component\EventDispatcher\EventDispatcherInterface
-      */
-    protected $event_dispatcher;
-    
-    /**
-      *  @var Faker\Components\Writer\WriterInterface 
-      */
-    protected $writer;
-    
-    /**
-      *  @var use Doctrine\DBAL\Platforms\AbstractPlatform;
-      */
-    protected $platform;
-    
-    /**
-      *  @var \Doctrine\DBAL\Types\Type[] 
-      */
-    protected $column_map = array();
-    
-    
-    
-    /**
-      *  Fetch Format Event to listen to
-      *
-      *  @return mixed[]
-      *  @access public
-      */
-    static public function getSubscribedEvents()
-    {
-        return array(
-            FormatEvents::onSchemaStart    => array('onSchemaStart', 0),
-            FormatEvents::onSchemaEnd       => array('onSchemaEnd', 0),
-            FormatEvents::onTableStart     => array('onTableStart',0),
-            FormatEvents::onTableEnd       => array('onTableEnd',0),
-            FormatEvents::onRowStart       => array('onRowStart',0),
-            FormatEvents::onRowEnd         => array('onRowEnd',0),
-            FormatEvents::onColumnStart    => array('onColumnStart',0),
-            FormatEvents::onColumnGenerate => array('onColumnGenerate',0),
-            FormatEvents::onColumnEnd      =>  array('onColumnEnd',0),
-        
-        );
-    }
     
     //  -------------------------------------------------------------------------
     # Constructor
@@ -61,86 +19,25 @@ class Phpunit implements FormatterInterface
       *  @param EventDispatcherInterface $event
       *  @param WriterInterface $writer
       *  @param AbstractPlatform $platform the doctine platform class
+      *  @param array mixed[] options
       */
-    public function __construct(EventDispatcherInterface $event, WriterInterface $writer, AbstractPlatform $platform)
+    public function __construct(EventDispatcherInterface $event, WriterInterface $writer, AbstractPlatform $platform, $options = array())
     {
         $this->setEventDispatcher($event);
         $this->setWriter($writer);
-        $this->platform = $platform;
+        $this->setPlatform($platform);
+        $this->options = $options;
        
     }
     
-    
-    /**
-      *  Sets the event dispatcher dependency 
-      */
-    public function setEventDispatcher(EventDispatcherInterface $event)
-    {
-        $this->event_dispatcher = $event;
-    }
-    
-     
-    public function setWriter(WriterInterface $writer)
-    {
-        $this->writer = $writer;
-    }
-    
-    public function getWriter()
-    {
-        return $this->writer;        
-    }
-    
-    /**
-      *  Returns the column map
-      *
-      *  @access public
-      *  @return \Doctrine\DBAL\Types\Type[]
-      */
-    public function getColumnMap()
-    {
-        return $this->column_map;
-    }
-    
-     /**
-      *  Set the column map
-      *
-      *  @access public
-      *  @param mixed[] $map
-      */
-    public function setColumnMap($map)
-    {
-        $this->column_map = $map;
-    }
-    
-    /**
-      *  Process a column with the map 
-      */
-    public function processColumnWithMap($key,$value)
-    {
-        $map = $this->getColumnMap();
-        
-        if(isset($map[$key]) === false) {
-            throw new FakerException('Unknown column mapping at key::'.$key);
-        }
-        
-        return $map[$key]->convertToDatabaseValue($value,$this->getPlatform());
-    }
-    
-    
-    /**
-      *  Return the assigned platform
-      *
-      *  @access public
-      *  @return Doctrine\DBAL\Platforms\AbstractPlatform
-      */
-    public function getPlatform()
-    {
-        return $this->platform;
-    }
-
     public function getName()
     {
         return 'phpunit';
+    }
+    
+    public function getOuputFileFormat()
+    {
+        return '{prefix}_{body}_{suffix}.{ext}';
     }
     
     
@@ -155,15 +52,6 @@ class Phpunit implements FormatterInterface
       */
     public function onSchemaStart(GenerateEvent $event)
     {
-        #set max limit so we can only have one file
-        $this->getWriter()->getStream()->getLimit()->changeLimit(PHP_INT_MAX);
-        
-        
-        # change the format on the writer to remove the seq number
-        # since we are using a single file format
-        $this->writer->getStream()->getSequence()->setFormat('{prefix}_{body}_{suffix}.{ext}');
-        
-        
         # set the schema prefix on writter
         $this->writer->getStream()->getSequence()->setPrefix(strtolower($event->getId()));
         $this->writer->getStream()->getSequence()->setBody('fixture');
@@ -307,14 +195,50 @@ class Phpunit implements FormatterInterface
     }
     
     //  -------------------------------------------------------------------------
-
+    
+    /**
+      *  Convert the formatter to xml representation
+      *
+      *  @return string the xml rep
+      *  @access public
+      */  
     public function toXml()
     {
         return '<writer platform="'.$this->getPlatform()->getName().'" format="'.$this->getName().'" />';
     }
 
     //  -------------------------------------------------------------------------
+    
+    /**
+      *  Overrides the base class merge to configure the writer
+      *  after the definitions are merged.
+      */
+    public function merge()
+    {
+        parent::merge();
+        
+        # change the format on the writer to remove the seq number
+        # since we are using a single file format
 
+        $this->getWriter()->getStream()->getLimit()->changeLimit(null);
+        $this->writer->getStream()->getSequence()->setFormat($this->getOption(self::CONFIG_OPTION_OUT_FILE_FORMAT));
+        
+    }
+    
+    
+    /**
+      *  Will fetch config extensions used in child formatters that
+      *  want to extends the default config tree
+      *
+      *  @return ArrayNodeDefinition
+      *  @access public
+      */
+    public function getConfigExtension(ArrayNodeDefinition $rootNode)
+    {
+	return $rootNode;
+    }
+    
+    //  ----------------------------------------------------------------------------
     
 }
 /* End of File */

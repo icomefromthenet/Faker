@@ -129,9 +129,9 @@ class Stream implements WriterInterface
         # write footer to file
         if($this->file_handle !== null) {
             $this->writeFooter();
+            $this->file_handle->fflush();
+            $this->file_handle = null;
         }
-        
-        $this->file_handle = null;
     }
     
     

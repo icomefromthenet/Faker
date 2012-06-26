@@ -34,6 +34,13 @@ class SchemaParser extends BaseXMLParser
       */
     protected function xmlStartTag($parser, $name, $attribs)
     {
+        
+        # convert attributes to phpType
+        
+        foreach($attribs as &$value) {
+            $value = self::phpize($value);
+        }
+        
         switch($name) {
             case 'writer' :
                
@@ -45,7 +52,13 @@ class SchemaParser extends BaseXMLParser
                     throw new FakerException('Writer Tag Missing Platform');
                 }
                 
-                $this->builder->addWriter($attribs['platform'],$attribs['format']);
+                $platform = $attribs['platform'];
+                $format   = $attribs['format'];
+                
+                unset($attribs['format']);
+                unset($attribs['platform']);
+                
+                $this->builder->addWriter($platform,$format,$attribs);
                 
                 
                 
