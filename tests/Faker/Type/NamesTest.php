@@ -23,8 +23,9 @@ class NamesTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Names($id,$parent,$event,$utilities);
+        $type = new Names($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -45,8 +46,9 @@ class NamesTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-            
-        $type = new Names($id,$parent,$event,$utilities);
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        
+        $type = new Names($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','xxxx'); 
         $type->merge();        
         $this->assertEquals('xxxx',$type->getOption('format'));
@@ -72,8 +74,10 @@ class NamesTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Names($id,$parent,$event,$utilities);
+        $type = new Names($id,$parent,$event,$utilities,$generator);
         $type->merge();        
     }
     
@@ -91,8 +95,10 @@ class NamesTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+         
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface'); 
             
-        $type = new Names($id,$parent,$event,$utilities);
+        $type = new Names($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','{fname} {lname}');
         $type->merge();
         $type->validate(); 

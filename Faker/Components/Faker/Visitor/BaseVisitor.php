@@ -21,6 +21,7 @@ abstract class BaseVisitor
     
     abstract public function visitMapBuilder(CompositeInterface $composite);
     
+    abstract public function visitGeneratorInjector(CompositeInterface $composite);
     
     //------------------------------------------------------------------
 }

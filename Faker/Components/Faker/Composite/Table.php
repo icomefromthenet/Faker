@@ -239,6 +239,18 @@ class Table extends BaseComposite
 
         $rootNode
             ->children()
+                  ->scalarNode('name')
+                    ->isRequired()
+                    ->setInfo('The Name of the Table')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new \Faker\Components\Faker\Exception('Table::Name must be a string');
+                        })
+                    ->end()
+                ->end()
                 ->scalarNode('locale')
                     ->treatNullLike('en')
                     ->defaultValue('en')
@@ -249,6 +261,40 @@ class Table extends BaseComposite
                         })
                         ->then(function($v){
                             throw new \Faker\Components\Faker\Exception('Table::Locale not in valid list');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('randomGenerator')
+                    ->setInfo('Type of random number generator to use')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return empty($v) or !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new FakerException('Table::randomGenerator must not be empty or string');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('generatorSeed')
+                    ->setInfo('Seed value to use in the generator')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return ! is_integer($v);
+                        })
+                        ->then(function($v){
+                            throw new FakerException('Table::generatorSeed must be an integer');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('generate')
+                    ->setInfo('The number of rows to generate')
+                    ->isRequired()
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_integer($v);
+                        })
+                        ->then(function($v){
+                            throw new FakerException('Table::Generate must be and integer');
                         })
                     ->end()
                 ->end()

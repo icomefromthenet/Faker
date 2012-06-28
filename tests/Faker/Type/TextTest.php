@@ -22,8 +22,9 @@ class TextTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Text($id,$parent,$event,$utilities);
+        $type = new Text($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -44,8 +45,10 @@ class TextTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Text($id,$parent,$event,$utilities);
+        $type = new Text($id,$parent,$event,$utilities,$generator);
         $type->setOption('paragraphs',5);
         $type->setOption('maxlines' ,5);
         $type->setOption('minlines' ,1);
@@ -75,8 +78,10 @@ class TextTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Text($id,$parent,$event,$utilities);
+        $type = new Text($id,$parent,$event,$utilities,$generator);
         $type->setOption('paragraphs','aaa');
         $type->setOption('maxlines' ,5);
         $type->setOption('minlines' ,1);
@@ -102,8 +107,10 @@ class TextTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Text($id,$parent,$event,$utilities);
+        $type = new Text($id,$parent,$event,$utilities,$generator);
         $type->setOption('paragraphs',1);
         $type->setOption('maxlines' ,5);
         $type->setOption('minlines' ,'aaa');
@@ -129,8 +136,10 @@ class TextTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Text($id,$parent,$event,$utilities);
+        $type = new Text($id,$parent,$event,$utilities,$generator);
         $type->setOption('paragraphs',1);
         $type->setOption('maxlines' ,'aaa');
         $type->setOption('minlines' ,1);
@@ -146,13 +155,14 @@ class TextTest extends AbstractProject
     {
         $id = 'table_two';
         
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
         $utilities = $this->getMockBuilder('Faker\Components\Faker\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock();
                           
         $utilities->expects($this->exactly(5))
                    ->method('generateRandomText')
-                   ->with($this->isType('array'),$this->equalTo(true),$this->equalTo(5),$this->equalTo(30))
+                   ->with($this->isType('array'),$this->equalTo(5),$this->equalTo(30),$this->equalTo($generator))
                    ->will($this->returnValue('dgHJ'));
         
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')
@@ -160,8 +170,9 @@ class TextTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
             
-        $type = new Text($id,$parent,$event,$utilities);
+        $type = new Text($id,$parent,$event,$utilities,$generator);
         $type->setOption('paragraphs',5);
         $type->setOption('maxlines',30);
         $type->setOption('minlines',5);

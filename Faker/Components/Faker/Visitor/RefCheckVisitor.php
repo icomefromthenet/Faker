@@ -43,6 +43,11 @@ class RefCheckVisitor extends BaseVisitor
     //------------------------------------------------------------------
     # Visitor Methods
     
+    public function visitGeneratorInjector(CompositeInterface $composite)
+    {
+         throw new FakerException('Not implemented');
+    }
+    
     public function visitCacheInjector(CompositeInterface $composite)
     {
         throw new FakerException('Not Implemented');

@@ -19,7 +19,7 @@ class AlphaNumeric extends Type
     public function generate($rows,$values = array())
     {
         $format = $this->getOption('format');
-        return $this->utilities->generateRandomAlphanumeric($format);
+        return $this->utilities->generateRandomAlphanumeric($format,$this->getGenerator());
     }
     
     

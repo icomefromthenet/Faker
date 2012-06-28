@@ -23,11 +23,12 @@ class UniqueTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
-            
-        $type = new UniqueString($id,$parent,$event,$utilities);
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        
+        $type = new UniqueString($id,$parent,$event,$utilities,$generator);
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
-        $type = new UniqueNumber($id,$parent,$event,$utilities);
+        $type = new UniqueNumber($id,$parent,$event,$utilities,$generator);
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     }
     
@@ -46,13 +47,14 @@ class UniqueTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-            
-        $type = new UniqueString($id,$parent,$event,$utilities);
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        
+        $type = new UniqueString($id,$parent,$event,$utilities,$generator);
         $type->setOption('format', 'xxxx');
         $type->merge();        
         $this->assertSame('xxxx',$type->getOption('format'));
         
-        $type = new UniqueNumber($id,$parent,$event,$utilities);
+        $type = new UniqueNumber($id,$parent,$event,$utilities,$generator);
         $type->setOption('format', 'xxxx');
         $type->merge();        
         $this->assertSame('xxxx',$type->getOption('format'));
@@ -80,8 +82,9 @@ class UniqueTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-            
-        $type = new UniqueString($id,$parent,$event,$utilities);
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');    
+        
+        $type = new UniqueString($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','ccCC');
         
         $type->merge();        
@@ -112,8 +115,10 @@ class UniqueTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new UniqueString($id,$parent,$event,$utilities);
+        $type = new UniqueString($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','XXxx');
         $type->merge(); 
         $type->validate(); 

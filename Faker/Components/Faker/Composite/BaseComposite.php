@@ -3,6 +3,7 @@ namespace Faker\Components\Faker\Composite;
 
 use Faker\Components\Faker\OptionInterface,
     Faker\Components\Faker\BaseNode,
+    Faker\Components\Faker\Visitor\GeneratorInjectorVisitor,
     Faker\Components\Faker\Visitor\ColumnCacheInjectorVisitor,
     Faker\Components\Faker\Visitor\ForeignCacheInjectorVisitor,
     Faker\Components\Faker\Visitor\MapBuilderVisitor,
@@ -155,6 +156,10 @@ abstract class BaseComposite extends BaseNode implements OptionInterface, Compos
        
        if($visitor instanceof RefCheckVisitor) {
             $visitor->visitRefCheck($this);
+       }
+       
+       if($visitor instanceof GeneratorInjectorVisitor) {
+            $visitor->visitGeneratorInjector($this);
        }
        
        # send visitor to the children.

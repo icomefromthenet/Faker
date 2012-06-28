@@ -48,6 +48,11 @@ class MapBuilderVisitor extends BaseVisitor
         throw new FakerException('Not implemented');
     }
     
+    public function visitGeneratorInjector(CompositeInterface $composite)
+    {
+         throw new FakerException('Not implemented');
+    }
+    
     public function visitMapBuilder(CompositeInterface $composite)
     {
         

@@ -115,6 +115,12 @@ class ForeignCacheInjectorVisitor extends BaseVisitor
     {
         throw new FakerException('Not Implemented');
     }
+    
+    public function visitGeneratorInjector(CompositeInterface $composite)
+    {
+         throw new FakerException('Not implemented');
+    }
+
 
 }
 /* End of File */

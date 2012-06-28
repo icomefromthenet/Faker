@@ -344,4 +344,112 @@ class ColumnTest extends AbstractProject
         
     }
     
+    public function testNoDefaultsSetForGenerator()
+    {
+        
+        $id = 'column_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+       
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+
+        
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $column->addChild($child_a);        
+            
+        $column->merge();
+        $this->assertFalse($column->hasOption('randomGenerator'));
+        $this->assertFalse($column->hasOption('generatorSeed'));
+        
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      */
+    public function testNotIntergerRefusedForGeneratorSeed()
+    {
+        
+        $id = 'column_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+       
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+
+        
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $column->addChild($child_a);        
+            
+       
+        $column->setOption('generatorSeed','a non integer');
+        
+        $column->merge();
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      */
+    public function testNullNotAcceptedGeneratorSeed()
+    {
+        $id = 'column_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $column->addChild($child_a);   
+        
+        $column->setOption('generatorSeed',null);
+        
+        $column->merge();
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      */
+    public function testEmptyStringNotAcceptedGeneratorSeed()
+    {
+        $id = 'column_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $column->addChild($child_a);   
+
+        
+        $column->setOption('generatorSeed','');
+        
+        $column->merge();
+        
+        
+    }
+    
+    
+    public function testGeneratorOptionsAccepted()
+    {
+        
+        $id = 'column_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $column->addChild($child_a);   
+        
+        $column->setOption('generatorSeed',100);
+        $column->setOption('randomGenerator','srand');
+        $column->merge();
+        
+        $this->assertEquals(100,$column->getOption('generatorSeed'));
+        $this->assertEquals('srand',$column->getOption('randomGenerator'));
+        
+    }
+    
 }

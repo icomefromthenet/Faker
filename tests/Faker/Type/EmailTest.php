@@ -23,8 +23,9 @@ class EmailTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Email($id,$parent,$event,$utilities);
+        $type = new Email($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -45,8 +46,10 @@ class EmailTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Email($id,$parent,$event,$utilities);
+        $type = new Email($id,$parent,$event,$utilities,$generator);
         $type->setOption('format' ,'xxxx');
         $type->setOption('domains' , 'au,com.au');
         $type->merge();        
@@ -75,8 +78,10 @@ class EmailTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Email($id,$parent,$event,$utilities);
+        $type = new Email($id,$parent,$event,$utilities,$generator);
         $type->merge();        
         
     }
@@ -97,11 +102,12 @@ class EmailTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Email($id,$parent,$event,$utilities);
+        $type = new Email($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','{fname}\'{lname}{alpha1}@{alpha2}.{domain}');
-        $type->setOption('alpha1','ccCCC');
-        $type->setOption('alpha2','xxxx');
+        $type->setOption('params','{"alpha1":"ccCCC","alpha2":"xxxx"}');
       
         $type->merge();       
         $type->validate(); 

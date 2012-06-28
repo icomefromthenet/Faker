@@ -10,9 +10,6 @@ use Faker\Components\Faker\Exception as FakerException,
 class Email extends Type
 {
     protected $valid_suffixes;
-    
-    
-
 
     //---------------------------------------------------------------
     /**
@@ -34,8 +31,8 @@ class Email extends Type
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         
         # fetch a random name from the db
-        $fname =$result['fname'];
-        $lname =$result['lname'];
+        $fname  = $result['fname'];
+        $lname  = $result['lname'];
         $inital = $result['middle_initial'];
         
         
@@ -50,10 +47,10 @@ class Email extends Type
         $format = preg_replace('/{domain}/',$domains[$rand_key],$format);
         
         # parse names param
-        $params = $this->getNameParams();
+        $params = $this->getOption('params');
         
         foreach($params as $param => $value) {
-            $format = preg_replace('/{'.$param.'}/',$this->utilities->generateRandomAlphanumeric($value),$format);
+            $format = preg_replace('/{'.$param.'}/',$this->utilities->generateRandomAlphanumeric($value,$this->getGenerator()),$format);
         }
         
         return $format;
@@ -78,6 +75,16 @@ class Email extends Type
     {
         return $rootNode
             ->children()
+                ->scalarNode('params')
+                    ->setInfo('a json name params to use')
+                    ->defaultValue('{}')
+                    ->validate()
+                        ->ifString()
+                        ->then(function($v){
+                            return json_decode($v,true);
+                        })
+                    ->end()
+                ->end()
                 ->scalarNode('domains')
                     ->defaultValue(array('edu','com','org','ca','net','co.uk','com.au','biz','info'))
                     ->setInfo('a list of domains to use')
@@ -102,7 +109,6 @@ class Email extends Type
                     ->setInfo('Format to use to generate addresses')
                     ->setExample('{fname}{lname}{alpha}@{alpha}.{domain}')
                 ->end()
-                
             ->end();
     }
     
@@ -111,34 +117,6 @@ class Email extends Type
     public function validate()
     {
         return true;
-    }
-    
-    //  -------------------------------------------------------------------------
-    
-    
-    public function setOption($name,$option)
-    {
-	if(in_array($name,array('format','domains')) === false) {
-            $this->addNameParam($name,$option);
-            
-        }else {
-            $this->options[$name] = $option;    
-        }
-        
-    }
-    
-    //  -------------------------------------------------------------------------
-    
-    protected $name_params = array();
-        
-    public function getNameParams()
-    {
-        return $this->name_params;
-    }
-    
-    public function addNameParam($param,$value)
-    {
-        $this->name_params[$param] = $value;
     }
     
     //  -------------------------------------------------------------------------

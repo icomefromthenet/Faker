@@ -22,8 +22,9 @@ class BooleanTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new BooleanType($id,$parent,$event,$utilities);
+        $type = new BooleanType($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -44,8 +45,10 @@ class BooleanTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new BooleanType($id,$parent,$event,$utilities);
+        $type = new BooleanType($id,$parent,$event,$utilities,$generator);
         $type->setOption('value' , true);
         $type->merge();        
     }
@@ -66,14 +69,16 @@ class BooleanTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new BooleanType($id,$parent,$event,$utilities);
+        $type = new BooleanType($id,$parent,$event,$utilities,$generator);
         $type->setOption('value',true);
         $type->validate(); 
          
         $this->assertEquals(true,$type->generate(1,array()));
         
-        $type = new BooleanType($id,$parent,$event,$utilities);
+        $type = new BooleanType($id,$parent,$event,$utilities,$generator);
         $type->setOption('value',false);
         $type->validate(); 
 

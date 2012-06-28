@@ -22,9 +22,10 @@ class CountryTest extends AbstractProject
 
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-      
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Country($id,$parent,$event,$utilities);
+        $type = new Country($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -45,14 +46,15 @@ class CountryTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Country($id,$parent,$event,$utilities);
+        $type = new Country($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries' ,'AU,US,UK');
         $type->merge();        
         $this->assertSame(array('AU','US','UK'),$type->getOption('countries'));
         
         # test with no options
-        $type = new Country($id,$parent,$event,$utilities);
+        $type = new Country($id,$parent,$event,$utilities,$generator);
         $type->merge();        
         $this->assertSame($type->getOption('countries'),null);
    
@@ -73,8 +75,10 @@ class CountryTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Country($id,$parent,$event,$utilities);
+        $type = new Country($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries','AU,UK,US');
         $type->merge();
         $type->validate(); 
@@ -87,7 +91,7 @@ class CountryTest extends AbstractProject
         $this->assertStringMatchesFormat('%s',$value);
         
         # test with no options        
-        $type = new Country($id,$parent,$event,$utilities);
+        $type = new Country($id,$parent,$event,$utilities,$generator);
         $type->merge();
         $type->validate(); 
                 

@@ -1,13 +1,13 @@
 <?php
 namespace Faker\Components\Faker;
 
-use Faker\Components\Faker\Utilities;
-use Faker\Components\Faker\Exception as FakerException;
-use Faker\Components\Faker\TypeConfigInterface;
-use Faker\Components\Faker\Composite\CompositeInterface;
-use Faker\ExtensionInterface;
-
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Faker\Components\Faker\Utilities,
+    Faker\Components\Faker\Exception as FakerException,
+    Faker\Components\Faker\TypeConfigInterface,
+    Faker\Components\Faker\Composite\CompositeInterface,
+    Faker\ExtensionInterface,
+    Faker\Generator\GeneratorInterface,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
   *  Construct new DatatypeConfig objects under the namespace Faker\Components\Faker\Config
@@ -51,13 +51,21 @@ class TypeFactory implements ExtensionInterface
       */
     protected $event;
     
+    /**
+      *  @var Faker\Generator\GeneratorInterface the random number generator 
+      */
+    protected $generator;
+    
     //  -------------------------------------------------------------------------
     
     
-    public function __construct(Utilities $util, EventDispatcherInterface $event)
+    public function __construct(Utilities $util, EventDispatcherInterface $event,GeneratorInterface $generator)
     {
         $this->util = $util;
         $this->event = $event;
+        
+        # a default Generator
+        $this->generator = $generator;
     }
     
     
@@ -82,7 +90,7 @@ class TypeFactory implements ExtensionInterface
             throw new FakerException('Class not found at::'.self::$types[$name]);
         }
         
-        $type =  new self::$types[$name]($name,$parent,$this->event,$this->util);
+        $type =  new self::$types[$name]($name,$parent,$this->event,$this->util,$this->generator);
     
         return $type;
     }

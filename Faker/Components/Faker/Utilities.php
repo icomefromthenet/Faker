@@ -1,7 +1,8 @@
 <?php
 namespace Faker\Components\Faker;
 
-use Faker\Project;
+use Faker\Project,
+    Faker\Generator\GeneratorInterface;
 
 /**
   *  This class contains some common methods used to generate
@@ -39,11 +40,12 @@ class Utilities
      * @param string[] $words the lines to pick from 
      * @param integer $min the minimum # of words to return OR the total number
      * @param integer $max the max # of words to return (or null for "fixed" type)
+     * @param GeneratorInterface $random
      */
-    public function generateRandomText($words, $min, $max)
+    public function generateRandomText($words, $min, $max, GeneratorInterface $random)
     {
         # how many lines do we need from range
-        $num_lines  = rand($min, $max);
+        $num_lines  = $random->generate($min, $max);
         
         # jumble the array so we consecutive calls get differnt result
         shuffle($words);
@@ -63,8 +65,11 @@ class Utilities
 
     /**
      * Converts all x's and X's in a string with a random digit. X's: 1-9, x's: 0-9.
+     *
+     * @param string str the DSL
+     * @param GeneratorInterface $random
      */
-    public function generateRandomNum($str)
+    public function generateRandomNum($str,GeneratorInterface $random)
     {
         // loop through each character and convert all unescaped X's to 1-9 and
         // unescaped x's to 0-9.
@@ -76,13 +81,13 @@ class Utilities
                 if ($i != 0 && ($str[$i - 1] == '\\')) {
                     $new_str .= "X";
                 } else {
-                    $new_str .= \rand(1, 9);
+                    $new_str .= $random->generate(1, 9);
                 }
             } else if ($str[$i] == "x") {
                 if ($i != 0 && ($str[$i - 1] == '\\')) {
                     $new_str .= "x";
                 } else {
-                    $new_str .= \rand(0, 9);
+                    $new_str .= $random->generate(0, 9);
                 }
             }else
                 $new_str .= $str[$i];
@@ -102,8 +107,11 @@ class Utilities
      *     X       - 1-9
      *     x       - 0-9
      *     H       - 0-F
+     *
+     *  @param string $str the DSL
+     *  @param GeneratorInterface $random
      */
-    public function generateRandomAlphanumeric($str)
+    public function generateRandomAlphanumeric($str,GeneratorInterface $random)
     {
         $letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $consonants = "BCDFGHJKLMNPQRSTVWXYZ";
@@ -118,60 +126,60 @@ class Utilities
             switch ($str[$i]) {
                 // Numbers
                 case "X":
-                    $new_str .= \rand(1, 9);
+                    $new_str .= $random->generate(1, 9);
                 break;
                 case "x":
-                    $new_str .= \rand(0, 9);
+                    $new_str .= $random->generate(0, 9);
                 break;
                 
                 // Hex
                 case "H":
-                    $new_str .= $hex[\rand(0, \strlen($hex) - 1)];
+                    $new_str .= $hex[$random->generate(0, \strlen($hex) - 1)];
                 break;
                     
                 // Letters
                 case "L":
-                    $new_str .= $letters[\rand(0, \strlen($letters) - 1)];
+                    $new_str .= $letters[$random->generate(0, \strlen($letters) - 1)];
                 break;
                 case "l":
-                    $new_str .= \strtolower($letters[\rand(0, \strlen($letters) - 1)]);
+                    $new_str .= \strtolower($letters[$random->generate(0, \strlen($letters) - 1)]);
                 break;
                 case "D":
-                    $bool = \rand() & 1;
-                    if ($bool)
-                        $new_str .= $letters[\rand(0, \strlen($letters) - 1)];
+                    $bool = $random->generate(0,1);
+                    if ($bool === 0)
+                        $new_str .= $letters[$random->generate(0, \strlen($letters) - 1)];
                     else
-                        $new_str .= \strtolower($letters[\rand(0, \strlen($letters) - 1)]);
+                        $new_str .= \strtolower($letters[$random->generate(0, \strlen($letters) - 1)]);
                     break;
 
                 // Consonants
                 case "C":
-                    $new_str .= $consonants[\rand(0, \strlen($consonants) - 1)];
+                    $new_str .= $consonants[$random->generate(0, \strlen($consonants) - 1)];
                 break;
                 case "c":
-                    $new_str .= \strtolower($consonants[\rand(0, \strlen($consonants) - 1)]);
+                    $new_str .= \strtolower($consonants[$random->generate(0, \strlen($consonants) - 1)]);
                 break;
                 case "E":
-                    $bool = \rand() & 1;
-                    if ($bool)
-                        $new_str .= $consonants[\rand(0, \strlen($consonants) - 1)];
+                    $bool = $random->generate(0,1);
+                    if ($bool === 0)
+                        $new_str .= $consonants[$random->generate(0, \strlen($consonants) - 1)];
                     else
-                        $new_str .= \strtolower($consonants[\rand(0, \strlen($consonants) - 1)]);
+                        $new_str .= \strtolower($consonants[$random->generate(0, \strlen($consonants) - 1)]);
                     break;
 
                 // Vowels
                 case "V":
-                    $new_str .= $vowels[\rand(0, \strlen($vowels) - 1)];
+                    $new_str .= $vowels[$random->generate(0, \strlen($vowels) - 1)];
                 break;
                 case "v":
                     $new_str .= \strtolower($vowels[\rand(0, \strlen($vowels) - 1)]);
                 break;
                 case "F":
-                    $bool = \rand() & 1;
-                    if ($bool)
-                        $new_str .= $vowels[\rand(0, \strlen($vowels) - 1)];
+                    $bool = $random->generate(0,1);
+                    if ($bool === 0)
+                        $new_str .= $vowels[$random->generate(0, \strlen($vowels) - 1)];
                     else
-                        $new_str .= \strtolower($vowels[rand(0, \strlen($vowels) - 1)]);
+                        $new_str .= \strtolower($vowels[$random->generate(0, \strlen($vowels) - 1)]);
                 break;
      
                 //space char
@@ -244,11 +252,12 @@ class Utilities
      * This function is like rand
      *
      * @param array $weights
+     * @param GeneratorInterface $random
      * @return float
      */
-    public function getWeightedRand($weights)
+    public function getWeightedRand($weights,GeneratorInterface $random)
     {
-        $r = \mt_rand(1, 1000);
+        $r = $random->generate(1, 1000);
         $offset = 0;
         foreach ($weights as $k => $w) {
             

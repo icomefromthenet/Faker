@@ -10,13 +10,15 @@ use Faker\Components\Faker\Utilities,
     Faker\Components\Faker\Visitor\MapBuilderVisitor,
     Faker\Components\Faker\Visitor\RefCheckVisitor,
     Faker\Components\Faker\Visitor\BaseVisitor,
+    Faker\Components\Faker\Visitor\GeneratorInjectorVisitor,
     Faker\Components\Faker\TypeConfigInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface,
     Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition,
     Symfony\Component\Config\Definition\Builder\TreeBuilder,
     Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Config\Definition\Exception\InvalidConfigurationException,
-    Faker\Components\Faker\OptionInterface;
+    Faker\Components\Faker\OptionInterface,
+    Faker\Generator\GeneratorInterface;
 
 class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
 {
@@ -46,6 +48,12 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
       */
     protected $options = array();
     
+    /**
+      *  @var Faker\Generator\GeneratorInterface the random number generator 
+      */
+    protected $generator;
+    
+    
     //  -------------------------------------------------------------------------
     
      /**
@@ -58,15 +66,18 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
       *  @param EventDispatcherInterface $event
       *  @param Utilities $util
       */
-    public function __construct($id , CompositeInterface $parent, EventDispatcherInterface $event, Utilities $util)
+    public function __construct($id , CompositeInterface $parent, EventDispatcherInterface $event, Utilities $util, GeneratorInterface $generator)
     {
         $this->id = $id;
         $this->event = $event;
         $this->utilities = $util;
+	$this->generator = $generator;
         
         if($parent !== null) {
             $this->setParent($parent);
         }
+	
+	$this->setOption('name',$id);
     }
    
    
@@ -96,6 +107,28 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
         return $this->parent_type;
     }
 
+    /**
+      *  Fetch the random number generator
+      *
+      *  @access public
+      *  @return Faker\Generator\GeneratorInterface
+      */
+    public function getGenerator()
+    {
+	return $this->generator;
+    }
+    
+    /**
+      *  Set the random number generator
+      *
+      *  @access public
+      *  @return Faker\Generator\GeneratorInterface
+      */
+    public function setGenerator(GeneratorInterface $generator)
+    {
+	$this->generator = $generator;
+    }
+    
     /**
       * @inheritdoc  
       */
@@ -216,6 +249,18 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
         $rootNode = $treeBuilder->root('config');
 	
 	$rootNode->children()
+		->scalarNode('name')
+                    ->isRequired()
+                    ->setInfo('The Name of the Type')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new \Faker\Components\Faker\Exception('Type::Name must be a string');
+                        })
+                    ->end()
+                ->end()
 	      ->scalarNode('locale')
                     ->treatNullLike('en')
                     ->defaultValue('en')
@@ -226,6 +271,28 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
                         })
                         ->then(function($v){
                             throw new \Faker\Components\Faker\Exception('Schema::Locale not in valid list');
+                        })
+                    ->end()
+                ->end()
+		->scalarNode('randomGenerator')
+                    ->setInfo('Type of random number generator to use')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return empty($v) or !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new FakerException('randomGenerator must not be empty or string');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('generatorSeed')
+                    ->setInfo('Seed value to use in the generator')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return ! is_integer($v);
+                        })
+                        ->then(function($v){
+                            throw new FakerException('generatorSeed must be an integer');
                         })
                     ->end()
                 ->end()
@@ -253,9 +320,9 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
       */
     public function acceptVisitor(BaseVisitor $visitor)
     {
-        
-	# no processing yet needed.
-	
+	if($visitor instanceof GeneratorInjectorVisitor) {
+            $visitor->visitGeneratorInjector($this);
+        }
 	
 	return $visitor;
     }

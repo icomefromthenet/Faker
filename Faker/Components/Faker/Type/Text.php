@@ -212,7 +212,7 @@ class Text extends Type
         
         # generate the text
         for($i = $parag; $i > 0; $i--) {
-            $return .=  $this->utilities->generateRandomText(self::$words,true,$min_lines,$max_lines).PHP_EOL;
+            $return .=  $this->utilities->generateRandomText(self::$words,$min_lines,$max_lines,$this->getGenerator()).PHP_EOL;
         }
         
         return $return;

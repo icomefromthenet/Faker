@@ -1,15 +1,18 @@
 <?php
 namespace Faker\Components\Faker;
 
-use Faker\Project;
-use Faker\Components\ManagerInterface;
-use Faker\Io\IoInterface;
-
-use Faker\PlatformFactory;
-use Faker\ColumnTypeFactory;
-use Faker\Components\Faker\Formatter\FormatterFactory;
-use Faker\Components\Faker\SchemaAnalysis;
-
+use Faker\Project,
+    Faker\Components\ManagerInterface,
+    Faker\Io\IoInterface,
+    Faker\PlatformFactory,
+    Faker\ColumnTypeFactory,
+    Faker\Components\Faker\Formatter\FormatterFactory,
+    Faker\Components\Faker\SchemaAnalysis,
+    Faker\Components\Faker\Compiler\Pass\CircularRefPass,
+    Faker\Components\Faker\Compiler\Pass\CacheInjectorPass,
+    Faker\Components\Faker\Compiler\Pass\KeysExistPass,
+    Faker\Components\Faker\Compiler\Pass\GeneratorInjectorPass,
+    Faker\Components\Faker\Compiler\Compiler;
 
 class Manager implements ManagerInterface
 {
@@ -142,7 +145,14 @@ class Manager implements ManagerInterface
                            $this->getPlatformFactory(),
                            $this->getColumnTypeFactory(),
                            $this->getTypeFactory(),
-                           $this->getFormatterFactory());        
+                           $this->getFormatterFactory(),
+                           new Compiler(),
+                           array(
+                                new KeysExistPass(),
+                                new CacheInjectorPass(),
+                                new CircularRefPass(),
+                                new GeneratorInjectorPass($this->project['generator_factory'],$this->project['random_generator'])
+                           ));        
     }
     
     /**
@@ -153,7 +163,10 @@ class Manager implements ManagerInterface
       */
     public function getTypeFactory()
     {
-        return new TypeFactory(new Utilities($this->project),$this->project['event_dispatcher']);        
+        return new TypeFactory(new Utilities($this->project),
+                               $this->project['event_dispatcher'],
+                               $this->project['random_generator']
+                               );        
     }
     
     //  -------------------------------------------------------------------------

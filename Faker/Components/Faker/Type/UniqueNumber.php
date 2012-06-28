@@ -62,7 +62,7 @@ class UniqueNumber extends Type
         $format = $this->getOption('format');
         
         do  {
-            $guid = $this->utilities->generateRandomNumeric($format);
+            $guid = $this->utilities->generateRandomNumeric($format,$this->getGenerator());
         
             if(in_array($guid, self::$generated) === false) {
                 $ok = true;

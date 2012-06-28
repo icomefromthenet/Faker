@@ -20,10 +20,7 @@ use Faker\Components\Faker\Composite\Column,
     Faker\Components\Faker\Formatter\FormatterInterface,
     Faker\Components\Faker\TypeFactory,
     Faker\Components\Writer\WriterInterface,
-    Faker\Components\Faker\Compiler\Compiler,
-    Faker\Components\Faker\Compiler\Pass\CircularRefPass,
-    Faker\Components\Faker\Compiler\Pass\CacheInjectorPass,
-    Faker\Components\Faker\Compiler\Pass\KeysExistPass,
+    Faker\Components\Faker\Compiler\CompilerInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Builder
@@ -79,16 +76,34 @@ class Builder
       */
     protected $event;
 
+    /**
+      *  @var Faker\Components\Compiler\PassCompilerPassInterface[] 
+      */
+    protected $compiler_passes;
+    
+    /**
+      *  @var Faker\Components\Compiler\CompilerInterface 
+      */
+    protected $compiler;
+    
     //  -------------------------------------------------------------------------
 
     
-    public function __construct(EventDispatcherInterface $event,PlatformFactory $platform, ColumnTypeFactory $column, TypeFactory $type,FormatterFactory $formatter)
+    public function __construct(EventDispatcherInterface $event,
+                                PlatformFactory $platform,
+                                ColumnTypeFactory $column,
+                                TypeFactory $type,
+                                FormatterFactory $formatter,
+                                CompilerInterface $compiler,
+                                array $compiler_passes)
     {
         $this->event = $event;
         $this->platform_factory = $platform;
         $this->column_factory  = $column;
         $this->formatter_factory = $formatter;
         $this->type_factory = $type;
+        $this->compiler = $compiler;
+        $this->compiler_passes = $compiler_passes;
     }
     
     //  -------------------------------------------------------------------------
@@ -130,7 +145,7 @@ class Builder
        
         # create the new schema
         
-        $this->current_schema = new Schema($name,null,$this->event,array('locale' => $options['locale']));
+        $this->current_schema = new Schema($name,null,$this->event,$options);
         
         # assign schema as our head
         
@@ -151,17 +166,6 @@ class Builder
             throw new FakerException('Must add a scheam first before adding a table');
         }
     
-        # validate the name for empty string
-        
-        if(empty($name)) {
-            throw new FakerException('Table must have a name');
-        }
-        
-        if(isset($options['generate']) === false) {
-            throw new FakerException('Table requires rows to generate');
-        }
-        
-        
         # merge options with default
         $options = array_merge(array(
                     'locale' => $this->head->getOption('locale')
@@ -170,7 +174,7 @@ class Builder
         
         # create the new table
         
-        $table = new Table($name,$this->current_schema,$this->event,(integer)$options['generate'],array('locale' => $options['locale']));
+        $table = new Table($name,$this->current_schema,$this->event,(integer)$options['generate'],$options);
         
         # add table to schema
         
@@ -194,10 +198,6 @@ class Builder
            throw new FakerException('Can not add new column without first setting a table and schema'); 
         }
     
-        if(empty($name)) {
-            throw new FakerException('Column must have a name');
-        }
-        
         if(isset($options['type']) === false) {
             throw new FakerException('Column requires a doctrine type');
         }
@@ -211,7 +211,7 @@ class Builder
                     ),$options);
     
         # create new column
-        $current_column = new Column($name,$this->head,$this->event,$doctrine,array('locale' => $options['locale']));
+        $current_column = new Column($name,$this->head,$this->event,$doctrine,$options);
         
         # add the column to the table
         $this->head->addChild($current_column);
@@ -365,7 +365,7 @@ class Builder
 
     //  -------------------------------------------------------------------------
     
-    public function addType($name,$options)
+    public function addType($name,$options = array())
     {
         
         # check if schema, table , column exist
@@ -383,6 +383,11 @@ class Builder
         # instance the type config
     
         $current_type = $this->type_factory->create($name,$this->head);    
+
+        # set custom options        
+        foreach($options as $optname => $optvalue) {
+            $current_type->setOption($optname,$optvalue);
+        }
         
         $this->head->addChild($current_type);
         
@@ -441,10 +446,12 @@ class Builder
     public function compile()
     {
         # run the compiler
-        $compiler = new Compiler();
-        $compiler->addPass(new KeysExistPass());
-        $compiler->addPass(new CacheInjectorPass());
-        $compiler->addPass(new CircularRefPass());
+        $compiler = $this->compiler;
+        
+        foreach($this->compiler_passes as $pass) {
+            $compiler->addPass($pass);
+        }
+        
         $compiler->compile($this->current_schema);
         
         return $this;

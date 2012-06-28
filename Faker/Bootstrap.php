@@ -389,3 +389,18 @@ $project['parser'] = function($project){
 $project['parser_options'] = function($project){
    return new \Faker\Parser\ParseOptions($project['event_dispatcher']);
 };
+
+
+//---------------------------------------------------------------
+// Generator 
+//
+//---------------------------------------------------------------
+$project['generator_factory_default'] = 'srand';
+
+$project['generator_factory'] = $project->share(function($project){
+   return new \Faker\Generator\GeneratorFactory();
+});
+
+$project['random_generator'] = $project->share(function($project){
+   return $project['generator_factory']->create($project['generator_factory_default']);
+});

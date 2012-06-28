@@ -22,8 +22,9 @@ class DateTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Date($id,$parent,$event,$utilities);
+        $type = new Date($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -44,8 +45,9 @@ class DateTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Date($id,$parent,$event,$utilities);
+        $type = new Date($id,$parent,$event,$utilities,$generator);
         $type->setOption('start', '14-01-1983');
         $type->merge();        
         
@@ -72,8 +74,10 @@ class DateTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Date($id,$parent,$event,$utilities);
+        $type = new Date($id,$parent,$event,$utilities,$generator);
         $type->setOption('aaaa' , 'bbb'); 
         $type->merge();        
         
@@ -98,8 +102,10 @@ class DateTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Date($id,$parent,$event,$utilities);
+        $type = new Date($id,$parent,$event,$utilities,$generator);
         $type->setOption('start' , 'bbb');
         $type->merge();        
         
@@ -125,8 +131,10 @@ class DateTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Date($id,$parent,$event,$utilities);
+        $type = new Date($id,$parent,$event,$utilities,$generator);
         $type->setOption('max' , 'bbb');
         $type->setOption('start' ,'1st August 2007');
         $type->merge();        
@@ -151,8 +159,10 @@ class DateTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Date($id,$parent,$event,$utilities);
+        $type = new Date($id,$parent,$event,$utilities,$generator);
         
         # test with start > 0
         $type->setOption('start','today');

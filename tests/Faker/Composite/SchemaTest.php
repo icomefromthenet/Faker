@@ -177,5 +177,115 @@ class SchemaTest extends AbstractProject
         
     }
     
+    public function testNoDefaultsSetForGenerator()
+    {
+        
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schema = new Schema($id,null,$event,array('locale'=>null));
+
+        $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+          
+        $schema->addChild($child_a);        
+        $schema->setWriters(array($writer));
+        
+        $schema->merge();
+        $this->assertFalse($schema->hasOption('randomGenerator'));
+        $this->assertFalse($schema->hasOption('generatorSeed'));
+        
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      */
+    public function testNotIntergerRefusedForGeneratorSeed()
+    {
+        
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schema = new Schema($id,null,$event,array('locale'=>null));
+
+        $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+          
+        $schema->addChild($child_a);        
+        $schema->setWriters(array($writer));
+        
+        $schema->setOption('generatorSeed','a non integer');
+        
+        $schema->merge();
+        
+        
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      */
+    public function testNullNotAcceptedGeneratorSeed()
+    {
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schema = new Schema($id,null,$event,array('locale'=>null));
+
+        $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+          
+        $schema->addChild($child_a);        
+        $schema->setWriters(array($writer));
+        
+        $schema->setOption('generatorSeed',null);
+        
+        $schema->merge();
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      */
+    public function testEmptyStringNotAcceptedGeneratorSeed()
+    {
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schema = new Schema($id,null,$event,array('locale'=>null));
+
+        $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+          
+        $schema->addChild($child_a);        
+        $schema->setWriters(array($writer));
+        
+        $schema->setOption('generatorSeed','');
+        
+        $schema->merge();
+        
+        
+    }
+    
+    
+    public function testGeneratorOptionsAccepted()
+    {
+        
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schema = new Schema($id,null,$event,array('locale'=>null));
+
+        $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+          
+        $schema->addChild($child_a);        
+        $schema->setWriters(array($writer));
+        
+        $schema->setOption('generatorSeed',100);
+        $schema->setOption('randomGenerator','srand');
+        
+        $schema->merge();
+        
+        $this->assertEquals(100,$schema->getOption('generatorSeed'));
+        $this->assertEquals('srand',$schema->getOption('randomGenerator'));
+        
+    }
     
 }

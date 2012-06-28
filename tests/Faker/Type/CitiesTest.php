@@ -22,9 +22,10 @@ class CitiesTest extends AbstractProject
 
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-      
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');     
             
-        $type = new Cities($id,$parent,$event,$utilities);
+        $type = new Cities($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -45,8 +46,10 @@ class CitiesTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Cities($id,$parent,$event,$utilities);
+        $type = new Cities($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries' ,'AU,US,UK');
         $type->merge();        
         
@@ -68,8 +71,10 @@ class CitiesTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Cities($id,$parent,$event,$utilities);
+        $type = new Cities($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries','AU');
         $type->merge();
         $type->validate(); 

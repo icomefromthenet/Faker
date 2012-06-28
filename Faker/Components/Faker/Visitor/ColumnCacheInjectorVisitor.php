@@ -61,6 +61,7 @@ class ColumnCacheInjectorVisitor extends BaseVisitor
     
     //------------------------------------------------------------------
     # Visitor Methods
+        
     
     /**
       *  Inject the cache if node matches the address
@@ -105,6 +106,11 @@ class ColumnCacheInjectorVisitor extends BaseVisitor
     public function visitMapBuilder(CompositeInterface $composite)
     {
         throw new FakerException('Not Implemented');
+    }
+    
+    public function visitGeneratorInjector(CompositeInterface $composite)
+    {
+         throw new FakerException('Not implemented');
     }
 
 }

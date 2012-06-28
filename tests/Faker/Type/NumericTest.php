@@ -21,9 +21,10 @@ class NumericTest extends AbstractProject
 
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-      
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Numeric($id,$parent,$event,$utilities);
+        $type = new Numeric($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -44,8 +45,10 @@ class NumericTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Numeric($id,$parent,$event,$utilities);
+        $type = new Numeric($id,$parent,$event,$utilities,$generator);
         $type->setOption('format' ,'xxxx'); 
         $type->merge();        
     }
@@ -69,8 +72,10 @@ class NumericTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Numeric($id,$parent,$event,$utilities);
+        $type = new Numeric($id,$parent,$event,$utilities,$generator);
         $type->merge();        
         
         
@@ -97,8 +102,10 @@ class NumericTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Numeric($id,$parent,$event,$utilities);
+        $type = new Numeric($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','xxxx');
         $type->merge();
         $type->validate(); 
@@ -124,8 +131,10 @@ class NumericTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Numeric($id,$parent,$event,$utilities);
+        $type = new Numeric($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','xxxx.xx');
         $type->merge();
         $type->validate(); 

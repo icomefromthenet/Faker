@@ -246,6 +246,18 @@ class Column extends BaseComposite implements CacheInterface
 
         $rootNode
             ->children()
+                  ->scalarNode('name')
+                    ->isRequired()
+                    ->setInfo('The Name of the Column')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new \Faker\Components\Faker\Exception('Column::Name must be a string');
+                        })
+                    ->end()
+                ->end()
                 ->scalarNode('locale')
                     ->treatNullLike('en')
                     ->defaultValue('en')
@@ -256,6 +268,40 @@ class Column extends BaseComposite implements CacheInterface
                         })
                         ->then(function($v){
                             throw new \Faker\Components\Faker\Exception('Column::Locale not in valid list');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('randomGenerator')
+                    ->setInfo('Type of random number generator to use')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return empty($v) or !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new FakerException('randomGenerator must not be empty or string');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('generatorSeed')
+                    ->setInfo('Seed value to use in the generator')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return ! is_integer($v);
+                        })
+                        ->then(function($v){
+                            throw new FakerException('generatorSeed must be an integer');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('type')
+                    ->setInfo('Doctrine Column Type')
+                    ->isRequired()
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return ! is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new FakerException('Column Type must be included');
                         })
                     ->end()
                 ->end()

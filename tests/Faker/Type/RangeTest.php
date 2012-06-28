@@ -21,9 +21,9 @@ class RangeTest extends AbstractProject
 
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-      
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Range($id,$parent,$event,$utilities);
+        $type = new Range($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -44,8 +44,9 @@ class RangeTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Range($id,$parent,$event,$utilities);
+        $type = new Range($id,$parent,$event,$utilities,$generator);
         $type->setOption('min', 1 );
         $type->setOption('max', 100);
         $type->setOption('step', 1);
@@ -77,8 +78,10 @@ class RangeTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Range($id,$parent,$event,$utilities);
+        $type = new Range($id,$parent,$event,$utilities,$generator);
         $type->setOption('max', 'aaa');
         $type->setOption('min' ,1);
         $type->merge();        
@@ -104,8 +107,10 @@ class RangeTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Range($id,$parent,$event,$utilities);
+        $type = new Range($id,$parent,$event,$utilities,$generator);
         $type->setOption('max' , 100);
         $type->setOption('min' ,'aa');
         $type->merge();        
@@ -130,8 +135,10 @@ class RangeTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Range($id,$parent,$event,$utilities);
+        $type = new Range($id,$parent,$event,$utilities,$generator);
         $type->setOption('step' , 'bbb');
         $type->setOption('max', 100);
         $type->setOption('min' , 1);
@@ -155,8 +162,10 @@ class RangeTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Range($id,$parent,$event,$utilities);
+        $type = new Range($id,$parent,$event,$utilities,$generator);
         
         # test with start > 0
         $type->setOption('min',1);
