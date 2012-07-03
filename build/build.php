@@ -8,14 +8,21 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
+//---------------------------------------------------------------
+// Setup Global Error Levels
+//
+//--------------------------------------------------------------
+
+error_reporting(E_ALL);
+
+ini_set('display_errors', 1);
+
+
 # load the bootstrap file
-require __DIR__ .'/../Faker/Bootstrap.php';
+$project = require __DIR__ .'/../Faker/Bootstrap.php';
 
 # set the data path
-
 $project['data_path'] = new \Faker\Path(__DIR__ .'/../data');
-
-
 $console = $project->getConsole();
 
 //---------------------------------------------------------------------
@@ -346,7 +353,7 @@ $parse_countries->setCode(function(InputInterface $input, ConsoleOutputInterface
     $parser_options->setParser('csv');
     $parser_options->setHasHeaderRow(false);
     $parser_options->setFieldSeperator(59);
-    $parser_options->setSkipRows(2);
+    $parser_options->setSkipRows(0);
     
     # register for the generate event
     $event = $project['event_dispatcher'];

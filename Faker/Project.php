@@ -3,7 +3,7 @@ namespace Faker;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
-use Symfony\Pimple\Pimple;
+use Pimple;
 use Faker\Exception as FakerException;
 
 class Project extends Pimple

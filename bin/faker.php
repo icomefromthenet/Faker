@@ -10,6 +10,17 @@ use Faker\Project,
     Faker\Command\ConfigureCommand,
     Faker\Command\InitProjectCommand;
 
+//---------------------------------------------------------------
+// Setup Global Error Levels
+//
+//--------------------------------------------------------------
+   
+   error_reporting(E_ALL);
+   
+   ini_set('display_errors', 1);
+       
+    
+    
 //---------------------------------------------------------------------
 // Set Pear Directories
 //
@@ -19,11 +30,11 @@ use Faker\Project,
 if(strpos('@PHP-BIN@', '@PHP-BIN') === 0) { // stand-alone version is running
 
    set_include_path(dirname(__FILE__) . '/../' . PATH_SEPARATOR . get_include_path());
-   require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
+   $project = require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
    $project['data_path'] = new Path(__DIR__ . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'data');      
 
 }else {
-   require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
+   $project = require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
    $project['data_path'] = new Path('@PEAR-DATA@' . DIRECTORY_SEPARATOR .'Faker');   
 }
 
