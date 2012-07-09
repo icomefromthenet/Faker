@@ -403,6 +403,7 @@ return call_user_func(function() {
    // Generator 
    //
    //---------------------------------------------------------------
+   
    $project['generator_factory_default'] = 'srand';
    
    $project['generator_factory'] = $project->share(function($project)
@@ -415,7 +416,29 @@ return call_user_func(function() {
       return $project['generator_factory']->create($project['generator_factory_default']);
    });
    
+   //---------------------------------------------------------------
+   // SimpleString Factory
+   //
+   //---------------------------------------------------------------
    
+   $project['simplestring_factory'] = $project->share(function($project) {
+      
+      return \Faker\Text\SimpleString::create('',null);
+      
+   });
+   
+   //---------------------------------------------------------------
+   // Locale
+   //
+   //---------------------------------------------------------------
+    
+   $project['locale_factory'] = $project->share(function($project)
+   {
+      return new \Faker\Locale\LocaleFactory($project['simplestring_factory']);
+   });
+   
+
+
    return $project;
 
 });
