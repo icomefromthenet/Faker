@@ -231,7 +231,7 @@ interface SimpleStringInterface
       *  @access public
       *  @return SimpleStringInterface
       */
-    public function ucfrist();
+    public function ucfirst();
     
     /**
       *  Convert the first letter to lowercase
@@ -293,7 +293,7 @@ interface SimpleStringInterface
      * @param string $string String to be checked
      * @return boolean False if it does not contain, true if it does
      */
-    public function contains($string);
+    public function contains($string , $offset = 0);
     
     /**
       *  Find position of first occurrence of string in a string

@@ -164,7 +164,7 @@ class MbProviderTest extends AbstractProject
     public function testUcFirst()
     {
         $string = new MbProvider('lorem ipsum dolor');
-        $string->ucfrist();
+        $string->ucfirst();
         $this->assertEquals('Lorem ipsum dolor', $string->__toString());
     }
     
@@ -250,6 +250,45 @@ class MbProviderTest extends AbstractProject
         $this->assertEquals('ASCII', mb_detect_encoding($string->__toString(),'ASCII',true));
     }
     
+    public function testRepeat()
+    {
+        $string = new MbProvider('r');
+        $string->repeat(5);
+        $this->assertEquals('rrrrrr',$string->__toString());
+        
+        $string = new MbProvider('');
+        $string->repeat(5);
+        $this->assertEquals('',$string->__toString());
+        
+        $string = new MbProvider('ë');
+        $string->repeat(5);
+        $this->assertEquals('ëëëëëë',$string->__toString());
+        
+    }
+    
+    
+    /**
+      *  @expectedException \InvalidArgumentException
+      *  @expectedExceptionMessage MbProvider::repeat::$multiplier must be an integer > 0
+      */
+    public function testRepeatExceptionThrownOnNotInt()
+    {
+        $string = new MbProvider('r');
+        $string->repeat(5.098);
+        
+    }
+    
+     /**
+      *  @expectedException \InvalidArgumentException
+      *  @expectedExceptionMessage MbProvider::repeat::$multiplier must be an integer > 0
+      */
+    public function testRepeatExceptionThrownNegitiveArg()
+    {
+        $string = new MbProvider('r');
+        $string->repeat(-5);
+        
+    }
+    
     
     public function testReplace()
     {
@@ -264,6 +303,7 @@ class MbProviderTest extends AbstractProject
         $this->assertEquals('mortem ipsum dolor Lechuga amet mortem ipsum', $string->__toString());
 
     }
+    
     
     public function testClear()
     {
@@ -326,11 +366,24 @@ class MbProviderTest extends AbstractProject
     
     public function testRtrim()
     {
-        //$string = new MbProvider(' Your mother is Æmët ugly. ');
-        //$string->rtrim();
-        //$this->assertEquals(' Your mother is Æmët ugly.',$string->__toString());
+        $string = new MbProvider(' Your mother is Æmët ugly. ');
+        $string->rtrim();
+        $this->assertEquals(' Your mother is Æmët ugly.',$string->__toString());
         
     }
+    
+    public function testContains()
+    {
+        $string = new MbProvider('rRA');
+        $this->assertTrue($string->contains('r'));
+        $this->assertFalse($string->caseSensitive()->contains('a'));
+        $this->assertTrue($string->caseSensitive()->contains('A'));
+    }
+    
+    
+    
+    
+    
     
 }
 /* End of File */

@@ -52,6 +52,9 @@ class MbProvider implements SimpleStringInterface
         $this->encoding              = $encoding;
         $this->str                   = $string;
         $this->case                  = true; #defaults case sensitive
+        
+        # convert inital encoding to ensure internal string is utf8
+        $this->convertEncoding($encoding);
     }
    
    
@@ -368,7 +371,7 @@ class MbProvider implements SimpleStringInterface
     {
         $this->str = (string) $this->trim()
                                     ->toLowerCase()
-                                    ->ucfrist();
+                                    ->ucfirst();
         return $this;
     }
     
@@ -545,7 +548,7 @@ class MbProvider implements SimpleStringInterface
       *  @access public
       *  @return SimpleStringInterface
       */
-    public function ucfrist()
+    public function ucfirst()
     {
         $this->str = (string) $this->sub(0,1)->toUpperCase()->append($this->sub(1,$this->length()));
                             
@@ -573,12 +576,12 @@ class MbProvider implements SimpleStringInterface
       */
     public function repeat($multiplier)
     {
-        if(is_init($multiplier) === false && (integer) $multiplier > 0) {
-            throw \InvalidArgumentException('MbProvider::repeat::$multiplier must be an integer > 0');
+        if(is_int($multiplier) === false || (integer) $multiplier < 0) {
+            throw new \InvalidArgumentException('MbProvider::repeat::$multiplier must be an integer > 0');
         }
         
-        $str = clone $this->str;      
-        for($i = 0; $i <= $max; $i++) {
+        $str = $this->str;      
+        for($i = 0; $i < $multiplier; $i++) {
             $this->append($str);
         }
         unset($str);
@@ -722,9 +725,16 @@ class MbProvider implements SimpleStringInterface
      * @param string $string String to be checked
      * @return boolean False if it does not contain, true if it does
      */
-    public function contains($string)
+    public function contains($string, $offset = 0)
     {
-        return (mb_stripos($this->str, $this->encoding) === false) ? false : true;
+        $function = "mb_stripos";
+        
+        if($this->case === true) {
+            $function = "mb_strpos";
+        }
+        
+        
+        return ($function($this->str, $string , $offset , $this->encoding) === false) ? false : true;
     }
     
     /**
