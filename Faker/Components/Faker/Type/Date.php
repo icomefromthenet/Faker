@@ -70,8 +70,8 @@ class Date extends Type
             ->children()
                 ->scalarNode('start')
                     ->isRequired()
-                    ->setInfo('The DateTime strtotime to use as base')
-                    ->setExample('Auguest 18 1818')
+                    ->info('The DateTime strtotime to use as base')
+                    ->example('Auguest 18 1818')
                     ->validate()
                         ->ifTrue(function($v){
                             try {
@@ -88,8 +88,8 @@ class Date extends Type
                 ->end()
                 ->scalarNode('max')
                     ->defaultValue(null)
-                    ->setInfo('The maxium (strtotime) date to use')
-                    ->setExample('August 15 2012')
+                    ->info('The maxium (strtotime) date to use')
+                    ->example('August 15 2012')
                     ->validate()
                         ->ifTrue(function($v){
                             try {
@@ -106,8 +106,8 @@ class Date extends Type
                 ->end()
                 ->scalarNode('modify')
                    ->defaultValue(null)
-                   ->setInfo('modify string (strtotime) applied on each increment')
-                   ->setExample('+1 minute')
+                   ->info('modify string (strtotime) applied on each increment')
+                   ->example('+1 minute')
                 ->end()        
             ->end();
     }

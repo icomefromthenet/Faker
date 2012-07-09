@@ -15,6 +15,8 @@ class MockSplFile {
     
     public function fwrite(){}
     
+    public function fflush(){}
+    
 }
 
 
@@ -84,6 +86,8 @@ class StreamTest extends AbstractProject
         $file_handle->expects($this->exactly(3))
                     ->method('fwrite');
         
+        $file_handle->expects($this->exactly(1))
+                    ->method('fflush');
         
         $file->expects($this->once())
              ->method('openFile')

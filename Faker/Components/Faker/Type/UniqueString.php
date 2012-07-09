@@ -36,8 +36,8 @@ class UniqueString extends Type
       return $rootNode
             ->children()
                 ->scalarNode('format')
-                ->defaultValue('XXXXXXXX-XXXX-XXXX-XXXX-XXXX-XXXXXXXX')
-                ->setInfo('unique format to use')
+                  ->defaultValue('XXXXXXXX-XXXX-XXXX-XXXX-XXXX-XXXXXXXX')
+                  ->info('unique format to use')
                 ->end()
             ->end();
     }

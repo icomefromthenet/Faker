@@ -36,8 +36,8 @@ class UniqueNumber extends Type
         return $rootNode
             ->children()
                 ->scalarNode('format')
-                ->defaultValue('XXXXXXXX')
-                ->setInfo('unique format to use')
+                  ->defaultValue('XXXXXXXX')
+                  ->info('unique format to use')
                 ->end()
             ->end();
     }

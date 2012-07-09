@@ -56,7 +56,7 @@ class AutoIncrement extends Type
             ->children()
                 ->scalarNode('increment')
                     ->defaultValue(1)
-                    ->setInfo('The increment to add on every loop')
+                    ->info('The increment to add on every loop')
                     ->validate()
                         ->ifTrue(function($v){ return !is_numeric($v); })
                         ->then(function($v){
@@ -72,7 +72,7 @@ class AutoIncrement extends Type
                         })
                     ->end()
                 ->defaultValue(1)
-                ->setInfo('The Value to start with')
+                ->info('The Value to start with')
                 ->end()
             ->end();
     }

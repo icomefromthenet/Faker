@@ -51,8 +51,8 @@ class BooleanType extends Type
                        return (boolean) $v; 
                     })
                 ->end()    
-                ->setInfo('true or false')
-                ->setExample('true | false')
+                ->info('true or false')
+                ->example('true | false')
                 ->end()
             ->end();
             

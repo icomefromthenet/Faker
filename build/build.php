@@ -145,8 +145,8 @@ $pear_task->setCode(function(InputInterface $input, ConsoleOutputInterface $outp
     
     $pack->setPackageType('php'); // this is a PEAR-style php script package
     
-    $pack->setReleaseVersion('1.0.1');
-    $pack->setAPIVersion('1.0.1');
+    $pack->setReleaseVersion('1.0.2');
+    $pack->setAPIVersion('1.0.2');
     
     $pack->setReleaseStability('stable');
     $pack->setAPIStability('stable');

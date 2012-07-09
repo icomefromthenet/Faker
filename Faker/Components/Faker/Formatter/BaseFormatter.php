@@ -132,12 +132,12 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
 	      ->booleanNode(self::CONFIG_OPTION_SPLIT_ON_TABLE)
                     ->treatNullLike(false)
                     ->defaultValue(false)
-                    ->setInfo('Start a new file when a table has finished generating')
+                    ->info('Start a new file when a table has finished generating')
                 ->end()
                 ->scalarNode(self::CONFIG_OPTION_OUT_FILE_FORMAT)
                     ->treatNullLike($this->getOuputFileFormat())
                     ->defaultValue($this->getOuputFileFormat())
-                    ->setInfo('The output file format')
+                    ->info('The output file format')
                 ->end()
 	->end();
 	

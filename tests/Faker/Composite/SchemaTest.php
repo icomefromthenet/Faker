@@ -130,7 +130,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event);
+        $schema = new Schema($id,null,$event,array('name' => $id));
      
         $schema->merge();
         $schema->validate();
@@ -141,7 +141,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event,array());
+        $schema = new Schema($id,null,$event,array('name' => $id));
         $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -162,7 +162,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event,array('locale'=>null));
+        $schema = new Schema($id,null,$event,array('locale'=>null,'name' => $id));
 
         $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -182,7 +182,7 @@ class SchemaTest extends AbstractProject
         
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event,array('locale'=>null));
+        $schema = new Schema($id,null,$event,array('locale'=>null,'name' => $id));
 
         $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -205,7 +205,7 @@ class SchemaTest extends AbstractProject
         
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event,array('locale'=>null));
+        $schema = new Schema($id,null,$event,array('locale'=>null,'name' => $id));
 
         $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -228,7 +228,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event,array('locale'=>null));
+        $schema = new Schema($id,null,$event,array('locale'=>null,'name' => $id));
 
         $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -249,7 +249,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event,array('locale'=>null));
+        $schema = new Schema($id,null,$event,array('locale'=>null,'name' => $id));
 
         $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -270,7 +270,7 @@ class SchemaTest extends AbstractProject
         
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event,array('locale'=>null));
+        $schema = new Schema($id,null,$event,array('locale'=>null,'name' => $id));
 
         $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();

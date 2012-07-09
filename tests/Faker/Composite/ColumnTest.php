@@ -61,14 +61,14 @@ class ColumnTest extends AbstractProject
     
     public function testChildrenGenerateCalled()
     {
-        $id = 'table_1';
+        $id = 'column_1';
         $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=>null));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=>null,'name' =>$id,'type' => 'string'));
              
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_a->expects($this->exactly(1))
@@ -99,14 +99,14 @@ class ColumnTest extends AbstractProject
     
     public function testConfigurationParsed()
     {
-        $id = 'table_1';
+        $id = 'column_1';
         $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','name' => $id,'type' => 'string'));
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $child_a->expects($this->exactly(1))
@@ -141,7 +141,7 @@ class ColumnTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         
-        $column = new Column($id,$parent,$event,$column_type);
+        $column = new Column($id,$parent,$event,$column_type,array('name' => $id,'type' => 'string'));
      
         
         $xml = $column->toXml();
@@ -159,7 +159,7 @@ class ColumnTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $column = new Column($id,$parent,$event,$column_type);
+        $column = new Column($id,$parent,$event,$column_type,array('type' => 'string'));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -183,7 +183,7 @@ class ColumnTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','type' => 'string'));
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $child_a->expects($this->exactly(1))
@@ -230,7 +230,7 @@ class ColumnTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','type' => 'string'));
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $child_a->expects($this->exactly(1))
@@ -266,7 +266,7 @@ class ColumnTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','type' => 'string'));
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $child_a->expects($this->exactly(1))
@@ -303,7 +303,7 @@ class ColumnTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','type' => 'string'));
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $child_a->expects($this->exactly(1))
@@ -354,7 +354,7 @@ class ColumnTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','type' => 'string','name' => $id));
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $column->addChild($child_a);        
@@ -379,7 +379,7 @@ class ColumnTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','name' => $id,'type' => 'string'));
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $column->addChild($child_a);        
@@ -400,7 +400,7 @@ class ColumnTest extends AbstractProject
         $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','name' => $id,'type' => 'string'));
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $column->addChild($child_a);   
         
@@ -419,7 +419,7 @@ class ColumnTest extends AbstractProject
         $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','name' => $id,'type' => 'string'));
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $column->addChild($child_a);   
 
@@ -439,7 +439,7 @@ class ColumnTest extends AbstractProject
         $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','name' => $id,'type' => 'string'));
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $column->addChild($child_a);   
         

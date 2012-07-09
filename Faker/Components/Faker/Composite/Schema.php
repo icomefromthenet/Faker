@@ -52,6 +52,8 @@ class Schema extends BaseComposite
         if($parent !== null) {
             $this->setParent($parent);
         }
+        
+        $this->setOption('name',$id);
     }
     
     /**
@@ -219,7 +221,7 @@ class Schema extends BaseComposite
             ->children()
                 ->scalarNode('name')
                     ->isRequired()
-                    ->setInfo('The Name of the Schema')
+                    ->info('The Name of the Schema')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_string($v);
@@ -232,7 +234,7 @@ class Schema extends BaseComposite
                 ->scalarNode('locale')
                     ->treatNullLike('en')
                     ->defaultValue('en')
-                    ->setInfo('The Default Local for this schema')
+                    ->info('The Default Local for this schema')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_string($v);
@@ -243,7 +245,7 @@ class Schema extends BaseComposite
                     ->end()
                 ->end()
                 ->scalarNode('randomGenerator')
-                    ->setInfo('Type of random number generator to use')
+                    ->info('Type of random number generator to use')
                     ->validate()
                         ->ifTrue(function($v){
                             return empty($v) or !is_string($v);
@@ -254,7 +256,7 @@ class Schema extends BaseComposite
                     ->end()
                 ->end()
                 ->scalarNode('generatorSeed')
-                    ->setInfo('Seed value to use in the generator')
+                    ->info('Seed value to use in the generator')
                     ->validate()
                         ->ifTrue(function($v){
                             return ! is_integer($v);

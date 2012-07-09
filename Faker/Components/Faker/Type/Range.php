@@ -58,8 +58,8 @@ class Range extends Type
             ->children()
                 ->scalarNode('min')
                     ->isRequired()
-                    ->setInfo('Starting Number')
-                    ->setExample('A numeric number like 1 or 1.67 or 0.87')
+                    ->info('Starting Number')
+                    ->example('A numeric number like 1 or 1.67 or 0.87')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_numeric($v);
@@ -71,8 +71,8 @@ class Range extends Type
                 ->end()
                 ->scalarNode('max')
                     ->isRequired()
-                    ->setExample('A numeric number like 1 or 1.67 or 0.87')
-                    ->setInfo('The maxium to use in range')
+                    ->example('A numeric number like 1 or 1.67 or 0.87')
+                    ->info('The maxium to use in range')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_numeric($v);
@@ -84,8 +84,8 @@ class Range extends Type
                 ->end()
                 ->scalarNode('step')
                     ->isRequired()
-                    ->setExample('1 , 1.5 , 0.6')
-                    ->setInfo('Stepping value applied on every increment, not supplied will use random')
+                    ->example('1 , 1.5 , 0.6')
+                    ->info('Stepping value applied on every increment, not supplied will use random')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_numeric($v);

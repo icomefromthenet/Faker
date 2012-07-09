@@ -66,9 +66,9 @@ class Names extends Type
         return $rootNode
             ->children()
                 ->scalarNode('format')
-                ->isRequired()
-                ->setInfo('Names Format to use')
-                ->setExample('{fname} {inital} {lname}')
+                    ->isRequired()
+                    ->info('Names Format to use')
+                    ->example('{fname} {inital} {lname}')
                 ->end()
             ->end();
     }

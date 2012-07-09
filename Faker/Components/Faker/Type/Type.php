@@ -251,7 +251,7 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
 	$rootNode->children()
 		->scalarNode('name')
                     ->isRequired()
-                    ->setInfo('The Name of the Type')
+                    ->info('The Name of the Type')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_string($v);
@@ -264,7 +264,7 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
 	      ->scalarNode('locale')
                     ->treatNullLike('en')
                     ->defaultValue('en')
-                    ->setInfo('The Default Local for this schema')
+                    ->info('The Default Local for this schema')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_string($v);
@@ -275,7 +275,7 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
                     ->end()
                 ->end()
 		->scalarNode('randomGenerator')
-                    ->setInfo('Type of random number generator to use')
+                    ->info('Type of random number generator to use')
                     ->validate()
                         ->ifTrue(function($v){
                             return empty($v) or !is_string($v);
@@ -286,7 +286,7 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
                     ->end()
                 ->end()
                 ->scalarNode('generatorSeed')
-                    ->setInfo('Seed value to use in the generator')
+                    ->info('Seed value to use in the generator')
                     ->validate()
                         ->ifTrue(function($v){
                             return ! is_integer($v);

@@ -76,7 +76,7 @@ class Email extends Type
         return $rootNode
             ->children()
                 ->scalarNode('params')
-                    ->setInfo('a json name params to use')
+                    ->info('a json name params to use')
                     ->defaultValue('{}')
                     ->validate()
                         ->ifString()
@@ -87,8 +87,8 @@ class Email extends Type
                 ->end()
                 ->scalarNode('domains')
                     ->defaultValue(array('edu','com','org','ca','net','co.uk','com.au','biz','info'))
-                    ->setInfo('a list of domains to use')
-                    ->setExample('edu,com,org,ca,net,co.uk,com.au,biz,info')
+                    ->info('a list of domains to use')
+                    ->example('edu,com,org,ca,net,co.uk,com.au,biz,info')
                     ->validate()
                         ->ifString()
                         ->then(function($v){
@@ -106,8 +106,8 @@ class Email extends Type
                 ->end()
                 ->scalarNode('format')
                     ->isRequired()
-                    ->setInfo('Format to use to generate addresses')
-                    ->setExample('{fname}{lname}{alpha}@{alpha}.{domain}')
+                    ->info('Format to use to generate addresses')
+                    ->example('{fname}{lname}{alpha}@{alpha}.{domain}')
                 ->end()
             ->end();
     }

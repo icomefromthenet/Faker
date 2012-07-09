@@ -1,10 +1,11 @@
 <?php
 namespace Faker;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
-use Pimple;
-use Faker\Exception as FakerException;
+use  Symfony\Component\Console\Output\OutputInterface,
+     Symfony\Component\Finder\Finder,
+     Pimple,
+     Faker\Exception as FakerException,
+     Faker\Path;
 
 class Project extends Pimple
 {
@@ -19,7 +20,18 @@ class Project extends Pimple
     {
          return $this['project_path'];
     }
-
+     
+    /**
+      *  function setPath
+      *
+      *  @access public
+      *  @param \Faker\Path
+      */ 
+    public function setPath(Path $path)
+    {
+        $this['project_path'] = $path;  
+    }
+    
     
     /**
       *  Function getDataPath

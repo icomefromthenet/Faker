@@ -307,7 +307,7 @@ class Sql extends BaseFormatter implements FormatterInterface
                     ->booleanNode(self::CONFIG_OPTION_SPLIT_ON_TABLE)
                         ->treatNullLike(true)
                         ->defaultValue(true)
-                        ->setInfo('Start a new file when a table has finished generating')
+                        ->info('Start a new file when a table has finished generating')
                     ->end()
                     ->scalarNode(self::CONFIG_OPTION_MAX_LINES)
                         ->treatNullLike(self::MAX_LINES)
@@ -322,7 +322,7 @@ class Sql extends BaseFormatter implements FormatterInterface
                     ->booleanNode(self::CONFIG_OPTION_SINGLE_FILE_MODE)
                         ->treatNullLike(self::SINGLE_FILE_MODE)
                         ->defaultValue(self::SINGLE_FILE_MODE)
-                        ->setInfo('Generate into a sinlge file not splitting on new table or maxlines')
+                        ->info('Generate into a sinlge file not splitting on new table or maxlines')
                     ->end()
                  ->end();
         

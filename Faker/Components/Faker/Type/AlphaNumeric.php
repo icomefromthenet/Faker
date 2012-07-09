@@ -49,7 +49,7 @@ class AlphaNumeric extends Type
             ->children()
                 ->scalarNode('format')
                 ->isRequired()
-                ->setInfo('Text format to use')
+                ->info('Text format to use')
                 ->end()
             ->end();
             

@@ -14,11 +14,11 @@ class TableTest extends AbstractProject
     {
         $id = 'table_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $rows_generate = 100;
+        $generate = 100;
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $table = new Table($id,$parent,$event,$rows_generate);
+        $table = new Table($id,$parent,$event,$generate,array('name' => $id,'generate' => $generate));
         
         $this->assertInstanceOf('Faker\Components\Faker\Composite\CompositeInterface',$table);
     }
@@ -26,7 +26,7 @@ class TableTest extends AbstractProject
     public function testSchemaDispatchesEvent()
     {
         $id = 'table_1';
-        $rows_generate = 1;
+        $generate = 1;
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -45,11 +45,11 @@ class TableTest extends AbstractProject
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_a->expects($this->once())
                 ->method('generate')
-                ->with($this->equalTo($rows_generate),$this->isType('array'))
+                ->with($this->equalTo($generate),$this->isType('array'))
                 ->will($this->returnValue(array('example')));
        
               
-        $table = new Table($id,$parent,$event,$rows_generate);
+        $table = new Table($id,$parent,$event,$generate,array('name' => $id,'generate' => $generate));
         
         $table->addChild($child_a);
  
@@ -62,13 +62,13 @@ class TableTest extends AbstractProject
     public function testChildrenGenerateCalled()
     {
         $id = 'table_1';
-        $rows_generate = 100;
+        $generate = 100;
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $table = new Table($id,$parent,$event,$rows_generate);
+        $table = new Table($id,$parent,$event,$generate,array('name' =>$id,'generate' => $generate));
              
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_a->expects($this->exactly(100))
@@ -95,13 +95,13 @@ class TableTest extends AbstractProject
     public function testToXml()
     {
         $id = 'table_1';
-        $rows_generate = 100;
+        $generate = 100;
        
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         
-        $table = new Table($id,$parent,$event,$rows_generate);
+        $table = new Table($id,$parent,$event,$generate,array('name' => $id,'generate' => $generate));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_a->expects($this->once())
@@ -124,13 +124,13 @@ class TableTest extends AbstractProject
     
     public function testProperties()
     {
-        $id = 'schema_1';
-        $rows_generate = 100;
+        $id = 'table_1';
+        $generate = 100;
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $table = new Table($id,$parent,$event,$rows_generate);
+        $table = new Table($id,$parent,$event,$generate,array('name' => $id,'generate' => $generate));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -142,7 +142,7 @@ class TableTest extends AbstractProject
         $this->assertSame($table->getEventDispatcher(),$event);
         $this->assertEquals($parent,$table->getParent());
         $this->assertEquals($id,$table->getId());
-        $this->assertEquals($rows_generate,$table->getToGenerate());
+        $this->assertEquals($generate,$table->getToGenerate());
         
     }
  
@@ -153,13 +153,13 @@ class TableTest extends AbstractProject
       */
     public function testValidateWithException()
     {
-        $id = 'schema_1';
-        $rows_generate = 100;
+        $id = 'table_1';
+        $generate = 100;
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $table = new Table($id,$parent,$event,$rows_generate);
+        $table = new Table($id,$parent,$event,$generate,array('name' => $id,'generate' => $generate));
      
         $table->merge();
         $table->validate();
@@ -168,13 +168,13 @@ class TableTest extends AbstractProject
     
     public function testValidate()
     {
-        $id = 'schema_1';
-        $rows_generate = 100;
+        $id = 'table_1';
+        $generate = 100;
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $table = new Table($id,$parent,$event,$rows_generate,array('locale' => 'china'));
+        $table = new Table($id,$parent,$event,$generate,array('locale' => 'china','name' => $id,'generate' => $generate));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $table->addChild($child_a);        
@@ -192,13 +192,13 @@ class TableTest extends AbstractProject
       */
     public function testValidateInvalidLocaleOption()
     {
-        $id = 'schema_1';
-        $rows_generate = 100;
+        $id = 'table_1';
+        $generate = 100;
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $table = new Table($id,$parent,$event,$rows_generate,array('locale' => 1));
+        $table = new Table($id,$parent,$event,$generate,array('locale' => 1,'name' => $id,'generate' => $generate));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $table->addChild($child_a);        
@@ -210,13 +210,13 @@ class TableTest extends AbstractProject
     
     public function testValidationNullLocale()
     {
-        $id = 'schema_1';
-        $rows_generate = 100;
+        $id = 'table_1';
+        $generate = 100;
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $table = new Table($id,$parent,$event,$rows_generate,array('locale' => null));
+        $table = new Table($id,$parent,$event,$generate,array('locale' => null,'name' => $id,'generate' => $generate));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $table->addChild($child_a);        
@@ -231,13 +231,13 @@ class TableTest extends AbstractProject
     public function testNoDefaultsSetForGenerator()
     {
         
-        $id = 'schema_1';
-        $rows_generate = 100;
+        $id = 'table_1';
+        $generate = 100;
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $table = new Table($id,$parent,$event,$rows_generate,array('locale' => null));
+        $table = new Table($id,$parent,$event,$generate,array('locale' => null,'name' => $id,'generate' => $generate));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $table->addChild($child_a);
@@ -250,18 +250,18 @@ class TableTest extends AbstractProject
     
     /**
       *  @expectedException \Faker\Components\Faker\Exception
-      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": Table::generatorSeed must be an integer
       */
     public function testNotIntergerRefusedForGeneratorSeed()
     {
         
-       $id = 'schema_1';
-        $rows_generate = 100;
+       $id = 'table_1';
+        $generate = 100;
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $table = new Table($id,$parent,$event,$rows_generate,array('locale' => null));
+        $table = new Table($id,$parent,$event,$generate,array('locale' => null,'generate' => $generate , 'name' => $id));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $table->addChild($child_a);
@@ -275,17 +275,17 @@ class TableTest extends AbstractProject
     
     /**
       *  @expectedException \Faker\Components\Faker\Exception
-      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": Table::generatorSeed must be an integer
       */
     public function testNullNotAcceptedGeneratorSeed()
     {
-        $id = 'schema_1';
-        $rows_generate = 100;
+        $id = 'table_1';
+        $generate = 100;
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $table = new Table($id,$parent,$event,$rows_generate,array('locale' => null));
+        $table = new Table($id,$parent,$event,$generate,array('locale' => null,'generate' => $generate,'name' => $id));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $table->addChild($child_a);
@@ -297,17 +297,17 @@ class TableTest extends AbstractProject
     
     /**
       *  @expectedException \Faker\Components\Faker\Exception
-      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": Table::generatorSeed must be an integer
       */
     public function testEmptyStringNotAcceptedGeneratorSeed()
     {
-        $id = 'schema_1';
-        $rows_generate = 100;
+        $id = 'table_1';
+        $generate = 100;
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $table = new Table($id,$parent,$event,$rows_generate,array('locale' => null));
+        $table = new Table($id,$parent,$event,$generate,array('locale' => null,'generate' => $generate,'name' => $id));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $table->addChild($child_a);
@@ -323,13 +323,13 @@ class TableTest extends AbstractProject
     public function testGeneratorOptionsAccepted()
     {
         
-        $id = 'schema_1';
-        $rows_generate = 100;
+        $id = 'table_1';
+        $generate = 100;
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $table = new Table($id,$parent,$event,$rows_generate,array('locale' => null));
+        $table = new Table($id,$parent,$event,$generate,array('locale' => null,'generate' => $generate,'name' => $id));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $table->addChild($child_a);

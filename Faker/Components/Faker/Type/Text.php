@@ -240,7 +240,7 @@ class Text extends Type
             ->children()
                 ->scalarNode('paragraphs')
                     ->defaultValue(4)
-                    ->setInfo('Text format to use')
+                    ->info('Text format to use')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_int($v);
@@ -252,8 +252,8 @@ class Text extends Type
                 ->end()
                 ->scalarNode('maxlines')
                     ->defaultValue(200)
-                    ->setInfo('Maxium number of line per paragraph')
-                    ->setExample('5 | 10 | ...')
+                    ->info('Maxium number of line per paragraph')
+                    ->example('5 | 10 | ...')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_integer($v);
@@ -265,8 +265,8 @@ class Text extends Type
                 ->end()
                 ->scalarNode('minlines')
                     ->defaultValue(5)
-                    ->setInfo('Minimum number of lines per paragraph')
-                    ->setExample('20 | 100 | ..')
+                    ->info('Minimum number of lines per paragraph')
+                    ->example('20 | 100 | ..')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_integer($v);

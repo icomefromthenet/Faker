@@ -64,6 +64,8 @@ class Table extends BaseComposite
         
         $this->rows = $rows;
         
+        $this->setOption('name',$id);
+        
     }
    
     /**
@@ -241,7 +243,7 @@ class Table extends BaseComposite
             ->children()
                   ->scalarNode('name')
                     ->isRequired()
-                    ->setInfo('The Name of the Table')
+                    ->info('The Name of the Table')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_string($v);
@@ -254,7 +256,7 @@ class Table extends BaseComposite
                 ->scalarNode('locale')
                     ->treatNullLike('en')
                     ->defaultValue('en')
-                    ->setInfo('The Default Local for this schema')
+                    ->info('The Default Local for this schema')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_string($v);
@@ -265,7 +267,7 @@ class Table extends BaseComposite
                     ->end()
                 ->end()
                 ->scalarNode('randomGenerator')
-                    ->setInfo('Type of random number generator to use')
+                    ->info('Type of random number generator to use')
                     ->validate()
                         ->ifTrue(function($v){
                             return empty($v) or !is_string($v);
@@ -276,7 +278,7 @@ class Table extends BaseComposite
                     ->end()
                 ->end()
                 ->scalarNode('generatorSeed')
-                    ->setInfo('Seed value to use in the generator')
+                    ->info('Seed value to use in the generator')
                     ->validate()
                         ->ifTrue(function($v){
                             return ! is_integer($v);
@@ -287,7 +289,7 @@ class Table extends BaseComposite
                     ->end()
                 ->end()
                 ->scalarNode('generate')
-                    ->setInfo('The number of rows to generate')
+                    ->info('The number of rows to generate')
                     ->isRequired()
                     ->validate()
                         ->ifTrue(function($v){

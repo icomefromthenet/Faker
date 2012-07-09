@@ -54,8 +54,8 @@ class Cities extends Type
                 ->scalarNode('countries')
                     //ftp://ftp.fu-berlin.de/doc/iso/iso3166-countrycodes.txt
                     ->defaultValue(array('AU,US,UK'))
-                    ->setInfo('a list of country codes to use')
-                    ->setExample('AU,US,UK')
+                    ->info('a list of country codes to use')
+                    ->example('AU,US,UK')
                     ->validate()
                         ->ifString()
                         ->then(function($v){
