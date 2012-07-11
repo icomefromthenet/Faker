@@ -97,42 +97,49 @@ class NamesTest extends AbstractProject
                       ->getMock();
          
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface'); 
+        $generator->expects($this->exactly(6))
+                  ->method('generate')
+                  ->with($this->equalTo(0),$this->anything())
+                  ->will($this->returnValue(0));
+            
             
         $type = new Names($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','{fname} {lname}');
         $type->merge();
         $type->validate(); 
          
-        $this->assertStringMatchesFormat('%s %s',$type->generate(1,array()));
+        $this->assertEquals('Kristina Chung',$type->generate(1,array()));
     
     
         $type->setOption('format','{fname} {inital} {lname}');
         $type->merge();
         $type->validate(); 
          
-        $this->assertStringMatchesFormat('%s %s %s',$type->generate(1,array()));
+        $this->assertEquals('Kristina H Chung',$type->generate(1,array()));
     
         $type->setOption('format','{fname},{inital} {lname}');
         $type->merge();
         $type->validate(); 
          
-        $this->assertStringMatchesFormat('%s,%s %s',$type->generate(1,array()));
+        $this->assertEquals('Kristina,H Chung',$type->generate(1,array()));
         
         $type->setOption('format','{fname},{lname} {inital}');
         $type->merge();
         $type->validate(); 
          
-        $this->assertStringMatchesFormat('%s,%s %s',$type->generate(1,array()));
+        $this->assertEquals('Kristina,Chung H',$type->generate(1,array()));
         
         $type->setOption('format','{lname}');
         $type->merge();
         $type->validate(); 
          
-        $this->assertStringMatchesFormat('%s',$type->generate(1,array()));
+        $this->assertEquals('Chung',$type->generate(1,array()));
         
         $type->setOption('format','{fname},{lname} {inital}');
         $type->merge();
-        $type->validate(); 
+        $type->validate();
+        
+        $this->assertEquals('Kristina,Chung H',$type->generate(1,array()));
          
     }
     

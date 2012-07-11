@@ -60,23 +60,26 @@ class CSV implements ParserInterface
                         if ($this->eol_ignorecr) {
                             break;
                         }
+                    break;
                     case "\n":
                         if (($position > 1) && !$inquote) {
                             $commit = true;
                             $done = true;
-                        } break;
+                        }
+                    break;
                     case $this->field_separator:
                         if (!$inquote) {
                             $commit = true;
                         } else {
                             $usechar = true;
-                        } break;
+                        }
+                    break;
                     case $this->text_delimiter:
                         if ($this->text_delimiter != chr(0)) {
                             $inquote = !$inquote;
-                        } break;
+                        }
+                    break;
                     default: $usechar = true;
-                        break;
                 }
 
             if ($usechar) {

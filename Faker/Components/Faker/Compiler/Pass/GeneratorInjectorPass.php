@@ -1,5 +1,4 @@
 <?php
-
 namespace Faker\Components\Faker\Compiler\Pass;
 
 use Faker\Components\Faker\Compiler\CompilerPassInterface,

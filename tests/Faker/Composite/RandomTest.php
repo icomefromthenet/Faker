@@ -54,6 +54,19 @@ class RandomTest extends AbstractProject
     
         $random = new Random($id,$parent,$event);
      
+     
+        $generatorA = $this->getMock('Faker\Generator\GeneratorInterface');
+        $generatorA->expects($this->exactly(1))
+                  ->method('generate')
+                  ->with($this->equalTo(0),$this->equalTo(1))
+                  ->will($this->returnValue(0));
+        
+        $generatorB = $this->getMock('Faker\Generator\GeneratorInterface');
+        $generatorB->expects($this->exactly(1))
+                  ->method('generate')
+                  ->with($this->equalTo(0),$this->equalTo(1))
+                  ->will($this->returnValue(1));
+     
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_a->expects($this->any())
                 ->method('generate')
@@ -70,24 +83,12 @@ class RandomTest extends AbstractProject
           
         $random->addChild($child_a);        
         $random->addChild($child_b);        
+
+        $random->setGenerator($generatorA);
+        $this->assertEquals('exampleA',$random->generate(1,array()));
         
-        $countA = 0;
-        $countB = 0;
-        
-        for($i=100; $i >= 0; $i--) {
-            
-            $value = $random->generate(1,array());
-            
-            if($value === 'exampleA') {
-                $countA = $countA +1;
-            } elseif ($value === 'exampleB') {
-                $countB = $countB +1;
-            } else {
-                throw new \Exception('Invalid reset returned');
-            }
-        }
-        
-        $this->assertTrue(($countA > 0) && ($countB > 0));
+        $random->setGenerator($generatorB);
+        $this->assertEquals('exampleB',$random->generate(1,array()));
         
     }
     

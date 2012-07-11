@@ -23,6 +23,8 @@ abstract class BaseVisitor
     
     abstract public function visitGeneratorInjector(CompositeInterface $composite);
     
+    abstract public function visitLocale(CompositeInterface $composite);
+    
     //------------------------------------------------------------------
 }
 /* End of File */

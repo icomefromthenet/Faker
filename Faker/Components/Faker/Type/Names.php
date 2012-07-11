@@ -10,6 +10,11 @@ use Faker\Components\Faker\Exception as FakerException,
 class Names extends Type
 {
 
+    /**
+      *  @var integer the number of names in db 
+      */
+    protected $name_count;
+   
     //  -------------------------------------------------------------------------
 
     /**
@@ -21,7 +26,25 @@ class Names extends Type
     {
         $conn = $this->utilities->getGeneratorDatabase();
         
-        $sql = "SELECT * FROM person_names ORDER BY RANDOM() LIMIT 1";
+        
+        if($this->name_count === null) {
+            
+            $sql              = "SELECT count(id) as nameCount FROM person_names ORDER BY id";
+            $stmt             = $conn->prepare($sql);
+            $stmt->execute();    
+            $result           = $stmt->fetch(PDO::FETCH_ASSOC);
+            $this->name_count = (integer) $result['nameCount'];
+            
+        }
+        
+        if($this->name_count <= 0) {
+            throw new FakerException('Names:: no names found in db');
+        }
+        
+        
+        $offset = ceil($this->generator->generate(0,($this->name_count -1)));
+        
+        $sql = "SELECT * FROM person_names ORDER BY id LIMIT 1 OFFSET ".$offset;
         $stmt = $conn->prepare($sql);
         $stmt->execute();    
    

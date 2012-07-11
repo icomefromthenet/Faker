@@ -87,7 +87,7 @@ class GeneratorInjectorTest extends AbstractProject
     
     public function testTableOverridesSchema()
     {
-         $project = $this->getProject();
+        $project = $this->getProject();
         $builder = $project->getFakerManager()->getCompositeBuilder();
 
         $default_generator = $this->getMock('Faker\Generator\GeneratorInterface');

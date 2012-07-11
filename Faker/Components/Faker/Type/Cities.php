@@ -18,10 +18,12 @@ class Cities extends Type
     public function generate($rows, $values = array())
     {
         $countries = $this->getOption('countries');
+        $x = 0;
         
         # fetch names values from database
         $conn = $this->utilities->getGeneratorDatabase();
-        $sql = "SELECT * FROM world_cities WHERE ".$conn->quoteIdentifier('country_code')." IN (?)  ORDER BY RANDOM() LIMIT 1";
+        $sql = "SELECT count(geonameid) as rcount FROM world_cities WHERE ".$conn->quoteIdentifier('country_code')." IN (?)  ORDER BY geonameid";
+        
         $stmt = $conn->executeQuery($sql,
                                 array($countries),
                                 array(\Doctrine\DBAL\Connection::PARAM_STR_ARRAY)
@@ -30,7 +32,33 @@ class Cities extends Type
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         
         # fetch a random name from the db
-        return $result['name'];
+        $collection_size =  (integer) $result['rcount'];
+        
+        if($collection_size > 0) {
+            
+            # want to avoid negative set size.
+            if($collection_size === 1) {
+                $x = 0;
+            } else {
+                $x = ceil($this->generator->generate(0,($collection_size-1)));    
+            }
+            
+            $sql = "SELECT * FROM world_cities WHERE ".$conn->quoteIdentifier('country_code')." IN (?) ORDER BY geonameid LIMIT 1 OFFSET $x";
+            
+            $stmt = $conn->executeQuery($sql,
+                                array($countries),
+                                array(\Doctrine\DBAL\Connection::PARAM_STR_ARRAY)
+            );
+   
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $result['name'];
+            
+        }else {
+            throw new FakerException('Cities::no cities found for countries '.implode(',',$countries));
+        }
+        
+        
     }
     
     //  -------------------------------------------------------------------------

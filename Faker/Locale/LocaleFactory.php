@@ -45,6 +45,11 @@ class LocaleFactory implements ExtensionInterface
         }
     }
     
+    public static function hasExtension($ext)
+    {
+        return isset(self::$types[$ext]);
+    }
+    
     //  ----------------------------------------------------------------------------
     
     /**
@@ -54,7 +59,7 @@ class LocaleFactory implements ExtensionInterface
       *  @param SimpleTextInterface $string_factory the string factory
       *  @return void
       */
-    public function construct(StringFactoryInterface $string_factory)
+    public function __construct(StringFactoryInterface $string_factory)
     {
         $this->string_factory = $string_factory;
         

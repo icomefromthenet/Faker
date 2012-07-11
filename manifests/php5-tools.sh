@@ -34,6 +34,11 @@ pear install PEAR_PackageFileManager2
 pear channel-discover pear.pirum-project.org
 pear install pirum/Pirum
 
+# pear Git package
+
+pear config-set preferred_state alpha
+pear install VersionControl_Git
+
 # Discover my own pear channel
 
 pear channel-discover icomefromthenet.github.com/pear

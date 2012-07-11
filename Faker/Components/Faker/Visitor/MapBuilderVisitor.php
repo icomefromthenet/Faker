@@ -53,6 +53,11 @@ class MapBuilderVisitor extends BaseVisitor
          throw new FakerException('Not implemented');
     }
     
+    public function visitLocale(CompositeInterface $composite)
+    {
+        throw new FakerException('Not Implemented');
+    }
+    
     public function visitMapBuilder(CompositeInterface $composite)
     {
         

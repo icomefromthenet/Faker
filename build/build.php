@@ -87,7 +87,7 @@ $pear_task->setCode(function(InputInterface $input, ConsoleOutputInterface $outp
     PEAR::setErrorHandling(PEAR_ERROR_DIE);
     
     $pack = new PEAR_PackageFileManager2;
-    $outputDir = realpath(dirname(__FILE__) . '/../') . '/';
+    $outputDir = realpath(dirname(__FILE__) . '/release') . '/';
     $inputDir = realpath(dirname(__FILE__) . '/../');
     
     $e = $pack->setOptions(array(
@@ -207,7 +207,6 @@ $parse_names->setCode(function(InputInterface $input, ConsoleOutputInterface $ou
     $parser_options->setParser('csv');
     $parser_options->setHasHeaderRow(true);
     $parser_options->setFieldSeperator(ord(','));
-    
        
     # register for the generate event
     $event = $project['event_dispatcher'];
