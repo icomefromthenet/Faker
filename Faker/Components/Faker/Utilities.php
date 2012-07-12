@@ -32,34 +32,6 @@ class Utilities
     }
    
    
-    //--------------------------------------------------------
-
-    /**
-     * Generates a string of lorem ipsum words.
-     *
-     * @param string[] $words the lines to pick from 
-     * @param integer $min the minimum # of words to return OR the total number
-     * @param integer $max the max # of words to return (or null for "fixed" type)
-     * @param GeneratorInterface $random
-     */
-    public function generateRandomText($words, $min, $max, GeneratorInterface $random)
-    {
-        # how many lines do we need from range
-        $num_lines  = $random->generate($min, $max);
-        
-        # jumble the array so we consecutive calls get differnt result
-        shuffle($words);
-    
-        $r = array();
-        for ($i = 0; $i <= $num_lines; $i++) {
-            $r[] = $words[$i];
-        }
-        
-        # join together the selected rows
-        return join(" ", $r);
-           
-    }
-
 
     //  -------------------------------------------------------------------------
 
