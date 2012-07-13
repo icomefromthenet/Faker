@@ -62,7 +62,7 @@ class UniqueString extends Type
         $format = $this->getOption('format');
         
         do  {
-            $guid = $this->utilities->generateRandomAlphaNumeric($format,$this->getGenerator());
+            $guid = $this->utilities->generateRandomAlphaNumeric($format,$this->getGenerator(),$this->getLocale());
         
             if(in_array($guid, self::$generated) === false) {
                 $ok = true;

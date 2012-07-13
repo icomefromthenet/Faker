@@ -600,6 +600,17 @@ class SimpleString implements SimpleStringInterface , StringFactoryInterface
     }
     
     
+     /**
+      *  Fetch a charater at postion x
+      *
+      *  @access public
+      *  @param integer postion
+      *  @return string the character at postion x
+      */
+    public function charAt($pos)
+    {
+        return $this->provider->charAt($pos);
+    }
     
     
     //  ----------------------------------------------------------------------------

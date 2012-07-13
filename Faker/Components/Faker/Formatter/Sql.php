@@ -47,6 +47,18 @@ class Sql extends BaseFormatter implements FormatterInterface
         return '{prefix}_{body}_{suffix}_{seq}.{ext}';
     }
     
+    /**
+      *  Defines the default output encoding
+      *
+      *  @return string the out encoding
+      *  @access public
+      */
+    public function getDefaultOutEncoding()
+    {
+        return 'UTF-8';
+    }
+    
+    
     //  -------------------------------------------------------------------------
     # Format Events
     
@@ -63,6 +75,7 @@ class Sql extends BaseFormatter implements FormatterInterface
         $this->writer->getStream()->getSequence()->setPrefix(strtolower($event->getId()));
         $this->writer->getStream()->getSequence()->setSuffix($this->platform->getName());
         $this->writer->getStream()->getSequence()->setExtension('sql');
+        $this->writer->getStream()->getEncoder()->setOutEncoding($this->getOption(self::CONFIG_OPTION_OUT_ENCODING));
         
         $now = new \DateTime();
         

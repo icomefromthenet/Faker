@@ -10,6 +10,7 @@ use Faker\Components\Faker\OptionInterface,
     Symfony\Component\Config\Definition\Exception\InvalidConfigurationException,
     Symfony\Component\EventDispatcher\EventDispatcherInterface,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
+    Faker\Text\SimpleStringInterface,
     Doctrine\DBAL\Platforms\AbstractPlatform;
 
 /*
@@ -27,6 +28,8 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
     const CONFIG_OPTION_SPLIT_ON_TABLE   = 'splitOnTable';
     
     const CONFIG_OPTION_OUT_FILE_FORMAT  = 'outFileFormat';
+    
+    const CONFIG_OPTION_OUT_ENCODING = 'outEncoding';
     
     /**
       *  @var mixed[] the options array 
@@ -133,6 +136,21 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
                     ->treatNullLike(false)
                     ->defaultValue(false)
                     ->info('Start a new file when a table has finished generating')
+                ->end()
+                ->scalarNode(self::CONFIG_OPTION_OUT_ENCODING)
+                    ->treatNullLike($this->getDefaultOutEncoding())
+                    ->defaultValue($this->getDefaultOutEncoding())
+                    ->info('An Iconv valid encoding format, defaults set on formatter')
+                    ->example('UTF-8')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return @!mb_convert_encoding('a assci test string', $v, 'UTF-8');
+                        })
+                        ->then(function($v){
+                            throw new FakerException('formatter::outEncoding is not mb valid');
+                        })
+                    ->end()
+                    
                 ->end()
                 ->scalarNode(self::CONFIG_OPTION_OUT_FILE_FORMAT)
                     ->treatNullLike($this->getOuputFileFormat())
@@ -277,6 +295,7 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
         $this->platform = $platform;
     }
     
+    
     //  ----------------------------------------------------------------------------
     # Abstract Methods
     
@@ -313,6 +332,15 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
       *  @access public
       */
     abstract public function getOuputFileFormat();
+    
+    /**
+      *  Defines the default output encoding
+      *
+      *  @return string the out encoding
+      *  @access public
+      */
+    abstract public function getDefaultOutEncoding();
+    
     
 }
 /* End of File */

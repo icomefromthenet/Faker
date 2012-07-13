@@ -13,7 +13,7 @@ use Faker\Project,
     Faker\Components\Faker\Compiler\Pass\KeysExistPass,
     Faker\Components\Faker\Compiler\Pass\GeneratorInjectorPass,
     Faker\Components\Faker\Compiler\Pass\LocalePass,
-    Faker\Components\Visitor\LocaleVisitor,
+    Faker\Components\Faker\Visitor\LocaleVisitor,
     Faker\Components\Faker\Compiler\Compiler;
 
 class Manager implements ManagerInterface
@@ -154,7 +154,7 @@ class Manager implements ManagerInterface
                                 new CacheInjectorPass(),
                                 new CircularRefPass(),
                                 new GeneratorInjectorPass($this->project['generator_factory'],$this->project['random_generator']),
-                                new LocalePass(new LocaleVisitor($project->getLocaleFactory()))
+                                new LocalePass(new LocaleVisitor($this->project->getLocaleFactory()))
                            ));        
     }
     

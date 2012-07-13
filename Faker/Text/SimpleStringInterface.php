@@ -349,6 +349,15 @@ interface SimpleStringInterface
       */
     public function bytes($start,$length = null);
     
+    /**
+      *  Fetch a charater at postion x
+      *
+      *  @access public
+      *  @param integer postion
+      *  @return string the character at postion x
+      */
+    public function charAt($pos);
+    
     
     /**
       *  Set the case flag to true

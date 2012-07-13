@@ -153,7 +153,8 @@ class SchemaParser extends BaseXMLParser
             case 'pick';
             case 'random';
             case 'when':
-            case 'swap':    
+            case 'swap':
+            case 'foreign-key':
                 $this->builder->end();
             break;
         }

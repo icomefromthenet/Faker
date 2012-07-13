@@ -26,6 +26,8 @@ class Writer implements WriterInterface
       *  @var integer the number of files to cache 
       */
     protected $cache_limit;
+    
+  
 
      //----------------------------------------------------------------
 
@@ -47,7 +49,7 @@ class Writer implements WriterInterface
             # test cache limit
             if($this->cache->count() >= $this->cache_limit ) {
                 foreach($this->cache as $line) {
-                    $this->stream->write($line);            
+                    $this->writeOut($line);             
                 }
                 
                 # remove lines from cache
@@ -76,7 +78,7 @@ class Writer implements WriterInterface
                 
             # empty the cache into the stream 
             foreach($this->cache as $line) {
-                $this->stream->write($line);            
+               $this->writeOut($line);            
             }
             # remove all lines from cache
             $this->cache->flush();
@@ -91,6 +93,18 @@ class Writer implements WriterInterface
 
     }
     
+    /**
+      *  Write out to the stream object encoding first
+      *
+      *  @access protected
+      *  @param string $str
+      *  @return void
+      */
+    protected function writeOut($str)
+    {
+        $this->stream->write($str);
+    }
+    
     
   //------------------------------------------------------------------
 
@@ -100,8 +114,8 @@ class Writer implements WriterInterface
     */
     public function __construct(Stream $stream, Cache $cache, $cache_limit = 500)
     {
-        $this->stream = $stream;
-        $this->cache = $cache;
+        $this->stream      = $stream;
+        $this->cache       = $cache;
         $this->cache_limit = $cache_limit;
         
     }

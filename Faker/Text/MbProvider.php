@@ -846,6 +846,22 @@ class MbProvider implements SimpleStringInterface
     
     
      /**
+      *  Fetch a charater at postion x
+      *
+      *  @access public
+      *  @param integer postion
+      *  @return string the character at postion x
+      */
+    public function charAt($pos)
+    {
+        if($pos > $this->length()) {
+            throw new \OutOfRangeException('charAt::$pos is not in range');
+        }
+        
+        return mb_substr($this->str,$pos,1,$this->encoding);
+    }
+    
+     /**
       *  Clear object of its internal data
       *
       *  @return SimpleStringInterface

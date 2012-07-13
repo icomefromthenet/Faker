@@ -28,6 +28,11 @@ class MockFormatter extends BaseFormatter
         return '{prefix}_{body}_{suffix}_{seq}.{ext}';
     }
     
+    public function getDefaultOutEncoding()
+    {
+        return 'UTF-8';
+    }
+    
 };    
     
     

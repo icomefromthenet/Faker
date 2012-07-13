@@ -246,7 +246,7 @@ class Project extends Pimple
       */
     public function getWritterManager()
     {
-        return $this['writter_manager'];
+        return $this['writer_manager'];
     }    
     
 
@@ -323,6 +323,12 @@ class Project extends Pimple
           return $this['locale_factory'];
      }
      
+   
+   
+     public function getDefaultRandom()
+     {
+          return $this['random_generator'];          
+     }
    
     //  -------------------------------------------------------------------------
     # Symfony Console
