@@ -1,17 +1,10 @@
 <?php
 namespace Faker\Components\Writer;
 
-use Faker\Io\IoInterface;
-use Faker\Project;
-use Faker\Components\ManagerInterface;
-
-
-use Faker\Components\Writer\Cache;
-use Faker\Components\Writer\Limit;
-use Faker\Components\Writer\Stream;
-use Faker\Components\Writer\Sequence;
-use Faker\Components\Writer\Writer;
-use Faker\Io\FileNotExistException;
+use Faker\Io\IoInterface,
+    Faker\Project,
+    Faker\Components\ManagerInterface,
+    Faker\Io\FileNotExistException;
 
 /*
  * class Manager
@@ -20,10 +13,15 @@ use Faker\Io\FileNotExistException;
 class Manager 
 {
 
-    protected $id;
-
+    /**
+      *  @var Faker\Project; 
+      */
     protected $project;
 
+    /**
+      *  @var Faker\Components\Writer\Io 
+      */
+    protected $io;
    
     //  -------------------------------------------------------------------------
     # Class Constructor
@@ -48,7 +46,7 @@ class Manager
 
 
     //  -------------------------------------------------------------------------
-    # Congfig file loader
+    # File loader
 
     public function getLoader()
     {
@@ -56,7 +54,7 @@ class Manager
     }
 
     //  -------------------------------------------------------------------------
-    # Config Writter
+    # Writter
 
     /**
       * function getWriter
@@ -70,6 +68,22 @@ class Manager
     public function getWriter($platform,$formatter)
     {
        return new Writer($this->getStream($platform,$formatter),$this->getCache(),$this->getCacheMax());
+    }
+    
+    //-------------------------------------------------------------------------------
+    # encoder
+    
+    /**
+      *  Fetches the character encoder
+      *
+      *  @access public
+      *  @param string $in
+      *  @param string $out;
+      *  @return Faker\Components\Writer\Encoding
+      */
+    public function getEncoder($in,$out)
+    {
+        return new Encoding($in,$out);
     }
 
     //  -------------------------------------------------------------------------
@@ -90,7 +104,9 @@ class Manager
         return new Stream($this->getHeaderTemplate($platform,$formatter),
                           $this->getFooterTemplate($platform,$formatter),
                           $this->getSequence($platform, 'schema', 'table', 'sql'),
-                          $this->getLimit(),$this->io
+                          $this->getLimit(),
+                          $this->io,
+                          $this->getEncoder('UTF-8','UTF-8')
                         );
     }
     

@@ -246,7 +246,7 @@ class Project extends Pimple
       */
     public function getWritterManager()
     {
-        return $this['writter_manager'];
+        return $this['writer_manager'];
     }    
     
 
@@ -296,6 +296,39 @@ class Project extends Pimple
     {
           return $this['has_config'];
     }
+   
+   
+     //  ----------------------------------------------------------------------------
+     # Locale And SimpleText Factories 
+     
+     /**
+       *  Fetch the Simple String Factory
+       *
+       *  @access public
+       *  @return Faker\Text\StringFactoryInterface
+       */
+     public function getSimpleStringFactory()
+     {
+          return $this['simplestring_factory'];
+     }
+     
+     /**
+       *  Fetch the Locale Factory
+       *
+       *  @access public
+       *  @return Faker\Locale\LocaleFactory
+       */
+     public function getLocaleFactory()
+     {
+          return $this['locale_factory'];
+     }
+     
+   
+   
+     public function getDefaultRandom()
+     {
+          return $this['random_generator'];          
+     }
    
     //  -------------------------------------------------------------------------
     # Symfony Console

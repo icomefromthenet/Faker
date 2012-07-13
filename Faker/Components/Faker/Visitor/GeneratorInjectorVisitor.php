@@ -5,6 +5,8 @@ use Faker\Components\Faker\Composite\CompositeInterface,
     Faker\Components\Faker\Composite\Table,
     Faker\Components\Faker\Composite\Column,
     Faker\Components\Faker\Composite\Schema,
+    Faker\Components\Faker\Composite\Random,
+    Faker\Components\Faker\Composite\Pick,
     Faker\Components\Faker\Type\Type,
     Faker\Generator\GeneratorFactory,
     Faker\Generator\GeneratorInterface,
@@ -113,6 +115,17 @@ class GeneratorInjectorVisitor extends BaseVisitor
             
         }
         
+        if($composite instanceof Random) {
+            # use the internal setting
+            $composite->setGenerator($this->column_generator);
+        }
+        
+        if($composite instanceof Pick) {
+            # use the internal setting
+            $composite->setGenerator($this->column_generator);
+        }
+        
+        
         if($composite instanceof Type) {
             
             # use the internal setting
@@ -128,7 +141,7 @@ class GeneratorInjectorVisitor extends BaseVisitor
              else { 
                 # inject column value
                 $composite->setGenerator($this->column_generator);
-             }
+            }
              
         }
         
@@ -147,6 +160,11 @@ class GeneratorInjectorVisitor extends BaseVisitor
     }
     
     public function visitMapBuilder(CompositeInterface $composite)
+    {
+        throw new FakerException('Not Implemented');
+    }
+    
+    public function visitLocale(CompositeInterface $composite)
     {
         throw new FakerException('Not Implemented');
     }

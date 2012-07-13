@@ -10,7 +10,12 @@ use Faker\Components\Faker\Exception as FakerException,
 class Email extends Type
 {
     protected $valid_suffixes;
-
+    
+    /**
+      *  @var integer the number of names in db 
+      */
+    protected $name_count;
+    
     //---------------------------------------------------------------
     /**
      * Generate an Email address
@@ -20,11 +25,27 @@ class Email extends Type
     public function generate($rows, $values = array())
     {
         $format = $this->getOption('format');
+        $conn = $this->utilities->getGeneratorDatabase();
         
         # fetch names values from database
+        if($this->name_count === null) {
+            
+            $sql              = "SELECT count(id) as nameCount FROM person_names ORDER BY id";
+            $stmt             = $conn->prepare($sql);
+            $stmt->execute();    
+            $result           = $stmt->fetch(PDO::FETCH_ASSOC);
+            $this->name_count = (integer) $result['nameCount'];
+            
+        }
         
-        $conn = $this->utilities->getGeneratorDatabase();
-        $sql = "SELECT * FROM person_names ORDER BY RANDOM() LIMIT 1";
+        if($this->name_count <= 0) {
+            throw new FakerException('Names:: no names found in db');
+        }
+        
+        
+        $offset = ceil($this->generator->generate(0,($this->name_count -1)));
+        
+        $sql  = "SELECT * FROM person_names ORDER BY id LIMIT 1 OFFSET ".$offset;
         $stmt = $conn->prepare($sql);
         $stmt->execute();    
    
@@ -34,6 +55,7 @@ class Email extends Type
         $fname  = $result['fname'];
         $lname  = $result['lname'];
         $inital = $result['middle_initial'];
+
         
         
         # parse name data into format
@@ -43,14 +65,23 @@ class Email extends Type
        
         # parse the domain data into format 
         $domains = $this->getOption('domains');
-        $rand_key = array_rand($domains,1); 
+        
+        #adjust for 0 based array
+        if(($domin_count = count($domains)) > 1) {
+            $domin_count = $domin_count -1;
+        }
+        
+        $rand_key = $this->generator->generate(0,$domin_count);
         $format = preg_replace('/{domain}/',$domains[$rand_key],$format);
         
         # parse names param
         $params = $this->getOption('params');
         
         foreach($params as $param => $value) {
-            $format = preg_replace('/{'.$param.'}/',$this->utilities->generateRandomAlphanumeric($value,$this->getGenerator()),$format);
+            $format = preg_replace('/{'.preg_quote($param).'}/',
+                                   $this->utilities->generateRandomAlphanumeric($value,$this->getGenerator(),$this->getLocale()),
+                                   $format
+                                );
         }
         
         return $format;

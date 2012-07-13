@@ -12,6 +12,8 @@ use Faker\Project,
     Faker\Components\Faker\Compiler\Pass\CacheInjectorPass,
     Faker\Components\Faker\Compiler\Pass\KeysExistPass,
     Faker\Components\Faker\Compiler\Pass\GeneratorInjectorPass,
+    Faker\Components\Faker\Compiler\Pass\LocalePass,
+    Faker\Components\Faker\Visitor\LocaleVisitor,
     Faker\Components\Faker\Compiler\Compiler;
 
 class Manager implements ManagerInterface
@@ -151,7 +153,8 @@ class Manager implements ManagerInterface
                                 new KeysExistPass(),
                                 new CacheInjectorPass(),
                                 new CircularRefPass(),
-                                new GeneratorInjectorPass($this->project['generator_factory'],$this->project['random_generator'])
+                                new GeneratorInjectorPass($this->project['generator_factory'],$this->project['random_generator']),
+                                new LocalePass(new LocaleVisitor($this->project->getLocaleFactory()))
                            ));        
     }
     

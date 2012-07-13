@@ -4,6 +4,7 @@ namespace Faker\Components\Faker\Composite;
 use Faker\Components\Faker\Exception as FakerException,
     Faker\Components\Faker\Formatter\FormatEvents,
     Faker\Components\Faker\Formatter\GenerateEvent,
+    Faker\Generator\GeneratorInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 
@@ -36,6 +37,11 @@ class Random extends BaseComposite implements CompositeInterface , SelectorInter
     protected $event;
     
     /**
+      *  @var Faker\Generator\GeneratorInterface 
+      */
+    protected $generator;
+    
+    /**
       *  Class construtor
       *
       *  @access public
@@ -56,41 +62,11 @@ class Random extends BaseComposite implements CompositeInterface , SelectorInter
       */
     public function generate($rows,$values = array())
     {
-        $format = $this->binRand(0,(count($this->child_types)-1));
         
-        return $this->child_types[$format]->generate($rows,$values);
-    }
-    
-    //  -------------------------------------------------------------------------
-
-    
-    /**
-      * Fenerates a random binominal distributed integer. 
-      *
-      *  @source http://www.php.net/manual/en/function.rand.php#107712 
-      */
-    function binRand($min = null, $max = null)
-    {
-        $min = ($min) ? (int) $min : 0;
-        $max = ($max) ? (int) $max : PHP_INT_MAX;
+        $return = $this->generator->generate(0,(count($this->child_types)-1));
+        $index = round($return);
         
-        $range = range($min, $max);
-        $average = array_sum($range) / count($range);
-        
-        $dist = array();
-        for ($x = $min; $x <= $max; $x++) {
-            $dist[$x] = -abs($average - $x) + $average + 1;
-        }
-        
-        $map = array();
-        foreach ($dist as $int => $quantity) {
-            for ($x = 0; $x < $quantity; $x++) {
-                $map[] = $int;
-            }
-        }
-        
-        shuffle($map);
-        return current($map);
+        return $this->child_types[$index]->generate($rows,$values);
     }
     
     
@@ -155,6 +131,18 @@ class Random extends BaseComposite implements CompositeInterface , SelectorInter
     {
         return '';
     }
+    
+    /**
+      *  Set the random number generator
+      *
+      *  @access public
+      *  @return Faker\Generator\GeneratorInterface
+      */
+    public function setGenerator(GeneratorInterface $generator)
+    {
+	$this->generator = $generator;
+    }
+    
     
     //  -------------------------------------------------------------------------
     

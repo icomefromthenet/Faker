@@ -74,7 +74,18 @@ class SqlTest extends AbstractProject
                ->method('getStream')
                ->will($this->returnValue($stream));
                
-               
+        $encoding = $this->getMockBuilder('Faker\Components\Writer\Encoding')
+                    ->disableOriginalConstructor()
+                    ->getMock();
+                    
+                       
+        $encoding->expects($this->any())
+                 ->method('encode')
+                 ->will($this->returnArgument(0));       
+        
+        $stream->expects($this->any())
+                ->method('getEncoder')
+                ->will($this->returnValue($encoding));
         
         $this->formatter_mock->setWriter($writer);
         

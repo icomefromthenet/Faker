@@ -40,6 +40,17 @@ class Phpunit extends BaseFormatter implements FormatterInterface
         return '{prefix}_{body}_{suffix}.{ext}';
     }
     
+    /**
+      *  Defines the default output encoding
+      *
+      *  @return string the out encoding
+      *  @access public
+      */
+    public function getDefaultOutEncoding()
+    {
+        return 'UTF-8';
+    }
+    
     
     //  -------------------------------------------------------------------------
     # Format Events

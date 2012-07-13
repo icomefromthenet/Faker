@@ -11,6 +11,7 @@ use Faker\Components\Faker\Utilities,
     Faker\Components\Faker\Visitor\RefCheckVisitor,
     Faker\Components\Faker\Visitor\BaseVisitor,
     Faker\Components\Faker\Visitor\GeneratorInjectorVisitor,
+    Faker\Components\Faker\Visitor\LocaleVisitor,
     Faker\Components\Faker\TypeConfigInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface,
     Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition,
@@ -18,6 +19,7 @@ use Faker\Components\Faker\Utilities,
     Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Config\Definition\Exception\InvalidConfigurationException,
     Faker\Components\Faker\OptionInterface,
+    Faker\Locale\LocaleInterface,
     Faker\Generator\GeneratorInterface;
 
 class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
@@ -53,6 +55,10 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
       */
     protected $generator;
     
+    /**
+      *  @var Faker\Locale\LocaleInterface 
+      */
+    protected $locale;
     
     //  -------------------------------------------------------------------------
     
@@ -127,6 +133,28 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
     public function setGenerator(GeneratorInterface $generator)
     {
 	$this->generator = $generator;
+    }
+    
+    /**
+      *  Set the type with a locale
+      *
+      *  @access public
+      *  @param Faker\Locale\LocaleInterface $locale
+      */
+    public function setLocale(LocaleInterface $locale)
+    {
+	$this->locale = $locale;
+    }
+    
+    /**
+      * Fetches this objects locale
+      * 
+      *  @return Faker\Locale\LocaleInterface
+      *  @access public
+      */
+    public function getLocale()
+    {
+	return $this->locale;
     }
     
     /**
@@ -323,6 +351,10 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
 	if($visitor instanceof GeneratorInjectorVisitor) {
             $visitor->visitGeneratorInjector($this);
         }
+	
+	if($visitor instanceof LocaleVisitor) {
+	    $visitor->visitLocale($this);
+	}
 	
 	return $visitor;
     }

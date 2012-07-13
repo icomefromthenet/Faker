@@ -16,6 +16,7 @@ use Faker\PlatformFactory;
 use Faker\ColumnTypeFactory;
 use Faker\Components\Faker\Formatter\FormatterFactory;
 use Faker\Components\Faker\TypeFactory;
+use Faker\Locale\LocaleFactory;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,7 +82,7 @@ use Faker\Components\Faker\TypeFactory;
 | Faker Formatters
 |--------------------------------------------------------------------------
 |
-| Register a new formatter, which control how data is written to the writter
+| Register a new formatter, which control how data is written to the writter.
 |
 | FormatterFactory::registerExtension('mongo','Faker\\Components\\Extension\\Faker\\Formatter\\Mongo');
 |
@@ -89,5 +90,18 @@ use Faker\Components\Faker\TypeFactory;
     
   //FormatterFactory::registerExtension('mongo','Faker\\Components\\Extension\\Faker\\Formatter\\Mongo');
 
+
+/*
+|--------------------------------------------------------------------------
+| Faker Locales
+|--------------------------------------------------------------------------
+|
+| Register a new Locale, which provide locale specific text to the generators.
+|
+| LocaleFactory::registerExtension('french','Faker\\Components\\Extension\\Locale\\FrenchLocale');
+|
+*/ 
+
+  //LocaleFactory::registerExtension('french','Faker\\Components\\Extension\\Locale\\FrenchLocale');
 
 /* End of File */

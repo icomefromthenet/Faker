@@ -35,14 +35,24 @@ class StreamTest extends AbstractProject
         $footer_template = $this->getMockBuilder('Faker\Components\Templating\Template')
                                 ->disableOriginalConstructor()
                                 ->getMock();
+        
+        $encoding = $this->getMockBuilder('Faker\Components\Writer\Encoding')
+                    ->disableOriginalConstructor()
+                    ->getMock();
+                    
+                       
+        $encoding->expects($this->any())
+                 ->method('encode')
+                 ->will($this->returnArgument(0));
                                 
         $sequence   = new Sequence('schema','table','','sql','{prefix}_{body}_{seq}.{ext}');
         $limit      = new Limit(5);
         $io         = $this->getMockBuilder('Faker\Components\Writer\Io')
                             ->disableOriginalConstructor()
                             ->getMock();
+                            
         
-        $stream = new Stream($header_template,$footer_template,$sequence,$limit,$io);
+        $stream = new Stream($header_template,$footer_template,$sequence,$limit,$io,$encoding);
         
         $this->assertSame($stream->getLimit(),$limit);
         $this->assertSame($stream->getSequence(),$sequence);
@@ -64,6 +74,16 @@ class StreamTest extends AbstractProject
         $footer_template = $this->getMockBuilder('Faker\Components\Templating\Template')
                                 ->disableOriginalConstructor()
                                 ->getMock();
+        
+        $encoding = $this->getMockBuilder('Faker\Components\Writer\Encoding')
+                    ->disableOriginalConstructor()
+                    ->getMock();
+                    
+                       
+        $encoding->expects($this->any())
+                 ->method('encode')
+                 ->will($this->returnArgument(0));
+        
                                 
         $sequence   = new Sequence('schema','table','','sql','{prefix}_{body}_{seq}.{ext}');
         $limit      = new Limit(1);
@@ -71,7 +91,7 @@ class StreamTest extends AbstractProject
                             ->disableOriginalConstructor()
                             ->getMock();
         
-        $stream = new Stream($header_template,$footer_template,$sequence,$limit,$io);
+        $stream = new Stream($header_template,$footer_template,$sequence,$limit,$io,$encoding);
         
         $line = 'my first line';
         

@@ -9,6 +9,13 @@ use Faker\Components\Faker\Exception as FakerException,
 
 class Country extends Type
 {
+   /**
+     *  @var the number of countries in db 
+     */
+    protected $country_count;
+   
+   
+   
     //---------------------------------------------------------------
     /**
      * Generate an a city string
@@ -18,28 +25,91 @@ class Country extends Type
     public function generate($rows, $values = array())
     {
         $countries = $this->getOption('countries');
-        $conn = $this->utilities->getGeneratorDatabase();
-        
+       
         # fetch names values from database
         if($countries == null) {
-            $sql = "SELECT * FROM countries ORDER BY RANDOM() LIMIT 1";
-            $stmt = $conn->executeQuery($sql);
-            
+           $result = $this->randomCountry();
         }
         else {
-            $sql = "SELECT * FROM countries WHERE ".$conn->quoteIdentifier('code')." IN (?)  ORDER BY RANDOM() LIMIT 1";
-            $stmt = $conn->executeQuery($sql,
-                                    array($countries),
-                                    array(\Doctrine\DBAL\Connection::PARAM_STR_ARRAY)
-            );
             
+           $result = $this->fromCode($countries);
         }
    
+       
+        return $result;
+    }
+    
+    
+    public function randomCountry()
+    {
+         # get cpunt 
+        $conn = $this->utilities->getGeneratorDatabase();
+
+        if($this->country_count === null) {
+             $sql                 = "SELECT count(name) as countryCount FROM countries ORDER BY name";
+             $stmt                = $conn->executeQuery($sql);
+             $result              = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+             $this->country_count = (integer) $result['countryCount']; 
+        }
+       
+       
+        if($this->country_count <= 0) {
+            throw new FakerException('Country::no countries found in db');
+        }
+        
+        # fetch a country
+        $offset = ceil($this->generator->generate(0,($this->country_count -1)));
+        $sql    = "SELECT * FROM countries ORDER BY name LIMIT 1 OFFSET ". $offset;
+        $stmt   = $conn->executeQuery($sql);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         
         # fetch a random name from the db
         return $result['name'];
+        
     }
+    
+    
+    public function fromCode(array $code)
+    {
+        $conn  = $this->utilities->getGeneratorDatabase();
+        
+        if($this->country_count === null) {
+        
+            $sql                 = "SELECT count(name) as countryCount FROM countries WHERE ".$conn->quoteIdentifier('code')." IN (?) ORDER BY name";
+            $stmt                = $conn->executeQuery($sql,
+                                                        array($code),
+                                                        array(\Doctrine\DBAL\Connection::PARAM_STR_ARRAY));
+            $result              = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $this->country_count = (integer) $result['countryCount'];
+        
+        }
+        
+        if($this->country_count <= 0 || $this->country_count !== count($code)) {
+            throw new FakerException('Country::no countries found in db for '. implode(',',$code)); 
+        }
+        
+        if($this->country_count === 1) {
+            $offset = 0;
+        }else {
+            $offset = ceil($this->generator->generate(0,($this->country_count -1)));
+        }
+        
+        $sql  = "SELECT * FROM countries WHERE ".$conn->quoteIdentifier('code')." IN (?) ORDER BY name LIMIT 1 OFFSET ".$offset;
+        $stmt = $conn->executeQuery($sql,
+                                    array($code),
+                                    array(\Doctrine\DBAL\Connection::PARAM_STR_ARRAY)
+        );
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        # fetch a random name from the db
+        return $result['name'];
+        
+    }
+    
+    
     
     //  -------------------------------------------------------------------------
 

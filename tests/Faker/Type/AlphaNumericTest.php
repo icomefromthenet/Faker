@@ -104,9 +104,12 @@ class AlphaNumericTest extends AbstractProject
                       ->getMock();
                       
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $locale  = $this->getMock('\Faker\Locale\LocaleInterface');
+        
             
         $type = new AlphaNumeric($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','ccCC');
+        $type->setLocale($locale);
         $type->merge();
         $type->validate(); 
          

@@ -74,6 +74,11 @@ class RefCheckVisitor extends BaseVisitor
         throw new FakerException('Not Implemented');
     }
     
+    public function visitLocale(CompositeInterface $composite)
+    {
+        throw new FakerException('Not Implemented');
+    }
+    
     //------------------------------------------------------------------
 
     /**
