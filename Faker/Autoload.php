@@ -41,7 +41,8 @@ class Autoload extends UniversalClassLoader
     
     protected $filter;
     
-    public function setFilter(\Closure $filter) {
+    public function setFilter(\Closure $filter)
+    {
         $this->filter = $filter;
     }
     

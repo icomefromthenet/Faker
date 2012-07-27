@@ -37,7 +37,7 @@ use Faker\Locale\LocaleFactory;
 |
 */
 
-    PlatformFactory::registerExtension('mysql','Faker\\Components\\Extension\\Doctrine\\Platforms\\MySqlPlatform');
+    PlatformFactory::registerExtension('mysql','Faker\\Extension\\Doctrine\\Platforms\\MySqlPlatform');
 
  
 /*

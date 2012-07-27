@@ -53,7 +53,7 @@ return call_user_func(function() {
    //
    //------------------------------------------------------------------------------
    
-   define('FAKER_VERSION','1.0.2'); 
+   define('FAKER_VERSION','1.0.3'); 
    
    
    //------------------------------------------------------------------------------
@@ -62,10 +62,10 @@ return call_user_func(function() {
    // If project folder is set by cmd this path below is overriden in Command.php
    //------------------------------------------------------------------------------
    
-   $ext_loader->setExtensionNamespace('Faker\\Components\\Extension', $project->getPath()->get());
+   $ext_loader->setExtensionNamespace('Faker\\Extension', $project->getPath()->get());
    
    $ext_loader->setFilter(function($ns){
-      return  substr($ns,17); # remove 'Faker\Components\' from namespace  
+      return  substr($ns,6); # remove 'Faker\Extension\' from namespace  
    });
    
    
