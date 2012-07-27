@@ -12,28 +12,20 @@
         }
     ],
     "require": {
-        "monolog/monolog"           : "dev-master",
-        "symfony/filesystem"        : "2.1.x-dev",
-        "symfony/class-loader"      : "2.1.x-dev",
-        "symfony/config"            : "2.1.x-dev",
-        "symfony/console"           : "2.1.x-dev",
-        "symfony/event-dispatcher"  : "2.1.x-dev",
-        "symfony/finder"            : "2.1.x-dev",
-        "symfony/yaml"              : "2.1.x-dev",
-        "twig/twig"                 : "dev-master",
-        "pimple/pimple"             : "1.0.x-dev",
-        "doctrine/common"           : "2.3.x-dev",
-        "doctrine/dbal"             : "2.3.x-dev"
-        //"zendframework/zend-config" : "2.0.*",
-        //"zendframework/zend-stdlib" : "2.0.*",
-        //"zendframework/zend-text"   : "2.0.*"
-        
-       
-    },
-    "autoload": {
-        "psr-0": {
-            "Zend\\ProgressBar" : "/Faker/Vendor/zendframework/zend-progressbar/"
-        }
+        "zendframework/zend-progressbar": "2.0.0-beta5",
+        "zendframework/zend-stdlib"     : "2.0.0-beta5",
+        "zendframework/zend-text"       : "2.0.0-beta5",
+        "monolog/monolog"               : "dev-master",
+        "symfony/filesystem"            : "2.1.x-dev",
+        "symfony/class-loader"          : "2.1.x-dev",
+        "symfony/config"                : "2.1.x-dev",
+        "symfony/console"               : "2.1.x-dev",
+        "symfony/event-dispatcher"      : "2.1.x-dev",
+        "symfony/finder"                : "2.1.x-dev",
+        "symfony/yaml"                  : "2.1.x-dev",
+        "twig/twig"                     : "dev-master",
+        "pimple/pimple"                 : "1.0.x-dev",
+        "doctrine/common"               : "2.3.x-dev",
+        "doctrine/dbal"                 : "2.3.x-dev"
     }
-    
 }
