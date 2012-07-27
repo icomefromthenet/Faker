@@ -10,7 +10,7 @@ The city type will provide city names parsed from [GeoNames](http://download.geo
 
 ```xml
     <datatype name="city">
-        <option name="countries" value="AU,GB"
+        <option name="countries" value="AU,GB" />
     </datatype>
 ```
 The above would produce city names from the England and Australia.
@@ -22,10 +22,10 @@ The country codes are the two letter [ISO_3166-1](http://en.wikipedia.org/wiki/I
 ```xml
     <random>
         <datatype name="city">
-            <option name="countries" value="GB"
+            <option name="countries" value="GB" />
         </datatype>
         <datatype name="city">
-            <option name="countries" value="AU"
+            <option name="countries" value="AU" />
         </datatype>
     </random>
 ```
