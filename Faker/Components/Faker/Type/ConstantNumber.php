@@ -59,13 +59,6 @@ class ConstantNumber extends Type
 
     //  -------------------------------------------------------------------------
 
-    public function toXml()
-    {
-       return '<datatype name="'.$this->getId().'"></datatype>' . PHP_EOL;
-    }
- 
-    //  -------------------------------------------------------------------------
-
    /**
      * Generates the configuration tree builder.
      *

@@ -15,14 +15,6 @@ class UniqueNumber extends Type
      */
     static $generated = array();
 
-    
-    //  -------------------------------------------------------------------------
-
-    public function toXml()
-    {
-       return '<datatype name="'.$this->getId().'"></datatype>' . PHP_EOL;
-    }
-    
     //  -------------------------------------------------------------------------
 
     

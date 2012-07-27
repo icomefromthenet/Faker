@@ -95,6 +95,23 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
     }
     
     //  -------------------------------------------------------------------------
+    
+    
+    public function toXml()
+    {
+       $str =  '<datatype name="'.$this->getId().'">' . PHP_EOL;
+       
+       foreach($this->options as $name => $option) {
+	    if($name !== 'locale' && $name !== 'name' ) {
+		$str .= '<option name="'.$name.'" value="'.$option.'" />' . PHP_EOL;
+	    }
+       }
+       
+       return $str . '</datatype>' . PHP_EOL;
+    }
+    
+    //  -------------------------------------------------------------------------
+    
      
     /**
       *  @inheritdoc 
@@ -189,15 +206,7 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
     {
           return $this->event;
     }
-    
-    
-    //  -------------------------------------------------------------------------
-    
-    public function toXml()
-    {
-        throw new FakerException('not implemented');
-    }
-    
+   
     //  -------------------------------------------------------------------------
      
     public function validate()
