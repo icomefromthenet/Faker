@@ -11,6 +11,7 @@ use Faker\Components\Faker\OptionInterface,
     Faker\Components\Faker\Visitor\BaseVisitor,
     Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Config\Definition\Exception\InvalidConfigurationException,
+    Symfony\Component\Config\Definition\Builder\TreeBuilder,
     Faker\Components\Faker\Exception as FakerException;
 
 /*
@@ -32,7 +33,10 @@ abstract class BaseComposite extends BaseNode implements OptionInterface, Compos
      */
     public function getConfigTreeBuilder()
     {
-        throw new FakerException('Not Implemented');
+        $treeBuilder = new TreeBuilder();
+        $rootNode    = $treeBuilder->root('config');
+
+        return $treeBuilder;
     }
     
     /**
