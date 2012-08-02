@@ -30,6 +30,7 @@ class RandomTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
         $random = new Random($id,$parent,$event);
+        $random->setOption('name','random');
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -53,7 +54,7 @@ class RandomTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
         $random = new Random($id,$parent,$event);
-     
+        $random->setOption('name','random');
      
         $generatorA = $this->getMock('Faker\Generator\GeneratorInterface');
         $generatorA->expects($this->exactly(1))

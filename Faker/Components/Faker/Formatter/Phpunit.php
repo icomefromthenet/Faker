@@ -64,7 +64,7 @@ class Phpunit extends BaseFormatter implements FormatterInterface
     public function onSchemaStart(GenerateEvent $event)
     {
         # set the schema prefix on writter
-        $this->writer->getStream()->getSequence()->setPrefix(strtolower($event->getId()));
+        $this->writer->getStream()->getSequence()->setPrefix(strtolower($event->getType()->getOption('name')));
         $this->writer->getStream()->getSequence()->setBody('fixture');
         $this->writer->getStream()->getSequence()->setSuffix($this->platform->getName());
         $this->writer->getStream()->getSequence()->setExtension('xml');
@@ -78,7 +78,7 @@ class Phpunit extends BaseFormatter implements FormatterInterface
                                         'host'          => $server_name,
                                         'datetime'      => $now->format(DATE_W3C),
                                         'phpversion'    => PHP_VERSION,
-                                        'schema'        => $event->getId(),
+                                        'schema'        => $event->getType()->getOption('name'),
                                         'platform'      => $this->platform->getName(),
                                         ));
         # start writing here
@@ -114,17 +114,17 @@ class Phpunit extends BaseFormatter implements FormatterInterface
         $map = array();
 
         foreach($event->getType()->getChildren() as $column) {
-            $map[$column->getId()] = $column->getColumnType();
+            $map[$column->getOption('name')] = $column->getColumnType();
         }
        
         $this->column_map = $map;
         
         # write table tag        
-        $this->writer->write(sprintf('<table name="%s">'. PHP_EOL,$event->getId()));
+        $this->writer->write(sprintf('<table name="%s">'. PHP_EOL,$event->getType()->getOption('name')));
     
          # fetch the columns for each table   
          foreach($event->getType()->getChildren() as $column) {
-            $this->writer->write('<column>'.trim($column->getId()).'</column>' .PHP_EOL);
+            $this->writer->write('<column>'.trim($column->getOption('name')).'</column>' .PHP_EOL);
          }
             
     }
@@ -194,7 +194,7 @@ class Phpunit extends BaseFormatter implements FormatterInterface
     public function onColumnEnd(GenerateEvent $event)
     {
         $values = $event->getValues();
-        $value = $this->processColumnWithMap($event->getId(),$values[$event->getId()]);
+        $value = $this->processColumnWithMap($event->getType()->getOption('name'),$values[$event->getType()->getOption('name')]);
         
         if($value !== null) {
             $this->writer->write('<value>');

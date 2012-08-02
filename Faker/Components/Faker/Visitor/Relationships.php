@@ -87,7 +87,7 @@ class Relationships implements \IteratorAggregate , \Countable
     }
     
     
-    public function filterByLocaleTable($table)
+    public function filterByLocalTable($table)
     {
         $local = array();
         

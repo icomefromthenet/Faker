@@ -136,6 +136,10 @@ class Builder
         if($this->current_schema !== null) {
             throw new FakerException('Scheam already added only have one');
         }
+        
+        if(isset($options['name']) === false) {
+            $options['name'] = $name;
+        }
        
         # validate the name for empty string
         
@@ -165,6 +169,10 @@ class Builder
         if(!$this->head instanceof Schema) {
             throw new FakerException('Must add a scheam first before adding a table');
         }
+        
+        if(isset($options['name']) === false) {
+            $options['name'] = $name;
+        }
     
         # merge options with default
         $options = array_merge(array(
@@ -173,8 +181,8 @@ class Builder
         
         
         # create the new table
-        
-        $table = new Table($name,$this->current_schema,$this->event,(integer)$options['generate'],$options);
+        $id = spl_object_hash($this->head).'.'.$name;
+        $table = new Table($id,$this->current_schema,$this->event,(integer)$options['generate'],$options);
         
         # add table to schema
         
@@ -202,6 +210,10 @@ class Builder
             throw new FakerException('Column requires a doctrine type');
         }
         
+        if(isset($options['name']) === false) {
+            $options['name'] = $name;
+        }
+        
          # find the doctine column type
         $doctrine = $this->column_factory->create($options['type']);
         
@@ -211,7 +223,8 @@ class Builder
                     ),$options);
     
         # create new column
-        $current_column = new Column($name,$this->head,$this->event,$doctrine,$options);
+        $id = spl_object_hash($this->head).'.'.$name;
+        $current_column = new Column($id,$this->head,$this->event,$doctrine,$options);
         
         # add the column to the table
         $this->head->addChild($current_column);
@@ -243,12 +256,14 @@ class Builder
             throw new FakerException('Foreign-key must have a name unique name try foreignTable.foriegnColumn');
         }
         
+        if(isset($options['name']) === false) {
+            $options['name'] = $name;
+        }
+        
+        $id = spl_object_hash($this->head);
+        
         # create new column
-        $foreign_key = new ForeignKey($name,$this->head,$this->event,array(
-                                                                        'foreignTable'  => $options['foreignTable'],
-                                                                        'foreignColumn' => $options['foreignColumn']
-                                                                        )
-                                      );
+        $foreign_key = new ForeignKey($id.'.'.$name,$this->head,$this->event,$options);
         
         # add the column to the table
         $this->head->addChild($foreign_key);
@@ -272,8 +287,13 @@ class Builder
         if(empty($name)) {
             throw new FakerException('Selector must have a name');
         }
+        
+        if(isset($options['name']) === false) {
+            $options['name'] = $name;
+        }
     
-
+        $parent_id = spl_object_hash($this->head);
+    
         switch($name) {
             case 'alternate':
                 if(isset($options['step']) === false) {
@@ -281,11 +301,13 @@ class Builder
                 }
                 
                 $current_selector = new Alternate(
-                                $name,
+                                $parent_id.'.'.$name,
                                 $this->head,
                                 $this->event,
                                 (int)$options['step']
                 );
+                
+                $current_selector->setOption('name',$options['name']);
                 
                 $this->head->addChild($current_selector);
                 
@@ -298,7 +320,13 @@ class Builder
                     throw new FakerException('Pick type needs a probability');
                 } 
                 
-                $current_selector = new Pick($name,$this->head,$this->event,$options['probability']);
+                $current_selector = new Pick($parent_id.'.'.$name,
+                                                $this->head,
+                                                $this->event,
+                                                $options['probability']
+                                             );
+                
+                $current_selector->setOption('name',$options['name']);
                 
                 $this->head->addChild($current_selector);
                 
@@ -308,10 +336,12 @@ class Builder
             
             case 'random' :
                 $current_selector = new Random(
-                                    $name,
+                                    $parent_id.'.'.$name,
                                     $this->head,
                                     $this->event
                 );
+                
+                $current_selector->setOption('name',$options['name']);
                 
                 $this->head->addChild($current_selector);
                 
@@ -321,10 +351,12 @@ class Builder
         
             case 'swap' :
                 $current_selector = new Swap(
-                                    $name,
+                                    $parent_id.'.'.$name,
                                     $this->head,
                                     $this->event
                 );
+                
+                $current_selector->setOption('name',$options['name']);
 
                 $this->head->addChild($current_selector);
                 
@@ -343,11 +375,13 @@ class Builder
                 }
                 
                 $when =  new When(
-                                    $name,
+                                    $parent_id.'.'.$name,
                                     $this->head,
                                     $this->event,
                                     $options['switch']
                 );
+                
+                $when->setOption('name',$options['name']);
                 
                 $this->head->addChild($when);
 
@@ -378,6 +412,10 @@ class Builder
         
         if(empty($name)) {
             throw new FakerException('Selector must have a name');
+        }
+        
+        if(isset($options['name']) === false) {
+            $options['name'] = $name;
         }
     
         # instance the type config
@@ -534,7 +572,9 @@ class Builder
       */
     public function end()
     {
-        $this->head = $this->head->getParent();
+        if(!$this->head instanceof Schema) {
+            $this->head = $this->head->getParent();
+        }
         
         return $this;
     }

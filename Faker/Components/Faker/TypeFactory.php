@@ -90,7 +90,8 @@ class TypeFactory implements ExtensionInterface
             throw new FakerException('Class not found at::'.self::$types[$name]);
         }
         
-        $type =  new self::$types[$name]($name,$parent,$this->event,$this->util,$this->generator);
+        $id = spl_object_hash($parent).'.'. $name;
+        $type =  new self::$types[$name]($id,$parent,$this->event,$this->util,$this->generator);
     
         return $type;
     }

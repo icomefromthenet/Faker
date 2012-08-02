@@ -66,7 +66,6 @@ class Column extends BaseComposite implements CacheInterface
         $this->options = $options;
         $this->use_cache = false;
         
-        $this->setOption('name',$id);
         
     }
     
@@ -79,7 +78,7 @@ class Column extends BaseComposite implements CacheInterface
         
         $this->event->dispatch(
                         FormatEvents::onColumnStart,
-                        new GenerateEvent($this,$values,$this->getId())
+                        new GenerateEvent($this,$values,$this->getOption('name'))
         );
         
         # send the generate command to the type
@@ -88,12 +87,12 @@ class Column extends BaseComposite implements CacheInterface
         foreach($this->child_types as $type) {
                          
             # if we have many types we concatinate
-            $value[] =$type->generate($rows,$values);
+            $value[] = $type->generate($rows,$values);
         
             # dispatch the generate event
             $this->event->dispatch(
                 FormatEvents::onColumnGenerate,
-                new GenerateEvent($this,array( $this->getId() => $value ),$this->getId())
+                new GenerateEvent($this,array( $this->getId() => $value ),$this->getOption('name'))
             );
         }
         
@@ -101,20 +100,20 @@ class Column extends BaseComposite implements CacheInterface
         # if one value we want to keep the type the same
         
         if(count($value) > 1) {
-            $values[$this->getId()] = implode('',$value); # join as a string 
+            $values[$this->getOption('name')] = implode('',$value); # join as a string 
         } else {
-            $values[$this->getId()] = $value[0]; 
+            $values[$this->getOption('name')] = $value[0]; 
         }
         
         # test if the value needs to be cached
         if($this->use_cache === true) {
-            $this->cache->add($values[$this->getId()]);
+            $this->cache->add($values[$this->getOption('name')]);
         }
         
         # dispatch the stop event
         $this->event->dispatch(
                 FormatEvents::onColumnEnd,
-                new GenerateEvent($this,$values,$this->getId())
+                new GenerateEvent($this,$values,$this->getOption('name'))
         );
         
         # return values so they can be grouped in table parent
@@ -186,7 +185,7 @@ class Column extends BaseComposite implements CacheInterface
       */
     public function toXml()
     {
-        $str = '<column name="'.$this->getId().'" type="'.$this->getColumnType()->getName().'">'.PHP_EOL;
+        $str = '<column name="'.$this->getOption('name').'" type="'.$this->getColumnType()->getName().'">'.PHP_EOL;
     
         foreach($this->getChildren() as $child) {
             $str .= $child->toXml();

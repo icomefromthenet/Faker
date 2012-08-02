@@ -51,11 +51,13 @@ class UniqueTest extends AbstractProject
         
         $type = new UniqueString($id,$parent,$event,$utilities,$generator);
         $type->setOption('format', 'xxxx');
+        $type->setOption('name','unique');
         $type->merge();        
         $this->assertSame('xxxx',$type->getOption('format'));
         
         $type = new UniqueNumber($id,$parent,$event,$utilities,$generator);
         $type->setOption('format', 'xxxx');
+        $type->setOption('name','unique');
         $type->merge();        
         $this->assertSame('xxxx',$type->getOption('format'));
         
@@ -87,6 +89,7 @@ class UniqueTest extends AbstractProject
         
         $type = new UniqueString($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','ccCC');
+        $type->setOption('name','unique');
         $type->setLocale($locale);
         $type->merge();        
         $type->validate(); 
@@ -119,6 +122,7 @@ class UniqueTest extends AbstractProject
         
         $type = new UniqueNumber($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','XXxx');
+        $type->setOption('name','unique');
         $type->merge(); 
         $type->validate(); 
          

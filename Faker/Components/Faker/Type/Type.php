@@ -9,6 +9,7 @@ use Faker\Components\Faker\Utilities,
     Faker\Components\Faker\Visitor\CacheInjectorVisitor,
     Faker\Components\Faker\Visitor\MapBuilderVisitor,
     Faker\Components\Faker\Visitor\RefCheckVisitor,
+    Faker\Components\Faker\Visitor\DirectedGraphVisitor,
     Faker\Components\Faker\Visitor\BaseVisitor,
     Faker\Components\Faker\Visitor\GeneratorInjectorVisitor,
     Faker\Components\Faker\Visitor\LocaleVisitor,
@@ -83,7 +84,6 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
             $this->setParent($parent);
         }
 	
-	$this->setOption('name',$id);
     }
    
    
@@ -99,7 +99,7 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
     
     public function toXml()
     {
-       $str =  '<datatype name="'.$this->getId().'">' . PHP_EOL;
+       $str =  '<datatype name="'.$this->getOption('name').'">' . PHP_EOL;
        
        foreach($this->options as $name => $option) {
 	    if($name !== 'locale' && $name !== 'name' ) {
@@ -363,6 +363,10 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
 	
 	if($visitor instanceof LocaleVisitor) {
 	    $visitor->visitLocale($this);
+	}
+	
+	if($visitor instanceof DirectedGraphVisitor) {
+	    $visitor->visitDirectedGraph($this);
 	}
 	
 	return $visitor;

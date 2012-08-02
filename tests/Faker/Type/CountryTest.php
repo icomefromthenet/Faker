@@ -50,11 +50,13 @@ class CountryTest extends AbstractProject
             
         $type = new Country($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries' ,'AU,US,UK');
+        $type->setOption('name','country');
         $type->merge();        
         $this->assertSame(array('AU','US','UK'),$type->getOption('countries'));
         
-        # test with no options
+        # test with min options
         $type = new Country($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','country');
         $type->merge();        
         $this->assertSame($type->getOption('countries'),null);
    
@@ -79,17 +81,18 @@ class CountryTest extends AbstractProject
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
         $generator->expects($this->exactly(3))
                   ->method('generate')
-                  ->with($this->equalTo(0),$this->equalTo(248))
+                  ->with($this->equalTo(0),$this->equalTo(247))
                   ->will($this->returnValue(0));
             
             
         $type = new Country($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','country');
         $type->merge();
         $type->validate(); 
          
-        $this->assertEquals('Afghanistan',$type->generate(1,array()));
-        $this->assertEquals('Afghanistan',$type->generate(1,array()));
-        $this->assertEquals('Afghanistan',$type->generate(1,array()));
+        $this->assertEquals('Albania',$type->generate(1,array()));
+        $this->assertEquals('Albania',$type->generate(1,array()));
+        $this->assertEquals('Albania',$type->generate(1,array()));
        
     }
     
@@ -115,6 +118,7 @@ class CountryTest extends AbstractProject
             
         $type = new Country($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries','AU');
+        $type->setOption('name','country');
         $type->merge();
         $type->validate(); 
          
@@ -147,6 +151,7 @@ class CountryTest extends AbstractProject
             
         $type = new Country($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries','AU,UK,US');
+        $type->setOption('name','country');
         $type->merge();
         $type->validate(); 
          
@@ -178,6 +183,7 @@ class CountryTest extends AbstractProject
             
         $type = new Country($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries','AU,GB,US');
+        $type->setOption('name','country');
         $type->merge();
         $type->validate(); 
          

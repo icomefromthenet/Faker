@@ -20,6 +20,7 @@ class ForeignKeyTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         
         $column = new ForeignKey($id,$parent,$event);
+        $column->setOption('name','foreign-key');
         
         $this->assertInstanceOf('Faker\Components\Faker\Composite\CompositeInterface',$column);
         $this->assertInstanceOf('Faker\Components\Faker\CacheInterface',$column);
@@ -32,7 +33,7 @@ class ForeignKeyTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=>'tb1', 'foreignColumn' => 'clmn1'));
+        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=>'tb1', 'foreignColumn' => 'clmn1','name' => 'foreign-key'));
 
         # assert use cache is default true
         $this->assertTrue($foreign->getUseCache()); 
@@ -52,7 +53,7 @@ class ForeignKeyTest extends AbstractProject
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable' => 'tbl1', 'foreignColumn' => 'clmn1'));
+        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable' => 'tbl1', 'foreignColumn' => 'clmn1','name' => 'foreign-key'));
         
         $xml = $foreign->toXml();
         $this->assertContains('<foreign-key name="tbl1.clmn1" foreignColumn="clmn1" foreignTable="tbl1">',$xml );
@@ -68,7 +69,7 @@ class ForeignKeyTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $foreign = new ForeignKey($id,$parent,$event);
+        $foreign = new ForeignKey($id,$parent,$event,array('name' => 'foreign-key'));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -89,7 +90,7 @@ class ForeignKeyTest extends AbstractProject
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd'));
+        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd','name' => 'foreign-key'));
         
         
         # test the default use cache true
@@ -114,7 +115,7 @@ class ForeignKeyTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd'));
+        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd','name' => 'foreign-key'));
 
         $this->assertTrue($foreign->getUseCache());
         
@@ -134,7 +135,7 @@ class ForeignKeyTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> '', 'foreignColumn' => 'aaa'));
+        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> '', 'foreignColumn' => 'aaa','name' => 'foreign-key'));
 
         $this->assertTrue($foreign->getUseCache());
         
@@ -154,7 +155,7 @@ class ForeignKeyTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'aa', 'foreignColumn' => ''));
+        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'aa', 'foreignColumn' => '','name' => 'foreign-key'));
 
         $this->assertTrue($foreign->getUseCache());
         
@@ -171,7 +172,7 @@ class ForeignKeyTest extends AbstractProject
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd'));
+        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd','name' => 'foreign-key'));
         
         # test the use cache property
         $foreign->setUseCache(true);
@@ -193,7 +194,7 @@ class ForeignKeyTest extends AbstractProject
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd'));
+        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd','name' => 'foreign-key'));
         $foreign->setUseCache(true);
         
         # setup the cache        

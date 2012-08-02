@@ -25,6 +25,7 @@ class NumericTest extends AbstractProject
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
         $type = new Numeric($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','numeric');
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -49,7 +50,8 @@ class NumericTest extends AbstractProject
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
         $type = new Numeric($id,$parent,$event,$utilities,$generator);
-        $type->setOption('format' ,'xxxx'); 
+        $type->setOption('format' ,'xxxx');
+        $type->setOption('name','numeric');
         $type->merge();        
     }
     
@@ -76,6 +78,7 @@ class NumericTest extends AbstractProject
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
         $type = new Numeric($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','numeric');
         $type->merge();        
         
         
@@ -107,6 +110,7 @@ class NumericTest extends AbstractProject
             
         $type = new Numeric($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','xxxx');
+        $type->setOption('name','numeric');
         $type->merge();
         $type->validate(); 
          
@@ -136,6 +140,7 @@ class NumericTest extends AbstractProject
             
         $type = new Numeric($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','xxxx.xx');
+        $type->setOption('name','numeric');
         $type->merge();
         $type->validate(); 
          

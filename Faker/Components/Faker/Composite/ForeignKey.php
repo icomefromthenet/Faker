@@ -198,6 +198,11 @@ class ForeignKey extends BaseComposite implements CacheInterface
 
         $rootNode
             ->children()
+                ->scalarNode('name')
+                    ->isRequired()
+                    ->info('unique name for this instance')
+                    ->cannotBeEmpty()
+                ->end()
                 ->scalarNode('foreignTable')
                     ->isRequired()
                     ->info('The exact name of the foreign table')

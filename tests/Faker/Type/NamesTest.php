@@ -49,7 +49,8 @@ class NamesTest extends AbstractProject
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
         
         $type = new Names($id,$parent,$event,$utilities,$generator);
-        $type->setOption('format','xxxx'); 
+        $type->setOption('format','xxxx');
+        $type->setOption('name','names');
         $type->merge();        
         $this->assertEquals('xxxx',$type->getOption('format'));
         
@@ -78,6 +79,7 @@ class NamesTest extends AbstractProject
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
         $type = new Names($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','names');
         $type->merge();        
     }
     
@@ -105,6 +107,7 @@ class NamesTest extends AbstractProject
             
         $type = new Names($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','{fname} {lname}');
+        $type->setOption('name','names');
         $type->merge();
         $type->validate(); 
          

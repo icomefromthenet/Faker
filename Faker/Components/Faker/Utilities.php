@@ -95,10 +95,10 @@ class Utilities
         // loop through each character and convert all unescaped X's to 1-9 and
         // unescaped x's to 0-9.
         $new_str = SimpleString::create("");
-                
-        for ($i = 0; $i < \strlen($str); $i++) {
+        $str     = SimpleString::create($str);                
+        for ($i = 0; $i < $str->length(); $i++) {
             
-            switch ($str[$i]) {
+            switch ($str->charAt($i)) {
                 // Numbers
                 case "X":
                     $new_str .= ceil($random->generate(1, 9));
@@ -117,44 +117,44 @@ class Utilities
                     $new_str .= $letters->charAt(ceil($random->generate(0, $letters->length()) - 1));
                 break;
                 case "l":
-                    $new_str .= \strtolower($letters[ceil($random->generate(0, $letters->length()) - 1)]);
+                    $new_str .= \mb_strtolower($letters->charAt(ceil($random->generate(0, $letters->length()) - 1)));
                 break;
                 case "D":
                     $bool = ceil($random->generate(0,1));
                     if ($bool === 0)
-                        $new_str .= $letters[ceil($random->generate(0, $letters->length()) - 1)];
+                        $new_str .= $letters->charAt(ceil($random->generate(0, $letters->length()) - 1));
                     else
-                        $new_str .= \strtolower($letters[ceil($random->generate(0, $letters->length()) - 1)]);
+                        $new_str .= \mb_strtolower($letters->charAt(ceil($random->generate(0, $letters->length()) - 1)));
                     break;
 
                 // Consonants
                 case "C":
-                    $new_str .= $consonants[ceil($random->generate(0, $consonants->length()) - 1)];
+                    $new_str .= $consonants->charAt(ceil($random->generate(0, $consonants->length()) - 1));
                 break;
                 case "c":
-                    $new_str .= \strtolower($consonants[ceil($random->generate(0,$consonants->length()) - 1)]);
+                    $new_str .= \mb_strtolower($consonants->charAt(ceil($random->generate(0,$consonants->length()) - 1)));
                 break;
                 case "E":
                     $bool = ceil($random->generate(0,1));
                     if ($bool === 0)
-                        $new_str .= $consonants[ceil($random->generate(0, $consonants->length()) - 1)];
+                        $new_str .= $consonants->charAt(ceil($random->generate(0, $consonants->length()) - 1));
                     else
-                        $new_str .= \strtolower($consonants[ceil($random->generate(0, $consonants->length()) - 1)]);
+                        $new_str .= \mb_strtolower($consonants->charAt(ceil($random->generate(0, $consonants->length()) - 1)));
                     break;
 
                 // Vowels
                 case "V":
-                    $new_str .= $vowels[ceil($random->generate(0,$vowels->length()) - 1)];
+                    $new_str .= $vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1));
                 break;
                 case "v":
-                    $new_str .= \strtolower($vowels[ceil($random->generate(0,$vowels->length()) - 1)]);
+                    $new_str .= \mb_strtolower($vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1)));
                 break;
                 case "F":
                     $bool = ceil($random->generate(0,1));
                     if ($bool === 0)
-                        $new_str .= $vowels[ceil($random->generate(0,$vowels->length()) - 1)];
+                        $new_str .= $vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1));
                     else
-                        $new_str .= \strtolower($vowels[ceil($random->generate(0,$vowels->length()) - 1)]);
+                        $new_str .=\mb_strtolower( $vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1)));
                 break;
      
                 //space char
@@ -163,7 +163,7 @@ class Utilities
                     $new_str .= " ";
                 break;    
                 default:
-                    $new_str .= $str[$i];
+                    $new_str .= $str->charAt($i);
                 break;
             }
         }

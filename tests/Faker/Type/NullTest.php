@@ -48,6 +48,7 @@ class NullTest extends AbstractProject
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
         $type = new Null($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','null');
         $type->merge();        
     }
     
@@ -71,6 +72,7 @@ class NullTest extends AbstractProject
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
         $type = new Null($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','null');
         $type->merge();
         $type->validate(); 
          

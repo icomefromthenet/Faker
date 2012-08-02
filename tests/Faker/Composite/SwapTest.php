@@ -29,6 +29,7 @@ class SwapTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
         $alt = new Swap($id,$parent,$event);
+        $alt->setOption('name','swap');
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -52,6 +53,7 @@ class SwapTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
         $alt = new Swap($id,$parent,$event);
+        $alt->setOption('name' ,'swap');
      
         $child_a = $this->getMockBuilder('\Faker\Components\Faker\Composite\When')->disableOriginalConstructor()->getMock();
         $child_a->expects($this->exactly(30))

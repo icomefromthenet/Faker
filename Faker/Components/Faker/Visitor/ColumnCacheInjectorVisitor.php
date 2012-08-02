@@ -79,7 +79,7 @@ class ColumnCacheInjectorVisitor extends BaseVisitor
         
             $table = $composite->getParent();
             # does the table and column name match the index
-            if($this->table === $table->getId() && $this->column === $composite->getId()) {
+            if($this->table === $table->getOption('name') && $this->column === $composite->getOption('name')) {
                 
                 
                 # does the column have cache interface
@@ -114,6 +114,11 @@ class ColumnCacheInjectorVisitor extends BaseVisitor
     }
     
     public function visitLocale(CompositeInterface $composite)
+    {
+        throw new FakerException('Not Implemented');
+    }
+    
+    public function visitDirectedGraph(CompositeInterface $composite)
     {
         throw new FakerException('Not Implemented');
     }

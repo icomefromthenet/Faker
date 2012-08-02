@@ -26,6 +26,11 @@ class Manager implements ManagerInterface
     protected $io;
 
     /**
+      *  @var boolean use the circular reference compiler check
+      */
+    protected $use_c_check = false;
+    
+    /**
       *  @var Faker\Project 
       */
     protected $project;
@@ -143,19 +148,22 @@ class Manager implements ManagerInterface
       */    
     public function getCompositeBuilder()
     {
+        $compiler = array(new KeysExistPass(),new CacheInjectorPass());
+        
+        if($this->use_c_check === true) {
+            $compiler[] =  new CircularRefPass();
+        }
+        $compiler[] = new GeneratorInjectorPass($this->project['generator_factory'],$this->project['random_generator']);
+        $compiler[] = new LocalePass(new LocaleVisitor($this->project->getLocaleFactory()));
+        
         return new Builder($this->project['event_dispatcher'],
                            $this->getPlatformFactory(),
                            $this->getColumnTypeFactory(),
                            $this->getTypeFactory(),
                            $this->getFormatterFactory(),
                            new Compiler(),
-                           array(
-                                new KeysExistPass(),
-                                new CacheInjectorPass(),
-                                new CircularRefPass(),
-                                new GeneratorInjectorPass($this->project['generator_factory'],$this->project['random_generator']),
-                                new LocalePass(new LocaleVisitor($this->project->getLocaleFactory()))
-                           ));        
+                           $compiler
+                           );        
     }
     
     /**
@@ -186,5 +194,31 @@ class Manager implements ManagerInterface
     }
     
     //  -------------------------------------------------------------------------
+    # Circular Reference Compiler Check    
+    
+    /**
+      *   Enable to Circular reference compiler check
+      *
+      *   @return void
+      *   @access public
+      */
+    public function enableCRCheck()
+    {
+        $this->use_c_check = true;
+    }
+    
+    /**
+      *  Disable to circular reference compiler check
+      *
+      *  @return void
+      *  @access public
+      */
+    public function disableCRCheck()
+    {
+        $this->use_c_check = false;
+    }
+    
+    //  ----------------------------------------------------------------------------
+    
 }
 /* End of File */

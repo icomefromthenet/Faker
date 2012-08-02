@@ -77,6 +77,11 @@ class LocaleVisitor extends BaseVisitor
     {
         throw new FakerException('Not Implemented');
     }
+    
+    public function visitDirectedGraph(CompositeInterface $composite)
+    {
+        throw new FakerException('Not Implemented');
+    }
 }
 
 /* End of File */

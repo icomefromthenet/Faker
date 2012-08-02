@@ -64,8 +64,6 @@ class Table extends BaseComposite
         
         $this->rows = $rows;
         
-        $this->setOption('name',$id);
-        
     }
    
     /**
@@ -77,7 +75,7 @@ class Table extends BaseComposite
        
         $this->event->dispatch(
                 FormatEvents::onTableStart,
-                new GenerateEvent($this,$values,$this->getId())
+                new GenerateEvent($this,$values,$this->getOption('name'))
         );
    
    
@@ -91,7 +89,7 @@ class Table extends BaseComposite
             
                 $this->event->dispatch(
                     FormatEvents::onRowStart,
-                    new GenerateEvent($this,$values,$this->getId())
+                    new GenerateEvent($this,$values,$this->getOption('name'))
                 );
 
                 # send the generate event to the columns
@@ -105,7 +103,7 @@ class Table extends BaseComposite
                 
                 $this->event->dispatch(
                     FormatEvents::onRowEnd,
-                    new GenerateEvent($this,$values,$this->getId())
+                    new GenerateEvent($this,$values,$this->getOption('name'))
                 );
 
                     
@@ -119,7 +117,7 @@ class Table extends BaseComposite
         
         $this->event->dispatch(
                     FormatEvents::onTableEnd,
-                    new GenerateEvent($this,$values,$this->getId())
+                    new GenerateEvent($this,$values,$this->getOption('name'))
         );
         
         return null;
@@ -181,7 +179,7 @@ class Table extends BaseComposite
     
     public function toXml()
     {
-        $str = sprintf('<table name="%s" generate="0">',$this->getId()). PHP_EOL;
+        $str = sprintf('<table name="%s" generate="0">',$this->getOption('name')). PHP_EOL;
      
         foreach($this->child_types as $child) {
                $str .= $child->toXml();     

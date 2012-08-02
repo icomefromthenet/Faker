@@ -25,6 +25,8 @@ abstract class BaseVisitor
     
     abstract public function visitLocale(CompositeInterface $composite);
     
+    abstract public function visitDirectedGraph(CompositeInterface $composite);
+    
     //------------------------------------------------------------------
 }
 /* End of File */

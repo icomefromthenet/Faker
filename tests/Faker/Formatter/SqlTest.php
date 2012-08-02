@@ -18,15 +18,15 @@ class SqlTest extends AbstractProject
         $project = $this->getProject();
         $builder = $project['faker_manager']->getCompositeBuilder();
        
-        $builder->addSchema('schema_1',array())
-                    ->addTable('table_1',array('generate' => 1000))
-                        ->addColumn('column_1',array('type' => 'text'))
-                            ->addType('alphanumeric',array())
+        $builder->addSchema('schema_1',array('name' =>'schema_1'))
+                    ->addTable('table_1',array('generate' => 1000,'name' =>'table_1'))
+                        ->addColumn('column_1',array('type' => 'text','name' =>'column_1'))
+                            ->addType('alphanumeric',array('name' => 'alphanumeric'))
                                 ->setTypeOption('format','Ccccc')
                             ->end()
                         ->end()
-                        ->addColumn('column_2',array('type' => 'integer'))
-                            ->addType('alphanumeric',array())
+                        ->addColumn('column_2',array('type' => 'integer','name' =>'column_2'))
+                            ->addType('alphanumeric',array('name' => 'alphanumeric'))
                                 ->setTypeOption('format','Ccccc')
                             ->end()
                         ->end()
@@ -146,7 +146,7 @@ class SqlTest extends AbstractProject
         $composite   = $this->getBuilderWithBasicComposite();
         $tables      = $composite->getChildren();
        
-        $generate_event    = new GenerateEvent($tables[0],array(),$tables[0]->getId());
+        $generate_event    = new GenerateEvent($tables[0],array(),$tables[0]->getOption('name'));
        
         $out = $this->formatter_mock->onTableStart($generate_event);
        
@@ -191,7 +191,7 @@ class SqlTest extends AbstractProject
         # need a column map (normally be done in on Row start event)
         $map = array();
         foreach($tables[0]->getChildren() as $column) {
-            $map[$column->getId()] = $column->getColumnType();
+            $map[$column->getOption('name')] = $column->getColumnType();
         }
         
         $this->formatter_mock->setColumnMap($map);
@@ -213,7 +213,7 @@ class SqlTest extends AbstractProject
         $composite   = $this->getBuilderWithBasicComposite();
         $tables    = $composite->getChildren();
 
-        $generate_event = new GenerateEvent($tables[0],array(),$tables[0]->getId());
+        $generate_event = new GenerateEvent($tables[0],array(),$tables[0]->getOption('name'));
         $this->formatter_mock->onTableEnd($generate_event);
         
         # was column map nulled

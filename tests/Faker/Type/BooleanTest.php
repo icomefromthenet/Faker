@@ -50,6 +50,7 @@ class BooleanTest extends AbstractProject
             
         $type = new BooleanType($id,$parent,$event,$utilities,$generator);
         $type->setOption('value' , true);
+        $type->setOption('name','boolean');
         $type->merge();        
     }
     
@@ -74,12 +75,14 @@ class BooleanTest extends AbstractProject
             
         $type = new BooleanType($id,$parent,$event,$utilities,$generator);
         $type->setOption('value',true);
+        $type->setOption('name','boolean');
         $type->validate(); 
          
         $this->assertEquals(true,$type->generate(1,array()));
         
         $type = new BooleanType($id,$parent,$event,$utilities,$generator);
         $type->setOption('value',false);
+        $type->setOption('name','boolean');
         $type->validate(); 
 
         $this->assertEquals(false,$type->generate(1,array()));

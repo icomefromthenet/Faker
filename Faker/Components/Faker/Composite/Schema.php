@@ -52,8 +52,7 @@ class Schema extends BaseComposite
         if($parent !== null) {
             $this->setParent($parent);
         }
-        
-        $this->setOption('name',$id);
+       
     }
     
     /**
@@ -65,7 +64,7 @@ class Schema extends BaseComposite
        
           $this->event->dispatch(
                FormatEvents::onSchemaStart,
-               new GenerateEvent($this,array(),$this->getId())
+               new GenerateEvent($this,array(),$this->getOption('name'))
           );
         
           # send generate command to children
@@ -78,7 +77,7 @@ class Schema extends BaseComposite
      
           $this->event->dispatch(
                FormatEvents::onSchemaEnd,
-               new GenerateEvent($this,array(),$this->getId())
+               new GenerateEvent($this,array(),$this->getOption('name'))
           );
     }
     
@@ -115,7 +114,7 @@ class Schema extends BaseComposite
       */
     public function getParent()
     {
-        return $this->parent_type;
+        throw new FakerException('Schema can have no parent');
     }
 
     /**
@@ -161,7 +160,7 @@ class Schema extends BaseComposite
           
           $str  = '<?xml version="1.0"?>' .PHP_EOL;
           
-          $str .= '<schema name="'.$this->getId().'">' . PHP_EOL;
+          $str .= '<schema name="'.$this->getOption('name').'">' . PHP_EOL;
      
           # generate xml def for each writter
           

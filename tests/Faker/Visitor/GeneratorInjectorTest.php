@@ -15,11 +15,11 @@ class GeneratorInjectorTest extends AbstractProject
         $default_generator = $this->getMock('Faker\Generator\GeneratorInterface');
         $factory_mock      = $this->getMock('Faker\Generator\GeneratorFactory');
         
-        $builder->addSchema('schema1',array())
+        $builder->addSchema('schema1',array('name' => 'schema1'))
                     ->addWriter('mysql','sql')
-                    ->addTable('table1',array('generate' => 100))
-                        ->addColumn('columnA',array('type' => 'string'))
-                            ->addType('alphanumeric',array())
+                    ->addTable('table1',array('generate' => 100,'name' => 'table1'))
+                        ->addColumn('columnA',array('type' => 'string','name' => 'columnA'))
+                            ->addType('alphanumeric',array('name' => 'alphanumeric'))
                                 ->setTypeOption('format','aaaa')
                             ->end()
                         ->end()
@@ -59,11 +59,11 @@ class GeneratorInjectorTest extends AbstractProject
                      ->with($this->equalTo('mersenne'))
                      ->will($this->returnValue($new_generator));
         
-        $builder->addSchema('schema1',array('randomGenerator' => 'mersenne','generatorSeed' => 100))
+        $builder->addSchema('schema1',array('randomGenerator' => 'mersenne','generatorSeed' => 100,'name' => 'schema1'))
                     ->addWriter('mysql','sql')
-                    ->addTable('table1',array('generate' => 100))
-                        ->addColumn('columnA',array('type' => 'string'))
-                            ->addType('alphanumeric',array())
+                    ->addTable('table1',array('generate' => 100,'name' => 'table1'))
+                        ->addColumn('columnA',array('type' => 'string','name' => 'columnA'))
+                            ->addType('alphanumeric',array('name' => 'alphanumeric'))
                                 ->setTypeOption('format','aaaa')
                             ->end()
                         ->end()
@@ -99,11 +99,11 @@ class GeneratorInjectorTest extends AbstractProject
                      ->with($this->equalTo('mersenne'))
                      ->will($this->returnValue($new_generator));
         
-        $builder->addSchema('schema1',array())
+        $builder->addSchema('schema1',array('name' => 'schema1'))
                     ->addWriter('mysql','sql')
-                    ->addTable('table1',array('generate' => 100,'randomGenerator' => 'mersenne','generatorSeed' => 100))
-                        ->addColumn('columnA',array('type' => 'string'))
-                            ->addType('alphanumeric',array())
+                    ->addTable('table1',array('generate' => 100,'randomGenerator' => 'mersenne','generatorSeed' => 100,'name' => 'table1'))
+                        ->addColumn('columnA',array('type' => 'string','name' => 'columnA'))
+                            ->addType('alphanumeric',array('name' => 'alphanumeric'))
                                 ->setTypeOption('format','aaaa')
                             ->end()
                         ->end()
@@ -139,11 +139,11 @@ class GeneratorInjectorTest extends AbstractProject
                      ->with($this->equalTo('mersenne'))
                      ->will($this->returnValue($new_generator));
         
-        $builder->addSchema('schema1',array())
+        $builder->addSchema('schema1',array('name' => 'schema1'))
                     ->addWriter('mysql','sql')
-                    ->addTable('table1',array('generate' => 100))
-                        ->addColumn('columnA',array('type' => 'string','randomGenerator' => 'mersenne','generatorSeed' => 100))
-                            ->addType('alphanumeric',array())
+                    ->addTable('table1',array('generate' => 100,'name' => 'table1'))
+                        ->addColumn('columnA',array('type' => 'string','randomGenerator' => 'mersenne','generatorSeed' => 100,'name' => 'columnA'))
+                            ->addType('alphanumeric',array('name' => 'alphanumeric'))
                                 ->setTypeOption('format','aaaa')
                             ->end()
                         ->end()
@@ -180,11 +180,11 @@ class GeneratorInjectorTest extends AbstractProject
                      ->with($this->equalTo('mersenne'))
                      ->will($this->returnValue($new_generator));
         
-        $builder->addSchema('schema1',array())
+        $builder->addSchema('schema1',array('name' => 'schema1'))
                     ->addWriter('mysql','sql')
-                    ->addTable('table1',array('generate' => 100))
-                        ->addColumn('columnA',array('type' => 'string'))
-                            ->addType('alphanumeric',array('randomGenerator' => 'mersenne','generatorSeed' => 100))
+                    ->addTable('table1',array('generate' => 100,'name' => 'table1'))
+                        ->addColumn('columnA',array('type' => 'string','name' => 'columnA'))
+                            ->addType('alphanumeric',array('randomGenerator' => 'mersenne','generatorSeed' => 100,'name' => 'alphanumeric'))
                                 ->setTypeOption('format','aaaa')
                             ->end()
                         ->end()

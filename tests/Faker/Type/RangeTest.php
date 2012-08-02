@@ -50,6 +50,7 @@ class RangeTest extends AbstractProject
         $type->setOption('min', 1 );
         $type->setOption('max', 100);
         $type->setOption('step', 1);
+        $type->setOption('name','range');
         $type->merge();        
         
         $this->assertEquals($type->getOption('min'),1);
@@ -84,6 +85,7 @@ class RangeTest extends AbstractProject
         $type = new Range($id,$parent,$event,$utilities,$generator);
         $type->setOption('max', 'aaa');
         $type->setOption('min' ,1);
+        $type->setOption('name','range');
         $type->merge();        
         
     }
@@ -113,6 +115,7 @@ class RangeTest extends AbstractProject
         $type = new Range($id,$parent,$event,$utilities,$generator);
         $type->setOption('max' , 100);
         $type->setOption('min' ,'aa');
+        $type->setOption('name','range');
         $type->merge();        
     }
     
@@ -142,6 +145,7 @@ class RangeTest extends AbstractProject
         $type->setOption('step' , 'bbb');
         $type->setOption('max', 100);
         $type->setOption('min' , 1);
+        $type->setOption('name','range');
         $type->merge();        
     }
     
@@ -171,6 +175,7 @@ class RangeTest extends AbstractProject
         $type->setOption('min',1);
         $type->setOption('max',4);
         $type->setOption('step',1);
+        $type->setOption('name','range');
         
         $type->validate(); 
          

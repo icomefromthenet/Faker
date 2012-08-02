@@ -240,6 +240,7 @@ class TextTest extends AbstractProject
         $type->setOption('paragraphs',5);
         $type->setOption('maxlines' ,5);
         $type->setOption('minlines' ,1);
+        $type->setOption('name','text');
         $type->merge();        
         
         $this->assertSame(5,$type->getOption('paragraphs'));
@@ -273,6 +274,7 @@ class TextTest extends AbstractProject
         $type->setOption('paragraphs','aaa');
         $type->setOption('maxlines' ,5);
         $type->setOption('minlines' ,1);
+        $type->setOption('name','text');
         $type->merge();        
         
         
@@ -302,6 +304,7 @@ class TextTest extends AbstractProject
         $type->setOption('paragraphs',1);
         $type->setOption('maxlines' ,5);
         $type->setOption('minlines' ,'aaa');
+        $type->setOption('name','text');
         $type->merge();        
         
         
@@ -331,6 +334,7 @@ class TextTest extends AbstractProject
         $type->setOption('paragraphs',1);
         $type->setOption('maxlines' ,'aaa');
         $type->setOption('minlines' ,1);
+        $type->setOption('name','text');
         $type->merge();        
         
         
@@ -375,6 +379,7 @@ class TextTest extends AbstractProject
         $type->setOption('paragraphs',5);
         $type->setOption('maxlines',30);
         $type->setOption('minlines',5);
+        $type->setOption('name','text');
         $type->setLocale($locale);
         $type->merge();
         $type->validate(); 
@@ -420,6 +425,7 @@ class TextTest extends AbstractProject
         $type->setOption('paragraphs',5);
         $type->setOption('maxlines',30);
         $type->setOption('minlines',5);
+        $type->setOption('name','text');
         $type->setLocale($locale);
         $type->merge();
         $type->validate(); 

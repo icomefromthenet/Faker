@@ -33,6 +33,7 @@ class PickTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
         $pick = new Pick($id,$parent,$event,$probability);
+        $pick->setOption('name','pick');
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -59,6 +60,7 @@ class PickTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
         $random = new Pick($id,$parent,$event,$probability);
+        $random->setOption('name','pick');
      
         $generatorA = $this->getMock('Faker\Generator\GeneratorInterface');  
         $generatorA->expects($this->once())
@@ -141,7 +143,7 @@ class PickTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
         $random = new Pick($id,$parent,$event,$probability);
-        
+        $random->setOption('name','pick');
         $this->assertTrue(true);
     }
         

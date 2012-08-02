@@ -38,8 +38,14 @@ class AlphaNumeric extends Type
         return $rootNode
             ->children()
                 ->scalarNode('format')
-                ->isRequired()
-                ->info('Text format to use')
+                    ->info('Text format to use')
+                    ->example('xxxxx ccccCC')
+                ->end()
+                ->scalarNode('from')
+                
+                ->end()
+                ->scalarNode('to')
+                
                 ->end()
             ->end();
             

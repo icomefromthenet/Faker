@@ -28,6 +28,10 @@ class GenerateCommand extends Command
         #event manager
         $event = $project['event_dispatcher'];
        
+        if($input->getOption('crc') === true) {
+            $faker_manager->enableCRCheck();
+        }
+       
          # fetch the schem parser        
         $parser = $faker_manager->getSchemaParser();
         $parser->register();
@@ -94,11 +98,13 @@ faker:generate schema.xml true <info>Use the debug outputter.</info>
 
 faker:generate                 <info>Parse schema.xml (default) in sources dir.</info>
 
+aker:generate --crc            <info>Enable a Circular Reference Compiler Check</info>
+
 EOF
         );
 
         $this->addArgument('schema',InputArgument::OPTIONAL, 'The name of the schema file','schema.xml');
-        
+        $this->addOption('crc', null,null, 'Enable Circular Reference Compiler Check',null);
         parent::configure();
     }
 

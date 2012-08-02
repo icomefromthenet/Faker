@@ -26,6 +26,7 @@ class EmailTest extends AbstractProject
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
         $type = new Email($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','email');
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -52,6 +53,7 @@ class EmailTest extends AbstractProject
         $type = new Email($id,$parent,$event,$utilities,$generator);
         $type->setOption('format' ,'xxxx');
         $type->setOption('domains' , 'au,com.au');
+        $type->setOption('name','email');
         $type->merge();        
         
         $this->assertEquals('xxxx',$type->getOption('format'));
@@ -82,6 +84,7 @@ class EmailTest extends AbstractProject
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
         $type = new Email($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','email');
         $type->merge();        
         
     }
@@ -123,7 +126,7 @@ class EmailTest extends AbstractProject
         $type = new Email($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','{fname}\'{lname}{alpha2}@{alpha1}.{domain}');
         $type->setOption('params','{"alpha1":"ccCCC","alpha2":"xxxx"}');
-
+        $type->setOption('name','email');
         $type->setLocale($locale);
         $type->merge();       
         $type->validate(); 

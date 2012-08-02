@@ -51,6 +51,7 @@ class CitiesTest extends AbstractProject
             
         $type = new Cities($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries' ,'AU,US,UK');
+        $type->setOption('name','cities');
         $type->merge();        
         
         $this->assertSame($type->getOption('countries'),array('AU','US','UK'));
@@ -81,6 +82,7 @@ class CitiesTest extends AbstractProject
             
         $type = new Cities($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries','AU');
+        $type->setOption('name','cities');
         $type->merge();
         $type->validate(); 
         
@@ -112,6 +114,7 @@ class CitiesTest extends AbstractProject
             
         $type = new Cities($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries','AU');
+        $type->setOption('name','cities');
         $type->merge();
         $type->validate(); 
         
@@ -143,6 +146,7 @@ class CitiesTest extends AbstractProject
             
         $type = new Cities($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries','AU');
+        $type->setOption('name','cities');
         $type->merge();
         $type->validate(); 
         
@@ -176,6 +180,7 @@ class CitiesTest extends AbstractProject
             
         $type = new Cities($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries','ASASAASAAU');
+        $type->setOption('name','cities');
         $type->merge();
         $type->validate(); 
         

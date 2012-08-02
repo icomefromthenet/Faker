@@ -7,6 +7,7 @@ use Faker\Components\Faker\OptionInterface,
     Faker\Components\Faker\Visitor\ColumnCacheInjectorVisitor,
     Faker\Components\Faker\Visitor\ForeignCacheInjectorVisitor,
     Faker\Components\Faker\Visitor\MapBuilderVisitor,
+    Faker\Components\Faker\Visitor\DirectedGraphVisitor,
     Faker\Components\Faker\Visitor\RefCheckVisitor,
     Faker\Components\Faker\Visitor\BaseVisitor,
     Symfony\Component\Config\Definition\Processor,
@@ -36,6 +37,21 @@ abstract class BaseComposite extends BaseNode implements OptionInterface, Compos
         $treeBuilder = new TreeBuilder();
         $rootNode    = $treeBuilder->root('config');
 
+        $rootNode
+            ->children()
+                 ->scalarNode('name')
+                    ->isRequired()
+                    ->info('The Name of the Column')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new \Faker\Components\Faker\Exception('Column::Name must be a string');
+                        })
+                    ->end()
+            ->end();
+        
         return $treeBuilder;
     }
     
@@ -164,6 +180,10 @@ abstract class BaseComposite extends BaseNode implements OptionInterface, Compos
        
        if($visitor instanceof GeneratorInjectorVisitor) {
             $visitor->visitGeneratorInjector($this);
+       }
+       
+       if($visitor instanceof DirectedGraphVisitor) {
+            $visitor->visitDirectedGraph($this);
        }
        
        # send visitor to the children.

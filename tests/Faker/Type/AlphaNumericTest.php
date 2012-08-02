@@ -49,37 +49,11 @@ class AlphaNumericTest extends AbstractProject
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
         $type = new AlphaNumeric($id,$parent,$event,$utilities,$generator);
-        $type->setOption('format','xxxx'); 
+        $type->setOption('format','xxxx');
+        $type->setOption('name','alphanumeric');
         $type->merge();        
     }
     
-    //  -------------------------------------------------------------------------
-    
-    /**
-      *  @expectedException \Faker\Components\Faker\Exception
-      *  @expectedExceptionMessage The child node "format" at path "config" must be configured
-      */
-    public function testConfigMissingFormat()
-    {
-        $id = 'table_two';
-        
-        $utilities = $this->getMockBuilder('Faker\Components\Faker\Utilities')
-                          ->disableOriginalConstructor()
-                          ->getMock(); 
-        
-        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')
-                        ->getMock();
-                        
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
-                      ->getMock();
-        
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
-            
-        $type = new AlphaNumeric($id,$parent,$event,$utilities,$generator);
-        $type->merge();        
-        
-        
-    }
     
     //  -------------------------------------------------------------------------
     
@@ -109,6 +83,7 @@ class AlphaNumericTest extends AbstractProject
             
         $type = new AlphaNumeric($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','ccCC');
+        $type->setOption('name','alphanumeric');
         $type->setLocale($locale);
         $type->merge();
         $type->validate(); 

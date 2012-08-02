@@ -60,7 +60,7 @@ class RefCheckVisitor extends BaseVisitor
             
             $table = $composite->getParent();
             
-            if($this->table === $table->getId() && $this->column === $composite->getId()) {
+            if($this->table === $table->getOption('name') && $this->column === $composite->getOption('name')) {
                 # set the obj container to reference the matched column
                 $this->obj = $composite;                
             }
@@ -75,6 +75,11 @@ class RefCheckVisitor extends BaseVisitor
     }
     
     public function visitLocale(CompositeInterface $composite)
+    {
+        throw new FakerException('Not Implemented');
+    }
+    
+    public function visitDirectedGraph(CompositeInterface $composite)
     {
         throw new FakerException('Not Implemented');
     }

@@ -49,6 +49,7 @@ class DateTest extends AbstractProject
             
         $type = new Date($id,$parent,$event,$utilities,$generator);
         $type->setOption('start', '14-01-1983');
+        $type->setOption('name','date');
         $type->merge();        
         
         $this->assertInstanceOf('\DateTime',$type->getOption('start'));
@@ -78,7 +79,8 @@ class DateTest extends AbstractProject
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
         $type = new Date($id,$parent,$event,$utilities,$generator);
-        $type->setOption('aaaa' , 'bbb'); 
+        $type->setOption('aaaa' , 'bbb');
+        $type->setOption('name','date');
         $type->merge();        
         
     }
@@ -107,6 +109,7 @@ class DateTest extends AbstractProject
             
         $type = new Date($id,$parent,$event,$utilities,$generator);
         $type->setOption('start' , 'bbb');
+        $type->setOption('name','date');
         $type->merge();        
         
         
@@ -137,6 +140,7 @@ class DateTest extends AbstractProject
         $type = new Date($id,$parent,$event,$utilities,$generator);
         $type->setOption('max' , 'bbb');
         $type->setOption('start' ,'1st August 2007');
+        $type->setOption('name','date');
         $type->merge();        
         
         
@@ -167,6 +171,7 @@ class DateTest extends AbstractProject
         # test with start > 0
         $type->setOption('start','today');
         $type->setOption('modify','+ 1 hour');
+        $type->setOption('name','date');
         $type->merge();
         $type->validate(); 
          
@@ -178,6 +183,7 @@ class DateTest extends AbstractProject
         $type->setOption('start','today');
         $type->setOption('modify','+ 1 hour');
         $type->setOption('max','today +3 hours');
+        $type->setOption('name','date');
         $type->merge();
         $type->validate(); 
         

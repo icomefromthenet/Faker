@@ -31,6 +31,7 @@ class AlternateTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
         $alt = new Alternate($id,$parent,$event,$step);
+        $alt->setOption('name','alternate');
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -55,6 +56,7 @@ class AlternateTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
         $alt = new Alternate($id,$parent,$event,$step);
+        $alt->setOption('name','alternate');
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_a->expects($this->exactly(50))

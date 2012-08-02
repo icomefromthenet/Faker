@@ -12,7 +12,7 @@ class CircularRefPassTest extends AbstractProject
 
     /**
       *  @expectedException \Faker\Components\Faker\Exception
-      *  @expectedExceptionMessage Is a Bad Dependency between Relationships table1 and table2
+      *  @expectedExceptionMessage Circular reference detected
       */
     public function testCircularRefPassBadRef()
     {

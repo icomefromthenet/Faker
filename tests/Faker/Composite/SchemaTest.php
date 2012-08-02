@@ -33,7 +33,7 @@ class SchemaTest extends AbstractProject
               ->method('dispatch')
               ->with($this->logicalOr($this->stringContains(FormatEvents::onSchemaStart), $this->stringContains(FormatEvents::onSchemaEnd)),$this->isInstanceOf('\Faker\Components\Faker\Formatter\GenerateEvent'));
               
-        $schema = new Schema($id,null,$event);
+        $schema = new Schema($id,null,$event,array('name' => $id));
         $schema->generate(1,array());
         
     }
@@ -43,7 +43,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event);
+        $schema = new Schema($id,null,$event,array('name' => $id));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_a->expects($this->once())
@@ -67,7 +67,7 @@ class SchemaTest extends AbstractProject
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
      
-        $schema = new Schema($id,null,$event);
+        $schema = new Schema($id,null,$event,array('name' => $id));
         
         $schema->setOption('locale','en');
         $this->assertEquals($schema->getOption('locale'),'en');
@@ -78,7 +78,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event);
+        $schema = new Schema($id,null,$event,array('name' => $id));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_a->expects($this->once())
@@ -106,7 +106,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event);
+        $schema = new Schema($id,null,$event,array('name' => $id));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -117,7 +117,6 @@ class SchemaTest extends AbstractProject
         
         $this->assertEquals($schema->getChildren(),array($child_a,$child_b));
         $this->assertSame($schema->getEventDispatcher(),$event);
-        $this->assertEquals(null,$schema->getParent());
         $this->assertEquals($id,$schema->getId());
         $this->assertEquals(array('one','two'),$schema->getWriters());
     }
