@@ -1,8 +1,8 @@
 <?php
-
 namespace Faker\Components\Faker\Compiler\Pass;
 
 use Faker\Components\Faker\Compiler\CompilerPassInterface,
+    Faker\Components\Faker\Compiler\CompilerInterface,
     Faker\Components\Faker\Composite\CompositeInterface,
     Faker\Components\Faker\Visitor\Relationships,
     Faker\Components\Faker\GeneratorCache,
@@ -27,8 +27,9 @@ class CacheInjectorPass implements CompilerPassInterface
       *  missing ones will not cause error, run KeysExistPass first
       *
       *  @param CompositeInterface $composite
+      *  @param CompilerInterface  $cmp
       */
-    public function process(CompositeInterface $composite)
+    public function process(CompositeInterface $composite,CompilerInterface $cmp)
     {
         # build the relationship map        
         $map_visitor    = new MapBuilderVisitor(new Relationships());

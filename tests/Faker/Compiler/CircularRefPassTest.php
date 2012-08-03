@@ -2,6 +2,9 @@
 namespace Faker\Tests\Faker\Compiler;
 
 use Faker\Components\Faker\Compiler\Pass\CircularRefPass,
+    Faker\Components\Faker\Compiler\Graph\DirectedGraph,
+    Faker\Components\Faker\Composite\CompositeInterface,
+    Faker\Components\Faker\Visitor\DirectedGraphVisitor,
     Faker\Components\Faker\GeneratorCache,
     Faker\Tests\Base\AbstractProject;
 
@@ -17,9 +20,16 @@ class CircularRefPassTest extends AbstractProject
     public function testCircularRefPassBadRef()
     {
         $pass = new CircularRefPass();
-        $composite = $this->getComposite();
         
-        $pass->process($composite);
+        $composite = $this->getComposite();
+        $graph = $this->buildDirectedGraph($composite);
+
+        $compiler = $this->getMock('Faker\Components\Faker\Compiler\CompilerInterface');
+        $compiler->expects($this->once())
+                 ->method('getGraph')
+                 ->will($this->returnValue($graph));
+        
+        $pass->process($composite,$compiler);
         
         
     }
@@ -28,12 +38,26 @@ class CircularRefPassTest extends AbstractProject
     {
         $pass = new CircularRefPass();
         $composite = $this->getCompositeNoCircularRef();
+        $graph = $this->buildDirectedGraph($composite);
         
-        $pass->process($composite);
+        $compiler = $this->getMock('Faker\Components\Faker\Compiler\CompilerInterface');
+        $compiler->expects($this->once())
+                 ->method('getGraph')
+                 ->will($this->returnValue($graph));
+        
+        $pass->process($composite,$compiler);
         
     }
         
         
+    protected function buildDirectedGraph(CompositeInterface $com)
+    {
+        $visitor = new DirectedGraphVisitor(new DirectedGraph());
+        $com->acceptVisitor($visitor);
+        return  $visitor->getDirectedGraph();   
+    }
+    
+    
     protected function getComposite()
     {
         $project = $this->getProject();

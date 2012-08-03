@@ -12,12 +12,13 @@ class LocalePassTest extends AbstractProject
 
     public function testLocalePass()
     {
+       $compiler = $this->getMock('Faker\Components\Faker\Compiler\CompilerInterface');
        $project   = $this->getProject();
        $composite = $this->getComposite();
        $visitor   = new LocaleVisitor($project->getLocaleFactory());
        $pass      = new LocalePass($visitor);
     
-       $pass->process($composite);
+       $pass->process($composite,$compiler);
        
        $tables  = $composite->getChildren();
        $columns = $tables[0]->getChildren();

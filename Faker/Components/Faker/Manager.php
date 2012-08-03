@@ -13,6 +13,9 @@ use Faker\Project,
     Faker\Components\Faker\Compiler\Pass\KeysExistPass,
     Faker\Components\Faker\Compiler\Pass\GeneratorInjectorPass,
     Faker\Components\Faker\Compiler\Pass\LocalePass,
+    Faker\Components\Faker\Compiler\Pass\TopOrderPass,
+    Faker\Components\Faker\Compiler\Graph\DirectedGraph,
+    Faker\Components\Faker\Visitor\DirectedGraphVisitor,
     Faker\Components\Faker\Visitor\LocaleVisitor,
     Faker\Components\Faker\Compiler\Compiler;
 
@@ -148,21 +151,22 @@ class Manager implements ManagerInterface
       */    
     public function getCompositeBuilder()
     {
-        $compiler = array(new KeysExistPass(),new CacheInjectorPass());
+        $compiler_pass = array(new KeysExistPass(),new CacheInjectorPass());
         
         if($this->use_c_check === true) {
-            $compiler[] =  new CircularRefPass();
+            $compiler_pass[] =  new CircularRefPass();
+            $compiler_pass[] =  new TopOrderPass();
         }
-        $compiler[] = new GeneratorInjectorPass($this->project['generator_factory'],$this->project['random_generator']);
-        $compiler[] = new LocalePass(new LocaleVisitor($this->project->getLocaleFactory()));
+        $compiler_pass[] = new GeneratorInjectorPass($this->project['generator_factory'],$this->project['random_generator']);
+        $compiler_pass[] = new LocalePass(new LocaleVisitor($this->project->getLocaleFactory()));
         
         return new Builder($this->project['event_dispatcher'],
                            $this->getPlatformFactory(),
                            $this->getColumnTypeFactory(),
                            $this->getTypeFactory(),
                            $this->getFormatterFactory(),
-                           new Compiler(),
-                           $compiler
+                           new Compiler(new DirectedGraphVisitor(new DirectedGraph())),
+                           $compiler_pass
                            );        
     }
     

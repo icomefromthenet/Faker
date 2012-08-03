@@ -30,6 +30,11 @@ class GraphNode
       *  @var string the value 
       */
     protected $value;
+    
+     /**
+      *  @var boolean has the node been visited 
+      */
+    protected $visited;
 
     /**
     * Constructor.
@@ -43,6 +48,7 @@ class GraphNode
         $this->value = $value;
         $this->inEdges = array();
         $this->outEdges = array();
+        $this->visited    = false;
     }
 
     /**
@@ -109,6 +115,29 @@ class GraphNode
     public function getValue()
     {
         return $this->value;
+    }
+    
+      /**
+      *  Has this node been visited 
+      */
+    public function getVisited()
+    {
+        return $this->visited;
+    }
+    
+    /**
+      *  Set if this node has been visited
+      *
+      *  @access public
+      *  @param boolean $visit
+      */    
+    public function setVisited($visit)
+    {
+        if(is_bool($visit) === false) {
+            throw new FakerException('Visited argumemt must be a boolean was :: '.$visited);
+        }
+        
+        $this->visited = $visit;
     }
 }
 /* End of Service */

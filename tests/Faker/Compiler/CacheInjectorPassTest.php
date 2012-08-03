@@ -12,9 +12,11 @@ class CacheInjectorPassTest extends AbstractProject
 
     public function testCacheInjector()
     {
+        $compiler = $this->getMock('Faker\Components\Faker\Compiler\CompilerInterface');
+        
         $pass = new CacheInjectorPass();
         $composite = $this->getComposite();
-        $pass->process($composite);
+        $pass->process($composite,$compiler);
         
         $tables = $composite->getChildren();
         

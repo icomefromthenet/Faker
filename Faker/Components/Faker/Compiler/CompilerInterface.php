@@ -1,7 +1,8 @@
 <?php
 namespace Faker\Components\Faker\Compiler;
 
-use Faker\Components\Faker\Composite\CompositeInterface;
+use Faker\Components\Faker\Composite\CompositeInterface,
+    Faker\Components\Faker\Compiler\Graph\DirectedGraph;
 
 /*
  * interface CompilerInterface
@@ -30,6 +31,23 @@ interface CompilerInterface
       *  @param CompositeInterface $composite
       */
     public function compile(CompositeInterface $composite);
+    
+    /**
+      *  Set the Directed Graph so only run once
+      *
+      *  @access public
+      *  @param DirectedGraph $graph
+      *  @return void
+      */
+    public function setGraph(DirectedGraph $graph);
+    
+    /**
+      *  Fetch the DirectedGraph
+      *
+      *  @access public
+      *  @return DirectedGraph
+      */
+    public function getGraph();
     
 }
 /* End of File */

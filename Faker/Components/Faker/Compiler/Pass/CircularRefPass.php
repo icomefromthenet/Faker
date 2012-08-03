@@ -2,11 +2,12 @@
 namespace Faker\Components\Faker\Compiler\Pass;
 
 use Faker\Components\Faker\Compiler\CompilerPassInterface,
+    Faker\Components\Faker\Compiler\CompilerInterface,
     Faker\Components\Faker\Composite\CompositeInterface,
     Faker\Components\Faker\Visitor\Relationships,
     Faker\Components\Faker\Exception as FakerException,
-    Faker\Components\Faker\Compiler\Graph\DirectedGraph,
-    Faker\Components\Faker\Visitor\DirectedGraphVisitor;
+    Faker\Components\Faker\Compiler\Graph\DirectedGraph;
+    
     
     
 
@@ -39,13 +40,11 @@ class CircularRefPass implements CompilerPassInterface
       *  a requires b and requires c but c requires a, a giant circle.
       *
       *  @param CompositeInterface $composite
+      *  @param CompilerInterface $cmp
       */
-    public function process(CompositeInterface $composite)
+    public function process(CompositeInterface $composite, CompilerInterface $cmp)
     {
-        # build the relationship map        
-        $map_visitor    = new DirectedGraphVisitor(new DirectedGraph());
-        $composite->acceptVisitor($map_visitor);
-        $graph = $map_visitor->getDirectedGraph();
+        $graph = $cmp->getGraph();
         
         foreach ($graph->getNodes() as $id => $node) {
             $this->current_id = $id;

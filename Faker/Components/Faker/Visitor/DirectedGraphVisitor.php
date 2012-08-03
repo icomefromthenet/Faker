@@ -76,11 +76,11 @@ class DirectedGraphVisitor extends BaseVisitor
             
         } elseif($composite instanceof Column) {
             # if instance of column connect to table
-            #$this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
+            $this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
                 
         } elseif($composite instanceof ForeignKey) {
             # if have a fk connect two columns together and connect the fk with parent element          
-            #$this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
+            $this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
         
            $finder = new CompositeFinder();
         
@@ -96,10 +96,10 @@ class DirectedGraphVisitor extends BaseVisitor
                         if($column->getOption('name') === $composite->getOption('foreignColumn')) {
                             
                             # connect the fk type to the referenced column
-                            #$this->graph->connect($composite->getId(),$composite,$column->getId(),$column);
+                            $this->graph->connect($composite->getId(),$composite,$column->getId(),$column);
                             
                             # tables are now related connect them
-                            $this->graph->connect($table->getId(),$table,$parent_table->getId(),$parent_table);
+                            $this->graph->connect($parent_table->getId(),$parent_table,$table->getId(),$table);
                             
                             break;
                         }
@@ -110,11 +110,11 @@ class DirectedGraphVisitor extends BaseVisitor
            
         } elseif ($composite instanceof SelectorInterface) {
            # process selectors add to parent 
-           #$this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
+           $this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
            
         } elseif ($composite instanceof BaseType) {
            # process add datatype to parent could be column or selector
-           #$this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
+           $this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
            
         } else {
             # could be writer but we will ignore those

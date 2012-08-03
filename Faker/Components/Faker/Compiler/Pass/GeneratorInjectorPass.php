@@ -2,6 +2,7 @@
 namespace Faker\Components\Faker\Compiler\Pass;
 
 use Faker\Components\Faker\Compiler\CompilerPassInterface,
+    Faker\Components\Faker\Compiler\CompilerInterface,
     Faker\Components\Faker\Composite\CompositeInterface,
     Faker\Components\Faker\Visitor\GeneratorInjectorVisitor,
     Faker\Generator\GeneratorInterface,
@@ -41,8 +42,9 @@ class GeneratorInjectorPass implements CompilerPassInterface
       *  missing ones will not cause error, run KeysExistPass first
       *
       *  @param CompositeInterface $composite
+      *  @param Compiler $cmp
       */
-    public function process(CompositeInterface $composite)
+    public function process(CompositeInterface $composite,CompilerInterface $cmp)
     {
         $visitor = new GeneratorInjectorVisitor($this->factory,$this->default_generator);
        

@@ -3,6 +3,7 @@ namespace Faker\Components\Faker\Compiler;
 
 use Faker\Components\Faker\Composite\CompositeInterface;
 
+
 /*
  * interface CompilerPassInterface
  *
@@ -18,8 +19,9 @@ interface CompilerPassInterface
       *
       *  @access public
       *  @param CompositeInterface $compiler
+      *  @param CompilerInterface  $cmp
       */
-    public function process(CompositeInterface $composite);    
+    public function process(CompositeInterface $composite, CompilerInterface $cmp);    
     
 }
 /* End of File */

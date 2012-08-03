@@ -2,6 +2,7 @@
 namespace Faker\Components\Faker\Compiler\Pass;
 
 use Faker\Components\Faker\Compiler\CompilerPassInterface,
+    Faker\Components\Faker\Compiler\CompilerInterface,
     Faker\Components\Faker\Composite\CompositeInterface,
     Faker\Components\Faker\Visitor\LocaleVisitor;
 
@@ -32,8 +33,9 @@ class LocalePass implements CompilerPassInterface
       *  Will inject Locale into the composite
       *
       *  @param CompositeInterface $composite
+      *  @param CompilerInterface $cmp
       */
-    public function process(CompositeInterface $composite)
+    public function process(CompositeInterface $composite,CompilerInterface $cmp)
     {
         $composite->acceptVisitor($this->visitor);
     }

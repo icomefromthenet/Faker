@@ -26,6 +26,8 @@ class GraphEdge
       */
     protected $value;
 
+   
+    
     /**
     * Constructor.
     *
@@ -36,8 +38,8 @@ class GraphEdge
     public function __construct(GraphNode $sourceNode, GraphNode $destNode, $value = null)
     {
         $this->sourceNode = $sourceNode;
-        $this->destNode = $destNode;
-        $this->value = $value;
+        $this->destNode   = $destNode;
+        $this->value      = $value;
     }
 
     /**
@@ -72,5 +74,6 @@ class GraphEdge
     {
         return $this->destNode;
     }
+     
 }
 /* End of File */

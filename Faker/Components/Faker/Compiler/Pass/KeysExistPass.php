@@ -2,6 +2,7 @@
 namespace Faker\Components\Faker\Compiler\Pass;
 
 use Faker\Components\Faker\Composite\CompositeInterface,
+    Faker\Components\Faker\Compiler\CompilerInterface,
     Faker\Components\Faker\Exception as FakerException,
     Faker\Components\Faker\Compiler\CompilerPassInterface,
     Faker\Components\Faker\Visitor\MapBuilderVisitor,
@@ -20,9 +21,11 @@ class KeysExistPass implements CompilerPassInterface
       *
       *  @access public
       *  @param CompositeInterface $compiler
+      *  @param CompilerInterface  $cmp
       */
-    public function process(CompositeInterface $composite)
+    public function process(CompositeInterface $composite,CompilerInterface $cmp)
     {
+        
         # use map visitor and gather our maps
         $map_visitor = new MapBuilderVisitor(new Relationships());
         $composite->acceptVisitor($map_visitor);
