@@ -101,10 +101,20 @@ class TopOrderPass implements CompilerPassInterface
         
     }
     
-    
+    /**
+      *  Set the composite Schema with new Table order
+      *
+      *  @access public
+      *  @param CompositeInterface $composite
+      *  @param array $order the node list
+      */    
     public function sortComposite(CompositeInterface $composite,array $order)
     {
+        $composite->removeChildren();
         
+        foreach ($order as $node) {
+            $composite->addChild($node->getValue());
+        }
         
     }
     
