@@ -144,6 +144,18 @@ class Schema extends BaseComposite
     }
     
     /**
+      *  Remove the children from the schema
+      *
+      *  @access public
+      */
+    public function removeChildren()
+    {
+        $this->child_types = array();
+        
+    }
+    
+    
+    /**
       *  @inheritdoc
       */
     public function getEventDispatcher()

@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface,
     Faker\Command\Base\Command,
     Faker\Components\Faker\DebugOutputter,
     Faker\Components\Faker\ProgressBarOutputter,
+    Faker\Components\Faker\BuilderConsoleOutput,
     Faker\Parser\FileFactory,
     Faker\Parser\ParseOptions,
     Faker\Command\Base\FakerCommand,
@@ -46,11 +47,16 @@ class GenerateCommand extends Command
         
         $file =  $source_io->load($schema_file,'',true);          
         
+        # bind build events output handler
+        $event->addSubscriber(new BuilderConsoleOutput($event,$output));
+        
         # parse the schema file
         $builder = $parser->parse(FileFactory::create($file->getPathname()), new ParseOptions()); 
         
         # fetch the composite
         $composite = $builder->build();
+        
+        $output->writeln('<info>Starting Generator</info>');
         
         # check if we use the debug or normal notifier
         if($input->getOption('verbose')) {
@@ -76,11 +82,12 @@ class GenerateCommand extends Command
             
             # instance the default notifier
             $event->addSubscriber(new ProgressBarOutputter($event,$progress_bar));
-    
+            
         }
-
+        
         # start execution of the generate
         $composite->generate(1,array());
+        
     }
 
 

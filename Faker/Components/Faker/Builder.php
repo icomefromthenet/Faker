@@ -483,6 +483,8 @@ class Builder
       */
     public function compile()
     {
+        $this->event->dispatch(BuildEvents::onCompileStart,new BuildEvent($this,'Starting Compile'));
+        
         # run the compiler
         $compiler = $this->compiler;
         
@@ -491,6 +493,8 @@ class Builder
         }
         
         $compiler->compile($this->current_schema);
+        
+        $this->event->dispatch(BuildEvents::onCompileEnd,new BuildEvent($this,'Finish Compile'));
         
         return $this;
     }
@@ -506,7 +510,12 @@ class Builder
       */
     public function validate()
     {
+        
+        $this->event->dispatch(BuildEvents::onValidationStart,new BuildEvent($this,'Starting Validation'));
+        
         $this->current_schema->validate();
+        
+        $this->event->dispatch(BuildEvents::onValidationEnd,new BuildEvent($this,'Finished Validation'));
         
         return $this;
     }
@@ -523,6 +532,8 @@ class Builder
             throw new FakerException('Can not build no schema set');
         }
         
+        $this->event->dispatch(BuildEvents::onBuildingStart,new BuildEvent($this,'Starting Build'));
+        
         # add the writers to the composite
         $this->current_schema->setWriters($this->formatters);
         
@@ -536,6 +547,8 @@ class Builder
         $this->validate();
         
         $schema = $this->current_schema;
+        
+         $this->event->dispatch(BuildEvents::onBuildingEnd,new BuildEvent($this,'Finished Build'));
         
         # reset the builder
         $this->clear();
