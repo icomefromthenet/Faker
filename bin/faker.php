@@ -19,8 +19,8 @@ use Faker\Project,
    
    ini_set('display_errors', 1);
        
-    
-    
+  
+   
 //---------------------------------------------------------------------
 // Set Pear Directories
 //
@@ -37,7 +37,6 @@ if(strpos('@PHP-BIN@', '@PHP-BIN') === 0) { // stand-alone version is running
    $project = require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
    $project['data_path'] = new Path('@PEAR-DATA@' . DIRECTORY_SEPARATOR .'Faker');   
 }
-
 
 
 //---------------------------------------------------------------------

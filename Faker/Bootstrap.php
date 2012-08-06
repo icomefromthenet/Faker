@@ -4,7 +4,8 @@ namespace Faker;
 use Faker\Command\Base\Application,
     Faker\Project,
     Faker\Path,
-    Faker\Autoload;
+    Faker\Autoload,
+    Symfony\Component\HttpKernel\Debug\ErrorHandler;
 
 return call_user_func(function() {
 
@@ -39,6 +40,7 @@ return call_user_func(function() {
    ));
    
    $ext_loader->register();
+   
    
    //------------------------------------------------------------------------------
    // Load the DI Component  which is an Instance the /Fakers/Project
@@ -118,10 +120,10 @@ return call_user_func(function() {
        return new \Faker\Exceptions\ExceptionHandler($project->getLogger(),new \Symfony\Component\Console\Output\ConsoleOutput());
    });
    
-   #set global error handlers
-   set_error_handler(array($project['error'],'errorHandler'));
+   #set global error handler 
+   ErrorHandler::register(E_NOTICE);
    
-   #set global exception handler
+   #set global exception handler this catch exceptions before console is run (it will catch them after)
    set_exception_handler(array($project['error'],'exceptionHandler'));
    
    //---------------------------------------------------------------
