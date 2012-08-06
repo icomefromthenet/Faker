@@ -80,7 +80,7 @@ class DirectedGraphVisitor extends BaseVisitor
                 
         } elseif($composite instanceof ForeignKey) {
             # if have a fk connect two columns together and connect the fk with parent element          
-            $this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
+            #$this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
         
            $finder = new CompositeFinder();
         
