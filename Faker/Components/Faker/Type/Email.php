@@ -77,6 +77,9 @@ class Email extends Type
         # parse names param
         $params = $this->getOption('params');
         
+        
+        
+        
         foreach($params as $param => $value) {
             $format = preg_replace('/{'.preg_quote($param).'}/',
                                    $this->utilities->generateRandomAlphanumeric($value,$this->getGenerator(),$this->getLocale()),
@@ -100,7 +103,8 @@ class Email extends Type
             ->children()
                 ->scalarNode('params')
                     ->info('a json name params to use')
-                    ->defaultValue('{}')
+                    ->defaultValue(array())
+                    ->treatNullLike(array())
                     ->validate()
                         ->ifString()
                         ->then(function($v){
