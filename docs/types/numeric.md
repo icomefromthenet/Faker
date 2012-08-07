@@ -6,11 +6,16 @@ The numeric type can be used to represet numbers in specify formats. It will gen
 
 1. format - the placeholder to replace for example xxxxxxxxxx.xxx.
 
+**Simple DSL.**
+
+1. `x` (0-9).
+2. `X` (1-9).
+
 **To declare this type use the following format:**
 
 ```xml
 
-<datatype>
+<datatype name="numeric">
     <option name="format" value="xxxx" />
 </datatype>
 
@@ -20,11 +25,12 @@ The numeric type can be used to represet numbers in specify formats. It will gen
 
 ```xml
 
-<datatype>
+<datatype name="numeric">
     <option name="format" value="xxxx.xx" />
 </datatype>
 
 ```
+
 
 To Represent a block of formats all values up to a million using the random selector is recommended.
 
@@ -33,47 +39,48 @@ To Represent a block of formats all values up to a million using the random sele
 
 <random>
     <!-- 0 - 10 cents --> 
-    <datatype>
+    <datatype name="numeric">
         <option name="format" value="0.0x" />
     </datatype>
 
-    <!-- 0 - 100 cents -->
-    <datatype>
-        <option name="format" value="0.xx" />
+    <!-- 10 - 99 cents -->
+    <datatype name="numeric">
+        <option name="format" value="0.Xx" />
     </datatype>
 
     <!-- 1.00 - 9.99 dollars -->
-    <datatype>
-        <option name="format" value="x.xx" />
-        
+    <datatype name="numeric">
+        <option name="format" value="X.xx" />
+    </datatype>
+    
     <!-- 10.00 dollars - 99.99 dollars -->
-    <datatype>
-        <option name="format" value="xx.xx" />
+    <datatype name="numeric">
+        <option name="format" value="Xx.xx" />
     </datatype>
     
     <!-- 100.00 hundred - 999.99 hundred -->
-    <datatype>
-        <option name="format" value="xxx.xx" />
+    <datatype name="numeric">
+        <option name="format" value="Xxx.xx" />
     </datatype>
 
     <!-- 1,000.00 thousand - 9,000 dollars -->
-    <datatype>
-        <option name="format" value="xxxx.xx" />
+    <datatype name="numeric">
+        <option name="format" value="Xxxx.xx" />
     </datatype>
 
     <!-- 10,000.00 thousand - 99,999.99 thousand -->
-    <datatype>
-        <option name="format" value="xxxxx.xx" />
+    <datatype name="numeric">
+        <option name="format" value="Xxxxx.xx" />
     </datatype>
 
     <!-- 100,000.00 thousand - 999,999.99 thousand -->
-    <datatype>
-        <option name="format" value="xxxxxx.xx" />
+    <datatype name="numeric">
+        <option name="format" value="Xxxxxx.xx" />
     </datatype>
 
     <!-- 1,000,000.00 million - 9,999,999.99 million -->
-    <datatype>
-        <option name="format" value="xxxxxxx.xx" />
+    <datatype name="numeric">
+        <option name="format" value="Xxxxxxx.xx" />
     </datatype>
 </random>
 

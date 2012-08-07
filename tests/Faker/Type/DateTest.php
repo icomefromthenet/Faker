@@ -165,6 +165,13 @@ class DateTest extends AbstractProject
                       ->getMock();
         
         $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        
+        $rnd_date = new \DateTime();
+        $generator->expects($this->once())
+                  ->method('generate')
+                  ->with($this->isType('integer'),$this->isType('integer'))
+                  ->will($this->returnValue($rnd_date->getTimestamp()));
+        
             
         $type = new Date($id,$parent,$event,$utilities,$generator);
         
@@ -202,6 +209,19 @@ class DateTest extends AbstractProject
        $this->assertFalse($dte3->format('U') === $dte4->format('U')); 
        $this->assertFalse($dte4->format('U') === $dte5->format('U')); 
    
+       # test with modify
+       $type->setOption('modify',false);
+       $type->setOption('random',true);
+       $this->assertEquals($rnd_date->getTimestamp(),$type->generate(1,array())->getTimestamp());
+       
+       # test fixed date
+       $start = new \DateTime();
+       $type->setOption('modify',false);
+       $type->setOption('random',false);
+       $type->setOption('start',$start);
+       $this->assertEquals($start->getTimestamp(),$type->generate(1,array())->getTimestamp());
+       $this->assertEquals($start->getTimestamp(),$type->generate(2,array())->getTimestamp());
+       $this->assertEquals($start->getTimestamp(),$type->generate(3,array())->getTimestamp());
     }
     
     

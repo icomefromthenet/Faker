@@ -17,21 +17,27 @@ class Range extends Type
     
     public function generate($rows, $values = array())
     {
-        $min = $this->getOption('min');
-        $max = $this->getOption('max');
-        $step = $this->getOption('step');
+        $min    = $this->getOption('min');
+        $max    = $this->getOption('max');
+        $step   = $this->getOption('step');
+        $random = $this->getOption('random');
         
-        # on first generate call set last value to min
-        if($this->last_value === null) {
-            $this->last_value = $min;
-        }
-        else {
-           $this->last_value = $this->last_value + $step;
-        }
-
-        if($this->last_value > $max) {
-            
-            $this->last_value = $min;
+        if($step === false && $random === true) {
+            $this->last_value = ceil($this->getGenerator()->generate($min,$max));
+        } else {
+        
+            # on first generate call set last value to min
+            if($this->last_value === null) {
+                $this->last_value = $min;
+            }
+            else {
+               $this->last_value = $this->last_value + $step;
+            }
+    
+            if($this->last_value > $max) {
+                $this->last_value = $min;
+            }
+        
         }
         
         return ($this->last_value +0);
@@ -58,7 +64,7 @@ class Range extends Type
                             return !is_numeric($v);
                         })
                         ->then(function($v){
-                            throw new \Faker\Components\Faker\Exception('Number::min Numeric is required');
+                            throw new \Faker\Components\Faker\Exception('Range::min Numeric is required');
                         })
                     ->end()
                 ->end()
@@ -71,22 +77,31 @@ class Range extends Type
                             return !is_numeric($v);
                         })
                         ->then(function($v){
-                            throw new \Faker\Components\Faker\Exception('Number::max Numeric is required');
+                            throw new \Faker\Components\Faker\Exception('Range::max Numeric is required');
                         })
                     ->end()
                 ->end()
                 ->scalarNode('step')
-                    ->isRequired()
+                    ->defaultValue(false)
                     ->example('1 , 1.5 , 0.6')
                     ->info('Stepping value applied on every increment, not supplied will use random')
                     ->validate()
                         ->ifTrue(function($v){
+                            if($v === false) {
+                                return true;
+                            }
+                            
                             return !is_numeric($v);
                         })
                         ->then(function($v){
-                            throw new \Faker\Components\Faker\Exception('Number::step Numeric is required');
+                            throw new \Faker\Components\Faker\Exception('Range::Step option should be numeric or bool(false) to use random step');
                         })
                     ->end()
+                ->end()
+                ->booleanNode('random')
+                    ->defaultFalse()
+                    ->example('false|true')
+                    ->info('Enable random step value on every loop, step param must be set to false')
                 ->end()
             ->end();
     }

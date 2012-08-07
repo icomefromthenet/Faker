@@ -1,7 +1,8 @@
 <?php
 namespace Faker\Components\Faker\Type;
 
-use Faker\Components\Faker\Exception as FakerException,
+use \DateTime,
+    Faker\Components\Faker\Exception as FakerException,
     Faker\Components\Faker\Utilities,
     Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition,
     Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -31,27 +32,34 @@ class Date extends Type
         if($this->current_date === null) {
             $this->current_date = clone $date;
         }
-        else {
-            if(empty($modify) === false) {
-                # on consecutive calls apply the modify value
-                $this->current_date->modify($modify);
+        
+        if(empty($modify) === false && $this->getOption('random') === false) {
+            # on consecutive calls apply the modify value
+            $this->current_date->modify($modify);
+                
+            # check if the origin has exceeded the max
+        
+            if($max instanceof \DateTime) {
+                if($this->current_date->getTimestamp() > $max->getTimestamp()) {
+                        $this->current_date = clone $date;
+                }
             }
+                
+        } else if($this->getOption('random') === true) {
+            # random date
+            $this->current_date->setTimestamp(ceil($this->getGenerator()->generate($date->getTimestamp(),$max->getTimestamp())));
+        } else {
+            # using fixed start date
+            $this->current_date = clone $date;
         }
         
-        # check if the origin has exceeded the max
-        
-        if($max instanceof \DateTime) {
-            if($this->current_date->getTimestamp() > $max->getTimestamp()) {
-                $this->current_date = clone $date;
-            }
-        }
           
         # return new instance so later calles don't change        
         return clone $this->current_date;
     }
     
     //  -------------------------------------------------------------------------
-
+    
    /**
      * Generates the configuration tree builder.
      *
@@ -98,10 +106,15 @@ class Date extends Type
                     ->end()
                 ->end()
                 ->scalarNode('modify')
-                   ->defaultValue(null)
+                   ->defaultValue(false)
                    ->info('modify string (strtotime) applied on each increment')
                    ->example('+1 minute')
-                ->end()        
+                ->end()
+                ->booleanNode('random')
+                   ->defaultValue(false)
+                   ->info('select a random datetime between min-max')
+                   ->example('true')
+                ->end()
             ->end();
     }
     
