@@ -6,6 +6,7 @@
 
 ##Schema
 The Schema tag is the first tag after the xml declaration, this tag represents a database, ***one schema per file***. 
+
 ```xml
  <schema name="schema_name" locale="en" randomGenerator="srand" generatorSeed="10000" >
  </schema>
@@ -23,6 +24,7 @@ The randomGenerator and generatorSeed will be inherited by table / column / data
 
 ##Table
 The Table tag must map to a database table, with the name attribute matching the tables name. The generate attribute tell the generator to make x passes. 
+
 ```xml
 <table name="actor" generate="100" randomGenerator="simple" generatorSeed="1000">
 </table>
@@ -41,6 +43,7 @@ The randomGenerator and generatorSeed will be inherited by column / datatype.
 
 ##Column
 The column must map back to a database column, the type should map to a Doctine Column or a custom column added by yourself to the extension namespace.
+
 ```xml
 <column name="last_name" type="string">
 </column>
@@ -91,6 +94,7 @@ Selector tags are seen inside columns, they allow the generator to make simple c
 
 ##Alternate
 The alternate selector allows a the generator to select a tag x (step) times then move onto the next tag until the sequence restarts.
+
 ```xml
 <alternate step ="1">
     <datatype />

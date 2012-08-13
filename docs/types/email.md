@@ -64,18 +64,18 @@ This will produce an email address with the following format.
         <datatype name="email" >
             <option name="format" value="{fname}{lname}@.{domain}" />
             <option name="domains" value="optus.com.au,telstra.com.au" />
-        <datatype>
+        </datatype>
         
         <datatype name="email" >
             <option name="format" value="{fname}\'{lname}@.{domain}" />
             <option name="domains" value="optus.com.au,telstra.com.au" />
-        <datatype>
+        </datatype>
         
          <datatype name="email" >
             <option name="format" value="{fname}_{alaph1}_{lname}@.{domain}" />
             <option name="domains" value="optus.com.au,telstra.com.au" />
             <option name="alpha1" value="ccXXX" />
-        <datatype>
+        </datatype>
     </random>
 
 ```

@@ -31,7 +31,7 @@ This is a helpful method to get started with an existing schema, it will output 
 
     myproject/database faker:analyse
 
-Don't run generate yet, columns like dates and times require, specialised data types so generate will fail, customize first. 
+Don't run generate yet, open the schema file and fill in.
 
 ## Generate.
 

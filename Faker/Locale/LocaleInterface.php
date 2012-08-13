@@ -18,7 +18,7 @@ interface LocaleInterface
       *  Fetch the consonants from alphabet
       *
       *  @access public
-      *  @return \Faker\Test\SimpleTextInterface
+      *  @return \Faker\Text\SimpleTextInterface
       */
     public function getConsonants();
     
@@ -26,7 +26,7 @@ interface LocaleInterface
       *  Fetch the vowels from alphabet
       *  
       *  @access public
-      *  @return \Faker\Test\SimpleTextInterface
+      *  @return \Faker\Text\SimpleTextInterface
       */
     public function getVowels();    
     
@@ -34,7 +34,7 @@ interface LocaleInterface
       *  Fetch the letters of the alphabet
       *  
       *  @access public
-      *  @return \Faker\Test\SimpleTextInterface
+      *  @return \Faker\Text\SimpleTextInterface
       */
     public function getLetters();
     
@@ -42,7 +42,7 @@ interface LocaleInterface
       *   Fetch an array of filler text
       *   
       *   @access public
-      *   @return array \Faker\Test\SimpleTextInterface
+      *   @return array \Faker\Text\SimpleTextInterface
       */
     public function getFillerText();
     
@@ -50,7 +50,7 @@ interface LocaleInterface
       *  Fetch Hexdecimal alphabet 
       * 
       *  @access public
-      *  @return \Faker\Test\SimpleTextInterface
+      *  @return \Faker\Text\SimpleTextInterface
       */
     public function getHex();
     

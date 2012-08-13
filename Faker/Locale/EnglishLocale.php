@@ -208,7 +208,7 @@ class EnglishLocale implements LocaleInterface
       *  Fetch the consonants from alphabet
       *
       *  @access public
-      *  @return \Faker\Test\SimpleTextInterface
+      *  @return \Faker\Text\SimpleTextInterface
       */
     public function getConsonants()
     {
@@ -221,7 +221,7 @@ class EnglishLocale implements LocaleInterface
       *  Fetch the vowels from alphabet
       *  
       *  @access public
-      *  @return \Faker\Test\SimpleTextInterface
+      *  @return \Faker\Text\SimpleTextInterface
       */
     public function getVowels()
     {
@@ -234,7 +234,7 @@ class EnglishLocale implements LocaleInterface
       *  Fetch the letters of the alphabet
       *  
       *  @access public
-      *  @return \Faker\Test\SimpleTextInterface
+      *  @return \Faker\Text\SimpleTextInterface
       */
     public function getLetters()
     {
@@ -258,7 +258,7 @@ class EnglishLocale implements LocaleInterface
       *  Fetch Hexdecimal alphabet 
       * 
       *  @access public
-      *  @return \Faker\Test\SimpleTextInterface
+      *  @return \Faker\Text\SimpleTextInterface
       */
     public function getHex()
     {
