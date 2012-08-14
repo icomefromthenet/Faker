@@ -70,10 +70,10 @@ use Faker\Locale\LocaleFactory;
 |
 | Example:
 |
-| TypeFactory::registerExtension('vector','Faker\\Components\\Extension\\Faker\\Type\\Vector');
+| TypeFactory::registerExtension('vector','Faker\\Extension\\Faker\\Type\\Vector');
 */
 
- //TypeFactory::registerExtension('vector','Faker\\Components\\Extension\\Faker\\Type\\Vector');
+ //TypeFactory::registerExtension('vector','Faker\\Extension\\Faker\\Type\\Vector');
 
 /*
 |--------------------------------------------------------------------------

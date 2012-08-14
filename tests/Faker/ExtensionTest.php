@@ -1,7 +1,7 @@
 <?php
 namespace Faker\Tests\Faker;
 
-use Faker\Components\Extension\Faker\Type\Demo,
+use Faker\Extension\Faker\Type\Demo,
     Faker\Tests\Base\AbstractProject;
 
 class ExtensionTest extends AbstractProject
@@ -12,7 +12,7 @@ class ExtensionTest extends AbstractProject
         $project = $this->getProject();
         
         $demo = new Demo();
-        $this->assertInstanceOf('\Faker\Components\Extension\Faker\Type\Demo',$demo);
+        $this->assertInstanceOf('\Faker\Extension\Faker\Type\Demo',$demo);
         
     }
     

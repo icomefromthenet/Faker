@@ -36,15 +36,11 @@ class Encoding
         $this->out = $out;
         
         if(function_exists('\mb_convert_encoding') === false) {
-            throw new WriterException('writer::encoding::Mbstring extension not installed');
+            throw new WriterException('Writer::Encoding::MBString extension not installed');
         }
-        
-        if($this->validateEncoding($in) === false) {
-            throw new WriterException("writer::__construct in encoding $in is invalid");
-        }
-        
-        if($this->validateEncoding($out) === false) {
-            throw new WriterException("writer::__construct out encoding $out is invalid");
+                       
+        if($this->validateEncoding() === false) {
+            throw new WriterException("writer::__construct out encoding $out OR in encoding $in is invalid");
         }
     }
     
@@ -104,15 +100,14 @@ class Encoding
     }
     
     /**
-      *  Run iconv and swallow error
+      *  Validate the encoding
       *
-      *  @param string the enchding to check
       *  @return boolean false if error caused
       *  @access public
       */
-    public function validateEncoding($encoding)
+    public function validateEncoding()
     {
-        if (@!mb_convert_encoding('a assci test string', $this->out, $this->in)) {
+        if (@!mb_convert_encoding('an asscii string', $this->out, $this->in)) {
            return false;
         }
         

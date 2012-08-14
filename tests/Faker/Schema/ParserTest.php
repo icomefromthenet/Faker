@@ -252,7 +252,7 @@ class ParserTest extends AbstractProjectWithDb
   
     /**
       *  @expectedException Faker\Components\Faker\Exception
-      *  @expectedExceptionMessage Option Missing Name
+      *  @expectedExceptionMessage Have Type Option Tag Missing Name Attribute
       */
     public function testOpeningTagTypeOptionMissingNameAttrib()
     {
@@ -274,7 +274,7 @@ class ParserTest extends AbstractProjectWithDb
   
     /**
       *  @expectedException Faker\Components\Faker\Exception
-      *  @expectedExceptionMessage Option Missing Value
+      *  @expectedExceptionMessage Have Type Option Tag Missing Value Attribute
       */
     public function testOpeningTagTypeOptionMissingValueAttrib()
     {

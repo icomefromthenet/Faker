@@ -41,13 +41,13 @@ class GraphBuildingTest extends AbstractProject
                                          ->getId()
                 );
         
-        $this->assertEquals(2,count($table1->getOutEdges()));
-        $this->assertEquals(1,count($table1->getInEdges()));
+        $this->assertEquals(1,count($table1->getOutEdges()));
+        $this->assertEquals(2,count($table1->getInEdges()));
         
         # check if relation from table2 to table1
         
-        $this->assertEquals(1,count($table2->getOutEdges()));
-        $this->assertEquals(2,count($table2->getInEdges()));
+        $this->assertEquals(2,count($table2->getOutEdges()));
+        $this->assertEquals(1,count($table2->getInEdges()));
         
     }
     

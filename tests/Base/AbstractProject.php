@@ -35,7 +35,7 @@ class AbstractProject extends PHPUnit_Framework_TestCase
         $project->setPath($this->getMockedPath());
 
         $project['loader']->setExtensionNamespace(
-               'Faker\\Components\\Extension' , $project->getPath()->get()
+               'Faker\\Extension' , $project->getPath()->get()
         );
        
         if(isset($project['data_path']) === false) {

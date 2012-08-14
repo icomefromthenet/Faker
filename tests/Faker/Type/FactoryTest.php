@@ -9,10 +9,19 @@ use Faker\Components\Faker\Composite\CompositeInterface,
 class FactoryTest extends AbstractProject
 {
     
+    protected $original_extensnions;
+    
+    
+    public function __construct()
+    {
+        $this->original_extensnions = TypeFactory::$types;
+    }
+
+    
     public function tearDown()
     {
         TypeFactory::clearExtensions();
-        
+        TypeFactory::registerExtensions($this->original_extensnions);
         parent::tearDown();
     }
     

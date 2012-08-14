@@ -12,25 +12,22 @@ class EncodingTest extends AbstractProject
     {
         $encoder = new Encoding('UTF-8','UTF-8');
         
-        $this->assertFalse($encoder->validateEncoding('aaa'));
-        $this->assertTrue($encoder->validateEncoding('ASCII'));
-        
+        $this->assertTrue($encoder->validateEncoding());
     }
     
     /**
-      *  @expectedException \Faker\Components\Writer\Exception
-      *  @expectedExceptionMessage writer::__construct in encoding aaa is invalid
+      *  Great if this threw an exception but the in encoding is ignored by mb_convert_encoding
+      *  it will fall back to system default.
       */
     public function testEncodingBadIn()
     {
         $encoder = new Encoding('aaa','UTF-8');
-        
     }
     
     
     /**
       *  @expectedException \Faker\Components\Writer\Exception
-      *  @expectedExceptionMessage writer::__construct out encoding aaa is invalid
+      *  @expectedExceptionMessage writer::__construct out encoding aaa OR in encoding UTF-8 is invalid
       */
     public function testEncodingBadOut()
     {

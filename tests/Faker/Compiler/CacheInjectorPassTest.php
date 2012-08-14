@@ -3,6 +3,9 @@ namespace Faker\Tests\Faker\Compiler;
 
 use Faker\Components\Faker\Compiler\Pass\CacheInjectorPass,
     Faker\Components\Faker\GeneratorCache,
+    Faker\Components\Faker\Visitor\DirectedGraphVisitor,
+    Faker\Components\Faker\Composite\CompositeInterface,
+    Faker\Components\Faker\Compiler\Graph\DirectedGraph,
     Faker\Tests\Base\AbstractProject;
 
 
@@ -12,10 +15,16 @@ class CacheInjectorPassTest extends AbstractProject
 
     public function testCacheInjector()
     {
+        $composite = $this->getComposite();
+        $graph = $this->buildDirectedGraph($composite);
         $compiler = $this->getMock('Faker\Components\Faker\Compiler\CompilerInterface');
+        $compiler->expects($this->once())
+                 ->method('getGraph')
+                 ->will($this->returnValue($graph));
+        
         
         $pass = new CacheInjectorPass();
-        $composite = $this->getComposite();
+        
         $pass->process($composite,$compiler);
         
         $tables = $composite->getChildren();
@@ -33,7 +42,12 @@ class CacheInjectorPassTest extends AbstractProject
         $this->assertInstanceOf('\Faker\Components\Faker\GeneratorCache',$fk[0]->getGeneratorCache());
     }
     
-   
+    protected function buildDirectedGraph(CompositeInterface $com)
+    {
+        $visitor = new DirectedGraphVisitor(new DirectedGraph());
+        $com->acceptVisitor($visitor);
+        return  $visitor->getDirectedGraph();   
+    }
         
         
     protected function getComposite()
