@@ -62,12 +62,12 @@ class Stream implements WriterInterface
 
     public function __construct(Template $header_template, Template $footer_template, Sequence $file_sequence, Limit $write_limit, Io $path,Encoding $encoder)
     {
-        $this->encoder     = $encoder;
+        $this->encoder         = $encoder;
         $this->header_template = $header_template;
         $this->footer_template = $footer_template;
-        $this->file_sequence = $file_sequence;
-        $this->write_limit = $write_limit;
-        $this->io = $path;
+        $this->file_sequence   = $file_sequence;
+        $this->write_limit     = $write_limit;
+        $this->io              = $path;
 
     }
 

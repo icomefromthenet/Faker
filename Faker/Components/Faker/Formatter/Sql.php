@@ -44,7 +44,7 @@ class Sql extends BaseFormatter implements FormatterInterface
     
     public function getOuputFileFormat()
     {
-        return '{prefix}_{body}_{suffix}_{seq}.{ext}';
+        return '{seq}_{prefix}_{body}_{suffix}.{ext}';
     }
     
     /**
