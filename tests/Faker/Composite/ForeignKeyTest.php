@@ -218,4 +218,24 @@ class ForeignKeyTest extends AbstractProject
         
     }
     
+     public function testGenerateReturnNullWhenCacheFalse()
+    {
+        $id = 'table_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+       
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd','name' => 'foreign-key','useCache'=>false));
+        $foreign->setUseCache(false);
+                
+        # set cache and validate        
+        $foreign->merge();
+        $foreign->validate(); 
+        
+        # generate (fetch from cache)
+        $this->assertNull($foreign->generate(1,array()));
+        $this->assertNull($foreign->generate(2,array()));
+        
+    }
+    
 }

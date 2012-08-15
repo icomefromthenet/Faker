@@ -48,10 +48,12 @@ class CacheInjectorPass implements CompilerPassInterface
                     $composite_type = $inEdge->getSourceNode()->getValue();
                     
                     if($composite_type instanceof ForeignKey) {
-                        $composite_type->setUseCache(true)->setGeneratorCache($cache);
-                        $f_key_found = true;        
+                        # test if cache is wanted, might only exist to establish relationship.    
+                        if($composite_type->getUseCache() === true) {
+                            $composite_type->setGeneratorCache($cache);
+                            $f_key_found = true;            
+                        }
                     }
-                    
                 }
                 
                 #assign the cache to the column.
