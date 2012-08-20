@@ -15,7 +15,7 @@ If your a database tester or a lone developer Faker will help you test your data
  3. Supports Standard Sql DDL (insert statements) for the platforms mentioned above.
  5. Output Formats have their own templates that can be customized per project. (add own branding).
  4. Configured via XML file that feels closer to your database.
- 5. Many [built in datatypes](docs/types/index.md), Including text, numeric , autoincrements, email , city names etc
+ 5. Many [built in datatypes](http://github.com/icomefromthenet/Faker/blob/master/docs/types/index.md), Including text, numeric , autoincrements, email , city names etc
  6. Embraces extension, write own types, writters and locales.
  7. Installed via pear.
  8. Analyse and build struct from existing database.
@@ -37,7 +37,7 @@ The easist way to install to use PEAR
      pear install icomefromthenet/Faker
 ```
 
-Read more from the [starting guide](docs/starting.md)
+Read more from the [starting guide](http://github.com/icomefromthenet/Faker/blob/master/docs/starting.md)
 
 ## Quick Example - still wondering
 
