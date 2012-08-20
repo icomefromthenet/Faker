@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Faker by icomefromthenet</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Faker</h1>
+        <h2>A Database Testing Tool.</h2>
+        <a href="https://github.com/icomefromthenet/Faker" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>Faker - A Database testing tool.</h1>
+
+<p>There have been a few ports of the original <a href="http://search.cpan.org/%7Ewsheldahl/Data-Faker-0.09/lib/Data/Faker.pm">Perl Faker</a> and a few of those have been to php. What started as another port has grown instead into a comprehensive data generation tool, powered by Doctrine DBAL and Symfony2 Components.</p>
+
+<p>Where I think Faker will help you:</p>
+
+<ol>
+<li>Write PHPUnit DBUnit fixtures, this will save you time (especially if that involves more than one platform).</li>
+<li>You need to fill database with test data for various loading test.</li>
+</ol><p>If your a database tester or a lone developer Faker will help you test your database quicker.</p>
+
+<h2>Features</h2>
+
+<ol>
+<li>Supports multiple platforms using Doctrine DBAL. (MySql|PGSQL|Oracle|Sqlite|MSSql).</li>
+<li>Supports PHPUnit Dataset XML for DBUnit fixtures.</li>
+<li>Supports Standard Sql DDL (insert statements) for the platforms mentioned above.</li>
+<li>Output Formats have their own templates that can be customized per project. (add own branding).</li>
+<li>Configured via XML file that feels closer to your database.</li>
+<li>Many <a href="docs/types/index.md">built in datatypes</a>, Including text, numeric , autoincrements, email , city names etc</li>
+<li>Embraces extension, write own types, writters and locales.</li>
+<li>Installed via pear.</li>
+<li>Analyse and build struct from existing database.</li>
+<li>Seed your random number generator for repeatable results (seed global|table|column|type). </li>
+<li>Supported custom locals, generate test data in unicode. <strong>(Not just ENGLISH)</strong>.</li>
+<li>Project folder that can be version controled with your project.</li>
+</ol><h2>Requirements.</h2>
+
+<p>SQlite3, PHP5.3.3, MBString, Pear and Linux / Mac (windows support in beta).</p>
+
+<p>All components are included by default in package installs of php.</p>
+
+<h2>How to install</h2>
+
+<p>The easist way to install to use PEAR</p>
+
+<div class="highlight"><pre>     pear channel-discover icomefromthenet.github.com/pear
+     pear install icomefromthenet/Faker
+</pre></div>
+
+<p>Read more from the <a href="docs/starting.md">starting guide</a></p>
+
+<h2>Quick Example - still wondering</h2>
+
+<p><strong>Turn your SCHEMA</strong></p>
+
+<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;schema</span> <span class="na">name=</span><span class="s">"sakila"</span> <span class="na">randomGenerator=</span><span class="s">"simple"</span> <span class="na">generatorSeed=</span><span class="s">"1000"</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;writer</span> <span class="na">platform=</span><span class="s">"mysql"</span> <span class="na">format=</span><span class="s">"sql"</span> <span class="na">singleFileMode=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+
+ <span class="nt">&lt;table</span> <span class="na">name=</span><span class="s">"actor"</span> <span class="na">generate=</span><span class="s">"100"</span> <span class="na">randomGenerator=</span><span class="s">"simple"</span> <span class="na">generatorSeed=</span><span class="s">"1000"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;column</span> <span class="na">name=</span><span class="s">"actor_id"</span> <span class="na">type=</span><span class="s">"integer"</span> <span class="na">randomGenerator=</span><span class="s">"simple"</span> <span class="na">generatorSeed=</span><span class="s">"1000"</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;datatype</span> <span class="na">name=</span><span class="s">"autoincrement"</span><span class="nt">&gt;</span>
+     <span class="nt">&lt;option</span> <span class="na">name=</span><span class="s">"start"</span> <span class="na">value=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
+     <span class="nt">&lt;option</span> <span class="na">name=</span><span class="s">"randomGenerator"</span> <span class="na">value=</span><span class="s">"simple"</span> <span class="nt">/&gt;</span>
+     <span class="nt">&lt;option</span> <span class="na">name=</span><span class="s">"generatorSeed"</span>   <span class="na">value=</span><span class="s">"100"</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;/datatype&gt;</span>
+  <span class="nt">&lt;/column&gt;</span>
+  <span class="nt">&lt;column</span> <span class="na">name=</span><span class="s">"first_name"</span> <span class="na">type=</span><span class="s">"string"</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;datatype</span> <span class="na">name=</span><span class="s">"people"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">name=</span><span class="s">"format"</span> <span class="na">value=</span><span class="s">"{fname}"</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;/datatype&gt;</span>
+  <span class="nt">&lt;/column&gt;</span>
+  <span class="nt">&lt;column</span> <span class="na">name=</span><span class="s">"last_name"</span> <span class="na">type=</span><span class="s">"string"</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;datatype</span> <span class="na">name=</span><span class="s">"people"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">name=</span><span class="s">"format"</span> <span class="na">value=</span><span class="s">"{lname}"</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;/datatype&gt;</span>
+  <span class="nt">&lt;/column&gt;</span>
+  <span class="nt">&lt;column</span> <span class="na">name=</span><span class="s">"last_update"</span> <span class="na">type=</span><span class="s">"datetime"</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;datatype</span> <span class="na">name=</span><span class="s">"date"</span><span class="nt">&gt;</span>
+     <span class="nt">&lt;option</span> <span class="na">name=</span><span class="s">"start"</span> <span class="na">value=</span><span class="s">"today"</span> <span class="nt">/&gt;</span>
+     <span class="nt">&lt;option</span> <span class="na">name=</span><span class="s">"modify"</span> <span class="na">value=</span><span class="s">"+1 week"</span> <span class="nt">/&gt;</span>
+     <span class="nt">&lt;option</span> <span class="na">name=</span><span class="s">"max"</span> <span class="na">value=</span><span class="s">"today +10 weeks"</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;/datatype&gt;</span>
+  <span class="nt">&lt;/column&gt;</span>
+ <span class="nt">&lt;/table&gt;</span>
+
+ <span class="nt">&lt;table</span> <span class="na">name=</span><span class="s">"actor_homes"</span> <span class="na">generate=</span><span class="s">"10000"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;column</span> <span class="na">name=</span><span class="s">"actor_id"</span> <span class="na">type=</span><span class="s">"integer"</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;foreign-key</span> <span class="na">name=</span><span class="s">"actor_homes.actor_id"</span> <span class="na">foreignTable=</span><span class="s">"actor"</span> <span class="na">foreignColumn=</span><span class="s">"actor_id"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/column&gt;</span>
+ <span class="nt">&lt;/table&gt;</span>
+
+<span class="nt">&lt;/schema&gt;</span>
+</pre></div>
+
+<p><strong>Calling command</strong></p>
+
+<div class="highlight"><pre> faker:generate schema.xml
+</pre></div>
+
+<p><strong>INTO DATA</strong></p>
+
+<div class="highlight"><pre><span class="c1">-- Migrations Faker Dump</span>
+<span class="c1">-- version 1.0.2</span>
+<span class="c1">-- https://github.com/icomefromthenet/Faker</span>
+<span class="c1">--</span>
+<span class="c1">-- Host: localhost</span>
+<span class="c1">-- Generation Time: 2012-07-03T06:08:02+00:00</span>
+<span class="c1">-- PHP Version: 5.3.10-1ubuntu3.2</span>
+<span class="c1">-- Platform: mysql</span>
+
+<span class="k">SET</span> <span class="n">SQL_MODE</span><span class="o">=</span><span class="ss">"NO_AUTO_VALUE_ON_ZERO"</span><span class="p">;</span>
+<span class="k">SET</span> <span class="n">time_zone</span> <span class="o">=</span> <span class="ss">"+00:00"</span><span class="p">;</span>
+
+<span class="c1">--</span>
+<span class="c1">-- Database: sakila</span>
+<span class="c1">--</span>
+
+<span class="c1">-- --------------------------------------------------------</span>
+
+
+
+<span class="c1">--</span>
+<span class="c1">-- Table: actor</span>
+<span class="c1">--</span>
+
+
+<span class="n">USE</span> <span class="n">sakila</span><span class="p">;</span>
+
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">'Jordan'</span><span class="p">,</span><span class="s1">'Proctor'</span><span class="p">,</span><span class="s1">'2012-07-03 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">'Michele'</span><span class="p">,</span><span class="s1">'Welsh'</span><span class="p">,</span><span class="s1">'2012-07-10 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">'Paul'</span><span class="p">,</span><span class="s1">'Lam'</span><span class="p">,</span><span class="s1">'2012-07-17 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">'Sheila'</span><span class="p">,</span><span class="s1">'Best'</span><span class="p">,</span><span class="s1">'2012-07-24 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="s1">'Karl'</span><span class="p">,</span><span class="s1">'Moser'</span><span class="p">,</span><span class="s1">'2012-07-31 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">'Victoria'</span><span class="p">,</span><span class="s1">'Todd'</span><span class="p">,</span><span class="s1">'2012-08-07 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="s1">'Julia'</span><span class="p">,</span><span class="s1">'Sun'</span><span class="p">,</span><span class="s1">'2012-08-14 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="s1">'Jimmy'</span><span class="p">,</span><span class="s1">'Rankin'</span><span class="p">,</span><span class="s1">'2012-08-21 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="s1">'George'</span><span class="p">,</span><span class="s1">'Brantley'</span><span class="p">,</span><span class="s1">'2012-08-28 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s1">'Wendy'</span><span class="p">,</span><span class="s1">'Walton'</span><span class="p">,</span><span class="s1">'2012-09-04 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="s1">'Lester'</span><span class="p">,</span><span class="s1">'Osborne'</span><span class="p">,</span><span class="s1">'2012-09-11 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="s1">'Edwin'</span><span class="p">,</span><span class="s1">'Upchurch'</span><span class="p">,</span><span class="s1">'2012-07-03 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="s1">'Courtney'</span><span class="p">,</span><span class="s1">'Ennis'</span><span class="p">,</span><span class="s1">'2012-07-10 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="s1">'Nina'</span><span class="p">,</span><span class="s1">'Fischer'</span><span class="p">,</span><span class="s1">'2012-07-17 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="s1">'Brooke'</span><span class="p">,</span><span class="s1">'Benson'</span><span class="p">,</span><span class="s1">'2012-07-24 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="s1">'Angela'</span><span class="p">,</span><span class="s1">'Rodriguez'</span><span class="p">,</span><span class="s1">'2012-07-31 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">17</span><span class="p">,</span><span class="s1">'Todd'</span><span class="p">,</span><span class="s1">'Wiggins'</span><span class="p">,</span><span class="s1">'2012-08-07 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="s1">'Ron'</span><span class="p">,</span><span class="s1">'Smith'</span><span class="p">,</span><span class="s1">'2012-08-14 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">19</span><span class="p">,</span><span class="s1">'Andrew'</span><span class="p">,</span><span class="s1">'Coates'</span><span class="p">,</span><span class="s1">'2012-08-21 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="s1">'Kerry'</span><span class="p">,</span><span class="s1">'Harrison'</span><span class="p">,</span><span class="s1">'2012-08-28 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">21</span><span class="p">,</span><span class="s1">'Harvey'</span><span class="p">,</span><span class="s1">'Mercer'</span><span class="p">,</span><span class="s1">'2012-09-04 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">22</span><span class="p">,</span><span class="s1">'Herbert'</span><span class="p">,</span><span class="s1">'Gould'</span><span class="p">,</span><span class="s1">'2012-09-11 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">23</span><span class="p">,</span><span class="s1">'Donna'</span><span class="p">,</span><span class="s1">'Forrest'</span><span class="p">,</span><span class="s1">'2012-07-03 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="s1">'Vivian'</span><span class="p">,</span><span class="s1">'Sumner'</span><span class="p">,</span><span class="s1">'2012-07-10 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="s1">'Carol'</span><span class="p">,</span><span class="s1">'Oliver'</span><span class="p">,</span><span class="s1">'2012-07-17 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="s1">'Patricia'</span><span class="p">,</span><span class="s1">'Tate'</span><span class="p">,</span><span class="s1">'2012-07-24 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">27</span><span class="p">,</span><span class="s1">'Dolores'</span><span class="p">,</span><span class="s1">'Bowers'</span><span class="p">,</span><span class="s1">'2012-07-31 00:00:00'</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">`</span><span class="n">actor</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">actor_id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">first_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">last_update</span><span class="o">`</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span><span class="s1">'Gerald'</span><span class="p">,</span><span class="s1">'Pearson'</span><span class="p">,</span><span class="s1">'2012-08-07 00:00:00'</span><span class="p">);</span>
+</pre></div>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/icomefromthenet/Faker/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/icomefromthenet/Faker/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/icomefromthenet/Faker"></a> is maintained by <a href="https://github.com/icomefromthenet">icomefromthenet</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
