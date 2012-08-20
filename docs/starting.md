@@ -126,13 +126,15 @@ Inside a column a [datatype](types/index.md) can be placed, or a [selector](tags
 
 ## Step 5. Generate Generate Generate.
 
-       faker faker:generate
+       faker faker:generate --crc
        
        or
        
-       faker faker:generate schema.xml
+       faker faker:generate schema.xml --crc
 
 To start the generator you must have a completed schema inside the **sources dir**. The command will assume the schema is called schema.xml, if your using multiple's then you can pass the schema name as the first argument.
+
+The ```--crc`` paramater will turn an the circular reference check, this uses alot of recursion and can have issues with x-debug when dealing with large scheams. I do recommend that it be used and not optional when using foreign-keys.
 
 ## Conclusion.
 You should now have data files generated under the **dump directory**, you can run the command again, it will overrite the files in the directory. I would recommand you add the dump dir to source code ignore list.
