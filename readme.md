@@ -1,6 +1,6 @@
 #Faker - A Database testing tool.
 
-There have been a few ports of the original [Perl Faker](http://search.cpan.org/~wsheldahl/Data-Faker-0.09/lib/Data/Faker.pm) and a few of those have been to php. What started as another port has grown instead into a comprehensive data generation tool, powered by Doctrine DBAL and Symfony2 Components.
+There have been a few ports of the original [Perl Faker](http://search.cpan.org/~wsheldahl/Data-Faker-0.09/lib/Data/Faker.pm) and a few to php. What started as another has grown instead into a comprehensive data generation tool, powered by Doctrine DBAL and Symfony2 Components.
 
 Where I think Faker will help you:
  1. Write PHPUnit DBUnit fixtures, this will save you time (especially if that involves more than one platform).
