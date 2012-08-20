@@ -86,7 +86,9 @@ return call_user_func(function() {
    
    $project['console'] = $project->share( function ($c) use ($project)
    {
-      return new \Faker\Command\Base\Application($project);
+      $app = new \Faker\Command\Base\Application($project);
+      $app->setHelperSet(new \Symfony\Component\Console\Helper\HelperSet());
+      return $app;
    });
    
    
@@ -229,7 +231,10 @@ return call_user_func(function() {
          $connectionParams['memory']     = $entity->getMemory();
       }
       
-      return \Doctrine\DBAL\DriverManager::getConnection($connectionParams, new \Doctrine\DBAL\Configuration());
+      $connection        = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, new \Doctrine\DBAL\Configuration());
+      $project['console']->getHelperSet()-> set(new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($connection), 'db');
+      
+      return $connection;
       
    });
    

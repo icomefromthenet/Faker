@@ -87,7 +87,7 @@ $pear_task->setCode(function(InputInterface $input, ConsoleOutputInterface $outp
     PEAR::setErrorHandling(PEAR_ERROR_DIE);
     
     $pack = new PEAR_PackageFileManager2;
-    $outputDir = realpath(dirname(__FILE__) . '/release') . '/';
+    $outputDir = realpath(dirname(__FILE__) . '/../');
     $inputDir = realpath(dirname(__FILE__) . '/../');
     
     $e = $pack->setOptions(array(
@@ -97,7 +97,7 @@ $pear_task->setCode(function(InputInterface $input, ConsoleOutputInterface $outp
         'packagedirectory' => $inputDir,
         
         'ignore' => array(
-            'bin/faker',
+            'bin/faker/',
             'bin/release.sh',
             'build/',
             'tests/',
@@ -145,8 +145,8 @@ $pear_task->setCode(function(InputInterface $input, ConsoleOutputInterface $outp
     
     $pack->setPackageType('php'); // this is a PEAR-style php script package
     
-    $pack->setReleaseVersion('1.0.2');
-    $pack->setAPIVersion('1.0.2');
+    $pack->setReleaseVersion('1.0.3');
+    $pack->setAPIVersion('1.0.3');
     
     $pack->setReleaseStability('stable');
     $pack->setAPIStability('stable');

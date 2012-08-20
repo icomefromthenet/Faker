@@ -8,7 +8,12 @@ use Faker\Project,
     Faker\Command\GenerateCommand,
     Faker\Command\AnalyseCommand,
     Faker\Command\ConfigureCommand,
-    Faker\Command\InitProjectCommand;
+    Faker\Command\InitProjectCommand,
+    Faker\Command\Doctrine\ImportCommand,
+    Faker\Command\Doctrine\ReservedWordsCommand,
+    Faker\Command\Doctrine\RunSqlCommand,
+    Symfony\Component\Console\Helper\HelperSet;
+    
 
 //---------------------------------------------------------------
 // Setup Global Error Levels
@@ -48,6 +53,17 @@ $project->getConsole()->add(new GenerateCommand('faker:generate'));
 $project->getConsole()->add(new AnalyseCommand('faker:analyse'));
 $project->getConsole()->add(new ConfigureCommand('faker:configure'));
 $project->getConsole()->add(new InitProjectCommand('faker:init'));
+
+//---------------------------------------------------------------------
+// Inject Doctine Commands
+//
+//--------------------------------------------------------------------
+
+
+$project->getConsole()->add(new ImportCommand());
+$project->getConsole()->add(new ReservedWordsCommand());
+$project->getConsole()->add(new RunSqlCommand());
+
 
 
 //--------------------------------------------------------------------
