@@ -3,13 +3,16 @@ namespace Faker\Components\Faker\Composite;
 
 use Faker\Components\Faker\OptionInterface,
     Faker\Components\Faker\BaseNode,
+    Faker\Components\Faker\Visitor\GeneratorInjectorVisitor,
     Faker\Components\Faker\Visitor\ColumnCacheInjectorVisitor,
     Faker\Components\Faker\Visitor\ForeignCacheInjectorVisitor,
     Faker\Components\Faker\Visitor\MapBuilderVisitor,
+    Faker\Components\Faker\Visitor\DirectedGraphVisitor,
     Faker\Components\Faker\Visitor\RefCheckVisitor,
     Faker\Components\Faker\Visitor\BaseVisitor,
     Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Config\Definition\Exception\InvalidConfigurationException,
+    Symfony\Component\Config\Definition\Builder\TreeBuilder,
     Faker\Components\Faker\Exception as FakerException;
 
 /*
@@ -31,7 +34,25 @@ abstract class BaseComposite extends BaseNode implements OptionInterface, Compos
      */
     public function getConfigTreeBuilder()
     {
-        throw new FakerException('Not Implemented');
+        $treeBuilder = new TreeBuilder();
+        $rootNode    = $treeBuilder->root('config');
+
+        $rootNode
+            ->children()
+                 ->scalarNode('name')
+                    ->isRequired()
+                    ->info('The Name of the Column')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new \Faker\Components\Faker\Exception('Column::Name must be a string');
+                        })
+                    ->end()
+            ->end();
+        
+        return $treeBuilder;
     }
     
     /**
@@ -155,6 +176,14 @@ abstract class BaseComposite extends BaseNode implements OptionInterface, Compos
        
        if($visitor instanceof RefCheckVisitor) {
             $visitor->visitRefCheck($this);
+       }
+       
+       if($visitor instanceof GeneratorInjectorVisitor) {
+            $visitor->visitGeneratorInjector($this);
+       }
+       
+       if($visitor instanceof DirectedGraphVisitor) {
+            $visitor->visitDirectedGraph($this);
        }
        
        # send visitor to the children.

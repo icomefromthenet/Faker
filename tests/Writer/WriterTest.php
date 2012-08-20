@@ -47,7 +47,6 @@ class WriterTest extends AbstractProject
        $stream->expects($this->once())
                ->method('write')
                ->with($this->equalTo('line'));
-     
         
         $cache = $this->getMockBuilder('Faker\Components\Writer\Cache')
                       ->disableOriginalConstructor()
@@ -92,6 +91,11 @@ class WriterTest extends AbstractProject
                       ->disableOriginalConstructor()
                       ->getMock();
         
+        $cache = $this->getMockBuilder('Faker\Components\Writer\Cache')
+                      ->disableOriginalConstructor()
+                      ->getMock();
+        
+        
         $cache->expects($this->once())
                ->method('write')
                ->will($this->throwException(new \Exception('a general exception')));
@@ -119,7 +123,10 @@ class WriterTest extends AbstractProject
         $stream->expects($this->once())
                ->method('write')
                ->with($this->equalTo('line'));
-         
+        
+        $cache = $this->getMockBuilder('Faker\Components\Writer\Cache')
+                      ->disableOriginalConstructor()
+                      ->getMock(); 
         
         $cache = $this->getMockBuilder('Faker\Components\Writer\Cache')
                       ->disableOriginalConstructor()
@@ -162,7 +169,6 @@ class WriterTest extends AbstractProject
                ->method('write')
                ->with($this->equalTo('line'))
                ->will($this->throwException(new \Exception('a general exception')));
-            
         
         $cache = $this->getMockBuilder('Faker\Components\Writer\Cache')
                       ->disableOriginalConstructor()

@@ -1,15 +1,16 @@
 <?php
-
 namespace Faker\Components\Faker\Compiler\Pass;
 
 use Faker\Components\Faker\Compiler\CompilerPassInterface,
+    Faker\Components\Faker\Compiler\CompilerInterface,
     Faker\Components\Faker\Composite\CompositeInterface,
-    Faker\Components\Faker\Visitor\Relationships,
+    Faker\Components\Faker\Composite\Column,
+    Faker\Components\Faker\Composite\ForeignKey,
     Faker\Components\Faker\GeneratorCache,
-    Faker\Components\Faker\Visitor\MapBuilderVisitor,
-    Faker\Components\Faker\Visitor\ForeignCacheInjectorVisitor,
-    Faker\Components\Faker\Visitor\ColumnCacheInjectorVisitor;
-
+    Faker\Components\Faker\CacheInterface,
+    Faker\Components\Faker\Exception as FakerException;
+    
+    
 /*
  * class CacheInjectorPass
  *
@@ -27,40 +28,46 @@ class CacheInjectorPass implements CompilerPassInterface
       *  missing ones will not cause error, run KeysExistPass first
       *
       *  @param CompositeInterface $composite
+      *  @param CompilerInterface  $cmp
       */
-    public function process(CompositeInterface $composite)
+    public function process(CompositeInterface $composite,CompilerInterface $cmp)
     {
-        # build the relationship map        
-        $map_visitor    = new MapBuilderVisitor(new Relationships());
-        $composite->acceptVisitor($map_visitor);
-        $map = $map_visitor->getMap();
-        
-        foreach($map as $relationship) {
-            $cache          = new GeneratorCache();
-
-            # inject cache into foreign reference (where key originates)
-            $foreign_cache_injector = new ColumnCacheInjectorVisitor(
-                                                                      $cache,
-                                                                      $relationship->getForeign()->getTable(),
-                                                                      $relationship->getForeign()->getColumn()
-                                                                      );
-            $composite->acceptVisitor($foreign_cache_injector);
+        # find nodes that are Columns
+        foreach($cmp->getGraph()->getNodes() as $node) {
+            $node_value = $node->getValue();
             
-            # inject same cache into the local container.
-            # container is used to allow multiple containers per column for composite keys.
-            # not good design to combine keys into single column but still done on occasion.
-            $local_cache_injector   = new ForeignCacheInjectorVisitor(
-                                                                     $cache,
-                                                                     $relationship->getLocal()->getTable(),
-                                                                     $relationship->getLocal()->getColumn(),
-                                                                     $relationship->getLocal()->getContainer()
-                                                                     );
-            $composite->acceptVisitor($local_cache_injector);
-            
+            if($node_value instanceof Column) {
+                
+                $inner_edges = $node->getInEdges();
+                $f_key_found = false;
+                $cache       = new GeneratorCache();
+                
+                #assign cache to foreign keys assocaited with this column.
+                
+                foreach($inner_edges as $inEdge) {
+                    $composite_type = $inEdge->getSourceNode()->getValue();
+                    
+                    if($composite_type instanceof ForeignKey) {
+                        # test if cache is wanted, might only exist to establish relationship.    
+                        if($composite_type->getUseCache() === true) {
+                            $composite_type->setGeneratorCache($cache);
+                            $f_key_found = true;            
+                        }
+                    }
+                }
+                
+                #assign the cache to the column.
+                
+                if($f_key_found) {
+                    if(!$node_value instanceof CacheInterface) {
+                            throw new FakerException('Column:: '. $node->getValue()->getId() .' does not implement CacheInterface');
+                    }
+                    $node_value->setUseCache(true)->setGeneratorCache($cache);
+                }
+                
+            }
         }
         
     }
-    
-    
 }
 /* End of File */

@@ -16,6 +16,7 @@ use Faker\PlatformFactory;
 use Faker\ColumnTypeFactory;
 use Faker\Components\Faker\Formatter\FormatterFactory;
 use Faker\Components\Faker\TypeFactory;
+use Faker\Locale\LocaleFactory;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +37,7 @@ use Faker\Components\Faker\TypeFactory;
 |
 */
 
-    PlatformFactory::registerExtension('mysql','Faker\\Components\\Extension\\Doctrine\\Platforms\\MySqlPlatform');
+    PlatformFactory::registerExtension('mysql','Faker\\Extension\\Doctrine\\Platforms\\MySqlPlatform');
 
  
 /*
@@ -62,26 +63,24 @@ use Faker\Components\Faker\TypeFactory;
 | Faker DataTypes
 |--------------------------------------------------------------------------
 | 
-| To Add a new datatype a it must be registerd registered, the  object
-| implements TypeConfigInterface,CompositeInterface and TypeInterface.
-|
-| You are only required to register the config as it containsa factory for the partner datatype. 
+| To Add a new datatype a it must be registered, and the object
+| are extending from base Type.
 |
 | You may also override built in types using the same key.
 |
 | Example:
 |
-| TypeFactory::registerExtension('vector','Faker\\Components\\Extension\\Faker\\Type\\Vector');
+| TypeFactory::registerExtension('vector','Faker\\Extension\\Faker\\Type\\Vector');
 */
 
- //TypeFactory::registerExtension('vector','Faker\\Components\\Extension\\Faker\\Type\\Vector');
+ //TypeFactory::registerExtension('vector','Faker\\Extension\\Faker\\Type\\Vector');
 
 /*
 |--------------------------------------------------------------------------
 | Faker Formatters
 |--------------------------------------------------------------------------
 |
-| Register a new formatter, which control how data is written to the writter
+| Register a new formatter, which control how data is written to the writter.
 |
 | FormatterFactory::registerExtension('mongo','Faker\\Components\\Extension\\Faker\\Formatter\\Mongo');
 |
@@ -89,5 +88,18 @@ use Faker\Components\Faker\TypeFactory;
     
   //FormatterFactory::registerExtension('mongo','Faker\\Components\\Extension\\Faker\\Formatter\\Mongo');
 
+
+/*
+|--------------------------------------------------------------------------
+| Faker Locales
+|--------------------------------------------------------------------------
+|
+| Register a new Locale, which provide locale specific text to the generators.
+|
+| LocaleFactory::registerExtension('french','Faker\\Components\\Extension\\Locale\\FrenchLocale');
+|
+*/ 
+
+  //LocaleFactory::registerExtension('french','Faker\\Components\\Extension\\Locale\\FrenchLocale');
 
 /* End of File */

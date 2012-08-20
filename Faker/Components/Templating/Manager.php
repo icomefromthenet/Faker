@@ -50,8 +50,8 @@ class Manager implements ManagerInterface
     /**
       *  function getLoader
       *
-      *  return with this components loader object, is used to find database
-      *  config files under the config directory of your project
+      *  return with this components loader object, is used to find 
+      *  files under the template directory of your project
       *
       *  @access public
       *  @return \Faker\Components\Config\Loader

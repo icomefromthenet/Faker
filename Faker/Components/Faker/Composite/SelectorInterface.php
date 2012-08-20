@@ -1,7 +1,8 @@
 <?php
 namespace Faker\Components\Faker\Composite;
 
-interface SelectorInterface {
+interface SelectorInterface
+{
     
 }
 

@@ -22,9 +22,10 @@ class CountryTest extends AbstractProject
 
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-      
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Country($id,$parent,$event,$utilities);
+        $type = new Country($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -45,14 +46,17 @@ class CountryTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Country($id,$parent,$event,$utilities);
+        $type = new Country($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries' ,'AU,US,UK');
+        $type->setOption('name','country');
         $type->merge();        
         $this->assertSame(array('AU','US','UK'),$type->getOption('countries'));
         
-        # test with no options
-        $type = new Country($id,$parent,$event,$utilities);
+        # test with min options
+        $type = new Country($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','country');
         $type->merge();        
         $this->assertSame($type->getOption('countries'),null);
    
@@ -60,7 +64,7 @@ class CountryTest extends AbstractProject
     
     //  -------------------------------------------------------------------------
     
-    public function testGenerate()
+    public function testGenerateRandomCountry()
     {
         $id = 'table_two';
         $project = $this->getProject();
@@ -73,35 +77,122 @@ class CountryTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator->expects($this->exactly(3))
+                  ->method('generate')
+                  ->with($this->equalTo(0),$this->equalTo(247))
+                  ->will($this->returnValue(0));
             
-        $type = new Country($id,$parent,$event,$utilities);
-        $type->setOption('countries','AU,UK,US');
+            
+        $type = new Country($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','country');
         $type->merge();
         $type->validate(); 
          
-        $value = $type->generate(1,array());
-        $this->assertStringMatchesFormat('%s',$value);
-        $value = $type->generate(1,array());
-        $this->assertStringMatchesFormat('%s',$value);
-        $value = $type->generate(1,array());
-        $this->assertStringMatchesFormat('%s',$value);
-        
-        # test with no options        
-        $type = new Country($id,$parent,$event,$utilities);
-        $type->merge();
-        $type->validate(); 
-                
-        $value = $type->generate(1,array());
-        $this->assertStringMatchesFormat('%s',$value);
-        $value = $type->generate(1,array());
-        $this->assertStringMatchesFormat('%s',$value);
-        $value = $type->generate(1,array());
-        $this->assertStringMatchesFormat('%s',$value);
-        $value = $type->generate(1,array());
-        $this->assertStringMatchesFormat('%s',$value);
-   
+        $this->assertEquals('Albania',$type->generate(1,array()));
+        $this->assertEquals('Albania',$type->generate(1,array()));
+        $this->assertEquals('Albania',$type->generate(1,array()));
+       
     }
     
+    
+    public function testGenerateFromSingleCode()
+    {
+        $id = 'table_two';
+        $project = $this->getProject();
+       
+        $utilities = new Utilities($project);
+        
+        
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')
+                        ->getMock();
+                        
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+                      ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator->expects($this->exactly(0))
+                  ->method('generate');
+            
+            
+        $type = new Country($id,$parent,$event,$utilities,$generator);
+        $type->setOption('countries','AU');
+        $type->setOption('name','country');
+        $type->merge();
+        $type->validate(); 
+         
+        $this->assertEquals('Australia',$type->generate(1,array()));
+        $this->assertEquals('Australia',$type->generate(1,array()));
+        $this->assertEquals('Australia',$type->generate(1,array()));
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception 
+      */
+    public function testGenerateMultipleCodesWithIncorrectCode()
+    {
+        $id = 'table_two';
+        $project = $this->getProject();
+       
+        $utilities = new Utilities($project);
+        
+        
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')
+                        ->getMock();
+                        
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+                      ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator->expects($this->exactly(0))
+                  ->method('generate');
+            
+            
+        $type = new Country($id,$parent,$event,$utilities,$generator);
+        $type->setOption('countries','AU,UK,US');
+        $type->setOption('name','country');
+        $type->merge();
+        $type->validate(); 
+         
+        $this->assertEquals('',$type->generate(1,array()));
+    
+        
+    }
+    
+    public function testGenerateMultipleCodes()
+    {
+        $id = 'table_two';
+        $project = $this->getProject();
+       
+        $utilities = new Utilities($project);
+        
+        
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')
+                        ->getMock();
+                        
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+                      ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator->expects($this->exactly(3))
+                  ->method('generate')
+                  ->with($this->equalTo(0),$this->equalTo(2))
+                  ->will($this->returnValue(2));
+            
+            
+        $type = new Country($id,$parent,$event,$utilities,$generator);
+        $type->setOption('countries','AU,GB,US');
+        $type->setOption('name','country');
+        $type->merge();
+        $type->validate(); 
+         
+        $this->assertEquals('United States',$type->generate(1,array()));
+        $this->assertEquals('United States',$type->generate(1,array()));
+        $this->assertEquals('United States',$type->generate(1,array()));
+    
+        
+    }
     
 }
 /*End of file */

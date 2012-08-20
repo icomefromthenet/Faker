@@ -25,7 +25,8 @@ class GeneratorCache implements Iterator , Countable
      * @return void
      */
     
-    public function __construct() {
+    public function __construct()
+    {
         $this->position = 0;
     }
     

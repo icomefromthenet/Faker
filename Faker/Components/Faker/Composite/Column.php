@@ -65,6 +65,8 @@ class Column extends BaseComposite implements CacheInterface
         $this->column_type = $column;
         $this->options = $options;
         $this->use_cache = false;
+        
+        
     }
     
     /**
@@ -76,7 +78,7 @@ class Column extends BaseComposite implements CacheInterface
         
         $this->event->dispatch(
                         FormatEvents::onColumnStart,
-                        new GenerateEvent($this,$values,$this->getId())
+                        new GenerateEvent($this,$values,$this->getOption('name'))
         );
         
         # send the generate command to the type
@@ -85,12 +87,12 @@ class Column extends BaseComposite implements CacheInterface
         foreach($this->child_types as $type) {
                          
             # if we have many types we concatinate
-            $value[] =$type->generate($rows,$values);
+            $value[] = $type->generate($rows,$values);
         
             # dispatch the generate event
             $this->event->dispatch(
                 FormatEvents::onColumnGenerate,
-                new GenerateEvent($this,array( $this->getId() => $value ),$this->getId())
+                new GenerateEvent($this,array( $this->getId() => $value ),$this->getOption('name'))
             );
         }
         
@@ -98,20 +100,20 @@ class Column extends BaseComposite implements CacheInterface
         # if one value we want to keep the type the same
         
         if(count($value) > 1) {
-            $values[$this->getId()] = implode('',$value); # join as a string 
+            $values[$this->getOption('name')] = implode('',$value); # join as a string 
         } else {
-            $values[$this->getId()] = $value[0]; 
+            $values[$this->getOption('name')] = $value[0]; 
         }
         
         # test if the value needs to be cached
         if($this->use_cache === true) {
-            $this->cache->add($values[$this->getId()]);
+            $this->cache->add($values[$this->getOption('name')]);
         }
         
         # dispatch the stop event
         $this->event->dispatch(
                 FormatEvents::onColumnEnd,
-                new GenerateEvent($this,$values,$this->getId())
+                new GenerateEvent($this,$values,$this->getOption('name'))
         );
         
         # return values so they can be grouped in table parent
@@ -183,7 +185,7 @@ class Column extends BaseComposite implements CacheInterface
       */
     public function toXml()
     {
-        $str = '<column name="'.$this->getId().'" type="'.$this->getColumnType()->getName().'">'.PHP_EOL;
+        $str = '<column name="'.$this->getOption('name').'" type="'.$this->getColumnType()->getName().'">'.PHP_EOL;
     
         foreach($this->getChildren() as $child) {
             $str .= $child->toXml();
@@ -246,16 +248,62 @@ class Column extends BaseComposite implements CacheInterface
 
         $rootNode
             ->children()
+                  ->scalarNode('name')
+                    ->isRequired()
+                    ->info('The Name of the Column')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new \Faker\Components\Faker\Exception('Column::Name must be a string');
+                        })
+                    ->end()
+                ->end()
                 ->scalarNode('locale')
                     ->treatNullLike('en')
                     ->defaultValue('en')
-                    ->setInfo('The Default Local for this schema')
+                    ->info('The Default Local for this schema')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_string($v);
                         })
                         ->then(function($v){
                             throw new \Faker\Components\Faker\Exception('Column::Locale not in valid list');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('randomGenerator')
+                    ->info('Type of random number generator to use')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return empty($v) or !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new FakerException('randomGenerator must not be empty or string');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('generatorSeed')
+                    ->info('Seed value to use in the generator')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return ! is_integer($v);
+                        })
+                        ->then(function($v){
+                            throw new FakerException('generatorSeed must be an integer');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('type')
+                    ->info('Doctrine Column Type')
+                    ->isRequired()
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return ! is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new FakerException('Column Type must be included');
                         })
                     ->end()
                 ->end()

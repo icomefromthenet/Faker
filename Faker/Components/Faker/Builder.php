@@ -20,10 +20,7 @@ use Faker\Components\Faker\Composite\Column,
     Faker\Components\Faker\Formatter\FormatterInterface,
     Faker\Components\Faker\TypeFactory,
     Faker\Components\Writer\WriterInterface,
-    Faker\Components\Faker\Compiler\Compiler,
-    Faker\Components\Faker\Compiler\Pass\CircularRefPass,
-    Faker\Components\Faker\Compiler\Pass\CacheInjectorPass,
-    Faker\Components\Faker\Compiler\Pass\KeysExistPass,
+    Faker\Components\Faker\Compiler\CompilerInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Builder
@@ -79,16 +76,34 @@ class Builder
       */
     protected $event;
 
+    /**
+      *  @var Faker\Components\Compiler\PassCompilerPassInterface[] 
+      */
+    protected $compiler_passes;
+    
+    /**
+      *  @var Faker\Components\Compiler\CompilerInterface 
+      */
+    protected $compiler;
+    
     //  -------------------------------------------------------------------------
 
     
-    public function __construct(EventDispatcherInterface $event,PlatformFactory $platform, ColumnTypeFactory $column, TypeFactory $type,FormatterFactory $formatter)
+    public function __construct(EventDispatcherInterface $event,
+                                PlatformFactory $platform,
+                                ColumnTypeFactory $column,
+                                TypeFactory $type,
+                                FormatterFactory $formatter,
+                                CompilerInterface $compiler,
+                                array $compiler_passes)
     {
         $this->event = $event;
         $this->platform_factory = $platform;
         $this->column_factory  = $column;
         $this->formatter_factory = $formatter;
         $this->type_factory = $type;
+        $this->compiler = $compiler;
+        $this->compiler_passes = $compiler_passes;
     }
     
     //  -------------------------------------------------------------------------
@@ -121,6 +136,10 @@ class Builder
         if($this->current_schema !== null) {
             throw new FakerException('Scheam already added only have one');
         }
+        
+        if(isset($options['name']) === false) {
+            $options['name'] = $name;
+        }
        
         # validate the name for empty string
         
@@ -130,7 +149,7 @@ class Builder
        
         # create the new schema
         
-        $this->current_schema = new Schema($name,null,$this->event,array('locale' => $options['locale']));
+        $this->current_schema = new Schema($name,null,$this->event,$options);
         
         # assign schema as our head
         
@@ -150,18 +169,11 @@ class Builder
         if(!$this->head instanceof Schema) {
             throw new FakerException('Must add a scheam first before adding a table');
         }
+        
+        if(isset($options['name']) === false) {
+            $options['name'] = $name;
+        }
     
-        # validate the name for empty string
-        
-        if(empty($name)) {
-            throw new FakerException('Table must have a name');
-        }
-        
-        if(isset($options['generate']) === false) {
-            throw new FakerException('Table requires rows to generate');
-        }
-        
-        
         # merge options with default
         $options = array_merge(array(
                     'locale' => $this->head->getOption('locale')
@@ -169,8 +181,8 @@ class Builder
         
         
         # create the new table
-        
-        $table = new Table($name,$this->current_schema,$this->event,(integer)$options['generate'],array('locale' => $options['locale']));
+        $id = spl_object_hash($this->head).'.'.$name;
+        $table = new Table($id,$this->current_schema,$this->event,(integer)$options['generate'],$options);
         
         # add table to schema
         
@@ -194,12 +206,12 @@ class Builder
            throw new FakerException('Can not add new column without first setting a table and schema'); 
         }
     
-        if(empty($name)) {
-            throw new FakerException('Column must have a name');
-        }
-        
         if(isset($options['type']) === false) {
             throw new FakerException('Column requires a doctrine type');
+        }
+        
+        if(isset($options['name']) === false) {
+            $options['name'] = $name;
         }
         
          # find the doctine column type
@@ -211,7 +223,8 @@ class Builder
                     ),$options);
     
         # create new column
-        $current_column = new Column($name,$this->head,$this->event,$doctrine,array('locale' => $options['locale']));
+        $id = spl_object_hash($this->head).'.'.$name;
+        $current_column = new Column($id,$this->head,$this->event,$doctrine,$options);
         
         # add the column to the table
         $this->head->addChild($current_column);
@@ -243,12 +256,14 @@ class Builder
             throw new FakerException('Foreign-key must have a name unique name try foreignTable.foriegnColumn');
         }
         
+        if(isset($options['name']) === false) {
+            $options['name'] = $name;
+        }
+        
+        $id = spl_object_hash($this->head);
+        
         # create new column
-        $foreign_key = new ForeignKey($name,$this->head,$this->event,array(
-                                                                        'foreignTable'  => $options['foreignTable'],
-                                                                        'foreignColumn' => $options['foreignColumn']
-                                                                        )
-                                      );
+        $foreign_key = new ForeignKey($id.'.'.$name,$this->head,$this->event,$options);
         
         # add the column to the table
         $this->head->addChild($foreign_key);
@@ -272,8 +287,13 @@ class Builder
         if(empty($name)) {
             throw new FakerException('Selector must have a name');
         }
+        
+        if(isset($options['name']) === false) {
+            $options['name'] = $name;
+        }
     
-
+        $parent_id = spl_object_hash($this->head);
+    
         switch($name) {
             case 'alternate':
                 if(isset($options['step']) === false) {
@@ -281,11 +301,13 @@ class Builder
                 }
                 
                 $current_selector = new Alternate(
-                                $name,
+                                $parent_id.'.'.$name,
                                 $this->head,
                                 $this->event,
                                 (int)$options['step']
                 );
+                
+                $current_selector->setOption('name',$options['name']);
                 
                 $this->head->addChild($current_selector);
                 
@@ -298,7 +320,13 @@ class Builder
                     throw new FakerException('Pick type needs a probability');
                 } 
                 
-                $current_selector = new Pick($name,$this->head,$this->event,$options['probability']);
+                $current_selector = new Pick($parent_id.'.'.$name,
+                                                $this->head,
+                                                $this->event,
+                                                $options['probability']
+                                             );
+                
+                $current_selector->setOption('name',$options['name']);
                 
                 $this->head->addChild($current_selector);
                 
@@ -308,10 +336,12 @@ class Builder
             
             case 'random' :
                 $current_selector = new Random(
-                                    $name,
+                                    $parent_id.'.'.$name,
                                     $this->head,
                                     $this->event
                 );
+                
+                $current_selector->setOption('name',$options['name']);
                 
                 $this->head->addChild($current_selector);
                 
@@ -321,10 +351,12 @@ class Builder
         
             case 'swap' :
                 $current_selector = new Swap(
-                                    $name,
+                                    $parent_id.'.'.$name,
                                     $this->head,
                                     $this->event
                 );
+                
+                $current_selector->setOption('name',$options['name']);
 
                 $this->head->addChild($current_selector);
                 
@@ -343,11 +375,13 @@ class Builder
                 }
                 
                 $when =  new When(
-                                    $name,
+                                    $parent_id.'.'.$name,
                                     $this->head,
                                     $this->event,
                                     $options['switch']
                 );
+                
+                $when->setOption('name',$options['name']);
                 
                 $this->head->addChild($when);
 
@@ -365,7 +399,7 @@ class Builder
 
     //  -------------------------------------------------------------------------
     
-    public function addType($name,$options)
+    public function addType($name,$options = array())
     {
         
         # check if schema, table , column exist
@@ -379,10 +413,19 @@ class Builder
         if(empty($name)) {
             throw new FakerException('Selector must have a name');
         }
+        
+        if(isset($options['name']) === false) {
+            $options['name'] = $name;
+        }
     
         # instance the type config
     
         $current_type = $this->type_factory->create($name,$this->head);    
+
+        # set custom options        
+        foreach($options as $optname => $optvalue) {
+            $current_type->setOption($optname,$optvalue);
+        }
         
         $this->head->addChild($current_type);
         
@@ -440,12 +483,18 @@ class Builder
       */
     public function compile()
     {
+        $this->event->dispatch(BuildEvents::onCompileStart,new BuildEvent($this,'Starting Compile'));
+        
         # run the compiler
-        $compiler = new Compiler();
-        $compiler->addPass(new KeysExistPass());
-        $compiler->addPass(new CacheInjectorPass());
-        $compiler->addPass(new CircularRefPass());
+        $compiler = $this->compiler;
+        
+        foreach($this->compiler_passes as $pass) {
+            $compiler->addPass($pass);
+        }
+        
         $compiler->compile($this->current_schema);
+        
+        $this->event->dispatch(BuildEvents::onCompileEnd,new BuildEvent($this,'Finish Compile'));
         
         return $this;
     }
@@ -461,7 +510,12 @@ class Builder
       */
     public function validate()
     {
+        
+        $this->event->dispatch(BuildEvents::onValidationStart,new BuildEvent($this,'Starting Validation'));
+        
         $this->current_schema->validate();
+        
+        $this->event->dispatch(BuildEvents::onValidationEnd,new BuildEvent($this,'Finished Validation'));
         
         return $this;
     }
@@ -478,6 +532,8 @@ class Builder
             throw new FakerException('Can not build no schema set');
         }
         
+        $this->event->dispatch(BuildEvents::onBuildingStart,new BuildEvent($this,'Starting Build'));
+        
         # add the writers to the composite
         $this->current_schema->setWriters($this->formatters);
         
@@ -491,6 +547,8 @@ class Builder
         $this->validate();
         
         $schema = $this->current_schema;
+        
+         $this->event->dispatch(BuildEvents::onBuildingEnd,new BuildEvent($this,'Finished Build'));
         
         # reset the builder
         $this->clear();
@@ -527,7 +585,9 @@ class Builder
       */
     public function end()
     {
-        $this->head = $this->head->getParent();
+        if(!$this->head instanceof Schema) {
+            $this->head = $this->head->getParent();
+        }
         
         return $this;
     }

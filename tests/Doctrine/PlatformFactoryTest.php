@@ -13,7 +13,7 @@ class PlatformFactoryTest extends AbstractProject
         $project = $this->getProject();
         
         $this->assertInstanceOf('Doctrine\\DBAL\\Platforms\\DB2Platform',$factory->create('db2'));
-        $this->assertInstanceOf('Faker\\Components\\Extension\\Doctrine\\Platforms\\MySqlPlatform',$factory->create('mysql'));
+        $this->assertInstanceOf('Doctrine\\DBAL\\Platforms\\MySqlPlatform',$factory->create('mysql'));
         $this->assertInstanceOf('Doctrine\\DBAL\\Platforms\\OraclePlatform',$factory->create('oracle'));
         $this->assertInstanceOf('Doctrine\\DBAL\\Platforms\\PostgreSqlPlatform',$factory->create('postgresql'));
         $this->assertInstanceOf('Doctrine\\DBAL\\Platforms\\SqlitePlatform', $factory->create('sqlite'));

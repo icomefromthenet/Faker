@@ -24,13 +24,6 @@ class BooleanType extends Type
     
     //  -------------------------------------------------------------------------
 
-    public function toXml()
-    {
-       return '<datatype name="'.$this->getId().'"></datatype>' . PHP_EOL;
-    }
-    
-    //  -------------------------------------------------------------------------
-
     /**
      * Generates the configuration tree builder.
      *
@@ -51,8 +44,8 @@ class BooleanType extends Type
                        return (boolean) $v; 
                     })
                 ->end()    
-                ->setInfo('true or false')
-                ->setExample('true | false')
+                ->info('true or false')
+                ->example('true | false')
                 ->end()
             ->end();
             

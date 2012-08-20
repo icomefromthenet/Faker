@@ -23,8 +23,10 @@ class EmailTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Email($id,$parent,$event,$utilities);
+        $type = new Email($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','email');
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -45,10 +47,13 @@ class EmailTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Email($id,$parent,$event,$utilities);
+        $type = new Email($id,$parent,$event,$utilities,$generator);
         $type->setOption('format' ,'xxxx');
         $type->setOption('domains' , 'au,com.au');
+        $type->setOption('name','email');
         $type->merge();        
         
         $this->assertEquals('xxxx',$type->getOption('format'));
@@ -75,8 +80,11 @@ class EmailTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Email($id,$parent,$event,$utilities);
+        $type = new Email($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','email');
         $type->merge();        
         
     }
@@ -88,25 +96,42 @@ class EmailTest extends AbstractProject
     {
         $id = 'table_two';
         $project = $this->getProject();
-       
-        $utilities = new Utilities($project);
         
+        $utilities = $this->getMockBuilder('Faker\Components\Faker\Utilities')
+                          ->disableOriginalConstructor()
+                          ->getMock(); 
         
-        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')
+        $parent    = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')
                         ->getMock();
-                        
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+        $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator->expects($this->exactly(2))
+                  ->method('generate')
+                  ->with($this->equalTo(0),$this->isType('integer'))
+                  ->will($this->returnValue(0));
+        
+        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        
+        $utilities->expects($this->exactly(2))
+                   ->method('generateRandomAlphanumeric')
+                   ->with($this->isType('string'),$this->equalTo($generator),$this->equalTo($locale))
+                   ->will($this->onConsecutiveCalls('ddDDD','1111'));
+        
+        $utilities->expects($this->once())
+                  ->method('getGeneratorDatabase')
+                  ->will($this->returnValue($project['faker_database']));
             
-        $type = new Email($id,$parent,$event,$utilities);
-        $type->setOption('format','{fname}\'{lname}{alpha1}@{alpha2}.{domain}');
-        $type->setOption('alpha1','ccCCC');
-        $type->setOption('alpha2','xxxx');
-      
+        $type = new Email($id,$parent,$event,$utilities,$generator);
+        $type->setOption('format','{fname}\'{lname}{alpha2}@{alpha1}.{domain}');
+        $type->setOption('params','{"alpha1":"ccCCC","alpha2":"xxxx"}');
+        $type->setOption('name','email');
+        $type->setLocale($locale);
         $type->merge();       
         $type->validate(); 
          
-        $value = $type->generate(1,array());
+        $this->assertEquals('Kristina\'Chung1111@ddDDD.edu',$type->generate(1,array()));
     }
     
     

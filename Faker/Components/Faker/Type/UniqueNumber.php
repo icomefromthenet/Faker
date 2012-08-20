@@ -15,14 +15,6 @@ class UniqueNumber extends Type
      */
     static $generated = array();
 
-    
-    //  -------------------------------------------------------------------------
-
-    public function toXml()
-    {
-       return '<datatype name="'.$this->getId().'"></datatype>' . PHP_EOL;
-    }
-    
     //  -------------------------------------------------------------------------
 
     
@@ -36,8 +28,8 @@ class UniqueNumber extends Type
         return $rootNode
             ->children()
                 ->scalarNode('format')
-                ->defaultValue('XXXXXXXX')
-                ->setInfo('unique format to use')
+                  ->defaultValue('XXXXXXXX')
+                  ->info('unique format to use')
                 ->end()
             ->end();
     }
@@ -62,7 +54,7 @@ class UniqueNumber extends Type
         $format = $this->getOption('format');
         
         do  {
-            $guid = $this->utilities->generateRandomNumeric($format);
+            $guid = $this->utilities->generateRandomNum($format,$this->getGenerator());
         
             if(in_array($guid, self::$generated) === false) {
                 $ok = true;

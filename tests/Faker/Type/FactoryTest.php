@@ -9,10 +9,19 @@ use Faker\Components\Faker\Composite\CompositeInterface,
 class FactoryTest extends AbstractProject
 {
     
+    protected $original_extensnions;
+    
+    
+    public function __construct()
+    {
+        $this->original_extensnions = TypeFactory::$types;
+    }
+
+    
     public function tearDown()
     {
         TypeFactory::clearExtensions();
-        
+        TypeFactory::registerExtensions($this->original_extensnions);
         parent::tearDown();
     }
     
@@ -39,8 +48,9 @@ class FactoryTest extends AbstractProject
         $utilities = $this->getMockBuilder('Faker\Components\Faker\Utilities')
                         ->disableOriginalConstructor()
                         ->getMock();
-
-        $this->assertInstanceOf('Faker\Components\Faker\TypeFactory',new TypeFactory($utilities,$event));        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+                        
+        $this->assertInstanceOf('Faker\Components\Faker\TypeFactory',new TypeFactory($utilities,$event,$generator));        
     }
     
     //  -------------------------------------------------------------------------
@@ -59,9 +69,11 @@ class FactoryTest extends AbstractProject
                     ->disableOriginalConstructor()
                     ->getMockForAbstractClass();   
 
-        TypeFactory::registerExtensions(array('mockb' => 'MockTypeTestB'));  
+        TypeFactory::registerExtensions(array('mockb' => 'MockTypeTestB'));
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
     
-        $typefactory = new TypeFactory($utilities,$event);
+        $typefactory = new TypeFactory($utilities,$event,$generator);
         
         $type = $typefactory->create('mockb',$parent);
         
@@ -88,9 +100,11 @@ class FactoryTest extends AbstractProject
                     ->disableOriginalConstructor()
                     ->getMockForAbstractClass();   
 
-        TypeFactory::registerExtensions(array('mockb' => 'MockTypeTestCa'));  
+        TypeFactory::registerExtensions(array('mockb' => 'MockTypeTestCa'));
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
     
-        $typefactory = new TypeFactory($utilities,$event);
+        $typefactory = new TypeFactory($utilities,$event,$generator);
         
         $type = $typefactory->create('mockb',$parent);
     }
@@ -116,9 +130,11 @@ class FactoryTest extends AbstractProject
                     ->disableOriginalConstructor()
                     ->getMockForAbstractClass();   
 
-        TypeFactory::registerExtensions(array('mockb' => 'MockTypeTestD'));  
+        TypeFactory::registerExtensions(array('mockb' => 'MockTypeTestD'));
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
     
-        $typefactory = new TypeFactory($utilities,$event);
+        $typefactory = new TypeFactory($utilities,$event,$generator);
         
         $type = $typefactory->create('mockda',$parent);
         

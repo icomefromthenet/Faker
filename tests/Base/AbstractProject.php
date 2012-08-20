@@ -11,32 +11,44 @@ use Faker\Project,
 
 class AbstractProject extends PHPUnit_Framework_TestCase
 {
-
-
     protected $backupGlobalsBlacklist = array('project','symfony_auto_loader');
 
 
     protected $faker_dir = 'myproject';
 
+    /**
+      *  @var Faker\Project 
+      */
+    public static $project;
 
+    /**
+      *  Class Constructor 
+      */
     public function __construct()
     {
         # remove Faker project directory
         $path = '/var/tmp/' . $this->faker_dir;
 
         self::recursiveRemoveDirectory($path,true);
+        
+        $project = self::$project;
+        $project->setPath($this->getMockedPath());
+
+        $project['loader']->setExtensionNamespace(
+               'Faker\\Extension' , $project->getPath()->get()
+        );
+       
+        if(isset($project['data_path']) === false) {
+            $project['data_path'] = new \Faker\Path(__DIR__.'/../../data');
+        }
     }
 
 
 
     public function setUp()
     {
-        $project = new Project($this->getMockedPath());
-
-        $io = $this->getSkeltonIO();
-
         #test build
-        $this->createProject($project,$io);
+        $this->createProject(self::$project,$this->getSkeltonIO());
     }
 
 
@@ -50,24 +62,14 @@ class AbstractProject extends PHPUnit_Framework_TestCase
 
     }
 
-
+    /**
+      *  Will Fetch the project object
+      *
+      *  @return Faker\Project
+      */
     public function getProject()
     {
-        # project normally injected into application.
-        # but for testing its a global variable
-        global $project;
-
-        $path = $project->getPath()->parse((string)'/var/tmp/'.$this->faker_dir);
-       
-        $project['loader']->setExtensionNamespace(
-               'Faker\\Components\\Extension' , $project->getPath()->get()
-        );
-       
-        if(isset($project['data_path']) === false) {
-            $project['data_path'] = new \Faker\Path(__DIR__.'/../../data');
-        }
-        
-        return $project;
+        return self::$project;
     }
 
 

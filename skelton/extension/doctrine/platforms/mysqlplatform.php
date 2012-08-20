@@ -1,5 +1,5 @@
 <?php
-namespace Faker\Components\Extension\Doctrine\Platforms;
+namespace Faker\Extension\Doctrine\Platforms;
 
 use Doctrine\DBAL\Platforms\MySqlPlatform as BasePlatform;
 

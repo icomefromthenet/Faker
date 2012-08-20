@@ -1,15 +1,23 @@
 <?php
 namespace Faker\Components\Faker;
 
-use Faker\Project;
-use Faker\Components\ManagerInterface;
-use Faker\Io\IoInterface;
-
-use Faker\PlatformFactory;
-use Faker\ColumnTypeFactory;
-use Faker\Components\Faker\Formatter\FormatterFactory;
-use Faker\Components\Faker\SchemaAnalysis;
-
+use Faker\Project,
+    Faker\Components\ManagerInterface,
+    Faker\Io\IoInterface,
+    Faker\PlatformFactory,
+    Faker\ColumnTypeFactory,
+    Faker\Components\Faker\Formatter\FormatterFactory,
+    Faker\Components\Faker\SchemaAnalysis,
+    Faker\Components\Faker\Compiler\Pass\CircularRefPass,
+    Faker\Components\Faker\Compiler\Pass\CacheInjectorPass,
+    Faker\Components\Faker\Compiler\Pass\KeysExistPass,
+    Faker\Components\Faker\Compiler\Pass\GeneratorInjectorPass,
+    Faker\Components\Faker\Compiler\Pass\LocalePass,
+    Faker\Components\Faker\Compiler\Pass\TopOrderPass,
+    Faker\Components\Faker\Compiler\Graph\DirectedGraph,
+    Faker\Components\Faker\Visitor\DirectedGraphVisitor,
+    Faker\Components\Faker\Visitor\LocaleVisitor,
+    Faker\Components\Faker\Compiler\Compiler;
 
 class Manager implements ManagerInterface
 {
@@ -20,6 +28,11 @@ class Manager implements ManagerInterface
 
     protected $io;
 
+    /**
+      *  @var boolean use the circular reference compiler check
+      */
+    protected $use_c_check = false;
+    
     /**
       *  @var Faker\Project 
       */
@@ -138,11 +151,23 @@ class Manager implements ManagerInterface
       */    
     public function getCompositeBuilder()
     {
+        $compiler_pass = array(new KeysExistPass(),new CacheInjectorPass());
+        
+        if($this->use_c_check === true) {
+            $compiler_pass[] =  new CircularRefPass();
+            $compiler_pass[] =  new TopOrderPass();
+        }
+        $compiler_pass[] = new GeneratorInjectorPass($this->project['generator_factory'],$this->project['random_generator']);
+        $compiler_pass[] = new LocalePass(new LocaleVisitor($this->project->getLocaleFactory()));
+        
         return new Builder($this->project['event_dispatcher'],
                            $this->getPlatformFactory(),
                            $this->getColumnTypeFactory(),
                            $this->getTypeFactory(),
-                           $this->getFormatterFactory());        
+                           $this->getFormatterFactory(),
+                           new Compiler(new DirectedGraphVisitor(new DirectedGraph())),
+                           $compiler_pass
+                           );        
     }
     
     /**
@@ -153,7 +178,10 @@ class Manager implements ManagerInterface
       */
     public function getTypeFactory()
     {
-        return new TypeFactory(new Utilities($this->project),$this->project['event_dispatcher']);        
+        return new TypeFactory(new Utilities($this->project),
+                               $this->project['event_dispatcher'],
+                               $this->project['random_generator']
+                               );        
     }
     
     //  -------------------------------------------------------------------------
@@ -170,5 +198,31 @@ class Manager implements ManagerInterface
     }
     
     //  -------------------------------------------------------------------------
+    # Circular Reference Compiler Check    
+    
+    /**
+      *   Enable to Circular reference compiler check
+      *
+      *   @return void
+      *   @access public
+      */
+    public function enableCRCheck()
+    {
+        $this->use_c_check = true;
+    }
+    
+    /**
+      *  Disable to circular reference compiler check
+      *
+      *  @return void
+      *  @access public
+      */
+    public function disableCRCheck()
+    {
+        $this->use_c_check = false;
+    }
+    
+    //  ----------------------------------------------------------------------------
+    
 }
 /* End of File */

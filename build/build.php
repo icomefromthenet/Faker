@@ -8,14 +8,21 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
+//---------------------------------------------------------------
+// Setup Global Error Levels
+//
+//--------------------------------------------------------------
+
+error_reporting(E_ALL);
+
+ini_set('display_errors', 1);
+
+
 # load the bootstrap file
-require __DIR__ .'/../Faker/Bootstrap.php';
+$project = require __DIR__ .'/../Faker/Bootstrap.php';
 
 # set the data path
-
 $project['data_path'] = new \Faker\Path(__DIR__ .'/../data');
-
-
 $console = $project->getConsole();
 
 //---------------------------------------------------------------------
@@ -80,7 +87,7 @@ $pear_task->setCode(function(InputInterface $input, ConsoleOutputInterface $outp
     PEAR::setErrorHandling(PEAR_ERROR_DIE);
     
     $pack = new PEAR_PackageFileManager2;
-    $outputDir = realpath(dirname(__FILE__) . '/../') . '/';
+    $outputDir = realpath(dirname(__FILE__) . '/../');
     $inputDir = realpath(dirname(__FILE__) . '/../');
     
     $e = $pack->setOptions(array(
@@ -90,7 +97,7 @@ $pear_task->setCode(function(InputInterface $input, ConsoleOutputInterface $outp
         'packagedirectory' => $inputDir,
         
         'ignore' => array(
-            'bin/faker',
+            'bin/faker/',
             'bin/release.sh',
             'build/',
             'tests/',
@@ -138,8 +145,8 @@ $pear_task->setCode(function(InputInterface $input, ConsoleOutputInterface $outp
     
     $pack->setPackageType('php'); // this is a PEAR-style php script package
     
-    $pack->setReleaseVersion('1.0.1');
-    $pack->setAPIVersion('1.0.1');
+    $pack->setReleaseVersion('1.0.3');
+    $pack->setAPIVersion('1.0.3');
     
     $pack->setReleaseStability('stable');
     $pack->setAPIStability('stable');
@@ -200,7 +207,6 @@ $parse_names->setCode(function(InputInterface $input, ConsoleOutputInterface $ou
     $parser_options->setParser('csv');
     $parser_options->setHasHeaderRow(true);
     $parser_options->setFieldSeperator(ord(','));
-    
        
     # register for the generate event
     $event = $project['event_dispatcher'];
@@ -346,7 +352,7 @@ $parse_countries->setCode(function(InputInterface $input, ConsoleOutputInterface
     $parser_options->setParser('csv');
     $parser_options->setHasHeaderRow(false);
     $parser_options->setFieldSeperator(59);
-    $parser_options->setSkipRows(2);
+    $parser_options->setSkipRows(0);
     
     # register for the generate event
     $event = $project['event_dispatcher'];

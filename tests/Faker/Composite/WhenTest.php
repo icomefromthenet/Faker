@@ -32,6 +32,7 @@ class WhenTest extends AbstractProject
         $swap = 100;
     
         $alt = new When($id,$parent,$event,$swap);
+        $alt->setOption('name','when');
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();

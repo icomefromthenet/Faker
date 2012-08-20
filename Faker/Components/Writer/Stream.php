@@ -54,14 +54,20 @@ class Stream implements WriterInterface
      */
     protected $file_handle = NULL;
 
+    /**
+      *  @var Faker\Components\Writer\Encoding the iconv char encoder 
+      */
+    protected $encoder;
+    
 
-    public function __construct(Template $header_template, Template $footer_template, Sequence $file_sequence, Limit $write_limit, Io $path)
+    public function __construct(Template $header_template, Template $footer_template, Sequence $file_sequence, Limit $write_limit, Io $path,Encoding $encoder)
     {
+        $this->encoder         = $encoder;
         $this->header_template = $header_template;
         $this->footer_template = $footer_template;
-        $this->file_sequence = $file_sequence;
-        $this->write_limit = $write_limit;
-        $this->io = $path;
+        $this->file_sequence   = $file_sequence;
+        $this->write_limit     = $write_limit;
+        $this->io              = $path;
 
     }
 
@@ -91,7 +97,7 @@ class Stream implements WriterInterface
         }
         
         # write to the file (SplFileObject)
-        $this->file_handle->fwrite($line);   
+        $this->writeOut($line);
            
         # increment the limit
         $this->getLimit()->increment();
@@ -110,7 +116,7 @@ class Stream implements WriterInterface
         # header template
         $header = (string) $this->header_template->render();
         
-        $this->file_handle->fwrite($header);
+        $this->writeOut($header);
        
     }
     
@@ -119,7 +125,7 @@ class Stream implements WriterInterface
         # footer template
         $footer = (string) $this->footer_template->render();
        
-        $this->file_handle->fwrite($footer);
+        $this->writeOut($footer);
        
         
     }
@@ -132,6 +138,18 @@ class Stream implements WriterInterface
             $this->file_handle->fflush();
             $this->file_handle = null;
         }
+    }
+    
+    /**
+      *  Write out to the stream object encoding first
+      *
+      *  @access protected
+      *  @param string $str
+      *  @return void
+      */
+    protected function writeOut($str)
+    {
+        $this->file_handle->fwrite($this->encoder->encode($str));
     }
     
     
@@ -195,5 +213,16 @@ class Stream implements WriterInterface
     
     //  -------------------------------------------------------------------------
 
+    /**
+      *  Fetch the output encoder
+      *
+      *  @access public
+      *  @return Faker\Components\Writer\Encoding;
+      */
+    public function getEncoder()
+    {
+        return $this->encoder;
+    }
+    
 }
 /* End of File */

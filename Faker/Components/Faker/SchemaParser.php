@@ -102,11 +102,11 @@ class SchemaParser extends BaseXMLParser
             case 'option':    
                 
                 if(isset($attribs['name']) === false) {
-                    throw new FakerException('Option Missing Name');
+                    throw new FakerException('Have Type Option Tag Missing Name Attribute');
                 }
                 
                 if(isset($attribs['value']) === false) {
-                    throw new FakerException('Option Missing Value');
+                    throw new FakerException('Have Type Option Tag Missing Value Attribute');
                 }
                 
                 
@@ -153,7 +153,8 @@ class SchemaParser extends BaseXMLParser
             case 'pick';
             case 'random';
             case 'when':
-            case 'swap':    
+            case 'swap':
+            case 'foreign-key':
                 $this->builder->end();
             break;
         }

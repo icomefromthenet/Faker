@@ -14,36 +14,59 @@ class Range extends Type
       */
     protected $last_value;
     
+    /**
+      *  @var boolean is this first iteration 
+      */
+    protected $first_iteration = true;
     
+    /**
+      *  @inheritdoc  
+      */
     public function generate($rows, $values = array())
     {
-        $min = $this->getOption('min');
-        $max = $this->getOption('max');
-        $step = $this->getOption('step');
+        $min         = $this->getOption('min');
+        $max         = $this->getOption('max');
+        $step        = $this->getOption('step');
+        $random      = $this->getOption('random');
+        $round       = $this->getOption('round');
+        $window_step = $this->getOption('windowStep') + 0;
         
-        # on first generate call set last value to min
-        if($this->last_value === null) {
-            $this->last_value = $min;
-        }
-        else {
-           $this->last_value = $this->last_value + $step;
-        }
-
-        if($this->last_value > $max) {
+        if($step === false && $random === true) {
+            $this->last_value = $this->getGenerator()->generate($min,$max);
             
-            $this->last_value = $min;
+            if($round > 0) {
+                $this->last_value = \round($this->last_value,$round,\PHP_ROUND_HALF_UP);            
+            }
+            
+        } else {
+        
+            # on first generate call set last value to min
+            if($this->last_value === null) {
+                $this->last_value = $min;
+            }
+            else {
+               $this->last_value = $this->last_value + $step;
+            }
+        
+            if($round > 0) {
+                $this->last_value = \round($this->last_value,$round,\PHP_ROUND_HALF_UP);            
+            }
+    
+            if($this->last_value > $max) {
+                $this->last_value      = $min;
+                $this->first_iteration = false;
+            }
+        
         }
         
-        return ($this->last_value +0);
+        # in first iteration reduce window to 0 remove the effect. 
+        if($this->first_iteration === true) {
+            $window_step = 0;
+        }
+        
+        return ($this->last_value + $window_step);    
     }
 
-    
-    //  -------------------------------------------------------------------------
-
-    public function toXml()
-    {
-       return '<datatype name="'.$this->getId().'"></datatype>' . PHP_EOL;
-    }
     
     //  -------------------------------------------------------------------------
 
@@ -58,43 +81,75 @@ class Range extends Type
             ->children()
                 ->scalarNode('min')
                     ->isRequired()
-                    ->setInfo('Starting Number')
-                    ->setExample('A numeric number like 1 or 1.67 or 0.87')
+                    ->info('Starting Number')
+                    ->example('A numeric number like 1 or 1.67 or 0.87')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_numeric($v);
                         })
                         ->then(function($v){
-                            throw new \Faker\Components\Faker\Exception('Number::min Numeric is required');
+                            throw new \Faker\Components\Faker\Exception('Range::min Numeric is required');
                         })
                     ->end()
                 ->end()
                 ->scalarNode('max')
                     ->isRequired()
-                    ->setExample('A numeric number like 1 or 1.67 or 0.87')
-                    ->setInfo('The maxium to use in range')
+                    ->example('A numeric number like 1 or 1.67 or 0.87')
+                    ->info('The maxium to use in range')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_numeric($v);
                         })
                         ->then(function($v){
-                            throw new \Faker\Components\Faker\Exception('Number::max Numeric is required');
+                            throw new \Faker\Components\Faker\Exception('Range::max Numeric is required');
                         })
                     ->end()
                 ->end()
                 ->scalarNode('step')
-                    ->isRequired()
-                    ->setExample('1 , 1.5 , 0.6')
-                    ->setInfo('Stepping value applied on every increment, not supplied will use random')
+                    ->defaultValue(false)
+                    ->example('1 , 1.5 , 0.6')
+                    ->info('Stepping value applied on every increment, not supplied will use random')
                     ->validate()
                         ->ifTrue(function($v){
-                            return !is_numeric($v);
+                            return !(is_numeric($v) || $v === false);
                         })
                         ->then(function($v){
-                            throw new \Faker\Components\Faker\Exception('Number::step Numeric is required');
+                            throw new \Faker\Components\Faker\Exception('Range::Step option should be numeric or bool(false) to use random step');
                         })
                     ->end()
                 ->end()
+                ->scalarNode('windowStep')
+                    ->info('Value to add to the base after the iteration has finished (reached max)')                
+                    ->example(1)
+                    ->defaultValue(0)
+                    ->validate()
+                        ->ifTrue(function($x){
+                            return !is_numeric($x);
+                        })
+                        ->then(function($x){
+                            throw new \Faker\Components\Faker\Exception('Range:: windowStep must be an number');
+                        })
+                    ->end()
+                ->end()
+                ->booleanNode('random')
+                    ->defaultFalse()
+                    ->example('false|true')
+                    ->info('Enable random step value on every loop, step param must be set to false')
+                ->end()
+                ->scalarNode('round')
+                    ->defaultValue(0)
+                    ->example('an integer')
+                    ->info('number of places to round too')
+                     ->validate()
+                        ->ifTrue(function($v){
+                            return !(is_integer($v) && $v > 0);
+                        })
+                        ->then(function($v){
+                            throw new \Faker\Components\Faker\Exception('Range::Round option should be a positive integer >= 0');
+                        })
+                    ->end()
+                ->end()
+                
             ->end();
     }
     
@@ -103,6 +158,16 @@ class Range extends Type
     
     public function validate()
     {
+        $random      = $this->getOption('random');
+        $window_step = $this->getOption('windowStep') + 0;
+        
+        if($window_step > 0 && $random === true) {
+            throw new FakerException('Range:: Cannot use windowStep and RandomStep at same time');
+        }
+        
+        # set the iteration state.
+        $this->first_iteration = true;
+        
         return true;
     }
     

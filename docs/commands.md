@@ -7,9 +7,9 @@ There are 4 commands that can be used.
 This is the first command that should be run, it will copy the skelton of a project into the current directory. The project folder must exists prior to running the init command. The location of the folder can be override with the -p option.
 
 
-    projects/myproject$ mkdir database
-    projects/myproject$ cd database
-    projects/myproject/database$ faker:init
+    myproject$ mkdir database
+    myproject$ cd database
+    myproject/database$ faker:init
 
 
 Will setup a project under the projects/myproject/database/. 
@@ -31,7 +31,7 @@ This is a helpful method to get started with an existing schema, it will output 
 
     myproject/database faker:analyse
 
-Don't run generate yet, columns like dates and times require, specialised data types so generate will fail, customize first. 
+Don't run generate yet, open the schema file and fill in.
 
 ## Generate.
 

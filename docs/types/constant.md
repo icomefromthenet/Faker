@@ -11,7 +11,7 @@ A constant must only be used with string and numbers, value types like datatime 
 **The constant can be declared with the following:** 
 
 ```xml
-<datatype name="constant_numer">
+<datatype name="constant_number">
     <option name="value" value="100" />
 </datatype>
 ```

@@ -33,7 +33,7 @@ class SchemaTest extends AbstractProject
               ->method('dispatch')
               ->with($this->logicalOr($this->stringContains(FormatEvents::onSchemaStart), $this->stringContains(FormatEvents::onSchemaEnd)),$this->isInstanceOf('\Faker\Components\Faker\Formatter\GenerateEvent'));
               
-        $schema = new Schema($id,null,$event);
+        $schema = new Schema($id,null,$event,array('name' => $id));
         $schema->generate(1,array());
         
     }
@@ -43,7 +43,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event);
+        $schema = new Schema($id,null,$event,array('name' => $id));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_a->expects($this->once())
@@ -67,7 +67,7 @@ class SchemaTest extends AbstractProject
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
      
-        $schema = new Schema($id,null,$event);
+        $schema = new Schema($id,null,$event,array('name' => $id));
         
         $schema->setOption('locale','en');
         $this->assertEquals($schema->getOption('locale'),'en');
@@ -78,7 +78,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event);
+        $schema = new Schema($id,null,$event,array('name' => $id));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_a->expects($this->once())
@@ -106,7 +106,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event);
+        $schema = new Schema($id,null,$event,array('name' => $id));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -117,7 +117,6 @@ class SchemaTest extends AbstractProject
         
         $this->assertEquals($schema->getChildren(),array($child_a,$child_b));
         $this->assertSame($schema->getEventDispatcher(),$event);
-        $this->assertEquals(null,$schema->getParent());
         $this->assertEquals($id,$schema->getId());
         $this->assertEquals(array('one','two'),$schema->getWriters());
     }
@@ -130,7 +129,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event);
+        $schema = new Schema($id,null,$event,array('name' => $id));
      
         $schema->merge();
         $schema->validate();
@@ -141,7 +140,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event,array());
+        $schema = new Schema($id,null,$event,array('name' => $id));
         $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -162,7 +161,7 @@ class SchemaTest extends AbstractProject
     {
         $id = 'schema_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new Schema($id,null,$event,array('locale'=>null));
+        $schema = new Schema($id,null,$event,array('locale'=>null,'name' => $id));
 
         $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -177,5 +176,115 @@ class SchemaTest extends AbstractProject
         
     }
     
+    public function testNoDefaultsSetForGenerator()
+    {
+        
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schema = new Schema($id,null,$event,array('locale'=>null,'name' => $id));
+
+        $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+          
+        $schema->addChild($child_a);        
+        $schema->setWriters(array($writer));
+        
+        $schema->merge();
+        $this->assertFalse($schema->hasOption('randomGenerator'));
+        $this->assertFalse($schema->hasOption('generatorSeed'));
+        
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      */
+    public function testNotIntergerRefusedForGeneratorSeed()
+    {
+        
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schema = new Schema($id,null,$event,array('locale'=>null,'name' => $id));
+
+        $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+          
+        $schema->addChild($child_a);        
+        $schema->setWriters(array($writer));
+        
+        $schema->setOption('generatorSeed','a non integer');
+        
+        $schema->merge();
+        
+        
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      */
+    public function testNullNotAcceptedGeneratorSeed()
+    {
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schema = new Schema($id,null,$event,array('locale'=>null,'name' => $id));
+
+        $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+          
+        $schema->addChild($child_a);        
+        $schema->setWriters(array($writer));
+        
+        $schema->setOption('generatorSeed',null);
+        
+        $schema->merge();
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      */
+    public function testEmptyStringNotAcceptedGeneratorSeed()
+    {
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schema = new Schema($id,null,$event,array('locale'=>null,'name' => $id));
+
+        $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+          
+        $schema->addChild($child_a);        
+        $schema->setWriters(array($writer));
+        
+        $schema->setOption('generatorSeed','');
+        
+        $schema->merge();
+        
+        
+    }
+    
+    
+    public function testGeneratorOptionsAccepted()
+    {
+        
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schema = new Schema($id,null,$event,array('locale'=>null,'name' => $id));
+
+        $writer = $this->getMockBuilder('Symfony\Components\Faker\Formatter\FormatterInterface')->getMock();
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+          
+        $schema->addChild($child_a);        
+        $schema->setWriters(array($writer));
+        
+        $schema->setOption('generatorSeed',100);
+        $schema->setOption('randomGenerator','srand');
+        
+        $schema->merge();
+        
+        $this->assertEquals(100,$schema->getOption('generatorSeed'));
+        $this->assertEquals('srand',$schema->getOption('randomGenerator'));
+        
+    }
     
 }

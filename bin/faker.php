@@ -8,8 +8,24 @@ use Faker\Project,
     Faker\Command\GenerateCommand,
     Faker\Command\AnalyseCommand,
     Faker\Command\ConfigureCommand,
-    Faker\Command\InitProjectCommand;
+    Faker\Command\InitProjectCommand,
+    Faker\Command\Doctrine\ImportCommand,
+    Faker\Command\Doctrine\ReservedWordsCommand,
+    Faker\Command\Doctrine\RunSqlCommand,
+    Symfony\Component\Console\Helper\HelperSet;
+    
 
+//---------------------------------------------------------------
+// Setup Global Error Levels
+//
+//--------------------------------------------------------------
+   
+   error_reporting(E_ALL);
+   
+   ini_set('display_errors', 1);
+       
+  
+   
 //---------------------------------------------------------------------
 // Set Pear Directories
 //
@@ -19,14 +35,13 @@ use Faker\Project,
 if(strpos('@PHP-BIN@', '@PHP-BIN') === 0) { // stand-alone version is running
 
    set_include_path(dirname(__FILE__) . '/../' . PATH_SEPARATOR . get_include_path());
-   require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
+   $project = require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
    $project['data_path'] = new Path(__DIR__ . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'data');      
 
 }else {
-   require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
+   $project = require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
    $project['data_path'] = new Path('@PEAR-DATA@' . DIRECTORY_SEPARATOR .'Faker');   
 }
-
 
 
 //---------------------------------------------------------------------
@@ -38,6 +53,17 @@ $project->getConsole()->add(new GenerateCommand('faker:generate'));
 $project->getConsole()->add(new AnalyseCommand('faker:analyse'));
 $project->getConsole()->add(new ConfigureCommand('faker:configure'));
 $project->getConsole()->add(new InitProjectCommand('faker:init'));
+
+//---------------------------------------------------------------------
+// Inject Doctine Commands
+//
+//--------------------------------------------------------------------
+
+
+$project->getConsole()->add(new ImportCommand());
+$project->getConsole()->add(new ReservedWordsCommand());
+$project->getConsole()->add(new RunSqlCommand());
+
 
 
 //--------------------------------------------------------------------

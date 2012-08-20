@@ -22,16 +22,9 @@ class Numeric extends Type
         
         # add 0 to fore type to be cast as number.
         
-        return $this->utilities->generateRandomNum($format) + 0;
+        return $this->utilities->generateRandomNum($format,$this->getGenerator()) + 0;
     }
     
-    
-    //  -------------------------------------------------------------------------
-
-    public function toXml()
-    {
-       return '<datatype name="'.$this->getId().'"></datatype>' . PHP_EOL;
-    }
     
     //  -------------------------------------------------------------------------
 
@@ -46,9 +39,9 @@ class Numeric extends Type
         return $rootNode
             ->children()
                 ->scalarNode('format')
-                ->isRequired()
-                ->setInfo('Numeric format to use')
-                ->setExample('xxxx.xx | xxxxx.xxxxx | xxxxxx')
+                    ->isRequired()
+                    ->info('Numeric format to use')
+                    ->example('xxxx.xx | xxxxx.xxxxx | xxxxxx')
                 ->end()
             ->end();
     }

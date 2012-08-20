@@ -59,13 +59,6 @@ class ConstantNumber extends Type
 
     //  -------------------------------------------------------------------------
 
-    public function toXml()
-    {
-       return '<datatype name="'.$this->getId().'"></datatype>' . PHP_EOL;
-    }
- 
-    //  -------------------------------------------------------------------------
-
    /**
      * Generates the configuration tree builder.
      *
@@ -78,11 +71,11 @@ class ConstantNumber extends Type
             ->children()
                 ->scalarNode('value')
                     ->isRequired()
-                    ->setInfo('The constant value to use')
+                    ->info('The constant value to use')
                 ->end()
                 ->scalarNode('type')
-                    ->setInfo('Cast to use')
-                    ->setExample('string|boolean|integer|float|double')
+                    ->info('Cast to use')
+                    ->example('string|boolean|integer|float|double')
                     ->defaultValue('integer')
                     ->validate()
                         ->ifTrue(function($v){

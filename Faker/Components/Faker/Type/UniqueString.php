@@ -16,14 +16,7 @@ class UniqueString extends Type
     static $generated = array();
 
     
-    //  -------------------------------------------------------------------------
-
-    public function toXml()
-    {
-       return '<datatype name="'.$this->getId().'"></datatype>' . PHP_EOL;
-    }
-    
-    //  -------------------------------------------------------------------------
+   //  -------------------------------------------------------------------------
 
     
     /**
@@ -36,8 +29,8 @@ class UniqueString extends Type
       return $rootNode
             ->children()
                 ->scalarNode('format')
-                ->defaultValue('XXXXXXXX-XXXX-XXXX-XXXX-XXXX-XXXXXXXX')
-                ->setInfo('unique format to use')
+                  ->defaultValue('XXXXXXXX-XXXX-XXXX-XXXX-XXXX-XXXXXXXX')
+                  ->info('unique format to use')
                 ->end()
             ->end();
     }
@@ -62,7 +55,7 @@ class UniqueString extends Type
         $format = $this->getOption('format');
         
         do  {
-            $guid = $this->utilities->generateRandomAlphaNumeric($format);
+            $guid = $this->utilities->generateRandomAlphaNumeric($format,$this->getGenerator(),$this->getLocale());
         
             if(in_array($guid, self::$generated) === false) {
                 $ok = true;

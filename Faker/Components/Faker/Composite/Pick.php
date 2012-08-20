@@ -4,6 +4,7 @@ namespace Faker\Components\Faker\Composite;
 use Faker\Components\Faker\Exception as FakerException,
     Faker\Components\Faker\Formatter\FormatEvents,
     Faker\Components\Faker\Formatter\GenerateEvent,
+    Faker\Generator\GeneratorInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 
@@ -41,6 +42,11 @@ class Pick extends BaseComposite implements  CompositeInterface , SelectorInterf
     protected $probability;
     
     /**
+      *  @var Faker\Generator\GeneratorInterface 
+      */
+    protected $generator;
+    
+    /**
       *  Class construtor
       *
       *  @access public
@@ -71,38 +77,6 @@ class Pick extends BaseComposite implements  CompositeInterface , SelectorInterf
     }
     
     
-    //  -------------------------------------------------------------------------
-
-
-     /**
-      * Fenerates a random binominal distributed integer. 
-      *
-      *  @source http://www.php.net/manual/en/function.rand.php#107712 
-      */
-    function binRand($min = null, $max = null)
-    {
-        $min = ($min) ? (int) $min : 0;
-        $max = ($max) ? (int) $max : PHP_INT_MAX;
-        
-        $range = range($min, $max);
-        $average = array_sum($range) / count($range);
-        
-        $dist = array();
-        for ($x = $min; $x <= $max; $x++) {
-            $dist[$x] = -abs($average - $x) + $average + 1;
-        }
-        
-        $map = array();
-        foreach ($dist as $int => $quantity) {
-            for ($x = 0; $x < $quantity; $x++) {
-                $map[] = $int;
-            }
-        }
-        
-        shuffle($map);
-        return current($map);
-    }
-       
    //  -------------------------------------------------------------------------
     
     /**
@@ -110,8 +84,7 @@ class Pick extends BaseComposite implements  CompositeInterface , SelectorInterf
       */
     public function generate($rows,$values = array())
     {
-        
-        $index = ($this->binRand(1,100) <= $this->probability) ? 0 : 1;
+        $index = (round($this->generator->generate(0,100)) <= $this->probability) ? 0 : 1;
         
         if(isset($this->child_types[$index]) == false) {
            throw new FakerException('Pick must have TWO types set');
@@ -181,6 +154,18 @@ class Pick extends BaseComposite implements  CompositeInterface , SelectorInterf
     {
         return '';
     }
+    
+    /**
+      *  Set the random number generator
+      *
+      *  @access public
+      *  @return Faker\Generator\GeneratorInterface
+      */
+    public function setGenerator(GeneratorInterface $generator)
+    {
+	$this->generator = $generator;
+    }
+    
     
     //  -------------------------------------------------------------------------
     

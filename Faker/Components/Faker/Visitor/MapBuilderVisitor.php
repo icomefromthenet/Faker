@@ -48,28 +48,48 @@ class MapBuilderVisitor extends BaseVisitor
         throw new FakerException('Not implemented');
     }
     
+    public function visitGeneratorInjector(CompositeInterface $composite)
+    {
+         throw new FakerException('Not implemented');
+    }
+    
+    public function visitLocale(CompositeInterface $composite)
+    {
+        throw new FakerException('Not Implemented');
+    }
+    
+    public function visitDirectedGraph(CompositeInterface $composite)
+    {
+        throw new FakerException('Not Implemented');
+    }
+    
     public function visitMapBuilder(CompositeInterface $composite)
     {
-        
-        
         
         # scan for fk to mine for indexes
         if($composite instanceof ForeignKey) {
            
-           # fetch foreign details 
-           $foreign_table   = $composite->getOption('foreignTable');
-           $foreign_column  = $composite->getOption('foreignColumn');
+           # iterate up the chain till get a column or excpetion if first node in composite (schema)
+           $node = $composite;
+           do
+           {
+                $node = $node->getParent();
+           }
+           while(!$node instanceof Column);
+           $column = $node;
            
-           # fetch the fk address details
-           $column = $composite->getParent();
-           $table  = $column->getParent();
-           
-           $column_name = $column->getId();
-           $table_name  = $table->getId();
+           $node = $composite; 
+           do
+           {
+                $node = $node->getParent();
+           }
+           while(!$node instanceof Table);
+           $table  = $node;
+     
            
            $this->results->add(new Relationship(
-                                         new Relation($table_name,$column_name,$composite->getId()),
-                                         new Relation($foreign_table,$foreign_column)
+                                         new Relation($table->getOption('name'),$column->getOption('name'),$composite->getOption('name')),
+                                         new Relation($composite->getOption('foreignTable'),$composite->getOption('foreignColumn'))
                                          )
                         );
         }

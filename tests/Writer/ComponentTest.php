@@ -27,12 +27,24 @@ class ComponentTest extends AbstractProject
         $manager2 =  $project['writer_manager'];
 
         $this->assertSame($manager,$manager2);
+      }
 
+    /**
+      *  @group Writer 
+      */
+    public function testNewEncoder()
+    {
+        $project = $this->getProject();
+        $manager = $project->getWritterManager();
+      
+        $this->assertInstanceOf('Faker\Components\Writer\Encoding',$manager->getEncoder('utf-8','utf-8'));
+      
     }
 
-      /**
-       *  @group Writer 
-       */
+    
+    /**
+      *  @group Writer 
+      */
     public function testManagerGetWriter()
     {
         $project = $this->getProject();
@@ -65,6 +77,8 @@ class ComponentTest extends AbstractProject
        
         # test if a footer template was supplied
         $this->assertInstanceOf('Faker\Components\Templating\Template',$writer->getStream()->getFooterTemplate());
+        
+        
     }
 
      

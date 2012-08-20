@@ -44,8 +44,20 @@ class Sql extends BaseFormatter implements FormatterInterface
     
     public function getOuputFileFormat()
     {
-        return '{prefix}_{body}_{suffix}_{seq}.{ext}';
+        return '{seq}_{prefix}_{body}_{suffix}.{ext}';
     }
+    
+    /**
+      *  Defines the default output encoding
+      *
+      *  @return string the out encoding
+      *  @access public
+      */
+    public function getDefaultOutEncoding()
+    {
+        return 'UTF-8';
+    }
+    
     
     //  -------------------------------------------------------------------------
     # Format Events
@@ -60,9 +72,10 @@ class Sql extends BaseFormatter implements FormatterInterface
     {
 
         # set the schema prefix on writter
-        $this->writer->getStream()->getSequence()->setPrefix(strtolower($event->getId()));
+        $this->writer->getStream()->getSequence()->setPrefix(strtolower($event->getType()->getOption('name')));
         $this->writer->getStream()->getSequence()->setSuffix($this->platform->getName());
         $this->writer->getStream()->getSequence()->setExtension('sql');
+        $this->writer->getStream()->getEncoder()->setOutEncoding($this->getOption(self::CONFIG_OPTION_OUT_ENCODING));
         
         $now = new \DateTime();
         
@@ -73,7 +86,7 @@ class Sql extends BaseFormatter implements FormatterInterface
                                         'host'          => $server_name,
                                         'datetime'      => $now->format(DATE_W3C),
                                         'phpversion'    => PHP_VERSION,
-                                        'schema'        => $event->getId(),
+                                        'schema'        => $event->getType()->getOption('name'),
                                         'platform'      => $this->platform->getName(),
                                         ));
     }
@@ -99,13 +112,13 @@ class Sql extends BaseFormatter implements FormatterInterface
     {
        
        # set the prefix on the writer for table 
-       $this->writer->getStream()->getSequence()->setBody(strtolower($event->getId()));
+       $this->writer->getStream()->getSequence()->setBody(strtolower($event->getType()->getOption('name')));
        
        # build a column map
        $map = array();
 
        foreach($event->getType()->getChildren() as $column) {
-            $map[$column->getId()] = $column->getColumnType();
+            $map[$column->getOption('name')] = $column->getColumnType();
        }
        
        $this->column_map = $map;
@@ -113,12 +126,12 @@ class Sql extends BaseFormatter implements FormatterInterface
        $this->writer->write(PHP_EOL);
        $this->writer->write(PHP_EOL);
        $this->writer->write('--'.PHP_EOL);
-       $this->writer->write('-- Table: '.$event->getId().PHP_EOL);
+       $this->writer->write('-- Table: '.$event->getType()->getOption('name').PHP_EOL);
        $this->writer->write('--'.PHP_EOL);
        $this->writer->write(PHP_EOL);
        $this->writer->write(PHP_EOL);
        
-       $this->writer->write('USE '.$event->getType()->getParent()->getId().';');        
+       $this->writer->write('USE '.$event->getType()->getParent()->getOption('name').';');        
        $this->writer->write(PHP_EOL);
        $this->writer->write(PHP_EOL);
 
@@ -139,7 +152,7 @@ class Sql extends BaseFormatter implements FormatterInterface
        $this->writer->write(PHP_EOL);
        $this->writer->write(PHP_EOL);
        $this->writer->write('--'.PHP_EOL);
-       $this->writer->write('-- Finished Table: '.$event->getId().PHP_EOL);
+       $this->writer->write('-- Finished Table: '.$event->getType()->getOption('name').PHP_EOL);
        $this->writer->write('--'.PHP_EOL);
        $this->writer->write(PHP_EOL);
        $this->writer->write(PHP_EOL);
@@ -181,7 +194,7 @@ class Sql extends BaseFormatter implements FormatterInterface
         # build insert statement 
         
         $q      = $this->platform->getIdentifierQuoteCharacter();
-        $table  = $event->getType()->getId();
+        $table  = $event->getType()->getOption('name');
         
         # column names add quotes to them
         
@@ -307,7 +320,7 @@ class Sql extends BaseFormatter implements FormatterInterface
                     ->booleanNode(self::CONFIG_OPTION_SPLIT_ON_TABLE)
                         ->treatNullLike(true)
                         ->defaultValue(true)
-                        ->setInfo('Start a new file when a table has finished generating')
+                        ->info('Start a new file when a table has finished generating')
                     ->end()
                     ->scalarNode(self::CONFIG_OPTION_MAX_LINES)
                         ->treatNullLike(self::MAX_LINES)
@@ -322,7 +335,7 @@ class Sql extends BaseFormatter implements FormatterInterface
                     ->booleanNode(self::CONFIG_OPTION_SINGLE_FILE_MODE)
                         ->treatNullLike(self::SINGLE_FILE_MODE)
                         ->defaultValue(self::SINGLE_FILE_MODE)
-                        ->setInfo('Generate into a sinlge file not splitting on new table or maxlines')
+                        ->info('Generate into a sinlge file not splitting on new table or maxlines')
                     ->end()
                  ->end();
         

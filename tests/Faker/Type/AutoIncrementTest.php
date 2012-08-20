@@ -21,9 +21,10 @@ class AutoIncrementTest extends AbstractProject
 
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-      
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface'); 
             
-        $type = new AutoIncrement($id,$parent,$event,$utilities);
+        $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -44,8 +45,11 @@ class AutoIncrementTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new AutoIncrement($id,$parent,$event,$utilities);
+        $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','autoincrement');
         $type->merge();        
         
         $this->assertEquals($type->getOption('start'),1);
@@ -73,9 +77,12 @@ class AutoIncrementTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new AutoIncrement($id,$parent,$event,$utilities);
-        $type->setOption('aaaa','bbb'); 
+        $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
+        $type->setOption('aaaa','bbb');
+        $type->setOption('name','autoincrement');
         $type->merge();        
     }
     
@@ -98,9 +105,12 @@ class AutoIncrementTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new AutoIncrement($id,$parent,$event,$utilities);
+        $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
         $type->setOption('increment' , 'bbb');
+        $type->setOption('name','autoincrement');
         $type->merge();        
     }
     
@@ -121,9 +131,12 @@ class AutoIncrementTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+                      
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');                      
             
-        $type = new AutoIncrement($id,$parent,$event,$utilities);
+        $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
         $type->setOption('start','bbb');
+        $type->setOption('name','autoincrement');
         $type->merge();        
     }
     
@@ -145,13 +158,15 @@ class AutoIncrementTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new AutoIncrement($id,$parent,$event,$utilities);
+        $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
         
         # test with start > 0
         $type->setOption('start',1);
         $type->setOption('increment',4);
-        
+        $type->setOption('name','autoincrement');
         $type->validate(); 
          
         $this->assertEquals(1,$type->generate(1,array()));
@@ -160,9 +175,11 @@ class AutoIncrementTest extends AbstractProject
         
         
         # test with start at 0
-        $type = new AutoIncrement($id,$parent,$event,$utilities);
+        $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
         $type->setOption('start',0);
         $type->setOption('increment',4);
+        $type->setOption('name','autoincrement');
+        
         
         $type->validate(); 
          
@@ -173,9 +190,10 @@ class AutoIncrementTest extends AbstractProject
  
  
         # test with non int increment
-        $type = new AutoIncrement($id,$parent,$event,$utilities);
+        $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
         $type->setOption('start',0);
         $type->setOption('increment',0.5);
+        $type->setOption('name','autoincrement');
         $type->validate(); 
          
         $this->assertEquals(0,$type->generate(1,array()));

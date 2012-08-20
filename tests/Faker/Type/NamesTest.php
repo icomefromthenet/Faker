@@ -23,8 +23,9 @@ class NamesTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Names($id,$parent,$event,$utilities);
+        $type = new Names($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -45,9 +46,11 @@ class NamesTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-            
-        $type = new Names($id,$parent,$event,$utilities);
-        $type->setOption('format','xxxx'); 
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        
+        $type = new Names($id,$parent,$event,$utilities,$generator);
+        $type->setOption('format','xxxx');
+        $type->setOption('name','names');
         $type->merge();        
         $this->assertEquals('xxxx',$type->getOption('format'));
         
@@ -72,8 +75,11 @@ class NamesTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new Names($id,$parent,$event,$utilities);
+        $type = new Names($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','names');
         $type->merge();        
     }
     
@@ -91,42 +97,52 @@ class NamesTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+         
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface'); 
+        $generator->expects($this->exactly(6))
+                  ->method('generate')
+                  ->with($this->equalTo(0),$this->anything())
+                  ->will($this->returnValue(0));
             
-        $type = new Names($id,$parent,$event,$utilities);
+            
+        $type = new Names($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','{fname} {lname}');
+        $type->setOption('name','names');
         $type->merge();
         $type->validate(); 
          
-        $this->assertStringMatchesFormat('%s %s',$type->generate(1,array()));
+        $this->assertEquals('Kristina Chung',$type->generate(1,array()));
     
     
         $type->setOption('format','{fname} {inital} {lname}');
         $type->merge();
         $type->validate(); 
          
-        $this->assertStringMatchesFormat('%s %s %s',$type->generate(1,array()));
+        $this->assertEquals('Kristina H Chung',$type->generate(1,array()));
     
         $type->setOption('format','{fname},{inital} {lname}');
         $type->merge();
         $type->validate(); 
          
-        $this->assertStringMatchesFormat('%s,%s %s',$type->generate(1,array()));
+        $this->assertEquals('Kristina,H Chung',$type->generate(1,array()));
         
         $type->setOption('format','{fname},{lname} {inital}');
         $type->merge();
         $type->validate(); 
          
-        $this->assertStringMatchesFormat('%s,%s %s',$type->generate(1,array()));
+        $this->assertEquals('Kristina,Chung H',$type->generate(1,array()));
         
         $type->setOption('format','{lname}');
         $type->merge();
         $type->validate(); 
          
-        $this->assertStringMatchesFormat('%s',$type->generate(1,array()));
+        $this->assertEquals('Chung',$type->generate(1,array()));
         
         $type->setOption('format','{fname},{lname} {inital}');
         $type->merge();
-        $type->validate(); 
+        $type->validate();
+        
+        $this->assertEquals('Kristina,Chung H',$type->generate(1,array()));
          
     }
     

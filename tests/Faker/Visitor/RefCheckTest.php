@@ -16,8 +16,8 @@ class RefCheckTest extends AbstractProject
         $composite->acceptVisitor($visitor);
         
         $this->assertInstanceOf('\Faker\Components\Faker\Composite\Column',$visitor->getFoundColumn());
-        $this->assertEquals('table1',$visitor->getFoundColumn()->getParent()->getId());
-        $this->assertEquals('column1',$visitor->getFoundColumn()->getId());
+        $this->assertEquals('table1',$visitor->getFoundColumn()->getParent()->getOption('name'));
+        $this->assertEquals('column1',$visitor->getFoundColumn()->getOption('name'));
     }
     
     public function testRefCheckonInvalidIndex()
@@ -34,11 +34,11 @@ class RefCheckTest extends AbstractProject
         $project = $this->getProject();
         $builder = $project->getFakerManager()->getCompositeBuilder();
 
-        $builder->addSchema('schema1',array())
+        $builder->addSchema('schema1',array('name' => 'schema1'))
                     ->addWriter('mysql','sql')
-                    ->addTable('table1',array('generate' => 100))
-                        ->addColumn('column1',array('type' => 'string'))
-                            ->addType('alphanumeric',array())
+                    ->addTable('table1',array('generate' => 100,'name' => 'table1'))
+                        ->addColumn('column1',array('type' => 'string','name' => 'column1'))
+                            ->addType('alphanumeric',array('name' => 'alphanumeric'))
                                 ->setTypeOption('format','aaaa')
                             ->end()
                         ->end()

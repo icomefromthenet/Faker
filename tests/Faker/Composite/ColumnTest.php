@@ -20,7 +20,7 @@ class ColumnTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
       
-        $column = new Column($id,$parent,$event,$column_type);
+        $column = new Column($id,$parent,$event,$column_type,array('name' => $id));
         
         $this->assertInstanceOf('Faker\Components\Faker\Composite\CompositeInterface',$column);
         $this->assertInstanceOf('Faker\Components\Faker\CacheInterface',$column);
@@ -51,7 +51,7 @@ class ColumnTest extends AbstractProject
                 ->will($this->returnValue('example'));
        
               
-        $column = new Column($id,$parent,$event,$column_type);
+        $column = new Column($id,$parent,$event,$column_type,array('name' => $id));
         $column->addChild($child_a);
         $column->generate(1,array());
         
@@ -61,14 +61,14 @@ class ColumnTest extends AbstractProject
     
     public function testChildrenGenerateCalled()
     {
-        $id = 'table_1';
+        $id = 'column_1';
         $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=>null));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=>null,'name' =>$id,'type' => 'string'));
              
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_a->expects($this->exactly(1))
@@ -99,14 +99,14 @@ class ColumnTest extends AbstractProject
     
     public function testConfigurationParsed()
     {
-        $id = 'table_1';
+        $id = 'column_1';
         $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
        
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','name' => $id,'type' => 'string'));
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $child_a->expects($this->exactly(1))
@@ -141,7 +141,7 @@ class ColumnTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         
-        $column = new Column($id,$parent,$event,$column_type);
+        $column = new Column($id,$parent,$event,$column_type,array('name' => $id,'type' => 'string'));
      
         
         $xml = $column->toXml();
@@ -159,7 +159,7 @@ class ColumnTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
     
-        $column = new Column($id,$parent,$event,$column_type);
+        $column = new Column($id,$parent,$event,$column_type,array('type' => 'string','name' => $id));
      
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
         $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
@@ -183,7 +183,7 @@ class ColumnTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','type' => 'string','name' => $id));
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $child_a->expects($this->exactly(1))
@@ -230,7 +230,7 @@ class ColumnTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','type' => 'string','name' => $id));
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $child_a->expects($this->exactly(1))
@@ -266,7 +266,7 @@ class ColumnTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','type' => 'string','name' => $id));
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $child_a->expects($this->exactly(1))
@@ -303,7 +303,7 @@ class ColumnTest extends AbstractProject
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
 
         
-        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china'));
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','type' => 'string','name' => $id));
         
         $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
         $child_a->expects($this->exactly(1))
@@ -341,6 +341,114 @@ class ColumnTest extends AbstractProject
         
         $cache->next();
         $this->assertEquals($cache->current(),'valueavalueb');
+        
+    }
+    
+    public function testNoDefaultsSetForGenerator()
+    {
+        
+        $id = 'column_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+       
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+
+        
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','type' => 'string','name' => $id));
+        
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $column->addChild($child_a);        
+            
+        $column->merge();
+        $this->assertFalse($column->hasOption('randomGenerator'));
+        $this->assertFalse($column->hasOption('generatorSeed'));
+        
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      */
+    public function testNotIntergerRefusedForGeneratorSeed()
+    {
+        
+        $id = 'column_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+       
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+
+        
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','name' => $id,'type' => 'string'));
+        
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $column->addChild($child_a);        
+            
+       
+        $column->setOption('generatorSeed','a non integer');
+        
+        $column->merge();
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      */
+    public function testNullNotAcceptedGeneratorSeed()
+    {
+        $id = 'column_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','name' => $id,'type' => 'string'));
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $column->addChild($child_a);   
+        
+        $column->setOption('generatorSeed',null);
+        
+        $column->merge();
+    }
+    
+    /**
+      *  @expectedException \Faker\Components\Faker\Exception
+      *  @expectedExceptionMessage Invalid configuration for path "config.generatorSeed": generatorSeed must be an integer
+      */
+    public function testEmptyStringNotAcceptedGeneratorSeed()
+    {
+        $id = 'column_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','name' => $id,'type' => 'string'));
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $column->addChild($child_a);   
+
+        
+        $column->setOption('generatorSeed','');
+        
+        $column->merge();
+        
+        
+    }
+    
+    
+    public function testGeneratorOptionsAccepted()
+    {
+        
+        $id = 'column_1';
+        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+        $column = new Column($id,$parent,$event,$column_type,array('locale'=> 'china','name' => $id,'type' => 'string'));
+        $child_a = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();     
+        $column->addChild($child_a);   
+        
+        $column->setOption('generatorSeed',100);
+        $column->setOption('randomGenerator','srand');
+        $column->merge();
+        
+        $this->assertEquals(100,$column->getOption('generatorSeed'));
+        $this->assertEquals('srand',$column->getOption('randomGenerator'));
         
     }
     

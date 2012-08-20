@@ -44,12 +44,6 @@ class ForeignKey extends BaseComposite implements CacheInterface
     protected $cache;
     
     /**
-      *  @var boolean true to use cache class 
-      */
-    protected $use_cache = true;
-    
-    
-    /**
       *  Class construtor
       *
       *  @access public
@@ -63,7 +57,12 @@ class ForeignKey extends BaseComposite implements CacheInterface
         $this->setParent($parent);
         $this->event = $event;
         $this->options = $options;
-        $this->use_cache = true;
+        
+        # set option if not been set
+        if(isset($this->options['useCache']) === false) {
+            $this->setUseCache(true);
+        }
+        
     }
     
     /**
@@ -71,6 +70,11 @@ class ForeignKey extends BaseComposite implements CacheInterface
       */
     public function generate($rows,$values = array())
     {
+        # return null if cache turned off 
+        if($this->getOption('useCache') === false) {
+            return null;
+        }
+            
         # rewind on the first row
         if($rows === 1) {
             $this->cache->rewind();
@@ -154,6 +158,7 @@ class ForeignKey extends BaseComposite implements CacheInterface
         $str .= 'name="' . $this->getOption('foreignTable') . '.' .$this->getOption('foreignColumn').'" ';
         $str .= 'foreignColumn="'.$this->getOption('foreignColumn').'" ';
         $str .= 'foreignTable="'.$this->getOption('foreignTable').'"';
+        //$str .= 'useCache="'.var_export($this->getOption('useCache')).'"';
         $str.=  '>'.PHP_EOL;
     
         foreach($this->getChildren() as $child) {
@@ -176,12 +181,13 @@ class ForeignKey extends BaseComposite implements CacheInterface
         }
         
         # check if cache has been set
-        if(!$this->cache instanceof GeneratorCache) {
+        if(!$this->cache instanceof GeneratorCache && $this->getOption('useCache') === true) {
             throw new FakerException('Foreign-key requires a cache to be set');
         }
 
         return true;  
     }
+    
 
     //  -------------------------------------------------------------------------
     # Option Interface
@@ -198,16 +204,26 @@ class ForeignKey extends BaseComposite implements CacheInterface
 
         $rootNode
             ->children()
+                ->scalarNode('name')
+                    ->isRequired()
+                    ->info('unique name for this instance')
+                    ->cannotBeEmpty()
+                ->end()
                 ->scalarNode('foreignTable')
                     ->isRequired()
-                    ->setInfo('The exact name of the foreign table')
+                    ->info('The exact name of the foreign table')
                     ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('foreignColumn')
                     ->isRequired()
-                    ->setInfo('Name of the Foreign Column')
+                    ->info('Name of the Foreign Column')
                     ->cannotBeEmpty()
                 ->end()
+                ->booleanNode('useCache')
+                    ->defaultTrue()
+                    ->info('Use the cache on the primary column and output value (default) Turn off to keep relation but not output value')                   
+                ->end()
+                
             ->end();
             
         return $treeBuilder;
@@ -240,7 +256,7 @@ class ForeignKey extends BaseComposite implements CacheInterface
       */
     public function setUseCache($bool)
     {
-        $this->use_cache = $bool;
+        $this->setOption('useCache',(boolean)$bool);
         
         return $this;
     }
@@ -251,7 +267,7 @@ class ForeignKey extends BaseComposite implements CacheInterface
       */
     public function getUseCache()
     {
-        return $this->use_cache;
+        return $this->getOption('useCache');
     }
     
     //------------------------------------------------------------------

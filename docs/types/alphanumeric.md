@@ -21,6 +21,13 @@ The alphanumeric is a favourite to generate small random blocks of text for item
     'x' = a number between 0-9
 
 
+**Options:**
+
+1. Format (Required) the dsl string.
+2. repeatMax maximum number of times to repeat the format string.
+3. repeatMin minimum number of times to repeat the format string.
+
+
 **To declare a alphanumeric type:**
 ```xml
 <datatype name="alphanumeric">
@@ -28,9 +35,17 @@ The alphanumeric is a favourite to generate small random blocks of text for item
 </datatype>
 ```
 
-The only option is the **format** which is required.
+**To Repeat between 0 and 5 times.**
 
-If your looking to combine a prefix you can use the constant datatype as shown below.
+<datatype name="alphanumeric">
+    <option name="format"    value="CcVDx" />
+    <option name="repeatMin" value="0" />
+    <option name="repeatMax" value="5" />
+</datatype>
+
+The minimum size of the string is 5 characters and the maxium is 25 characters. The repeat options must be positive integers.
+
+**To combine a prefix the constant datatype can be used, shown below.**
 
 ```xml
 <datatype name="constant">
@@ -41,5 +56,7 @@ If your looking to combine a prefix you can use the constant datatype as shown b
 </datatype>
 ```
 
-Would give return for example 'Index_FgEp6'.  
+Would give return for example 'Index_FgEp6'.
+
+
 

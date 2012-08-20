@@ -25,12 +25,13 @@ class ConstantTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
-            
-        $type = new ConstantNumber($id,$parent,$event,$utilities);
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        
+        $type = new ConstantNumber($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
         
-        $type = new ConstantString($id,$parent,$event,$utilities);
+        $type = new ConstantString($id,$parent,$event,$utilities,$generator);
         
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
     
@@ -51,15 +52,19 @@ class ConstantTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new ConstantString($id,$parent,$event,$utilities);
+        $type = new ConstantString($id,$parent,$event,$utilities,$generator);
         $type->setOption('value' ,'xxxx');
+        $type->setOption('name','constant_string');
         $type->merge();        
         
         $this->assertEquals('xxxx',$type->getOption('value'));
         
-        $type = new ConstantNumber($id,$parent,$event,$utilities);
+        $type = new ConstantNumber($id,$parent,$event,$utilities,$generator);
         $type->setOption('value','xxxx');
+        $type->setOption('name','constant_number');
         $type->merge();
         
         $this->assertEquals('xxxx',$type->getOption('value'));
@@ -85,8 +90,11 @@ class ConstantTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-            
-        $type = new ConstantString($id,$parent,$event,$utilities);
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');    
+        
+        $type = new ConstantString($id,$parent,$event,$utilities,$generator);
+        $type->setOption('name','constant_string');
         $type->merge();        
         
     }
@@ -110,10 +118,13 @@ class ConstantTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new ConstantString($id,$parent,$event,$utilities);
+        $type = new ConstantString($id,$parent,$event,$utilities,$generator);
         $type->setOption('value' , '1');
         $type->setOption('type' , 'none');
+        $type->setOption('name','constant_string');
         $type->merge();        
     }
    
@@ -134,25 +145,29 @@ class ConstantTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
             
-        $type = new ConstantString($id,$parent,$event,$utilities);
+        $type = new ConstantString($id,$parent,$event,$utilities,$generator);
         $type->setOption('value','ccCC');
+        $type->setOption('name','constant_string');
         $type->merge();
         $type->validate(); 
          
         $this->assertEquals('ccCC',$type->generate(1,array()));
         $this->assertEquals('ccCC',$type->generate(2,array()));
         $this->assertEquals('ccCC',$type->generate(3,array()));
-    
-    
-        $type = new ConstantNumber($id,$parent,$event,$utilities);
+            
+        $type = new ConstantNumber($id,$parent,$event,$utilities,$generator);
         $type->setOption('value','123');
+        $type->setOption('name','constant_number');
         $type->merge();
         $type->validate(); 
         $this->assertEquals(123,$type->generate(1,array()));
         
-        $type = new ConstantString($id,$parent,$event,$utilities);
+        $type = new ConstantString($id,$parent,$event,$utilities,$generator);
         $type->setOption('value','1');
+        $type->setOption('name','constant_string');
         $type->merge();
         $type->validate(); 
         $this->assertSame('1',$type->generate(1,array()));

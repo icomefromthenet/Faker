@@ -18,8 +18,8 @@ class KeysExistPassTest extends AbstractProject
     {
         $pass = new KeysExistPass();
         $composite = $this->getComposite();
-        
-        $pass->process($composite);
+        $compiler = $this->getMock('Faker\Components\Faker\Compiler\CompilerInterface');
+        $pass->process($composite,$compiler);
         
         
     }
@@ -28,8 +28,8 @@ class KeysExistPassTest extends AbstractProject
     {
         $pass = new KeysExistPass();
         $composite = $this->getCompositeAllKeysExist();
-        
-        $pass->process($composite);
+        $compiler = $this->getMock('Faker\Components\Faker\Compiler\CompilerInterface');
+        $pass->process($composite,$compiler);
         $this->assertTrue(true);
         
     }

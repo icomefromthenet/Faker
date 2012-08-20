@@ -1,5 +1,5 @@
 <?php
-namespace Faker\Components\Extension\Faker\Type;
+namespace Faker\Extension\Faker\Type;
 
 use Faker\Components\Faker\TypeInterface;
 

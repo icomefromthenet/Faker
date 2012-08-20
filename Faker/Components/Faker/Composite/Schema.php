@@ -52,6 +52,7 @@ class Schema extends BaseComposite
         if($parent !== null) {
             $this->setParent($parent);
         }
+       
     }
     
     /**
@@ -63,7 +64,7 @@ class Schema extends BaseComposite
        
           $this->event->dispatch(
                FormatEvents::onSchemaStart,
-               new GenerateEvent($this,array(),$this->getId())
+               new GenerateEvent($this,array(),$this->getOption('name'))
           );
         
           # send generate command to children
@@ -76,7 +77,7 @@ class Schema extends BaseComposite
      
           $this->event->dispatch(
                FormatEvents::onSchemaEnd,
-               new GenerateEvent($this,array(),$this->getId())
+               new GenerateEvent($this,array(),$this->getOption('name'))
           );
     }
     
@@ -113,7 +114,7 @@ class Schema extends BaseComposite
       */
     public function getParent()
     {
-        return $this->parent_type;
+        throw new FakerException('Schema can have no parent');
     }
 
     /**
@@ -143,6 +144,18 @@ class Schema extends BaseComposite
     }
     
     /**
+      *  Remove the children from the schema
+      *
+      *  @access public
+      */
+    public function removeChildren()
+    {
+        $this->child_types = array();
+        
+    }
+    
+    
+    /**
       *  @inheritdoc
       */
     public function getEventDispatcher()
@@ -159,7 +172,7 @@ class Schema extends BaseComposite
           
           $str  = '<?xml version="1.0"?>' .PHP_EOL;
           
-          $str .= '<schema name="'.$this->getId().'">' . PHP_EOL;
+          $str .= '<schema name="'.$this->getOption('name').'">' . PHP_EOL;
      
           # generate xml def for each writter
           
@@ -217,16 +230,50 @@ class Schema extends BaseComposite
 
         $rootNode
             ->children()
+                ->scalarNode('name')
+                    ->isRequired()
+                    ->info('The Name of the Schema')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new \Faker\Components\Faker\Exception('Schema::Name must be a string');
+                        })
+                    ->end()
+                ->end()
                 ->scalarNode('locale')
                     ->treatNullLike('en')
                     ->defaultValue('en')
-                    ->setInfo('The Default Local for this schema')
+                    ->info('The Default Local for this schema')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_string($v);
                         })
                         ->then(function($v){
                             throw new \Faker\Components\Faker\Exception('Schema::Locale not in valid list');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('randomGenerator')
+                    ->info('Type of random number generator to use')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return empty($v) or !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new FakerException('randomGenerator must not be empty or string');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('generatorSeed')
+                    ->info('Seed value to use in the generator')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return ! is_integer($v);
+                        })
+                        ->then(function($v){
+                            throw new FakerException('generatorSeed must be an integer');
                         })
                     ->end()
                 ->end()

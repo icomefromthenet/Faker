@@ -1,12 +1,14 @@
 <?php
-
 namespace Faker\Components\Faker\Compiler\Pass;
 
 use Faker\Components\Faker\Compiler\CompilerPassInterface,
+    Faker\Components\Faker\Compiler\CompilerInterface,
     Faker\Components\Faker\Composite\CompositeInterface,
     Faker\Components\Faker\Visitor\Relationships,
     Faker\Components\Faker\Exception as FakerException,
-    Faker\Components\Faker\Visitor\MapBuilderVisitor;
+    Faker\Components\Faker\Compiler\Graph\DirectedGraph;
+    
+    
     
 
 /*
@@ -17,6 +19,15 @@ use Faker\Components\Faker\Compiler\CompilerPassInterface,
  */
 class CircularRefPass implements CompilerPassInterface
 {
+    /**
+      *  @string id of the current node checking for
+      */
+    protected $current_id;
+    
+    /**
+      *  @mixed string[] map of the current path ( inner-node -> outter-node -> reallyoutter-node) 
+      */
+    protected $current_path = array();
     
     
     /**
@@ -29,43 +40,48 @@ class CircularRefPass implements CompilerPassInterface
       *  a requires b and requires c but c requires a, a giant circle.
       *
       *  @param CompositeInterface $composite
+      *  @param CompilerInterface $cmp
       */
-    public function process(CompositeInterface $composite)
+    public function process(CompositeInterface $composite, CompilerInterface $cmp)
     {
-        # build the relationship map        
-        $map_visitor    = new MapBuilderVisitor(new Relationships());
-        $composite->acceptVisitor($map_visitor);
-        $map = $map_visitor->getMap();
+        $graph = $cmp->getGraph();
         
-        
-        # make sure table have no bi-directional dependecies (b requires a and a requires b) 
-        $tables_require_key = $map->getLocalRelations();
-        
-        foreach($tables_require_key as $relation) {
-          
-            # fetch tables that provide keys to this local table
-            $tables_that_provide_keys = $map->filterByForeignTable($relation->getTable());
-            
-            # Check that above tables have no foreign keys that point back to the table defined in the current relation.
-            $remaining = array_filter($tables_that_provide_keys,
-                                      function($element) use ($relation){
-                                        if($element->getForeign()->getTable() === $relation->getTable()) {
-                                          return true;
-                                        }
-                                        
-                                        return false;
-                                    });
-            
-            if(count($remaining) > 0) {
-                # throw an exception
-                throw new FakerException(sprintf('Is a Bad Dependency between Relationships %s and %s',$relation->getTable(),$remaining[0]->getLocal()->getTable()));
-            }
-            
+        foreach ($graph->getNodes() as $id => $node) {
+            $this->current_id = $id;
+            $this->current_path = array($id);
+            $this->checkOutEdges($node->getOutEdges());
         }
         
-        # make sre tables has no outter dependecies (a requires b and requires c but c requires a)
+        
         
     }
+    
+    /**
+     * Checks for circular references.
+     *
+     * @param array $edges An array of Nodes
+     *
+     * @throws CircularReferenceException When a circular reference is found.
+     */
+    protected function checkOutEdges(array $edges)
+    {
+        foreach ($edges as $edge) {
+            $node = $edge->getDestNode();
+            $this->current_path[] = $id = $node->getId();
+
+            # if the top node (current_id) is found elseware in this path we have circular reference
+            if ($this->current_id === $id) {
+                throw new CircularReferenceException($this->current_id, $this->current_path);
+            }
+        
+            if(count($node->getOutEdges()) > 0) {
+              $this->checkOutEdges($node->getOutEdges());  
+            }
+            
+            array_pop($this->current_path);
+        }
+    }
+   
     
     
 }

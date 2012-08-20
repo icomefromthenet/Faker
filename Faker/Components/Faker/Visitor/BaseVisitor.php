@@ -21,6 +21,11 @@ abstract class BaseVisitor
     
     abstract public function visitMapBuilder(CompositeInterface $composite);
     
+    abstract public function visitGeneratorInjector(CompositeInterface $composite);
+    
+    abstract public function visitLocale(CompositeInterface $composite);
+    
+    abstract public function visitDirectedGraph(CompositeInterface $composite);
     
     //------------------------------------------------------------------
 }
