@@ -122,7 +122,7 @@ A table is a collection of columns, each [column](tags.md#column) must map to a 
     <option name="max" value="today +10 weeks" />
 </datatype>
 ```
-Inside a column a [datatype](types/index.md) can be placed, or a [selector](type.md#alternate) to control which type is used. A type usually has options which are added via the options tag.   
+Inside a column a [datatype](types/index.md) can be placed, or a [selector](tags.md#selector-tags-describe-flow) to control which type is used. A type usually has options which are added via the options tag.   
 
 ## Step 5. Generate Generate Generate.
 
