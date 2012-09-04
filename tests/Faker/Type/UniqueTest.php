@@ -69,23 +69,25 @@ class UniqueTest extends AbstractProject
     public function testUniqueStringGenerate()
     {
         $id = 'table_two';
-        
-        $locale   = $this->getMock('\Faker\Locale\LocaleInterface');
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');    
-        $utilities = $this->getMockBuilder('Faker\Components\Faker\Utilities')
-                          ->disableOriginalConstructor()
-                          ->getMock();
-                          
-        $utilities->expects($this->once())
-                   ->method('generateRandomAlphanumeric')
-                   ->with($this->equalTo('ccCC'),$this->equalTo($generator),$this->equalTo($locale))
-                   ->will($this->returnValue('dgHJ'));
-        
+       
+         
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')
                        ->getMock();
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
+        
+        $locale   = $this->getMock('\Faker\Locale\LocaleInterface');
+        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');    
+        $utilities = $this->getMockBuilder('\Faker\Components\Faker\Utilities')
+                          ->disableOriginalConstructor()
+                          ->getMock();
+                          
+        $utilities->expects($this->once())
+                   ->method('generateRandomAlphanumeric')
+                   ->with($this->equalTo('ccCC'),$this->isInstanceOf($generator),$this->isInstanceOf($locale))
+                   ->will($this->returnValue('dgHJ'));
+       
         
         $type = new UniqueString($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','ccCC');
@@ -111,7 +113,7 @@ class UniqueTest extends AbstractProject
                           
         $utilities->expects($this->once())
                    ->method('generateRandomNum')
-                   ->with($this->equalTo('XXxx'),$this->equalTo($generator))
+                   ->with($this->equalTo('XXxx'),$this->isInstanceOf($generator))
                    ->will($this->returnValue(1207));
         
         $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')

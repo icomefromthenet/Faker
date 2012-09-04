@@ -56,6 +56,9 @@ class Command extends BaseCommand
         # path exists does it have a project
         if(Project::detect((string)$path) === false && $this->getName() !== 'faker:init') {
             throw new \RuntimeException('Project Folder does not contain the correct folder heirarchy');
+        } else {
+          # load the extension bootstrap the path has been verifed to contain an extension folder
+          $project->getPath()->loadExtensionBootstrap();  
         }
 
 

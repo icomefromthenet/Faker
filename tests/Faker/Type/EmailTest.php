@@ -116,7 +116,7 @@ class EmailTest extends AbstractProject
         
         $utilities->expects($this->exactly(2))
                    ->method('generateRandomAlphanumeric')
-                   ->with($this->isType('string'),$this->equalTo($generator),$this->equalTo($locale))
+                   ->with($this->isType('string'),$this->isInstanceOf($generator),$this->isInstanceOf($locale))
                    ->will($this->onConsecutiveCalls('ddDDD','1111'));
         
         $utilities->expects($this->once())

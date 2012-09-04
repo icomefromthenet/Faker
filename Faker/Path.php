@@ -3,7 +3,6 @@ namespace Faker;
 
 class Path
 {
-
     /**
       *  @var $path a parsed path of the project
       */
@@ -65,37 +64,46 @@ class Path
       */
     public function parse($project_folder)
     {
-
+        # strip the last char if its a DIRECTORY_SEPARATOR
+        $project_folder = rtrim($project_folder,DIRECTORY_SEPARATOR);
+    
         # Step 1. Check for empty path or dot operator.
-
         if ($project_folder === '.' || $project_folder === '') {
             // must mean use current directory
-            $project_folder = rtrim(getcwd(),'/') . DIRECTORY_SEPARATOR;
+            $project_folder = getcwd();
         }
+        else {
 
-        # Step 2. check if path is absolute or relative
-
-        if(strpos('../',$project_folder) == 0) {
-
-            $project_folder =  realpath($project_folder);
+            # Step 2. check if path is relative and resolve it with realpath
+            if(strpos('..',$project_folder) == 0) {
+                $project_folder =  realpath($project_folder);
+            }
+            
+            # Step 3. Check for existance of the directory if not found assume child of the Current Working Directory
+            if(!is_dir($project_folder)) {
+               #if where still false lets append cwd to what we have
+               $project_folder  = getcwd() . DIRECTORY_SEPARATOR . ltrim($project_folder,DIRECTORY_SEPARATOR); 
+            } 
 
         }
-        elseif(is_dir($project_folder) === false) {
-           #if where still false lets append cwd to what we have
-           $project_folder = is_dir(rtrim(getcwd(),'/') . DIRECTORY_SEPARATOR . rtrim(ltrim($project_folder,'/'),'/'));
-        }
-
+        
         $this->path = $project_folder;
 
-
-        # load the extension bootstrap file
-
-        $extension_bootstrap = $this->path . DIRECTORY_SEPARATOR . 'extension'. DIRECTORY_SEPARATOR .'bootstrap.php';
-        if(is_file($extension_bootstrap)) {
-            require $extension_bootstrap;
-        }
         
         return $this->path;
     }
+    
+    /**
+      *  Load the Extensions Bootstrap file
+      *
+      *  @access public
+      *  @return void
+      */
+    public function loadExtensionBootstrap()
+    {
+        $extension_bootstrap = $this->path . DIRECTORY_SEPARATOR . 'extension'. DIRECTORY_SEPARATOR .'bootstrap.php';
+        require $extension_bootstrap;
+    }
+    
 }
 /* End of File */
