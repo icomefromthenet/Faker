@@ -4,6 +4,7 @@ namespace Faker\Components\Faker;
 use Faker\Project,
     Faker\Locale\LocaleInterface,
     Faker\Text\SimpleString,
+    Faker\Text\StringIterator,
     Faker\Generator\GeneratorInterface;
 
 /**
@@ -47,27 +48,29 @@ class Utilities
     {
         // loop through each character and convert all unescaped X's to 1-9 and
         // unescaped x's to 0-9.
-        $new_str = "";
-        for ($i = 0; $i < \strlen($str); $i++) {
-            if ($str[$i] == '\\' && ($str[$i + 1] == "X" || $str[$i + 1] == "x")) {
+        $new_str  = SimpleString::create("");
+        $str      = SimpleString::create($str);
+        $iterator = new StringIterator($str);
+        
+        foreach ($iterator as $index => $char) {
+            
+            # check if character is escaped
+            if ($char == '\\' && ($iterator->peek() == "X" || $iterator->peek() == "x")) {
+                $iterator->next();
                 continue;
-            } else if ($str[$i] == "X") {
-                if ($i != 0 && ($str[$i - 1] == '\\')) {
-                    $new_str .= "X";
-                } else {
-                    $new_str .= $random->generate(1, 9);
-                }
-            } else if ($str[$i] == "x") {
-                if ($i != 0 && ($str[$i - 1] == '\\')) {
-                    $new_str .= "x";
-                } else {
-                    $new_str .= $random->generate(0, 9);
-                }
-            }else
-                $new_str .= $str[$i];
+            } else if ($char === "X") {
+                $new_str->append((string) ceil($random->generate(1, 9)));
+            } else if ($char === "x") {
+                $new_str->append((string) ceil($random->generate(0, 9)));
+            } else {
+                $new_str->append((string) $char);
+            }    
         }
-
-        return \trim($new_str);
+        
+        # trim remove white space
+        $new_str->trim();
+        
+        return (string) $new_str;
     }
 
     //  -------------------------------------------------------------------------
@@ -101,74 +104,74 @@ class Utilities
             switch ($str->charAt($i)) {
                 // Numbers
                 case "X":
-                    $new_str .= ceil($random->generate(1, 9));
+                    $new_str->append(ceil($random->generate(1, 9)));
                 break;
                 case "x":
-                    $new_str .= ceil($random->generate(0, 9));
+                    $new_str->append(ceil($random->generate(0, 9)));
                 break;
                 
                 // Hex
                 case "H":
-                    $new_str .= $hex->charAt(ceil($random->generate(0, $hex->length()) - 1));
+                    $new_str->append($hex->charAt(ceil($random->generate(0, $hex->length()) - 1)));
                 break;
                     
                 // Letters
                 case "L":
-                    $new_str .= $letters->charAt(ceil($random->generate(0, $letters->length()) - 1));
+                    $new_str->append($letters->charAt(ceil($random->generate(0, $letters->length()) - 1)));
                 break;
                 case "l":
-                    $new_str .= \mb_strtolower($letters->charAt(ceil($random->generate(0, $letters->length()) - 1)));
+                    $new_str->append(\mb_strtolower($letters->charAt(ceil($random->generate(0, $letters->length()) - 1))));
                 break;
                 case "D":
                     $bool = ceil($random->generate(0,1));
                     if ($bool === 0)
-                        $new_str .= $letters->charAt(ceil($random->generate(0, $letters->length()) - 1));
+                        $new_str->append($letters->charAt(ceil($random->generate(0, $letters->length()) - 1)));
                     else
-                        $new_str .= \mb_strtolower($letters->charAt(ceil($random->generate(0, $letters->length()) - 1)));
+                        $new_str->append(\mb_strtolower($letters->charAt(ceil($random->generate(0, $letters->length()) - 1))));
                     break;
 
                 // Consonants
                 case "C":
-                    $new_str .= $consonants->charAt(ceil($random->generate(0, $consonants->length()) - 1));
+                    $new_str->append($consonants->charAt(ceil($random->generate(0, $consonants->length()) - 1)));
                 break;
                 case "c":
-                    $new_str .= \mb_strtolower($consonants->charAt(ceil($random->generate(0,$consonants->length()) - 1)));
+                    $new_str->append(\mb_strtolower($consonants->charAt(ceil($random->generate(0,$consonants->length()) - 1))));
                 break;
                 case "E":
                     $bool = ceil($random->generate(0,1));
                     if ($bool === 0)
-                        $new_str .= $consonants->charAt(ceil($random->generate(0, $consonants->length()) - 1));
+                        $new_str->append($consonants->charAt(ceil($random->generate(0, $consonants->length()) - 1)));
                     else
-                        $new_str .= \mb_strtolower($consonants->charAt(ceil($random->generate(0, $consonants->length()) - 1)));
+                        $new_str->append(\mb_strtolower($consonants->charAt(ceil($random->generate(0, $consonants->length()) - 1))));
                     break;
 
                 // Vowels
                 case "V":
-                    $new_str .= $vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1));
+                    $new_str->append($vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1)));
                 break;
                 case "v":
-                    $new_str .= \mb_strtolower($vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1)));
+                    $new_str->append(\mb_strtolower($vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1))));
                 break;
                 case "F":
                     $bool = ceil($random->generate(0,1));
                     if ($bool === 0)
-                        $new_str .= $vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1));
+                        $new_str->append($vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1)));
                     else
-                        $new_str .=\mb_strtolower( $vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1)));
+                        $new_str->append(\mb_strtolower( $vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1))));
                 break;
      
                 //space char
                 case "S":
                 case "s":
-                    $new_str .= " ";
+                    $new_str->append(" ");
                 break;    
                 default:
-                    $new_str .= $str->charAt($i);
+                    $new_str->append($str->charAt($i));
                 break;
             }
         }
 
-        return $new_str;
+        return (string) $new_str;
     }
 
     
