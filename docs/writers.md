@@ -42,7 +42,7 @@ This formatter will output the generated data into phpunit dataset xml file, If 
 You might want to change the default out format, you can use this attribute.
 
 ```xml
-<writer platform="mysql" format="sql" outFileFormat="{prefix}_{body}_{suffix}.{ext}" />
+<writer platform="mysql" format="phpunit" outFileFormat="{prefix}_{body}_{suffix}.{ext}" />
 ```
 
 ##Writer Examples
