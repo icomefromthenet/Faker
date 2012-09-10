@@ -23,7 +23,7 @@ class CountryTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Country($id,$parent,$event,$utilities,$generator);
         
@@ -46,7 +46,7 @@ class CountryTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Country($id,$parent,$event,$utilities,$generator);
         $type->setOption('countries' ,'AU,US,UK');
@@ -78,7 +78,7 @@ class CountryTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         $generator->expects($this->exactly(3))
                   ->method('generate')
                   ->with($this->equalTo(0),$this->equalTo(247))
@@ -111,7 +111,7 @@ class CountryTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         $generator->expects($this->exactly(0))
                   ->method('generate');
             
@@ -144,7 +144,7 @@ class CountryTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         $generator->expects($this->exactly(0))
                   ->method('generate');
             
@@ -174,7 +174,7 @@ class CountryTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         $generator->expects($this->exactly(3))
                   ->method('generate')
                   ->with($this->equalTo(0),$this->equalTo(2))

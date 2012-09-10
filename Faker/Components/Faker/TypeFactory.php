@@ -6,7 +6,7 @@ use Faker\Components\Faker\Utilities,
     Faker\Components\Faker\TypeConfigInterface,
     Faker\Components\Faker\Composite\CompositeInterface,
     Faker\ExtensionInterface,
-    Faker\Generator\GeneratorInterface,
+    PHPStats\Generator\GeneratorInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -53,7 +53,7 @@ class TypeFactory implements ExtensionInterface
     protected $event;
     
     /**
-      *  @var Faker\Generator\GeneratorInterface the random number generator 
+      *  @var PHPStats\Generator\GeneratorInterface the random number generator 
       */
     protected $generator;
     

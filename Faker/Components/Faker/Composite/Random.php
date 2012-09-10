@@ -4,7 +4,7 @@ namespace Faker\Components\Faker\Composite;
 use Faker\Components\Faker\Exception as FakerException,
     Faker\Components\Faker\Formatter\FormatEvents,
     Faker\Components\Faker\Formatter\GenerateEvent,
-    Faker\Generator\GeneratorInterface,
+    PHPStats\Generator\GeneratorInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 
@@ -37,7 +37,7 @@ class Random extends BaseComposite implements CompositeInterface , SelectorInter
     protected $event;
     
     /**
-      *  @var Faker\Generator\GeneratorInterface 
+      *  @var PHPStats\Generator\GeneratorInterface 
       */
     protected $generator;
     
@@ -136,7 +136,7 @@ class Random extends BaseComposite implements CompositeInterface , SelectorInter
       *  Set the random number generator
       *
       *  @access public
-      *  @return Faker\Generator\GeneratorInterface
+      *  @return PHPStats\Generator\GeneratorInterface
       */
     public function setGenerator(GeneratorInterface $generator)
     {

@@ -21,7 +21,7 @@ class NullTest extends AbstractProject
 
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Null($id,$parent,$event,$utilities,$generator);
         
@@ -45,7 +45,7 @@ class NullTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Null($id,$parent,$event,$utilities,$generator);
         $type->setOption('name','null');
@@ -69,7 +69,7 @@ class NullTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Null($id,$parent,$event,$utilities,$generator);
         $type->setOption('name','null');

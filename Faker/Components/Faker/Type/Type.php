@@ -21,7 +21,7 @@ use Faker\Components\Faker\Utilities,
     Symfony\Component\Config\Definition\Exception\InvalidConfigurationException,
     Faker\Components\Faker\OptionInterface,
     Faker\Locale\LocaleInterface,
-    Faker\Generator\GeneratorInterface;
+    PHPStats\Generator\GeneratorInterface;
 
 class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
 {
@@ -52,7 +52,7 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
     protected $options = array();
     
     /**
-      *  @var Faker\Generator\GeneratorInterface the random number generator 
+      *  @var PHPStats\Generator\GeneratorInterface the random number generator 
       */
     protected $generator;
     
@@ -134,7 +134,7 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
       *  Fetch the random number generator
       *
       *  @access public
-      *  @return Faker\Generator\GeneratorInterface
+      *  @return PHPStats\Generator\GeneratorInterface
       */
     public function getGenerator()
     {
@@ -145,7 +145,7 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
       *  Set the random number generator
       *
       *  @access public
-      *  @return Faker\Generator\GeneratorInterface
+      *  @return PHPStats\Generator\GeneratorInterface
       */
     public function setGenerator(GeneratorInterface $generator)
     {

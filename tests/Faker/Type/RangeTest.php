@@ -21,7 +21,7 @@ class RangeTest extends AbstractProject
 
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Range($id,$parent,$event,$utilities,$generator);
         
@@ -44,7 +44,7 @@ class RangeTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Range($id,$parent,$event,$utilities,$generator);
         $type->setOption('min', 1 );
@@ -80,7 +80,7 @@ class RangeTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Range($id,$parent,$event,$utilities,$generator);
         $type->setOption('max', 'aaa');
@@ -110,7 +110,7 @@ class RangeTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Range($id,$parent,$event,$utilities,$generator);
         $type->setOption('max', 5);
@@ -139,7 +139,7 @@ class RangeTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Range($id,$parent,$event,$utilities,$generator);
         $type->setOption('max', 5);
@@ -170,7 +170,7 @@ class RangeTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Range($id,$parent,$event,$utilities,$generator);
         $type->setOption('max' , 100);
@@ -199,7 +199,7 @@ class RangeTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Range($id,$parent,$event,$utilities,$generator);
         $type->setOption('step' , 'bbb');
@@ -230,7 +230,7 @@ class RangeTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Range($id,$parent,$event,$utilities,$generator);
         $type->setOption('windowStep' , 'aaa');
@@ -258,7 +258,7 @@ class RangeTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Range($id,$parent,$event,$utilities,$generator);
         
@@ -298,7 +298,7 @@ class RangeTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Range($id,$parent,$event,$utilities,$generator);
         
@@ -339,7 +339,7 @@ class RangeTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $generator->expects($this->once())
                  ->method('generate')
@@ -376,7 +376,7 @@ class RangeTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $generator->expects($this->once())
                  ->method('generate')

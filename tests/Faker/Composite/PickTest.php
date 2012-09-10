@@ -62,13 +62,13 @@ class PickTest extends AbstractProject
         $random = new Pick($id,$parent,$event,$probability);
         $random->setOption('name','pick');
      
-        $generatorA = $this->getMock('Faker\Generator\GeneratorInterface');  
+        $generatorA = $this->getMock('PHPStats\Generator\GeneratorInterface');  
         $generatorA->expects($this->once())
                   ->method('generate')
                   ->with($this->equalTo(0),$this->equalTo(100))
                   ->will($this->returnValue(80));
     
-        $generatorB = $this->getMock('Faker\Generator\GeneratorInterface');  
+        $generatorB = $this->getMock('PHPStats\Generator\GeneratorInterface');  
         $generatorB->expects($this->once())
                   ->method('generate')
                   ->with($this->equalTo(0),$this->equalTo(100))

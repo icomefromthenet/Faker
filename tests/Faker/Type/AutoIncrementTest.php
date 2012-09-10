@@ -22,7 +22,7 @@ class AutoIncrementTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface'); 
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface'); 
             
         $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
         
@@ -46,7 +46,7 @@ class AutoIncrementTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
         $type->setOption('name','autoincrement');
@@ -78,7 +78,7 @@ class AutoIncrementTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
         $type->setOption('aaaa','bbb');
@@ -106,7 +106,7 @@ class AutoIncrementTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
         $type->setOption('increment' , 'bbb');
@@ -132,7 +132,7 @@ class AutoIncrementTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
                       
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');                      
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');                      
             
         $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
         $type->setOption('start','bbb');
@@ -159,7 +159,7 @@ class AutoIncrementTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
 
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new AutoIncrement($id,$parent,$event,$utilities,$generator);
         

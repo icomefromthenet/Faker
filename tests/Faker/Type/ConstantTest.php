@@ -25,7 +25,7 @@ class ConstantTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         
         $type = new ConstantNumber($id,$parent,$event,$utilities,$generator);
         
@@ -53,7 +53,7 @@ class ConstantTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new ConstantString($id,$parent,$event,$utilities,$generator);
         $type->setOption('value' ,'xxxx');
@@ -91,7 +91,7 @@ class ConstantTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');    
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');    
         
         $type = new ConstantString($id,$parent,$event,$utilities,$generator);
         $type->setOption('name','constant_string');
@@ -119,7 +119,7 @@ class ConstantTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new ConstantString($id,$parent,$event,$utilities,$generator);
         $type->setOption('value' , '1');
@@ -146,7 +146,7 @@ class ConstantTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new ConstantString($id,$parent,$event,$utilities,$generator);
         $type->setOption('value','ccCC');

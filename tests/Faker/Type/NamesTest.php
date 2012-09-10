@@ -23,7 +23,7 @@ class NamesTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Names($id,$parent,$event,$utilities,$generator);
         
@@ -46,7 +46,7 @@ class NamesTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         
         $type = new Names($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','xxxx');
@@ -76,7 +76,7 @@ class NamesTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Names($id,$parent,$event,$utilities,$generator);
         $type->setOption('name','names');
@@ -98,7 +98,7 @@ class NamesTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
          
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface'); 
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface'); 
         $generator->expects($this->exactly(6))
                   ->method('generate')
                   ->with($this->equalTo(0),$this->anything())

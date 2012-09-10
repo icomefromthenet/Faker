@@ -48,7 +48,7 @@ class FactoryTest extends AbstractProject
         $utilities = $this->getMockBuilder('Faker\Components\Faker\Utilities')
                         ->disableOriginalConstructor()
                         ->getMock();
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
                         
         $this->assertInstanceOf('Faker\Components\Faker\TypeFactory',new TypeFactory($utilities,$event,$generator));        
     }
@@ -71,7 +71,7 @@ class FactoryTest extends AbstractProject
 
         TypeFactory::registerExtensions(array('mockb' => 'MockTypeTestB'));
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
     
         $typefactory = new TypeFactory($utilities,$event,$generator);
         
@@ -102,7 +102,7 @@ class FactoryTest extends AbstractProject
 
         TypeFactory::registerExtensions(array('mockb' => 'MockTypeTestCa'));
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
     
         $typefactory = new TypeFactory($utilities,$event,$generator);
         
@@ -132,7 +132,7 @@ class FactoryTest extends AbstractProject
 
         TypeFactory::registerExtensions(array('mockb' => 'MockTypeTestD'));
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
     
         $typefactory = new TypeFactory($utilities,$event,$generator);
         

@@ -22,7 +22,7 @@ class NumericTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Numeric($id,$parent,$event,$utilities,$generator);
         $type->setOption('name','numeric');
@@ -47,7 +47,7 @@ class NumericTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Numeric($id,$parent,$event,$utilities,$generator);
         $type->setOption('format' ,'xxxx');
@@ -75,7 +75,7 @@ class NumericTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Numeric($id,$parent,$event,$utilities,$generator);
         $type->setOption('name','numeric');
@@ -106,7 +106,7 @@ class NumericTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Numeric($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','xxxx');
@@ -136,7 +136,7 @@ class NumericTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Numeric($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','xxxx.xx');

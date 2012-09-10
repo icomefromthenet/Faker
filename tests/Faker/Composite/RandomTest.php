@@ -56,13 +56,13 @@ class RandomTest extends AbstractProject
         $random = new Random($id,$parent,$event);
         $random->setOption('name','random');
      
-        $generatorA = $this->getMock('Faker\Generator\GeneratorInterface');
+        $generatorA = $this->getMock('PHPStats\Generator\GeneratorInterface');
         $generatorA->expects($this->exactly(1))
                   ->method('generate')
                   ->with($this->equalTo(0),$this->equalTo(1))
                   ->will($this->returnValue(0));
         
-        $generatorB = $this->getMock('Faker\Generator\GeneratorInterface');
+        $generatorB = $this->getMock('PHPStats\Generator\GeneratorInterface');
         $generatorB->expects($this->exactly(1))
                   ->method('generate')
                   ->with($this->equalTo(0),$this->equalTo(1))

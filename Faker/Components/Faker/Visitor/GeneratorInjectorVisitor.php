@@ -8,8 +8,8 @@ use Faker\Components\Faker\Composite\CompositeInterface,
     Faker\Components\Faker\Composite\Random,
     Faker\Components\Faker\Composite\Pick,
     Faker\Components\Faker\Type\Type,
-    Faker\Generator\GeneratorFactory,
-    Faker\Generator\GeneratorInterface,
+    PHPStats\Generator\GeneratorFactory,
+    PHPStats\Generator\GeneratorInterface,
     Faker\Components\Faker\Exception as FakerException;
 
 /*
@@ -24,22 +24,22 @@ class GeneratorInjectorVisitor extends BaseVisitor
 {
     
     /**
-      *  @var  Faker\Generator\GeneratorInterface a generator defined in schema declaration
+      *  @var  PHPStats\Generator\GeneratorInterface a generator defined in schema declaration
       */
     protected $global_generator;
     
     /**
-      *  @var  Faker\Generator\GeneratorInterface a generator defined in last table declaration
+      *  @var  PHPStats\Generator\GeneratorInterface a generator defined in last table declaration
       */        
     protected $table_generator;
     
     /**
-      *  @var  Faker\Generator\GeneratorInterface a generator defined in last column declaration
+      *  @var  PHPStats\Generator\GeneratorInterface a generator defined in last column declaration
       */
     protected $column_generator;
 
     /**
-      *  @var Faker\Generator\GeneratorFactory the generator factory 
+      *  @var PHPStats\Generator\GeneratorFactory the generator factory 
       */
     protected $factory;
     

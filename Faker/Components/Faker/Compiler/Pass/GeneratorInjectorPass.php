@@ -5,8 +5,8 @@ use Faker\Components\Faker\Compiler\CompilerPassInterface,
     Faker\Components\Faker\Compiler\CompilerInterface,
     Faker\Components\Faker\Composite\CompositeInterface,
     Faker\Components\Faker\Visitor\GeneratorInjectorVisitor,
-    Faker\Generator\GeneratorInterface,
-    Faker\Generator\GeneratorFactory;
+    PHPStats\Generator\GeneratorInterface,
+    PHPStats\Generator\GeneratorFactory;
     
 
 /*
@@ -26,7 +26,7 @@ class GeneratorInjectorPass implements CompilerPassInterface
     /**
       *  Class Constructor
       *
-      *  @var Faker\Generator\GeneratorFactory
+      *  @var PHPStats\Generator\GeneratorFactory
       */
     public function __construct(GeneratorFactory $factory, GeneratorInterface $default_generator)
     {

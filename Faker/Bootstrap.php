@@ -415,7 +415,7 @@ return call_user_func(function() {
    
    $project['generator_factory'] = $project->share(function($project)
    {
-      return new \Faker\Generator\GeneratorFactory();
+      return new \PHPStats\Generator\GeneratorFactory();
    });
    
    $project['random_generator'] = $project->share(function($project)

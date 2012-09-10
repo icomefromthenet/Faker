@@ -23,7 +23,7 @@ class LocaleFactory implements ExtensionInterface
     /**
       *  @var string[] list of Generators
       *
-      *  Each Generator must implement the Faker\GeneratorInterface
+      *  Each Generator must implement the PHPStats\GeneratorInterface
       */
     protected static $types = array(
         'en'        => '\Faker\Locale\EnglishLocale',
@@ -72,7 +72,7 @@ class LocaleFactory implements ExtensionInterface
       *
       *  @param string the name of the locale
       *  @access public
-      *  @return Faker\GeneratorInterface
+      *  @return PHPStats\GeneratorInterface
       *  @throws Faker\Exception
       */
     public function create($type)

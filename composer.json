@@ -9,12 +9,16 @@
         {
             "type": "composer",
             "url": "http://packages.zendframework.com/"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/icomefromthenet/PHPStats"
         }
     ],
     "require": {
-        "zendframework/zend-progressbar": "2.0.0-beta5",
-        "zendframework/zend-stdlib"     : "2.0.0-beta5",
-        "zendframework/zend-text"       : "2.0.0-beta5",
+        "zendframework/zend-progressbar": "2.0.*",
+        "zendframework/zend-stdlib"     : "2.0.*",
+        "zendframework/zend-text"       : "2.0.*",
         "monolog/monolog"               : "dev-master",
         "symfony/filesystem"            : "2.1.x-dev",
         "symfony/class-loader"          : "2.1.x-dev",
@@ -28,6 +32,7 @@
         "twig/twig"                     : "dev-master",
         "pimple/pimple"                 : "1.0.x-dev",
         "doctrine/common"               : "2.3.x-dev",
-        "doctrine/dbal"                 : "2.3.x-dev"
+        "doctrine/dbal"                 : "2.3.x-dev",
+        "PHPStats/PHPStats"             : "dev-master"
     }
 }

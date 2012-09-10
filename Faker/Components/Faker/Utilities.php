@@ -5,7 +5,7 @@ use Faker\Project,
     Faker\Locale\LocaleInterface,
     Faker\Text\SimpleString,
     Faker\Text\StringIterator,
-    Faker\Generator\GeneratorInterface;
+    PHPStats\Generator\GeneratorInterface;
 
 /**
   *  This class contains some common methods used to generate

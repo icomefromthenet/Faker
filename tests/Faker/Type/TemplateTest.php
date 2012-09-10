@@ -22,7 +22,7 @@ class TemplateTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Template($id,$parent,$event,$utilities,$generator);
         
@@ -46,7 +46,7 @@ class TemplateTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
                       
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Template($id,$parent,$event,$utilities,$generator);
         $type->setOption('file','template1.twig');
@@ -72,7 +72,7 @@ class TemplateTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
                       
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Template($id,$parent,$event,$utilities,$generator);
         $type->setOption('name','template');
@@ -107,7 +107,7 @@ class TemplateTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
                       
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         $locale  = $this->getMock('\Faker\Locale\LocaleInterface');
         
         $io     = $this->getMock('Faker\Io\IoInterface');

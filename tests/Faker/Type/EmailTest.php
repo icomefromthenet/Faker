@@ -23,7 +23,7 @@ class EmailTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Email($id,$parent,$event,$utilities,$generator);
         $type->setOption('name','email');
@@ -48,7 +48,7 @@ class EmailTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Email($id,$parent,$event,$utilities,$generator);
         $type->setOption('format' ,'xxxx');
@@ -81,7 +81,7 @@ class EmailTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Email($id,$parent,$event,$utilities,$generator);
         $type->setOption('name','email');
@@ -106,7 +106,7 @@ class EmailTest extends AbstractProject
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         $generator->expects($this->exactly(2))
                   ->method('generate')
                   ->with($this->equalTo(0),$this->isType('integer'))

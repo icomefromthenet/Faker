@@ -12,8 +12,8 @@ class GeneratorInjectorTest extends AbstractProject
         $project = $this->getProject();
         $builder = $project->getFakerManager()->getCompositeBuilder();
 
-        $default_generator = $this->getMock('Faker\Generator\GeneratorInterface');
-        $factory_mock      = $this->getMock('Faker\Generator\GeneratorFactory');
+        $default_generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $factory_mock      = $this->getMock('PHPStats\Generator\GeneratorFactory');
         
         $builder->addSchema('schema1',array('name' => 'schema1'))
                     ->addWriter('mysql','sql')
@@ -50,9 +50,9 @@ class GeneratorInjectorTest extends AbstractProject
         $project = $this->getProject();
         $builder = $project->getFakerManager()->getCompositeBuilder();
 
-        $default_generator = $this->getMock('Faker\Generator\GeneratorInterface');
-        $new_generator     = $this->getMock('Faker\Generator\GeneratorInterface');
-        $factory_mock      = $this->getMock('Faker\Generator\GeneratorFactory');
+        $default_generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $new_generator     = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $factory_mock      = $this->getMock('PHPStats\Generator\GeneratorFactory');
         
         $factory_mock->expects($this->once())
                      ->method('create')
@@ -90,9 +90,9 @@ class GeneratorInjectorTest extends AbstractProject
         $project = $this->getProject();
         $builder = $project->getFakerManager()->getCompositeBuilder();
 
-        $default_generator = $this->getMock('Faker\Generator\GeneratorInterface');
-        $new_generator     = $this->getMock('Faker\Generator\GeneratorInterface');
-        $factory_mock      = $this->getMock('Faker\Generator\GeneratorFactory');
+        $default_generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $new_generator     = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $factory_mock      = $this->getMock('PHPStats\Generator\GeneratorFactory');
         
         $factory_mock->expects($this->once())
                      ->method('create')
@@ -130,9 +130,9 @@ class GeneratorInjectorTest extends AbstractProject
         $project = $this->getProject();
         $builder = $project->getFakerManager()->getCompositeBuilder();
 
-        $default_generator = $this->getMock('Faker\Generator\GeneratorInterface');
-        $new_generator     = $this->getMock('Faker\Generator\GeneratorInterface');
-        $factory_mock      = $this->getMock('Faker\Generator\GeneratorFactory');
+        $default_generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $new_generator     = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $factory_mock      = $this->getMock('PHPStats\Generator\GeneratorFactory');
         
         $factory_mock->expects($this->once())
                      ->method('create')
@@ -171,9 +171,9 @@ class GeneratorInjectorTest extends AbstractProject
         $project = $this->getProject();
         $builder = $project->getFakerManager()->getCompositeBuilder();
 
-        $default_generator = $this->getMock('Faker\Generator\GeneratorInterface');
-        $new_generator     = $this->getMock('Faker\Generator\GeneratorInterface');
-        $factory_mock      = $this->getMock('Faker\Generator\GeneratorFactory');
+        $default_generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $new_generator     = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $factory_mock      = $this->getMock('PHPStats\Generator\GeneratorFactory');
         
         $factory_mock->expects($this->once())
                      ->method('create')

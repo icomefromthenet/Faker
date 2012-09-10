@@ -22,7 +22,7 @@ class AlphaNumericTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new AlphaNumeric($id,$parent,$event,$utilities,$generator);
         
@@ -46,7 +46,7 @@ class AlphaNumericTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
                       
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new AlphaNumeric($id,$parent,$event,$utilities,$generator);
         $type->setOption('format','xxxx');
@@ -77,7 +77,7 @@ class AlphaNumericTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
                       
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         $locale  = $this->getMock('\Faker\Locale\LocaleInterface');
         
             
@@ -110,7 +110,7 @@ class AlphaNumericTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
                       
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         $locale  = $this->getMock('\Faker\Locale\LocaleInterface');
         
             
@@ -145,7 +145,7 @@ class AlphaNumericTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
                       
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         $locale  = $this->getMock('\Faker\Locale\LocaleInterface');
         
         $generator->expects($this->exactly(3))

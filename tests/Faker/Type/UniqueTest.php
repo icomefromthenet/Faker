@@ -23,7 +23,7 @@ class UniqueTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         
         $type = new UniqueString($id,$parent,$event,$utilities,$generator);
         $this->assertInstanceOf('\\Faker\\Components\\Faker\\TypeInterface',$type);
@@ -47,7 +47,7 @@ class UniqueTest extends AbstractProject
                         
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         
         $type = new UniqueString($id,$parent,$event,$utilities,$generator);
         $type->setOption('format', 'xxxx');
@@ -78,7 +78,7 @@ class UniqueTest extends AbstractProject
                       ->getMock();
         
         $locale   = $this->getMock('\Faker\Locale\LocaleInterface');
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');    
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');    
         $utilities = $this->getMockBuilder('\Faker\Components\Faker\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock();
@@ -106,7 +106,7 @@ class UniqueTest extends AbstractProject
      public function testUniqueNumberGenerate()
     {
         $id = 'table_two';
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         $utilities = $this->getMockBuilder('Faker\Components\Faker\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock();

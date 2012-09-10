@@ -210,7 +210,7 @@ class TextTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
       
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Text($id,$parent,$event,$utilities,$generator);
         
@@ -234,7 +234,7 @@ class TextTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Text($id,$parent,$event,$utilities,$generator);
         $type->setOption('paragraphs',5);
@@ -268,7 +268,7 @@ class TextTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Text($id,$parent,$event,$utilities,$generator);
         $type->setOption('paragraphs','aaa');
@@ -298,7 +298,7 @@ class TextTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Text($id,$parent,$event,$utilities,$generator);
         $type->setOption('paragraphs',1);
@@ -328,7 +328,7 @@ class TextTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                       ->getMock();
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Text($id,$parent,$event,$utilities,$generator);
         $type->setOption('paragraphs',1);
@@ -352,7 +352,7 @@ class TextTest extends AbstractProject
           array(0,182,182),
         );
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         $generator->expects($this->any())
                   ->method('generate')
                   ->will($this->returnValueMap($generator_valuemap));
@@ -398,7 +398,7 @@ class TextTest extends AbstractProject
           array(0,182,0),
         );
         
-        $generator = $this->getMock('\Faker\Generator\GeneratorInterface');
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
         $generator->expects($this->any())
                   ->method('generate')
                   ->will($this->returnValueMap($generator_valuemap));
