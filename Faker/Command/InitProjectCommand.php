@@ -22,8 +22,6 @@ class InitProjectCommand extends Command
 
         $project_folder = new BaseIo($this->getApplication()->getProject()->getPath()->get());
         $skelton_folder = new BaseIo($skelton);
-        
-        
 
         # ask for confirmation if dir is not empty
         if($project_folder->isEmpty() === false) {

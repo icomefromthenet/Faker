@@ -12,7 +12,8 @@ use Faker\Project,
     Faker\Command\Doctrine\ImportCommand,
     Faker\Command\Doctrine\ReservedWordsCommand,
     Faker\Command\Doctrine\RunSqlCommand,
-    Symfony\Component\Console\Helper\HelperSet;
+    Symfony\Component\Console\Helper\HelperSet,
+    Symfony\Component\Console\Helper\DialogHelper;
     
 
 //---------------------------------------------------------------
@@ -42,6 +43,14 @@ if(strpos('@PHP-BIN@', '@PHP-BIN') === 0) { // stand-alone version is running
    $project = require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
    $project['data_path'] = new Path('@PEAR-DATA@' . DIRECTORY_SEPARATOR .'Faker');   
 }
+
+
+//---------------------------------------------------------------------
+// Create Helper sets for commands
+//
+//--------------------------------------------------------------------
+
+$project->getConsole()->setHelperSet(new HelperSet(array('dialog' => new DialogHelper())));
 
 
 //---------------------------------------------------------------------
