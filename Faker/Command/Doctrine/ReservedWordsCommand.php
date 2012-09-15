@@ -52,11 +52,12 @@ class ReservedWordsCommand extends DoctrineReservedWordsCommand
         # path exists does it have a project
         if(Project::detect((string)$path) === false && $this->getName() !== 'faker:init') {
             throw new \RuntimeException('Project Folder does not contain the correct folder heirarchy');
-        } else {
-            # load the extension bootstrap the path has been verifed to contain an extension folder
-            $project->getPath()->loadExtensionBootstrap();  
         }
-
+        
+        # load the extension bootstrap the path has been verifed to contain an extension folder
+        if($this->getName() !== 'faker:init') {
+          $project->getPath()->loadExtensionBootstrap();    
+        }
 
         if (true === $input->hasParameterOption(array('--schema'))) {
             #switch path to the argument
