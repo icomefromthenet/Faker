@@ -116,6 +116,23 @@ class TemplateComponentTest extends AbstractProject
  
  
     }
+    
+    /**
+      *  @depends testManagerGetLoader
+      */
+    public function testLoaderWithString(Loader $loader)
+    {
+        $vars = array('one' => 1, 'two' => 2);
+ 
+        $template = $loader->loadString('{{one}}_{{two}}',$vars);
+
+        $this->assertInstanceOf('\Faker\Components\Templating\Template',$template);
+    
+        $this->assertSame($vars,$template->getData());   
+ 
+         $str =$template->render();     
+         $this->assertEquals('1_2',$str);
+    }
 
     /**
       *  @depends testManagerGetLoader

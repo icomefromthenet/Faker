@@ -15,7 +15,14 @@ class Loader
       */
     protected $twig_environment;
 
-
+    /**
+      *  Load a template from a file
+      *
+      *  @access public
+      *  @param string $name a template filename
+      *  @param array $vars a key value array of variables to pass to template
+      *  @return Template
+      */
     public function load($name, array $vars = array())
     {
         # on first call setup our twig environment
@@ -28,12 +35,30 @@ class Loader
                 ));
         }
 
-        if(is_array($vars) === false) {
-            throw new TemplatingException('Vars param must be an array');
-        }
-        
         # load the template
         $template =  $this->twig_environment->loadTemplate($name);
+        
+        return new Template($template,$vars);
+    }
+    
+    /**
+      *  Load a template from a string
+      *
+      *  @access public
+      *  @param string $string a template contents
+      *  @param array $vars a key value array of variables to pass to template
+      *  @return Template
+      */
+    public function loadString($string, array $vars = array())
+    {
+        $loader = new \Twig_Loader_String();
+        $env    = new Twig_Environment($loader, array(
+                'debug' => false,
+                'autoescape' => false
+                ));
+        
+        # load the template
+        $template =  $env->loadTemplate($string);
         
         return new Template($template,$vars);
     }
