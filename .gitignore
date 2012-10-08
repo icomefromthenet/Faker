@@ -3,6 +3,6 @@
 build/pear
 build/*.tgz
 package.xml
-Faker/Vendor/*
+vendor
 composer.lock
 
