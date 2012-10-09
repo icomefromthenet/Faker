@@ -1,11 +1,11 @@
 #Locale
-Many of the build-in (Text,Alphanumeric) datatypes use a locale. Currently the only an english locale is include to include you own follow the guide below.
+Many of the build-in Text, Alphanumeric use a locale. Currently only an english locale is included. To include your own follow the guide below.
 
 ## Simple conventions
 
 1. All folder and file names must be **lowercase**.
 2. They must be registered to a factory via the bootstrap in root of the project directory.
-3. No limit on class names, as they are referenced by the short name.
+3. No limit on class names.
 4. Need a unique short name.
 5. Must use the extension namespace ```\Faker\Extensions\Locale``.
 
@@ -13,16 +13,14 @@ Many of the build-in (Text,Alphanumeric) datatypes use a locale. Currently the o
 ## Create the File
 
 1. Navigate to project directory open __extension/faker/locale__
-2. Create the new file xxxxLocale.php
+2. Create the new file xxxxlocale.php
 
 
 ## Fill in the blanks
 
-I have included an example of the english locale, need to change the class names and add your own filler text and alphabet.
+I have included an example of the english locale, you will need to change the class name and add your own filler text and alphabet.
 
 ```php
-
-<?php
 namespace Faker\Extension\Locale;
 
 use Faker\Text\StringFactoryInterface,

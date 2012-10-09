@@ -4,10 +4,18 @@ After reading this guide you will be ready to being testing your databases.
 
 ## Step 1. Install.
 
-Installing is easy you can use [my pear channel](http://www.icomefromthenet.com/pear/) hosted on github.
+Installing is easy you can use composer.
  
-     pear channel-discover icomefromthenet.github.com/pear
-     pear install icomefromthenet/Faker
+``json
+{
+ "require" : {
+    "icomefromthenet/migration": "dev-master"
+ }
+
+}
+
+```
+     
 
 ## Step 2. Setup Project.
 
@@ -15,21 +23,21 @@ Faker lives in your project, the schema files and output can be commited to your
 
      mkdir faker
      cd faker
-     faker faker:init
+     ../vendor/bin/faker.php faker:init
 
-These commands will create a directory under your project (assuming linux/mac). Faker is accessed using the executable called faker and the command faker:init. You will see output listing the files copied into the directory.
+These commands will create a directory under your project (assuming linux). Faker is accessed using the executable in the vendor bin and the command faker:init. You will see output listing the files copied into the directory.
 
-Now its time to configure the database connection, if your going to use the analyser. If your building your schema by hand this is not a necessary step you can go to setp 4 and start filing in.
+Now its time to configure the database connection only if you plan on using the analyser. If building the schema by hand this is not necessary.
 
-    faker faker:configure
+    ../vendor/bin/faker.php faker:configure
 
 You will be asked a list of questions, after the last quesition a config file will be written to the config directory. There is only one config file per project.
 
 ## Step 3. Analyse your schema.
 
-As a shortcut to building you schema fake will use doctrine schema manager to build a starting file.
+As a shortcut to building you schema faker will use doctrine schema manager to build a starting file.
 
-     faker faker:analyse
+     ../vendor/bin/faker.php faker:analyse
 
 Will write a schema.xml file to the `sources` directory in your project folder
 
@@ -126,17 +134,17 @@ Inside a column a [datatype](types/index.md) can be placed, or a [selector](tags
 
 ## Step 5. Generate Generate Generate.
 
-       faker faker:generate 
+       ../vendor/bin/faker.php faker:generate 
        
        or
        
-       faker faker:generate schema.xml 
+       ../vendor/bin/faker.php faker:generate schema.xml 
 
 To start the generator you must have a completed schema inside the **sources dir**. The command will assume the schema is called schema.xml, if your using multiple's then you can pass the schema name as the first argument.
 
 
 ## Conclusion.
-You should now have data files generated under the **dump directory**, you can run the command again, it will overrite the files in the directory. I would recommand you add the dump dir to source code ignore list.
+You should now have data files generated under the **dump directory**, you can run the command again, it will overrite the files in the directory. I would recommand you add sql and xml files inside dump dir to source code ignore.
 
 
 

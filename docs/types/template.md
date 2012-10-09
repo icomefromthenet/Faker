@@ -18,6 +18,15 @@ If your looking for numbers the template returns string make sure there are no s
 </datatype>
 ```
 
+**Indicate a string instead of a file**
+
+```xml
+<datatype name="template">
+    <option name="template" value="{{ 1 + 1 }}" />
+</datatype>
+```
+
+
 Tip: to use the table and column and schema names in your template filename.
 
 **The following default namespace are available inside the template:**

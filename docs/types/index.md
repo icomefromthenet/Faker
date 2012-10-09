@@ -31,7 +31,6 @@ All Extension must following the following conventions:
 I have provided an example below that can be used as a base for **datatypes**.
 
 ```php
-    <?php
     namespace Faker\Extension\Faker\Type;
     
     use Faker\Components\Faker\Exception as FakerException,
@@ -39,7 +38,7 @@ I have provided an example below that can be used as a base for **datatypes**.
         Faker\Components\Faker\Utilities,
         Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
     
-    class class_name extends Type
+    class ClassName extends Type
     {
     
         //  -------------------------------------------------------------------------
