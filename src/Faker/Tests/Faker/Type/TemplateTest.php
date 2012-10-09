@@ -2,6 +2,7 @@
 namespace Faker\Tests\Faker\Type;
 
 use Faker\Components\Faker\Type\Template,
+    Faker\Components\Faker\Utilities,
     Faker\Tests\Base\AbstractProject;
 
 class TemplateTest extends AbstractProject
@@ -32,7 +33,7 @@ class TemplateTest extends AbstractProject
     
     //--------------------------------------------------------------------------
     
-    public function testConfig()
+    public function testConfigWithFile()
     {
         $id = 'table_two';
         
@@ -56,9 +57,9 @@ class TemplateTest extends AbstractProject
     
     /**
       *  @expectedException Faker\Components\Faker\Exception
-      *  @expectedExceptionMessage The child node "file" at path "config" must be configured
+      *  @expectedExceptionMessage Template Type:: must set either a file or a template string
       */
-    public function testConfigFileMisssing()
+    public function testFileMisssingAndTemplateStringMissing()
     {
         $id = 'table_two';
         
@@ -76,10 +77,9 @@ class TemplateTest extends AbstractProject
             
         $type = new Template($id,$parent,$event,$utilities,$generator);
         $type->setOption('name','template');
-        $type->merge();        
+        $type->merge();
+        $type->validate();
     }
-    
-    //  -------------------------------------------------------------------------
     
     /**
       *  @expectedException Faker\Components\Faker\Exception
@@ -138,9 +138,31 @@ class TemplateTest extends AbstractProject
         $type->setLocale($locale);
         $type->merge();
         $type->validate(); 
-         
-        $this->assertEquals('dgHJ',$type->generate(1,array('v1' => 'a value string')));
     }
+    
+    public function testWithTemplateString()
+    {
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')
+                        ->getMock();
+        
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+                      ->getMock();
+        
+        $utilities = new Utilities($this->getProject());
+        
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        
+        $template = new Template('id_a',$parent,$event,$utilities,$generator);
+        
+        $template->setOption('name','template');
+        $template->setOption('template','a template string {{ 1 + 1 }}');
+        $template->merge();
+        $template->validate();
+        
+        $this->assertEquals('a template string 2',$template->generate(1));
+    }
+    
+    
     
 }
 /*End of file */

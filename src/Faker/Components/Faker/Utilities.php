@@ -59,9 +59,9 @@ class Utilities
                 $iterator->next();
                 continue;
             } else if ($char === "X") {
-                $new_str->append((string) ceil($random->generate(1, 9)));
+                $new_str->append((string) round($random->generate(1, 9)));
             } else if ($char === "x") {
-                $new_str->append((string) ceil($random->generate(0, 9)));
+                $new_str->append((string) round($random->generate(0, 9)));
             } else {
                 $new_str->append((string) $char);
             }    
@@ -104,60 +104,60 @@ class Utilities
             switch ($str->charAt($i)) {
                 // Numbers
                 case "X":
-                    $new_str->append(ceil($random->generate(1, 9)));
+                    $new_str->append(round($random->generate(1, 9)));
                 break;
                 case "x":
-                    $new_str->append(ceil($random->generate(0, 9)));
+                    $new_str->append(round($random->generate(0, 9)));
                 break;
                 
                 // Hex
                 case "H":
-                    $new_str->append($hex->charAt(ceil($random->generate(0, $hex->length()) - 1)));
+                    $new_str->append($hex->charAt(round($random->generate(0, $hex->length()) - 1)));
                 break;
                     
                 // Letters
                 case "L":
-                    $new_str->append($letters->charAt(ceil($random->generate(0, $letters->length()) - 1)));
+                    $new_str->append($letters->charAt(round($random->generate(0, $letters->length()) - 1)));
                 break;
                 case "l":
-                    $new_str->append(\mb_strtolower($letters->charAt(ceil($random->generate(0, $letters->length()) - 1))));
+                    $new_str->append(\mb_strtolower($letters->charAt(round($random->generate(0, $letters->length()) - 1))));
                 break;
                 case "D":
-                    $bool = ceil($random->generate(0,1));
+                    $bool = round($random->generate(0,1));
                     if ($bool === 0)
-                        $new_str->append($letters->charAt(ceil($random->generate(0, $letters->length()) - 1)));
+                        $new_str->append($letters->charAt(round($random->generate(0, $letters->length()) - 1)));
                     else
-                        $new_str->append(\mb_strtolower($letters->charAt(ceil($random->generate(0, $letters->length()) - 1))));
+                        $new_str->append(\mb_strtolower($letters->charAt(round($random->generate(0, $letters->length()) - 1))));
                     break;
 
                 // Consonants
                 case "C":
-                    $new_str->append($consonants->charAt(ceil($random->generate(0, $consonants->length()) - 1)));
+                    $new_str->append($consonants->charAt(round($random->generate(0, $consonants->length()) - 1)));
                 break;
                 case "c":
-                    $new_str->append(\mb_strtolower($consonants->charAt(ceil($random->generate(0,$consonants->length()) - 1))));
+                    $new_str->append(\mb_strtolower($consonants->charAt(round($random->generate(0,$consonants->length()) - 1))));
                 break;
                 case "E":
-                    $bool = ceil($random->generate(0,1));
+                    $bool = round($random->generate(0,1));
                     if ($bool === 0)
-                        $new_str->append($consonants->charAt(ceil($random->generate(0, $consonants->length()) - 1)));
+                        $new_str->append($consonants->charAt(round($random->generate(0, $consonants->length()) - 1)));
                     else
-                        $new_str->append(\mb_strtolower($consonants->charAt(ceil($random->generate(0, $consonants->length()) - 1))));
+                        $new_str->append(\mb_strtolower($consonants->charAt(round($random->generate(0, $consonants->length()) - 1))));
                     break;
 
                 // Vowels
                 case "V":
-                    $new_str->append($vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1)));
+                    $new_str->append($vowels->charAt(round($random->generate(0,$vowels->length()) - 1)));
                 break;
                 case "v":
-                    $new_str->append(\mb_strtolower($vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1))));
+                    $new_str->append(\mb_strtolower($vowels->charAt(round($random->generate(0,$vowels->length()) - 1))));
                 break;
                 case "F":
-                    $bool = ceil($random->generate(0,1));
+                    $bool = round($random->generate(0,1));
                     if ($bool === 0)
-                        $new_str->append($vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1)));
+                        $new_str->append($vowels->charAt(round($random->generate(0,$vowels->length()) - 1)));
                     else
-                        $new_str->append(\mb_strtolower( $vowels->charAt(ceil($random->generate(0,$vowels->length()) - 1))));
+                        $new_str->append(\mb_strtolower( $vowels->charAt(round($random->generate(0,$vowels->length()) - 1))));
                 break;
      
                 //space char

@@ -56,10 +56,8 @@ class Application extends BaseApplication
      * @param \Faker\Project $project
      *
      */
-    public function __construct(Project $project)
-    {   $name     = 'Faker';
-        $version  = '1.0';
-
+    public function __construct(Project $project,$name = 'Faker',$version)
+    {   
         parent::__construct($name,$version);
 
         $this->getDefinition()->addOptions(array(

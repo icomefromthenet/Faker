@@ -4,6 +4,7 @@ namespace Faker\Tests\Base;
 use Faker\Project,
     Faker\Io\Io,
     Faker\Path,
+    Faker\Bootstrap,
     Faker\Components\Faker\Collection,
     Symfony\Component\Console\Output\NullOutput,
     Symfony\Component\Filesystem\Filesystem,
@@ -58,13 +59,18 @@ class AbstractProject extends PHPUnit_Framework_TestCase
       */
     public function getProject()
     {
+        if(self::$project === null) {
+            $boot    = new Bootstrap();
+            self::$project = $boot->boot('1.0.3-test');
+        }
+        
         return self::$project;
     }
 
 
     protected function getSkeltonIO()
     {
-        return new Io(realpath(__DIR__.'/../../skelton'));
+        return new Io(realpath(__DIR__.'/../../../../skelton'));
     }
 
     
@@ -123,7 +129,7 @@ class AbstractProject extends PHPUnit_Framework_TestCase
         );
        
         if(isset($project['data_path']) === false) {
-            $project['data_path'] = new \Faker\Path(__DIR__.'/../../data');
+            $project['data_path'] = new \Faker\Path(__DIR__.'/../../../../data');
         }
         
         $project->getPath()->loadExtensionBootstrap();            

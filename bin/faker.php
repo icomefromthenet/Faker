@@ -2,7 +2,8 @@
 <?php
 namespace Faker;
 
-use Faker\Project,
+use Faker\Bootstrap,
+    Faker\Project,
     Faker\Path,
     Faker\Command\Application,
     Faker\Command\GenerateCommand,
@@ -21,28 +22,33 @@ use Faker\Project,
 //
 //--------------------------------------------------------------
    
-   error_reporting(E_ALL);
+error_reporting(E_ALL);
    
-   ini_set('display_errors', 1);
+ini_set('display_errors', 1);
        
-  
-   
-//---------------------------------------------------------------------
-// Set Pear Directories
+
+//---------------------------------------------------------------
+// Load Composer
 //
-//--------------------------------------------------------------------
-    
-    
-if(strpos('@PHP-BIN@', '@PHP-BIN') === 0) { // stand-alone version is running
+//--------------------------------------------------------------
 
-   set_include_path(dirname(__FILE__) . '/../' . PATH_SEPARATOR . get_include_path());
-   $project = require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
-   $project['data_path'] = new Path(__DIR__ . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'data');      
-
-}else {
-   $project = require 'Faker' . DIRECTORY_SEPARATOR .'Bootstrap.php';
-   $project['data_path'] = new Path('@PEAR-DATA@' . DIRECTORY_SEPARATOR .'Faker');   
+if (is_dir($vendor = __DIR__.'/../vendor')) {
+   require($vendor.'/autoload.php');
+} elseif (is_dir($vendor = __DIR__.'/../../../../vendor')) {
+   require($vendor.'/autoload.php');
+} 
+else {
+    die(
+        'You must set up the project dependencies, run the following commands:'.PHP_EOL.
+        'curl -s http://getcomposer.org/installer | php'.PHP_EOL.
+        'php composer.phar install'.PHP_EOL
+    );
 }
+
+
+$boot = new Bootstrap();
+
+$project = $boot->boot('1.0.3');
 
 
 //---------------------------------------------------------------------

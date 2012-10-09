@@ -15,15 +15,25 @@ class Template extends Type
     
     public function generate($rows, $values = array())
     {
-        $template = $this->getOption('file');
-        $loader = $this->getUtilities()->getTemplatingManager()->getLoader();
-    
-        if($loader->getIo()->exists($template) === false) {
-            throw new FakerException('Template::File Does not Exists at '. $template);
+        
+        if($this->template === null) {
+            $template    = $this->getOption('file');
+            $temp_string = $this->getOption('template');
+            $loader      = $this->getUtilities()->getTemplatingManager()->getLoader();
+            
+            $vars = array('faker_utilities' => $this->getUtilities(),
+                          'faker_locale' => $this->getLocale(),
+                          'faker_generator' => $this->getGenerator()
+            );
+            
+            if($template !== false) {
+                $this->template = $loader->load($template,$vars);      
+                
+            } else {
+                $this->template = $loader->loadString($temp_string,$vars);      
+            }
         }
-    
-        $this->template = $loader->load($template,array('faker_utilities' => $this->getUtilities(),'faker_locale' => $this->getLocale(),'faker_generator' => $this->getGenerator()));
-    
+            
         return $this->template->render($values);
     
     }
@@ -41,9 +51,16 @@ class Template extends Type
         return $rootNode
             ->children()
                 ->scalarNode('file')
-                    ->isRequired()
+                    ->defaultValue(false)
+                    ->treatNullLike(false)
                     ->info('File name of the template')
                     ->example('file under the tempplate dir')
+                ->end()
+                ->scalarNode('template')
+                    ->defaultValue(false)
+                    ->treatNullLike(false)
+                    ->info('A template string to use')
+                    ->example('{{ var1 }} + {{ var2 }}')
                 ->end()
             ->end();
     }
@@ -53,6 +70,21 @@ class Template extends Type
     
     public function validate()
     {
+        $template    = $this->getOption('file');
+        $temp_string = $this->getOption('template');
+        
+        if($template === false && $temp_string === false) {
+            throw new FakerException('Template Type:: must set either a file or a template string');
+        }
+        
+        
+        if($template !== false) {
+            $loader      = $this->getUtilities()->getTemplatingManager()->getLoader();
+            if($loader->getIo()->exists($template) === false) {
+                throw new FakerException('Template::File Does not Exists at '. $template);
+            }  
+        }
+        
         return true;
     }
     
