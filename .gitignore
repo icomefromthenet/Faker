@@ -5,4 +5,5 @@ build/*.tgz
 package.xml
 vendor
 composer.lock
+*.komodoproject
 
