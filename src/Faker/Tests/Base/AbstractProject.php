@@ -61,7 +61,7 @@ class AbstractProject extends PHPUnit_Framework_TestCase
     {
         if(self::$project === null) {
             $boot    = new Bootstrap();
-            self::$project = $boot->boot('1.0.3-test');
+            self::$project = $boot->boot('1.0.3-test',null);
         }
         
         return self::$project;

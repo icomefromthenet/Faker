@@ -15,7 +15,7 @@ class Bootstrap
      *
      *  @return Faker\Project;
      */
-   public function boot($version)
+   public function boot($version,$composer)
    {
 
       //---------------------------------------------------------------
@@ -24,6 +24,7 @@ class Bootstrap
       //--------------------------------------------------------------
       
       $COREPATH   =   __DIR__. DIRECTORY_SEPARATOR . '..'   . DIRECTORY_SEPARATOR;
+      
       
       //------------------------------------------------------------------------------
       // Load the Extension Loader
@@ -69,7 +70,7 @@ class Bootstrap
       //------------------------------------------------------------------------------
       
       $project['loader']   = $ext_loader;
-      
+      $project['composer'] = $composer;
       
       //---------------------------------------------------------------------
       // Assign the datapath

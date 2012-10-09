@@ -43,14 +43,14 @@
         "pimple/pimple"                 : "1.0.0",
         "doctrine/common"               : "2.3.0",
         "doctrine/dbal"                 : "2.3.0",
-        "icomefromthenet/phpstats"      : "dev-master",
         "ext-dom": "*",
         "ext-spl": "*",
         "ext-pcre": "*"
     },
     "autoload": {
         "psr-0": {
-            "Faker": "src"
+            "Faker": "src",
+            "PHPStats" : "src"
             }
     },
     "bin" : ["bin/faker.php"]

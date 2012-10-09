@@ -33,9 +33,9 @@ ini_set('display_errors', 1);
 //--------------------------------------------------------------
 
 if (is_dir($vendor = __DIR__.'/../vendor')) {
-   require($vendor.'/autoload.php');
+  $composer =  require($vendor.'/autoload.php');
 } elseif (is_dir($vendor = __DIR__.'/../../../../vendor')) {
-   require($vendor.'/autoload.php');
+  $composer = require($vendor.'/autoload.php');
 } 
 else {
     die(
@@ -47,8 +47,7 @@ else {
 
 
 $boot = new Bootstrap();
-
-$project = $boot->boot('1.0.3');
+$project = $boot->boot('1.0.3',$composer);
 
 
 //---------------------------------------------------------------------
