@@ -4,7 +4,7 @@
     "keywords": ["database", "testing","generator"],
     "homepage": "https://github.com/icomefromthenet/Faker",
     "type": "library",
-    "license": "MIT",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Lewis Dyer",
@@ -43,7 +43,10 @@
         "pimple/pimple"                 : "1.0.0",
         "doctrine/common"               : "2.3.0",
         "doctrine/dbal"                 : "2.3.0",
-        "PHPStats/PHPStats"             : "dev-master"
+        "icomefromthenet/phpstats"      : "dev-master",
+        "ext-dom": "*",
+        "ext-spl": "*",
+        "ext-pcre": "*"
     },
     "autoload": {
         "psr-0": {
