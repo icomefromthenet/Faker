@@ -6,7 +6,7 @@ After reading this guide you will be ready to being testing your databases.
 
 Installing is easy you can use composer.
  
-``json
+```json
 {
  "require" : {
     "icomefromthenet/migration": "dev-master"
