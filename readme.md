@@ -17,7 +17,7 @@ If your a database tester or a lone developer Faker will help you test your data
  4. Configured via XML file that feels closer to your database.
  5. Many [built in datatypes](http://github.com/icomefromthenet/Faker/blob/master/docs/types/index.md), Including text, numeric , autoincrements, email , city names etc
  6. Embraces extension, write own types, writters and locales.
- 7. Installed via pear.
+ 7. Installed via composer.
  8. Analyse and build struct from existing database.
  9. Seed your random number generator for repeatable results (seed global|table|column|type). 
  10. Supported custom locals, generate test data in unicode. **(Not just ENGLISH)**.
@@ -30,11 +30,14 @@ SQlite3, PHP5.3.3, MBString, Pear and Linux / Mac (windows support in beta).
 All components are included by default in package installs of php.
 
 ## How to install
-The easist way to install to use PEAR
+The easist way to install to use composer
 
-```bash
-     pear channel-discover icomefromthenet.github.com/pear
-     pear install icomefromthenet/Faker
+```json
+{
+  "require-dev" : {
+    "icomefromthenet/migration": "dev-master"
+  }
+}
 ```
 
 Read more from the [starting guide](http://github.com/icomefromthenet/Faker/blob/master/docs/starting.md)
@@ -89,7 +92,7 @@ Read more from the [starting guide](http://github.com/icomefromthenet/Faker/blob
 **Calling command**
 
 ``` bash
- faker:generate schema.xml
+ ../vendor/bin/faker.php faker:generate schema.xml
 
 ```
 
