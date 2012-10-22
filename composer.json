@@ -19,13 +19,10 @@
         {
             "type": "composer",
             "url": "http://packages.zendframework.com/"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/icomefromthenet/PHPStats"
         }
     ],
     "require": {
+        "icomefromthenet/reverse-regex" : "0.0.3",
         "zendframework/zend-progressbar": "2.0.*",
         "zendframework/zend-stdlib"     : "2.0.*",
         "zendframework/zend-text"       : "2.0.*",

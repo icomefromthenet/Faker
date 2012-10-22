@@ -12,6 +12,7 @@
 11. [People](people.md) - People names
 12. [Range](range.md) - A number range
 13. [Template](template.md) - For calculated  columns.
+14. [Regex](regex.md) - Text values using a Regex great for varaible formats.
 
 ## Writing your own DataType.
 

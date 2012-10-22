@@ -39,6 +39,7 @@ class TypeFactory implements ExtensionInterface
             'city'            => '\\Faker\\Components\\Faker\\Type\\Cities',
             'country'         => '\\Faker\\Components\\Faker\\Type\\Country',
             'template'        => '\\Faker\\Components\\Faker\\Type\\Template',
+            'regex'           => '\\Faker\\Components\\Faker\\Type\\Regex',
         
     );
 
