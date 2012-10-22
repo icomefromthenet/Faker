@@ -10,11 +10,11 @@ The Regex type is perfect for representing text and numeric values.
 
 ```xml
 <datatype name="regex">
-    <option name="format" value="\[a-z\]{1,4}" />
+    <option name="format" value="[a-z]{1,4}" />
 </datatype>
 ```
 
-The above will return a letter between a-z 1 to four times.
+The above will return a letter between a and z, one to four times.
 
 See the project page for [supported regex meta-characters](https://github.com/icomefromthenet/ReverseRegex#writing-a-regex). 
 
