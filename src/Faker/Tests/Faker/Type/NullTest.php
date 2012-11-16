@@ -72,7 +72,7 @@ class NullTest extends AbstractProject
         $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
             
         $type = new Null($id,$parent,$event,$utilities,$generator);
-        $type->setOption('name','null');
+        $type->setOption('name','nulltype');
         $type->merge();
         $type->validate(); 
          

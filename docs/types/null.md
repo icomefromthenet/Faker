@@ -9,7 +9,7 @@ There are <strong>no options</strong> for this type.
 
 ```xml
 
-<datatype name="null">
+<datatype name="nulltype">
 </datatype>
 
 ```
@@ -18,7 +18,7 @@ or
 
 ```xml
 
-<datatype name="null" />
+<datatype name="nulltype" />
 
 ```
 
@@ -27,7 +27,7 @@ or
 ```xml
 
 <random>
-    <datatype name="null" />
+    <datatype name="nulltype" />
     ... other type
 </random>
 
