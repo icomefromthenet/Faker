@@ -23,9 +23,6 @@
     ],
     "require": {
         "icomefromthenet/reverse-regex" : "0.0.3",
-        "zendframework/zend-progressbar": "2.0.*",
-        "zendframework/zend-stdlib"     : "2.0.*",
-        "zendframework/zend-text"       : "2.0.*",
         "monolog/monolog"               : "1.2.1",
         "symfony/filesystem"            : "2.1.2",
         "symfony/class-loader"          : "2.1.2",
@@ -46,8 +43,9 @@
     },
     "autoload": {
         "psr-0": {
-            "Faker": "src",
-            "PHPStats" : "src"
+            "Faker"    : "src",
+            "PHPStats" : "lib",
+            "Zend"     : "lib"
             }
     },
     "bin" : ["bin/faker.php"]
