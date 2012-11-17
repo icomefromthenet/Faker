@@ -35,6 +35,10 @@ class Swap extends BaseComposite implements CompositeInterface , SelectorInterfa
       */
     protected $switch_map = null;    
     
+    /**
+      *  @var integer current index 
+      */
+    protected $current;
     
     /**
       *  Class construtor
@@ -58,52 +62,32 @@ class Swap extends BaseComposite implements CompositeInterface , SelectorInterfa
     
     public function generate($rows,$values = array())
     {
-       $high = 0;
-       $low = 0;
-       $i = 0;
-       $use_index = 0;
-       $key_map = array();
-       $value_map = array();
       
-       # test if we have a range map
-       
+       # has the switch map been populated?
        if($this->switch_map === null) {
+            
+            $this->switch_map = array();
             
             foreach($this->child_types as $index => $type) {
                 $this->switch_map[$index] = (integer) $type->getSwap();
             } 
-       
-            # low to high quicksort (maintains key associations)
-       
-            asort($this->switch_map,SORT_NUMERIC);
+            
+            reset($this->switch_map);
+            $this->current = key($this->switch_map);
        }
        
-       $key_map = array_keys($this->switch_map);
-       $value_map = array_values($this->switch_map);
-       
-       # find which child should be using for the current row
-
-       $last = count($value_map) -1;
-       $i = 0;
-
-       for($i; $i <= $last; $i++) {
-        
-            # if we no other ranges check then use the last.
-            if($i === $last) {
-                $use_index = $key_map[$i];
-                break;
-            }
-        
-            $high = $value_map[$i+1];
-            $low = $value_map[$i];
-        
-            if($rows <= $high AND $rows  >= $low ) {
-                $use_index = $key_map[$i];        
-                break;
-            }
+       # if at 0 pass reset the counter and move the position to
+       # the next child type in the switch map
+       if($this->switch_map[$this->current] === 0) {
+            $this->switch_map[$this->current] = (integer) $this->child_types[$this->current]->getSwap();
+            ++$this->current;
        }
        
-       return $this->child_types[$use_index]->generate($rows,$values);
+       # about to use a generator pass remove it from total left.
+       --$this->switch_map[$this->current];
+       
+       # return the generator pass
+       return $this->child_types[$this->current]->generate($rows,$values);
     }
     
     //  -------------------------------------------------------------------------

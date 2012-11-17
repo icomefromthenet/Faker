@@ -45,7 +45,7 @@ class SwapTest extends AbstractProject
         
     }
     
-    public function testGenerate()
+    public function testGenerateNoRepeat()
     {
         
         $id = 'swap_1';
@@ -56,24 +56,25 @@ class SwapTest extends AbstractProject
         $alt->setOption('name' ,'swap');
      
         $child_a = $this->getMockBuilder('\Faker\Components\Faker\Composite\When')->disableOriginalConstructor()->getMock();
+        
         $child_a->expects($this->exactly(30))
                 ->method('generate')
                 ->with($this->isType('integer'),$this->isType('array'))
                 ->will($this->returnValue('exampleA'));
             
-        $child_a->expects($this->once())
+        $child_a->expects($this->any())
                 ->method('getSwap')
-                ->will($this->returnValue(0));
+                ->will($this->returnValue(30));
             
         $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\When')->disableOriginalConstructor()->getMock();
-        $child_b->expects($this->exactly(70)) //second child only called if first is not return true
+        $child_b->expects($this->exactly(70)) 
                 ->method('generate')
                 ->with($this->isType('integer'),$this->isType('array'))
                 ->will($this->returnValue('exampleB'));
         
-        $child_b->expects($this->once())
+        $child_b->expects($this->any())
                 ->method('getSwap')
-                ->will($this->returnValue(30));
+                ->will($this->returnValue(70));
         
 
         $alt->addChild($child_a);        
@@ -81,6 +82,50 @@ class SwapTest extends AbstractProject
         
         
         for( $i = 1; $i <= 100; $i++) {
+            $alt->generate($i,array());
+        }
+        
+        
+    }
+    
+    
+    public function testGenerateRepeat()
+    {
+        
+        $id = 'swap_1';
+        $event  = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $parent = $this->getMockBuilder('Faker\Components\Faker\Composite\CompositeInterface')->getMock();
+    
+        $alt = new Swap($id,$parent,$event);
+        $alt->setOption('name' ,'swap');
+     
+        $child_a = $this->getMockBuilder('\Faker\Components\Faker\Composite\When')->disableOriginalConstructor()->getMock();
+        
+        $child_a->expects($this->exactly(60))
+                ->method('generate')
+                ->with($this->isType('integer'),$this->isType('array'))
+                ->will($this->returnValue('exampleA'));
+            
+        $child_a->expects($this->any())
+                ->method('getSwap')
+                ->will($this->returnValue(60));
+            
+        $child_b = $this->getMockBuilder('Faker\Components\Faker\Composite\When')->disableOriginalConstructor()->getMock();
+        $child_b->expects($this->exactly(140)) 
+                ->method('generate')
+                ->with($this->isType('integer'),$this->isType('array'))
+                ->will($this->returnValue('exampleB'));
+        
+        $child_b->expects($this->any())
+                ->method('getSwap')
+                ->will($this->returnValue(140));
+        
+
+        $alt->addChild($child_a);        
+        $alt->addChild($child_b);        
+        
+        
+        for( $i = 1; $i <= 200; $i++) {
             $alt->generate($i,array());
         }
         
