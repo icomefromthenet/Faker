@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "icomefromthenet/reverse-regex" : "0.0.3",
+        "icomefromthenet/reverse-regex" : "0.0.*",
         "monolog/monolog"               : "1.2.1",
         "symfony/filesystem"            : "2.1.2",
         "symfony/class-loader"          : "2.1.2",
@@ -35,8 +35,8 @@
         "symfony/yaml"                  : "2.1.2",
         "twig/twig"                     : "1.10.0",
         "pimple/pimple"                 : "1.0.0",
-        "doctrine/common"               : "2.3.0",
-        "doctrine/dbal"                 : "2.3.0",
+        "doctrine/common"               : "2.3.*",
+        "doctrine/dbal"                 : "2.3.*",
         "ext-dom": "*",
         "ext-spl": "*",
         "ext-pcre": "*"
