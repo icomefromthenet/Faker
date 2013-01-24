@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "icomefromthenet/reverse-regex" : ">=0.4",
+        "icomefromthenet/reverse-regex" : "dev-master",
         "monolog/monolog"               : "1.2.*",
         "symfony/filesystem"            : "2.1.*",
         "symfony/class-loader"          : "2.1.*",
