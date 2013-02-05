@@ -352,9 +352,9 @@ class Bootstrap
       
       $project['faker_manager'] = $project->share(function($project)
       {
-          $io = new \Faker\Components\Faker\Io($project->getPath()->get());
+          $io = new \Faker\Components\Engine\Original\Io($project->getPath()->get());
          
-          return new \Faker\Components\Faker\Manager($io,$project);
+          return new \Faker\Components\Engine\Original\Manager($io,$project);
          
       });
       

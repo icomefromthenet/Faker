@@ -1,7 +1,7 @@
 <?php
 namespace Faker;
 
-use Faker\Components\Faker\Exception as FakerException;
+use Faker\Components\Engine\Original\Exception as FakerException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
 use Faker\ExtensionInterface;
@@ -45,7 +45,7 @@ class ColumnTypeFactory implements ExtensionInterface
       *  @param string the column type name
       *  @access public
       *  @return Doctrine\DBAL\Types\Type
-      *  @throws Faker\Components\Faker\Exception
+      *  @throws Faker\Components\Engine\Original\Exception
       */
     public function create($type)
     {

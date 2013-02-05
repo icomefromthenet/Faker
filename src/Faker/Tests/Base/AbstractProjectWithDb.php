@@ -55,7 +55,7 @@ class AbstractProjectWithDb extends AbstractProject
         $connection = $this->getDoctrineConnection();        
         $log    = $this->getMockLog();
               
-        return new \Faker\Components\Faker\Driver\Mysql\TableManager($connection,$log,'Faker_migrate');
+        return new \Faker\Components\Engine\Original\Driver\Mysql\TableManager($connection,$log,'Faker_migrate');
         
     }
     

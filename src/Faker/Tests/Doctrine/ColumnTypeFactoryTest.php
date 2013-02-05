@@ -18,7 +18,7 @@ class ColumnTypeFactoryTest extends AbstractProject
 
     
     /**
-      *  @expectedException Faker\Components\Faker\Exception 
+      *  @expectedException Faker\Components\Engine\Original\Exception 
       */
     public function testFactoryCreateBadKey()
     {
@@ -27,7 +27,7 @@ class ColumnTypeFactoryTest extends AbstractProject
     }
     
     /**
-      *  @expectedException Faker\Components\Faker\Exception 
+      *  @expectedException Faker\Components\Engine\Original\Exception 
       */
     public function testregisterExtension()
     {
@@ -39,7 +39,7 @@ class ColumnTypeFactoryTest extends AbstractProject
     }
     
     /**
-      *  @expectedException Faker\Components\Faker\Exception 
+      *  @expectedException Faker\Components\Engine\Original\Exception 
       */
     public function testregisterManyExtension()
     {
