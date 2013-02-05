@@ -63,6 +63,7 @@ class UniqueString extends Type
             
         } while($ok === false);
         
+        array_push(self::$generated,$guid);
         
         return (string) $guid;
     }

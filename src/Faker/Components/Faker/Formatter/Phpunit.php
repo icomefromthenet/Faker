@@ -198,7 +198,7 @@ class Phpunit extends BaseFormatter implements FormatterInterface
         
         if($value !== null) {
             $this->writer->write('<value>');
-            $this->writer->write($value);
+            $this->writer->write(htmlentities($value));
             $this->writer->write('</value>'.PHP_EOL);
         } else {
             $this->writer->write('<null />');            

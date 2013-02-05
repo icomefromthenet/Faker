@@ -62,6 +62,7 @@ class UniqueNumber extends Type
             
         } while($ok === false);
         
+        array_push(self::$generated,$guid);
         
         return $guid + 0;
     }
