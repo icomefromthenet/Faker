@@ -1,9 +1,9 @@
 <?php
 namespace Faker\Extension\Faker\Type;
 
-use Faker\Components\Faker\Exception as FakerException,
-    Faker\Components\Faker\Type\Type,
-    Faker\Components\Faker\Utilities,
+use Faker\Components\Engine\Original\Exception as FakerException,
+    Faker\Components\Engine\Original\Type\Type,
+    Faker\Components\Engine\Original\Utilities,
     Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition,
     Symfony\Component\Config\Definition\Builder\TreeBuilder;
 

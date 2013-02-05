@@ -199,6 +199,17 @@ class Project extends Pimple
     }
    
    
+    /**
+      * Fetch a faker database
+      *
+      * @access public
+      * @return \Doctine\DBAL\Connection
+      */
+    public function getGeneratorDatabase()
+    {
+        return $this['faker_database'];
+    }
+   
 
     //  -------------------------------------------------------------------------
     # Manager loaders
@@ -227,11 +238,12 @@ class Project extends Pimple
         return $this['template_manager'];
     }
 
+    
     /**
       *  function getFakerManager
       *
       *  @access public
-      *  @return \Faker\Components\Faker\Manager an instance of the Faker component manager
+      *  @return \Faker\Components\Engine\Original\Manager an instance of the Faker component manager
       */
     public function getFakerManager()
     {
@@ -242,7 +254,7 @@ class Project extends Pimple
       *  function getFakerManager
       *
       *  @access public
-      *  @return \Faker\Components\Faker\Manager an instance of the Faker component manager
+      *  @return \Faker\Components\Engine\Original\Manager an instance of the Faker component manager
       */
     public function getWritterManager()
     {
