@@ -1,10 +1,12 @@
 <?php
 namespace Faker\Components\Engine\Original;
 
-use Faker\Components\Engine\Original\Exception as FakerException,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Symfony\Component\EventDispatcher\EventDispatcherInterface,
-    Symfony\Component\Console\Output\OutputInterface;
+use Faker\Components\Engine\Common\BuildEvents;
+use Faker\Components\Engine\Original\Exception as FakerException;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
 
 /**
   *  Send output to console for builder events

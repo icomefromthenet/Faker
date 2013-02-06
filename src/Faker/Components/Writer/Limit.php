@@ -1,5 +1,4 @@
 <?php
-
 namespace Faker\Components\Writer;
 
 use Faker\Components\Writer\Exception as WriterException;

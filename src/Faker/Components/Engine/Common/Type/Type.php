@@ -44,7 +44,7 @@ class Type implements TypeInterface, OptionInterface
       */
     protected $utilities;
     
-     //------------------------------------------------------------------
+    //------------------------------------------------------------------
     # TypeInterface
     
     
