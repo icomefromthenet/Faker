@@ -1,5 +1,5 @@
 <?php
-namespace Faker\Components\Engine\Original;
+namespace Faker\Components\Engine\Common;
 
 /**
   *  List of events the buidler will fire

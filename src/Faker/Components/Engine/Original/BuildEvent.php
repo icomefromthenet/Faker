@@ -1,11 +1,11 @@
 <?php
 namespace Faker\Components\Engine\Original;
 
-use Symfony\Component\EventDispatcher\Event,
-    Faker\Components\Engine\Original\Composite\CompositeInterface;
+use Symfony\Component\EventDispatcher\Event;
+    
 
 /**
-  *  Event is used for events found in \Faker\Components\Engine\Original\BuildEvents
+  *  Event is used for events found in \Faker\Components\Engine\Common\BuildEvents
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.3

@@ -1,11 +1,14 @@
 <?php
-namespace Faker\Components\Engine\Original;
+namespace Faker\Components\Engine\Common;
 
 use Faker\Io\Io as Base;
 use Faker\Io\IoInterface;
 
 /*
  * class Io
+ *
+ * @author Lewis Dyer <getintouch@icomefromthenet.com>
+ * @since 1.0.4
  */
 class Io extends Base implements IoInterface
 {

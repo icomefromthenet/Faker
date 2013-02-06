@@ -1,6 +1,7 @@
 <?php
 namespace Faker\Components\Engine\Original;
 
+use Faker\Components\Engine\Common\BuildEvents;
 use Faker\Components\Engine\Original\Composite\Column,
     Faker\Components\Engine\Original\Composite\ForeignKey,
     Faker\Components\Engine\Original\Composite\Schema,
