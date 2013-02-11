@@ -213,8 +213,31 @@ class AlternateSelectorTest extends AbstractProject
         $this->assertEquals(3,$type->generate(0,array()));
         $this->assertEquals(4,$type->generate(0,array()));
         $this->assertEquals(5,$type->generate(0,array()));
+        
+        $type->setOption('set',3);
+        $type->setOption('step',3);
+        
+        $this->assertTrue($type->validate());
+        
+        $this->assertEquals(1,$type->generate(0,array()));
+        $this->assertEquals(1,$type->generate(0,array()));
         $this->assertEquals(1,$type->generate(0,array()));
         $this->assertEquals(2,$type->generate(0,array()));
+        $this->assertEquals(2,$type->generate(0,array()));
+        $this->assertEquals(2,$type->generate(0,array()));
+        $this->assertEquals(3,$type->generate(0,array()));
+        $this->assertEquals(3,$type->generate(0,array()));
+        $this->assertEquals(3,$type->generate(0,array()));
+        
+        # loop ok
+        $this->assertEquals(1,$type->generate(0,array()));
+        $this->assertEquals(1,$type->generate(0,array()));
+        $this->assertEquals(1,$type->generate(0,array()));
+        $this->assertEquals(2,$type->generate(0,array()));
+        $this->assertEquals(2,$type->generate(0,array()));
+        $this->assertEquals(2,$type->generate(0,array()));
+        $this->assertEquals(3,$type->generate(0,array()));
+        $this->assertEquals(3,$type->generate(0,array()));
         $this->assertEquals(3,$type->generate(0,array()));
         
     }

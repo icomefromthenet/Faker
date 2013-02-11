@@ -1,8 +1,11 @@
 <?php
 namespace Faker\Components\Engine\Common\Selector;
 
-use Faker\Components\Engine\Common\Type;
+use Faker\Components\Engine\Common\Type\Type;
 use Faker\Components\Engine\Common\PositionManager;
+use Faker\Components\Engine\EngineException;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+
 
 /**
  * Swaps to an index after x tries
@@ -28,12 +31,11 @@ class SwapSelector extends Type
     {
         $index = $this->current->position();
         
-        if($this->swaps[$index]->atLimit()) {
-            $this->current->increment();    
-        } else {
-            $this->swaps[$index]->increment();    
-        }
-                
+        if($this->swaps[$index-1]->atLimit()) {
+            $this->current->increment();
+        } 
+        
+        $this->swaps[$index-1]->increment();
         
         return $index;
     }
