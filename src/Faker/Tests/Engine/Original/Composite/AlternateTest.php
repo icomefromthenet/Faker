@@ -3,7 +3,7 @@ namespace Faker\Tests\Engine\Original\Composite;
 
 use Faker\Components\Engine\Original\Composite\Alternate,
     Faker\Components\Engine\Original\Composite\CompositeInterface,
-    Faker\Components\Engine\Original\Formatter\FormatEvents,
+    Faker\Components\Engine\Common\Formatter\FormatEvents,
     Faker\Components\Engine\Original\Formatter\GenerateEvent,
     Doctrine\DBAL\Types\Type as ColumnType,
     Faker\Tests\Base\AbstractProject;

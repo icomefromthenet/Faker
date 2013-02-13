@@ -1,5 +1,5 @@
 <?php
-namespace Faker\Components\Engine\Original\Formatter;
+namespace Faker\Components\Engine\Common\Formatter;
 
 
 final class FormatEvents
@@ -10,7 +10,7 @@ final class FormatEvents
      *
      * Used in xml generation for root schema's opening tag
      *
-     * The event listener receives an Faker\Components\Engine\Original\Formatter\GenerateEvent
+     * The event listener receives an Faker\Components\Engine\Common\Formatter\GenerateEvent
      * instance.
      *
      * @var string
@@ -24,7 +24,7 @@ final class FormatEvents
      *
      * Used in xml generation for root schema's ending tag
      *
-     * The event listener receives an Faker\Components\Engine\Original\Formatter\GenerateEvent
+     * The event listener receives an Faker\Components\Engine\Common\Formatter\GenerateEvent
      * instance.
      *
      * @var string
@@ -38,7 +38,7 @@ final class FormatEvents
      *
      * Used in xml generation for tables opening tag
      *
-     * The event listener receives an Faker\Components\Engine\Original\Formatter\GenerateEvent
+     * The event listener receives an Faker\Components\Engine\Common\Formatter\GenerateEvent
      * instance.
      *
      * @var string
@@ -52,7 +52,7 @@ final class FormatEvents
      *
      * Used in xml generation for table closing tag
      *
-     * The event listener receives an Faker\Components\Engine\Original\Formatter\GenerateEvent
+     * The event listener receives an Faker\Components\Engine\Common\Formatter\GenerateEvent
      * instance.
      *
      * @var string
@@ -65,7 +65,7 @@ final class FormatEvents
      *
      * Used in xml generation for rows opening tag.
      *
-     * The event listener receives an Faker\Components\Engine\Original\Formatter\GenerateEvent
+     * The event listener receives an Faker\Components\Engine\Common\Formatter\GenerateEvent
      * instance.
      *
      * @var string
@@ -79,7 +79,7 @@ final class FormatEvents
      * Used in xml generation for rows closing tag. also be used in sql to
      * generate insert row.
      *
-     * The event listener receives an Faker\Components\Engine\Original\Formatter\GenerateEvent
+     * The event listener receives an Faker\Components\Engine\Common\Formatter\GenerateEvent
      * instance.
      *
      * @var string
@@ -92,7 +92,7 @@ final class FormatEvents
      *
      * Used in xml generation for value opening tag. 
      *
-     * The event listener receives an Faker\Components\Engine\Original\Formatter\GenerateEvent
+     * The event listener receives an Faker\Components\Engine\Common\Formatter\GenerateEvent
      * instance.
      *
      * @var string
@@ -106,7 +106,7 @@ final class FormatEvents
      * Used in xml generation for character data in a value tag or wait for next event
      * for closing tag and value
      *
-     * The event listener receives an Faker\Components\Engine\Original\Formatter\GenerateEvent
+     * The event listener receives an Faker\Components\Engine\Common\Formatter\GenerateEvent
      * instance.
      *
      * @var string
@@ -120,7 +120,7 @@ final class FormatEvents
      *
      * Used in xml generation for value closing tag. value be included with in the event 
      *
-     * The event listener receives an Faker\Components\Engine\Original\Formatter\GenerateEvent
+     * The event listener receives an Faker\Components\Engine\Common\Formatter\GenerateEvent
      * instance.
      *
      * @var string

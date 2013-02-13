@@ -128,17 +128,17 @@ class RandomSelectorTest extends AbstractProject
         $generatorA = $this->getMock('PHPStats\Generator\GeneratorInterface');
         $generatorA->expects($this->at(0))
                   ->method('generate')
-                  ->with($this->equalTo(0),$this->equalTo(1))
-                  ->will($this->returnValue(0.00));
+                  ->with($this->equalTo(1),$this->equalTo(1))
+                  ->will($this->returnValue(1));
                   
         $generatorA->expects($this->at(1))
                   ->method('generate')
-                  ->with($this->equalTo(0),$this->equalTo(1))
-                  ->will($this->returnValue(0.8));
+                  ->with($this->equalTo(1),$this->equalTo(1))
+                  ->will($this->returnValue(1.8));
                   
         $generatorA->expects($this->at(2))
                   ->method('generate')
-                  ->with($this->equalTo(0),$this->equalTo(1))
+                  ->with($this->equalTo(1),$this->equalTo(1))
                   ->will($this->returnValue(1.3));
         
          $type = new RandomSelector();
@@ -148,8 +148,8 @@ class RandomSelectorTest extends AbstractProject
         $type->setOption('set',1);
         $type->validate();
         
-        $this->assertEquals(0,$type->generate(1,array()));
-        $this->assertEquals(1,$type->generate(1,array())); # rounds up
+        $this->assertEquals(1,$type->generate(1,array()));
+        $this->assertEquals(2,$type->generate(1,array())); # rounds up
         $this->assertEquals(1,$type->generate(1,array())); # rounds down
         
         

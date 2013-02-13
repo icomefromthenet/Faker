@@ -3,7 +3,7 @@ namespace Faker\Tests\Engine\Original\Composite;
 
 use Faker\Components\Engine\Original\Composite\Table,
     Faker\Components\Engine\Original\Composite\CompositeInterface,
-    Faker\Components\Engine\Original\Formatter\FormatEvents,
+    Faker\Components\Engine\Common\Formatter\FormatEvents,
     Faker\Components\Engine\Original\Formatter\GenerateEvent,
     Faker\Tests\Base\AbstractProject;
 

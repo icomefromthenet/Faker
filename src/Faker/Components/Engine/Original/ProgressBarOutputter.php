@@ -3,7 +3,7 @@ namespace Faker\Components\Engine\Original;
 
 use Faker\Components\Engine\Original\Formatter\GenerateEvent;
 use Faker\Components\Engine\Original\Exception as FakerException;
-use Faker\Components\Engine\Original\Formatter\FormatEvents;
+use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Zend\ProgressBar\ProgressBar;

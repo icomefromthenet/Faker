@@ -23,6 +23,17 @@ class SrandRandom implements GeneratorInterface
     protected $seed;
     
     
+     /**
+      *  @var integer the max 
+      */
+    protected $max;
+    
+    /**
+      *  @var integer the min 
+      */
+    protected $min;
+    
+    
     /*
      * __construct()
      *
@@ -41,9 +52,35 @@ class SrandRandom implements GeneratorInterface
       *  @access public
       *  @return double
       */
-    public function max()
+    public function max($value = null)
     {
-        return getrandmax();
+        if($value === null && $this->max === null) {
+            $max = getrandmax();
+        }
+        elseif($value === null) {
+            $max = $this->max;
+        }
+        else {
+            $max = $this->max = $value;
+        }
+        
+        return $max;
+    }
+    
+    
+    public function min($value = null)
+    {
+        if($value === null && $this->max === null) {
+            $min = 0;
+        }
+        elseif($value === null) {
+            $min = $this->min;
+        }
+        else {
+            $min = $this->min = $value;
+        }
+        
+        return $min;
     }
     
     /**

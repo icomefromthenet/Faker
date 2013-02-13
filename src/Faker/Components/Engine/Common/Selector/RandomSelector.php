@@ -19,7 +19,7 @@ class RandomSelector extends Type
    
     public function generate($rows,$values = array())
     {
-        return round($this->getGenerator()->generate(0,($this->getOption('set'))));
+        return round($this->getGenerator()->generate(1,($this->getOption('set'))));
     }
     
     //------------------------------------------------------------------

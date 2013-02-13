@@ -12,6 +12,7 @@ use Faker\Components\Engine\Common\OptionInterface,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
     Faker\Text\SimpleStringInterface,
     Doctrine\DBAL\Platforms\AbstractPlatform;
+use Faker\Components\Engine\Common\Formatter\FormatEvents;
 
 /*
  * class BaseFormatter
