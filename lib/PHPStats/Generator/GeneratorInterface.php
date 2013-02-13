@@ -26,12 +26,23 @@ interface GeneratorInterface
     public function seed($seed = null);
     
     /**
-      *  Return the hights possible random value
+      *  Return or Set the highest possible random value
       *
       *  @access public
       *  @return double
+      *  @param numeric $value
       */
-    public function max();
+    public function max($value = null);
+    
+    /**
+      *  Return or Set the lowest  possible random value
+      *
+      *  @access public
+      *  @return double
+      *  @param numeric $value
+      */
+    public function min($value = null);
+    
     
 }
 /* End of File */

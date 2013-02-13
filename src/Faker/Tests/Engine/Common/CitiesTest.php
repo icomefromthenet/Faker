@@ -1,5 +1,5 @@
 <?php
-namespace Faker\Tests\Engine\Original\Type;
+namespace Faker\Tests\Engine\Common\Type;
 
 use Faker\Components\Engine\Common\Type\Cities,
     Faker\Tests\Base\AbstractProject;

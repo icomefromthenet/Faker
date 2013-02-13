@@ -2,7 +2,7 @@
 namespace Faker\Components\Engine\Original\Composite;
 
 use Faker\Components\Engine\Original\Exception as FakerException,
-    Faker\Components\Engine\Original\Formatter\FormatEvents,
+    Faker\Components\Engine\Common\Formatter\FormatEvents,
     Faker\Components\Engine\Original\Formatter\GenerateEvent,
     Faker\Components\Engine\Original\CacheInterface,
     Faker\Components\Engine\Original\GeneratorCache,

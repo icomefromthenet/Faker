@@ -26,6 +26,15 @@ class MersenneRandom implements GeneratorInterface
       */
     protected $ps;
     
+    /**
+      *  @var integer the max 
+      */
+    protected $max;
+    
+    /**
+      *  @var integer the min 
+      */
+    protected $min;
     
     public function __construct($seed = null)
     {
@@ -33,19 +42,50 @@ class MersenneRandom implements GeneratorInterface
         $this->seed($seed);
         $this->index = -1;
         $this->ps = null;
+        $this->max = null;
+        $this->min = null;
     }
     
     
-    public function max()
+    public function max($value = null)
     {
-        return 2147483647;
+        if($value === null && $this->max === null) {
+            $max = 2147483647;
+        }
+        elseif($value === null) {
+            $max = $this->max;
+        }
+        else {
+            $max = $this->max = $value;
+        }
+        
+        return $max;
     }
     
+    
+    public function min($value = null)
+    {
+        if($value === null && $this->max === null) {
+            $min = 0;
+        }
+        elseif($value === null) {
+            $min = $this->min;
+        }
+        else {
+            $min = $this->min = $value;
+        }
+        
+        return $min;
+    }
     
     public function generate($min = 0,$max = null)
     {
         if($max === null) {
-            $max = 1000;
+            $max = $this->max;
+        }
+        
+        if($min === null) {
+            $min = $this->min;
         }
         
         return abs($this->mt(++$this->index,$min,$max));

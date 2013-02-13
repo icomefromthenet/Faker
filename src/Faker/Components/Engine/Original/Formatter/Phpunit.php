@@ -6,6 +6,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface,
     Doctrine\DBAL\Platforms\AbstractPlatform,
     Faker\Components\Writer\WriterInterface,
     Faker\Components\Engine\Original\Exception as FakerException;
+use Faker\Components\Engine\Common\Formatter\FormatEvents;
 
 class Phpunit extends BaseFormatter implements FormatterInterface
 {

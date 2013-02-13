@@ -24,7 +24,7 @@ class PickSelector extends Type
         $generated = round($this->getGenerator()->generate(0,100));
         $rounded   = round($prob * 100);
         
-        return $generated <=  $rounded ? 1 : 0;
+        return $generated <=  $rounded ? 2 : 1;
     }
     
     

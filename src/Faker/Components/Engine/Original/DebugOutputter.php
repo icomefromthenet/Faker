@@ -3,7 +3,7 @@ namespace Faker\Components\Engine\Original;
 
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Faker\Components\Engine\Original\Formatter\FormatEvents;
+use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Faker\Components\Engine\Original\Formatter\GenerateEvent;
 use Faker\Components\Engine\Original\Exception as FakerException;
 

@@ -1,56 +1,35 @@
 <?php
-namespace Faker\Components\Engine\Original\Distribution;
+namespace Faker\Components\Engine\Common\Distribution;
 
-
-use PHPStats\Generator\GeneratorInterface,
-    PHPStats\PDistribution\ProbabilityDistributionInterface;
-
+use PHPStats\PDistribution\ProbabilityDistributionInterface;
+use PHPStats\Generator\GeneratorInterface;
 
 /**
-  *  All Distribution Nodes should implement
+  *  Interface for a distribution generator
   *
-  *  @since 1.0.4
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
+  *  @since 1.0.4
   */
-interface DistributionInterface
+interface DistributionInterface extends GeneratorInterface
 {
-    
     /**
-      *  Fetch the random number generator
+      *  Gets the internal php stats
       *
-      *  @access public
-      *  @return PHPStats\Generator\GeneratorInterface
-      */
-    public function getGenerator();
-    
-    /**
-      *  Set the random number generator
-      *
-      *  @access public
-      *  @return PHPStats\Generator\GeneratorInterface
-      */
-    public function setGenerator(GeneratorInterface $generator);
-    
-    
-    /**
-      *  Set the assigned distribution
-      *
-      *  @param HPStats\PDistribution\ProbabilityDistributionInterface
+      *  @return PHPStats\PDistribution\ProbabilityDistributionInterface
       *  @access public
       */
-    public function setDistribution(ProbabilityDistributionInterface $dist);
+    public function getInternal();
     
     /**
-      *  Return the assigned distribution
+      *  Sets the internal phpstats distribution
       *
-      *  @return HPStats\PDistribution\ProbabilityDistributionInterface
+      *  @param PHPStats\PDistribution\ProbabilityDistributionInterface $internal
+      *  @return void
       *  @access public
       */
-    public function getDistribution();
-    
-    
-    public function create();
+    public function setInternal(ProbabilityDistributionInterface $internal);
     
     
 }
+
 /* End of File */

@@ -84,5 +84,8 @@ interface TypeInterface
       */
     public function validate();
     
+   
+    
+    
 }
 /* End of File */

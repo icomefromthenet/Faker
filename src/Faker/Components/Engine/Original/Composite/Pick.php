@@ -2,7 +2,7 @@
 namespace Faker\Components\Engine\Original\Composite;
 
 use Faker\Components\Engine\Original\Exception as FakerException,
-    Faker\Components\Engine\Original\Formatter\FormatEvents,
+    Faker\Components\Engine\Common\Formatter\FormatEvents,
     Faker\Components\Engine\Original\Formatter\GenerateEvent,
     PHPStats\Generator\GeneratorInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface;
