@@ -15,7 +15,7 @@
 use Faker\PlatformFactory;
 use Faker\ColumnTypeFactory;
 use Faker\Components\Engine\Original\Formatter\FormatterFactory;
-use Faker\Components\Engine\Original\TypeFactory;
+use Faker\Components\Engine\Common\TypeFactory;
 use Faker\Locale\LocaleFactory;
 
 /*

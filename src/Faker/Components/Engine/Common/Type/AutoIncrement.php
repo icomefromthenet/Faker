@@ -70,8 +70,8 @@ class AutoIncrement extends Type
                             throw new EngineException('AutoIncrement::Start option must be numeric');
                         })
                     ->end()
-                ->defaultValue(1)
-                ->info('The Value to start with')
+                    ->defaultValue(1)
+                    ->info('The Value to start with')
                 ->end()
             ->end();
             
