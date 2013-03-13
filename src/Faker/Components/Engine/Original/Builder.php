@@ -19,7 +19,7 @@ use Faker\Components\Engine\Original\Composite\Column,
     Faker\ColumnTypeFactory,
     Faker\Components\Engine\Original\Formatter\FormatterFactory,
     Faker\Components\Engine\Original\Formatter\FormatterInterface,
-    Faker\Components\Engine\Original\TypeFactory,
+    Faker\Components\Engine\Common\TypeFactory,
     Faker\Components\Writer\WriterInterface,
     Faker\Components\Engine\Original\Compiler\CompilerInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -58,7 +58,7 @@ class Builder
     protected $column_factory;
     
     /**
-      *  @var Faker\Components\Engine\Original\TypeFactory 
+      *  @var Faker\Components\Engine\Common\TypeFactory 
       */
     protected $type_factory;
     

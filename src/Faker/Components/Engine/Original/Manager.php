@@ -174,7 +174,7 @@ class Manager implements ManagerInterface
       *  Create a new type factory
       *
       *  @access public
-      *  @return Faker\Components\Engine\Original\TypeFactory
+      *  @return Faker\Components\Engine\Common\TypeFactory
       */
     public function getTypeFactory()
     {

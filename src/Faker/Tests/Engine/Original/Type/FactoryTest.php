@@ -3,7 +3,7 @@ namespace Faker\Tests\Engine\Original\Type;
 
 use Faker\Components\Engine\Original\Composite\CompositeInterface,
     Faker\Components\Engine\Original\Type\Type,
-    Faker\Components\Engine\Original\TypeFactory,
+    Faker\Components\Engine\Common\TypeFactory,
     Faker\Tests\Base\AbstractProject;
 
 class FactoryTest extends AbstractProject
@@ -50,7 +50,7 @@ class FactoryTest extends AbstractProject
                         ->getMock();
         $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
                         
-        $this->assertInstanceOf('Faker\Components\Engine\Original\TypeFactory',new TypeFactory($utilities,$event,$generator));        
+        $this->assertInstanceOf('Faker\Components\Engine\Common\TypeFactory',new TypeFactory($utilities,$event,$generator));        
     }
     
     //  -------------------------------------------------------------------------
