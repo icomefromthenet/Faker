@@ -11,18 +11,18 @@ use Doctrine\DBAL\Connection;
 
 use Faker\Components\Engine\Common\TypeRepository;
 use Faker\Components\Engine\Common\Builder\DefaultTypeDefinition;
-use Faker\Components\Engine\Entity\Composite\FieldNode;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
+use Faker\Components\Engine\Common\Composite\TypeNode;
 
 /**
-  *  Builder to construct a single FieldNode.
+  *  Builder that will compress child nodes into a single TypeNode.
   *
   *  This implements SelectorListInterface and FieldListInterface
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class FieldBuilder extends NodeBuilder implements SelectorListInterface, FieldListInterface
+class TypeBuilder extends NodeBuilder implements SelectorListInterface, FieldListInterface
 {
     
     /**
@@ -33,7 +33,7 @@ class FieldBuilder extends NodeBuilder implements SelectorListInterface, FieldLi
       */
     public function getNode()
     {
-        return new FieldNode($this->name,$this->eventDispatcher);
+        return new TypeNode($this->name,$this->eventDispatcher);
     }
     
     

@@ -1,7 +1,6 @@
 <?php
 namespace Faker\Components\Engine\Common\Composite;
 
-use PHPStats\Generator\GeneratorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Type\TypeInterface;
@@ -49,12 +48,12 @@ class TypeNode implements CompositeInterface
       *
       *  
       */
-    public function __construct($id,CompositeInterface $parent, EventDispatcherInterface $event, TypeInterface $type)
+    public function __construct($id, EventDispatcherInterface $event, TypeInterface $type)
     {
         $this->id       = $id;
         $this->type     = $type;
         $this->children = array();
-        $this->parent   = $parent;
+        $this->parent   = null;
         $this->event    = $event;
         
     }
@@ -106,18 +105,7 @@ class TypeNode implements CompositeInterface
         throw new EngineException('TypeNode can not have children');
     }
     
-    
     /**
-      *  Get Event Dispatcher
-      *
-      *  @return Symfony\Component\EventDispatcher\EventDispatcherInterface 
-      */ 
-    public function getEventDispatcher()
-    {
-        return $this->event;
-    }
-    
-     /**
       *  Return the nodes id
       *
       *  @access public
@@ -130,75 +118,18 @@ class TypeNode implements CompositeInterface
     
     
     //------------------------------------------------------------------
-    # TypeInterface
+    # GeneratorInterface
+    
     
     /**
-      *  Get the utilities property
+      *  Get Event Dispatcher
       *
-      *  @access public
-      *  @return Faker\Components\Engine\Common\Utilities
+      *  @return Symfony\Component\EventDispatcher\EventDispatcherInterface 
       */ 
-    public function getUtilities()
+    public function getEventDispatcher()
     {
-	return $this->type->getUtilities();
+        return $this->event;
     }
-    
-    
-    /**
-      *  Sets the utilities property
-      *
-      *  @access public
-      *  @param $util Faker\Components\Engine\Common\Utilities
-      */
-    public function setUtilities(Utilities $util)
-    {
-	$this->type->setUtilities($util);
-    }
-    
-    /**
-      *  Fetch the random number generator
-      *
-      *  @access public
-      *  @return PHPStats\Generator\GeneratorInterface
-      */
-    public function getGenerator()
-    {
-	return $this->type->getGenerator();
-    }
-    
-    /**
-      *  Set the random number generator
-      *
-      *  @access public
-      *  @return PHPStats\Generator\GeneratorInterface
-      */
-    public function setGenerator(GeneratorInterface $generator)
-    {
-	$this->type->setGenerator($generator);
-    }
-    
-    /**
-      *  Set the type with a locale
-      *
-      *  @access public
-      *  @param Faker\Locale\LocaleInterface $locale
-      */
-    public function setLocale(LocaleInterface $locale)
-    {
-	$this->type->setLocale($locale);
-    }
-    
-    /**
-      * Fetches this objects locale
-      * 
-      *  @return Faker\Locale\LocaleInterface
-      *  @access public
-      */
-    public function getLocale()
-    {
-	return $this->type->getLocale();
-    }
-    
     
     /**
       *  Generate a value

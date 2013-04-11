@@ -7,17 +7,19 @@ use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Faker\Components\Engine\Entity\Event\GenerateEvent;
 use Faker\Components\Engine\Entity\GenericEntity;
 use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\Type\TypeInterface;
 
+
+/**
+  *  Field Node for Generator
+  *
+  *  @author Lewis Dyer <getintouch@icomefromthenet.com>
+  *  @since 1.0.4
+  */
 class FieldNode implements CompositeInterface
 {
     
-    protected $locale;
-    
-    protected $generator;
-    
     protected $id; 
-    
-    protected $utilities;
     
     protected $children = array();
     
@@ -29,17 +31,19 @@ class FieldNode implements CompositeInterface
       *  Class Constructor
       *
       *  @param string $id the nodes id
+      *  @param Symfony\Component\EventDispatcher\EventDispatcherInterface $event the event bus
       */    
-    public function __construct($id,EventDispatcherInterface $event, CompositeInterface $parent)
+    public function __construct($id,EventDispatcherInterface $event)
     {
         $this->id       = $id;
-        $this->parent   = $parent;
+        $this->parent   = null;
         $this->children = array();
         $this->event    = $event;
     }
     
     //------------------------------------------------------------------
-    # Type Interface
+    # GeneratorInterface
+    
     
     /**
       *  Generate a value
@@ -55,88 +59,33 @@ class FieldNode implements CompositeInterface
         
         $this->getEventDispatcher()->dispatch(FormatEvents::onColumnStart,new GenerateEvent($this,$entity,null));
         
-        # build result from children
-        foreach($this->getChildren() as $child) {
-            $result .= $child->generate($rows,$entity);
+        # bind result to the generic entity
+        
+        if(count($this->children) > 1) {
+            
+            foreach($this->children as $child) {
+               $entity->$field .= $child->generate($rows,$values);    
+            }
+            
+        } else {
+             $entity->$field = $this->children[0]->generate($rows,$values);    
         }
         
-        # bind result to the generic entity
-        $entity->$field = $result;
         
         $this->getEventDispatcher()->dispatch(FormatEvents::onColumnEnd,new GenerateEvent($this,$entity,null));
                 
         return $entity;
     }
     
-    
     /**
-      *  Get the utilities property
+      *  Get Event Dispatcher
       *
-      *  @access public
-      *  @return Faker\Components\Engine\Common\Utilities
+      *  @return Symfony\Component\EventDispatcher\EventDispatcherInterface 
       */ 
-    public function getUtilities()
+    public function getEventDispatcher()
     {
-        return $this->utilities;
+        return $this->event;
     }
-    
-    
-    /**
-      *  Sets the utilities property
-      *
-      *  @access public
-      *  @param $util Faker\Components\Engine\Common\Utilities
-      */
-    public function setUtilities(Utilities $util)
-    {
-        $this->utilities = $util;
-    }
-    
-    
-    /**
-      *  Fetch the random number generator
-      *
-      *  @access public
-      *  @return PHPStats\Generator\GeneratorInterface
-      */
-    public function getGenerator()
-    {
-        return $this->generator;
-    }
-    
-    /**
-      *  Set the random number generator
-      *
-      *  @access public
-      *  @return PHPStats\Generator\GeneratorInterface
-      */
-    public function setGenerator(GeneratorInterface $generator)
-    {
-        $this->generator = $generator;
-    }
-
-    /**
-      *  Set the type with a locale
-      *
-      *  @access public
-      *  @param Faker\Locale\LocaleInterface $locale
-      */
-    public function setLocale(LocaleInterface $locale)
-    {
-        $this->locale = $locale;
-    }
-    
-    /**
-      * Fetches this objects locale
-      * 
-      *  @return Faker\Locale\LocaleInterface
-      *  @access public
-      */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-    
     
     /**
       *  Will Merge options with config definition and pass judgement
@@ -146,15 +95,11 @@ class FieldNode implements CompositeInterface
       */
     public function validate()
     {
-        foreach($this->children as $child) {
-            $child->validate();
-        }
-        
-        return true;
+       return $this->type->validate();
     }
     
     //------------------------------------------------------------------
-    # Composite Interface
+    # CompositeInterface
     
     /**
       *  Fetches the parent in this type composite
@@ -187,7 +132,7 @@ class FieldNode implements CompositeInterface
       */
     public function getChildren()
     {
-        return $this->children;
+        return $this->type;
     }
     
     
@@ -203,17 +148,6 @@ class FieldNode implements CompositeInterface
     
     
     /**
-      *  Get Event Dispatcher
-      *
-      *  @return Symfony\Component\EventDispatcher\EventDispatcherInterface 
-      */ 
-    public function getEventDispatcher()
-    {
-        return $this->event;
-    }
-    
-    
-    /**
       *  Return the nodes id
       *
       *  @access public
@@ -223,7 +157,5 @@ class FieldNode implements CompositeInterface
     {
         return $this->id;
     }
-    
-        
 }
 /* End of File */

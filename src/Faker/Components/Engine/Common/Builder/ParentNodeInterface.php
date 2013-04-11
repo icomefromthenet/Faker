@@ -1,6 +1,9 @@
 <?php
 namespace Faker\Components\Engine\Common\Builder;
 
+
+use Faker\Components\Engine\Common\Composite\CompositeInterface;
+
 /**
   *  Interface for Builders and Definitions allowing a composite
   *
@@ -9,31 +12,24 @@ namespace Faker\Components\Engine\Common\Builder;
   */
 interface ParentNodeInterface extends NodeInterface
 {
-    
-    /**
-      *  Return the assigned parent
-      *
-      *  @param access
-      *  @return NodeInterface
-      */
-    public function getParent();
-    
     /**
       *  Append a node to this one
       *
       *  @access public
       *  @return NodeInterface
-      *  @param NodeInterface $node
+      *  @param  Faker\Components\Engine\Common\Composite\CompositeInterface $node
       */
-    public function append(NodeInterface $node);
+    public function append(CompositeInterface $node);
     
     /**
       *  Return this nodes children
       *
       *  @access public
-      *  @return array[NodeInterface]
+      *  @return array[Faker\Components\Engine\Common\Composite\CompositeInterface]
       */
     public function children();
+    
+    
     
 }
 /* End of File */

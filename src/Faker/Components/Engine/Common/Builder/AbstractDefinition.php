@@ -8,7 +8,9 @@ use PHPStats\Generator\GeneratorInterface;
 use Faker\Components\Engine\Common\Builder\TypeDefinitionInterface;
 use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
+use Faker\Components\Engine\EngineException;
 use Doctrine\DBAL\Connection;
+
 
 /**
   *  Abstract Definition For Type / Selector Definitions
@@ -46,10 +48,7 @@ abstract class AbstractDefinition implements TypeDefinitionInterface , NodeInter
       *  @access public
       *  @return Faker\Components\Engine\Common\Composite\CompositeInterface the new node
       */
-    public function getNode($id,CompositeInterface $parent)
-    {
-        
-    }
+    abstract public function getNode();
     
     
     //------------------------------------------------------------------
@@ -71,12 +70,30 @@ abstract class AbstractDefinition implements TypeDefinitionInterface , NodeInter
     
     
     /**
+      *  Return the assigned parent
+      *
+      *  @param access
+      *  @return NodeInterface
+      */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+    
+    /**
     * Returns the parent node.
     *
     * @return ParentNodeInterface The builder of the parent node
     */
     public function end()
     {
+        # construct the node from this definition.
+        $node = $this->getNode();
+        
+        # append generators compositeNode to the parent builder.
+        $this->parent->append($node);
+        
+        # return the parent to continue chain.
         return $this->parent;
     }
     

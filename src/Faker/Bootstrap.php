@@ -444,6 +444,23 @@ class Bootstrap
          return new \Faker\Locale\LocaleFactory($project['simplestring_factory']);
       });
       
+      //---------------------------------------------------------------
+      // Engine Common
+      //
+      //---------------------------------------------------------------
+      
+      $project['engine_common_utilities'] = $project->share(function($project){
+           return new \Faker\Components\Engine\Common\Utilities(); 
+      });
+      
+      
+      
+      $project['engine_common_typerepo'] = $project->share(function($project){
+           return new \Faker\Components\Engine\Common\TypeRepository(); 
+      });
+      
+      
+      
       return $project;
    }
 };

@@ -10,7 +10,7 @@ use Faker\Components\Engine\Common\Type\TypeInterface;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-interface CompositeInterface extends TypeInterface
+interface CompositeInterface extends GeneratorInterface 
 {
 
     /**
@@ -48,21 +48,12 @@ interface CompositeInterface extends TypeInterface
     
     
     /**
-      *  Get Event Dispatcher
-      *
-      *  @return Symfony\Component\EventDispatcher\EventDispatcherInterface 
-      */ 
-    public function getEventDispatcher();
-    
-    
-    /**
       *  Return the nodes id
       *
       *  @access public
       *  @return string the nodes id
       */
     public function getId();
-    
     
 }
 /* End of File */

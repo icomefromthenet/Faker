@@ -3,16 +3,19 @@ namespace Faker\Components\Engine\Common\Builder;
 
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Composite\TypeNode;
-use Faker\Components\Engine\Common\Type\AutoIncrement;
+use Faker\Components\Engine\Common\Type\ClosureType;
+use Faker\Components\Engine\EngineException;
 
 /**
-  *  Definition for the AutoIncrement Datatype
+  *  Definition for the Closure Types
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class AutoIncrementTypeDefinition extends AbstractDefinition
+class ClosureTypeDefinition extends AbstractDefinition
 {
+    
+    protected $closure;
     
     /**
     * Instantiate and configure the node according to this definition
@@ -21,25 +24,40 @@ class AutoIncrementTypeDefinition extends AbstractDefinition
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
-    public function getNode($id, CompositeInterface $parent)
+    public function getNode()
     {
-        $type = new AutoIncrement();
+        
+        if($this->closure === null) {
+            throw new EngineException('ClosureTypeDefinition must have a callable closure set before building the ClosureType');
+        }
+        
+        $type = new ClosureType();
         $type->setGenerator($this->generator);
         $type->setUtilities($this->utilities);
         $type->setLocale($this->locale);
+        $type->setClosure($this->closure);
         
         foreach($this->attributes as $attribute => $value) {
             $type->setOption($attribute,$value);
         }
         
-        return new TypeNode($id,$parent,$this->eventDispatcher,$type);
+        return $type;
     }
     
-    
-    public function format($value)
+    /**
+      *  Pass in a callable
+      *
+      *  @param \Closure the function to execute
+      *  @return $this;
+      */
+    public function execute(\Closure $callable)
     {
-        $this->attribute('format',$value);
+        $this->closure = $callable;
+        
         return $this;
     }
+    
+    
+    
 }
 /* End of File */

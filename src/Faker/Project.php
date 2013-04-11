@@ -341,6 +341,41 @@ class Project extends Pimple
      {
           return $this['random_generator'];          
      }
+     
+     /**
+       *  Fetch engine common utilities
+       *
+       *  @access public
+       *  @return Faker\Components\Engine\Common\Utilities
+       */
+     public function getEngineUtilities()
+     {
+          return $this['engine_common_utilities'];
+          
+     }
+     
+      /**
+       *  Fetch engine common type repository
+       *
+       *  @access public
+       *  @return \Faker\Components\Engine\Common\TypeRepository
+       */
+     public function getEngineTypeRepository()
+     {
+          return $this['engine_common_typerepo'];
+     }
+     
+    /**
+      *  Fetch the default event dispatcher
+      *
+      *  @access public
+      *  @return \Symfony\Component\EventDispatcher\EventDispatcher
+      */
+     public function getEventDispatcher()
+     {
+          return $this['event_dispatcher'];
+     }
+   
    
     //  -------------------------------------------------------------------------
     # Symfony Console

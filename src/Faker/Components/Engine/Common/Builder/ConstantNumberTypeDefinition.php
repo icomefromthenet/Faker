@@ -3,15 +3,15 @@ namespace Faker\Components\Engine\Common\Builder;
 
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Composite\TypeNode;
-use Faker\Components\Engine\Common\Type\AlphaNumeric;
+use Faker\Components\Engine\Common\Type\ConstantNumber;
 
 /**
-  *  Definition for the AlphaNumeric Datatype
+  *  Definition for the ConstantNumber Datatype
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class AlphaNumericTypeDefinition extends AbstractDefinition
+class ConstantNumberTypeDefinition extends AbstractDefinition
 {
     
     /**
@@ -23,7 +23,7 @@ class AlphaNumericTypeDefinition extends AbstractDefinition
     */
     public function getNode()
     {
-        $type = new AlphaNumeric();
+        $type = new ConstantNumber();
         $type->setGenerator($this->generator);
         $type->setUtilities($this->utilities);
         $type->setLocale($this->locale);
@@ -36,24 +36,18 @@ class AlphaNumericTypeDefinition extends AbstractDefinition
     }
     
     
-    public function format($value)
+    public function value($value)
     {
-        $this->attribute('format',$value);
+        $this->attribute('value',$value);
         return $this;
     }
     
     
-    public function repeatMin($value)
+    public function cast($value)
     {
-        $this->attribute('repeatMin',$value);
+        $this->attribute('type',$value);
         return $this;
     }
     
-    
-    public function repeatMax($value)
-    {
-        $this->attribute('repeatMax',$value);
-        return $this;
-    }
 }
 /* End of File */
