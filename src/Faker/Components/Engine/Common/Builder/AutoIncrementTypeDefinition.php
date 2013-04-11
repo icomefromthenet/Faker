@@ -3,15 +3,15 @@ namespace Faker\Components\Engine\Common\Builder;
 
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Composite\TypeNode;
-use Faker\Components\Engine\Common\Type\AlphaNumeric;
+use Faker\Components\Engine\Common\Type\AutoIncrement;
 
 /**
-  *  Definition for the AlphaNumeric Datatype
+  *  Definition for the AutoIncrement Datatype
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class AlphaNumericTypeDefinition extends AbstractDefinition
+class AutoIncrementTypeDefinition extends AbstractDefinition
 {
     
     /**
@@ -23,7 +23,7 @@ class AlphaNumericTypeDefinition extends AbstractDefinition
     */
     public function getNode()
     {
-        $type = new AlphaNumeric();
+        $type = new AutoIncrement();
         $type->setGenerator($this->generator);
         $type->setUtilities($this->utilities);
         $type->setLocale($this->locale);
@@ -39,20 +39,6 @@ class AlphaNumericTypeDefinition extends AbstractDefinition
     public function format($value)
     {
         $this->attribute('format',$value);
-        return $this;
-    }
-    
-    
-    public function repeatMin($value)
-    {
-        $this->attribute('repeatMin',$value);
-        return $this;
-    }
-    
-    
-    public function repeatMax($value)
-    {
-        $this->attribute('repeatMax',$value);
         return $this;
     }
 }

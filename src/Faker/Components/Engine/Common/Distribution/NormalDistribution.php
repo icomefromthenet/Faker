@@ -45,9 +45,10 @@ class NormalDistribution implements DistributionInterface
     /**
       *  Class Constructor
       *
-      *  @param PHPStats\Generator\GeneratorInterface $generator
+      *  @param PHPStats\Generator\GeneratorInterface $internalGnerator
       *  @param PHPStats\BasicStats $stats
-      *  @param double $lambda 
+      *  @param double $mu
+      *  @param double $variance
       */    
     public function __construct(GeneratorInterface $internalGnerator, BasicStats $stats, $mu = 0.0, $variance = 1.0)
     {

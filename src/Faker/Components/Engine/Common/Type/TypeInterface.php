@@ -4,7 +4,7 @@ namespace Faker\Components\Engine\Common\Type;
 use Faker\Locale\LocaleInterface;
 use Faker\Components\Engine\Common\Utilities;
 use PHPStats\Generator\GeneratorInterface;
-
+use Faker\Components\Engine\Common\Composite\GeneratorInterface as CompositeGenInterface;
 
 /**
  * Interface for a type generator.
@@ -13,17 +13,8 @@ use PHPStats\Generator\GeneratorInterface;
  * @since 1.0.4
  *
  */
-interface TypeInterface
+interface TypeInterface extends CompositeGenInterface
 {
-    
-    /**
-      *  Generate a value
-      *
-      *  @param integer $rows the current row number
-      *  @param mixed $array list of values generated in context
-      */
-    public function generate($rows,$values = array());
-    
     
     /**
       *  Get the utilities property
@@ -74,18 +65,6 @@ interface TypeInterface
       *  @access public
       */
     public function getLocale();
-    
-    
-    /**
-      *  Will Merge options with config definition and pass judgement
-      *
-      *  @access public
-      *  @return boolean true if passed
-      */
-    public function validate();
-    
    
-    
-    
 }
 /* End of File */

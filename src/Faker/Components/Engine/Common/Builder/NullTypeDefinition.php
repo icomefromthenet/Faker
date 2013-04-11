@@ -21,7 +21,7 @@ class NullTypeDefinition extends AbstractDefinition
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
-    public function getNode($id, CompositeInterface $parent)
+    public function getNode()
     {
         $type = new Null();
         $type->setGenerator($this->generator);
@@ -32,7 +32,7 @@ class NullTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return new TypeNode($id,$parent,$this->eventDispatcher,$type);
+        return $type;
     }
     
     

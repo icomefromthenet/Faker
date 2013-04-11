@@ -4,6 +4,7 @@ namespace Faker\Components\Engine\Common\Type;
 use Faker\Locale\LocaleInterface;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\OptionInterface;
+use Faker\Components\Engine\Common\Composite\GeneratorInterface as CompositeGenInterface;
 use Faker\Components\Engine\Common\Utilities;
 
 use PHPStats\Generator\GeneratorInterface;
@@ -20,7 +21,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  * @since 1.0.4
  *
  */
-class Type implements TypeInterface, OptionInterface
+class Type implements TypeInterface, OptionInterface 
 {
     
      /**
@@ -32,7 +33,6 @@ class Type implements TypeInterface, OptionInterface
       *  @var Faker\Locale\LocaleInterface 
       */
     protected $locale;
-        
     
     /**
       *  @var array[mixed] the option values

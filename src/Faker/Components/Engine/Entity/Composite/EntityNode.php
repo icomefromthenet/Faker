@@ -11,13 +11,7 @@ use Faker\Components\Engine\EngineException;
 class EntityNode implements CompositeInterface
 {
     
-    protected $locale;
-    
-    protected $generator;
-    
     protected $id; 
-    
-    protected $utilities;
     
     protected $children = array();
     
@@ -36,7 +30,20 @@ class EntityNode implements CompositeInterface
     }
     
     //------------------------------------------------------------------
-    # Type Interface
+    # GeneratorInterface
+    
+      
+    /**
+      *  Get Event Dispatcher
+      *
+      *  @return Symfony\Component\EventDispatcher\EventDispatcherInterface 
+      */ 
+    public function getEventDispatcher()
+    {
+        return $this->event;
+    }
+    
+    
     
     /**
       *  Generate a value
@@ -57,75 +64,6 @@ class EntityNode implements CompositeInterface
         $this->getEventDispatcher()->dispatch(FormatEvents::onRowEnd,new GenerateEvent($this,$entity,null));
                 
         return $entity;
-    }
-    
-    
-    /**
-      *  Get the utilities property
-      *
-      *  @access public
-      *  @return Faker\Components\Engine\Common\Utilities
-      */ 
-    public function getUtilities()
-    {
-        return $this->utilities;
-    }
-    
-    
-    /**
-      *  Sets the utilities property
-      *
-      *  @access public
-      *  @param $util Faker\Components\Engine\Common\Utilities
-      */
-    public function setUtilities(Utilities $util)
-    {
-        $this->utilities = $util;
-    }
-    
-    
-    /**
-      *  Fetch the random number generator
-      *
-      *  @access public
-      *  @return PHPStats\Generator\GeneratorInterface
-      */
-    public function getGenerator()
-    {
-        return $this->generator;
-    }
-    
-    /**
-      *  Set the random number generator
-      *
-      *  @access public
-      *  @return PHPStats\Generator\GeneratorInterface
-      */
-    public function setGenerator(GeneratorInterface $generator)
-    {
-        $this->generator = $generator;
-    }
-
-    /**
-      *  Set the type with a locale
-      *
-      *  @access public
-      *  @param Faker\Locale\LocaleInterface $locale
-      */
-    public function setLocale(LocaleInterface $locale)
-    {
-        $this->locale = $locale;
-    }
-    
-    /**
-      * Fetches this objects locale
-      * 
-      *  @return Faker\Locale\LocaleInterface
-      *  @access public
-      */
-    public function getLocale()
-    {
-        return $this->locale;
     }
     
     
@@ -190,17 +128,6 @@ class EntityNode implements CompositeInterface
     public function addChild(CompositeInterface $child)
     {
         $this->children[] = $child;
-    }
-    
-    
-    /**
-      *  Get Event Dispatcher
-      *
-      *  @return Symfony\Component\EventDispatcher\EventDispatcherInterface 
-      */ 
-    public function getEventDispatcher()
-    {
-        return $this->event;
     }
     
     

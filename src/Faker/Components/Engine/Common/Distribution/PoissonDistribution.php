@@ -40,7 +40,7 @@ class PoissonDistribution implements DistributionInterface
     /**
       *  Class Constructor
       *
-      *  @param PHPStats\Generator\GeneratorInterface $generator
+      *  @param PHPStats\Generator\GeneratorInterface $internalGnerator
       *  @param PHPStats\BasicStats $stats
       *  @param double $lambda 
       */    

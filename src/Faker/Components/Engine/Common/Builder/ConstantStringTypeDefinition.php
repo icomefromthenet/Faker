@@ -3,15 +3,15 @@ namespace Faker\Components\Engine\Common\Builder;
 
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Composite\TypeNode;
-use Faker\Components\Engine\Common\Type\ConstantNumber;
+use Faker\Components\Engine\Common\Type\ConstantString;
 
 /**
-  *  Definition for the ConstantNumber Datatype
+  *  Definition for the ConstantString Datatype
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class ConstantTypeDefinition extends AbstractDefinition
+class ConstantStringTypeDefinition extends AbstractDefinition
 {
     
     /**
@@ -21,9 +21,9 @@ class ConstantTypeDefinition extends AbstractDefinition
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
-    public function getNode($id, CompositeInterface $parent)
+    public function getNode()
     {
-        $type = new ConstantNumber();
+        $type = new ConstantString();
         $type->setGenerator($this->generator);
         $type->setUtilities($this->utilities);
         $type->setLocale($this->locale);
@@ -32,7 +32,7 @@ class ConstantTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return new TypeNode($id,$parent,$this->eventDispatcher,$type);
+        return $type;
     }
     
     

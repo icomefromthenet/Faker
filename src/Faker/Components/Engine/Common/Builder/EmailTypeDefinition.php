@@ -21,7 +21,7 @@ class EmailTypeDefinition extends AbstractDefinition
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
-    public function getNode($id, CompositeInterface $parent)
+    public function getNode()
     {
         $type = new Email($this->database);
         $type->setGenerator($this->generator);
@@ -32,7 +32,7 @@ class EmailTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return new TypeNode($id,$parent,$this->eventDispatcher,$type);
+        return $type;
     }
     
     

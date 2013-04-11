@@ -3,15 +3,17 @@ namespace Faker\Components\Engine\Common\Builder;
 
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Composite\TypeNode;
-use Faker\Components\Engine\Common\Type\Numeric;
+use Faker\Components\Engine\Common\Distribution\ExponentialDistribution;
+
+use PHPStats\BasicStats;
 
 /**
-  *  Definition for the Numeric Datatype
+  *  Definition for the Exponential Distribution Generator
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class NumericTypeDefinition extends AbstractDefinition
+class ExponentialDistributionDefinition extends AbstractDefinition
 {
     
     /**
@@ -21,25 +23,26 @@ class NumericTypeDefinition extends AbstractDefinition
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
-    public function getNode($id, CompositeInterface $parent)
+    public function getNode()
     {
-        $type = new Numeric();
-        $type->setGenerator($this->generator);
-        $type->setUtilities($this->utilities);
-        $type->setLocale($this->locale);
+        $lambda       = 0.00;
         
-        foreach($this->attributes as $attribute => $value) {
-            $type->setOption($attribute,$value);
+        if(isset($this->attributes['lambda']) === true) {
+            $lambda = $this->attributes['lambda'];
         }
         
-        return $type;
+        return new ExponentialDistribution($this->generator,new BasicStats(),$lambda);
     }
     
     
-    public function format($value)
+    public function lambda($mu)
     {
-        $this->attribute('format',$value);
+        $this->attribute('lambda',$mu);
+        
         return $this;
     }
+    
+    
+
 }
 /* End of File */

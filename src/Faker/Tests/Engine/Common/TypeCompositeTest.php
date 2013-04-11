@@ -25,12 +25,10 @@ class TypeCompositeTest extends AbstractProject
         
         $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
             
-        $type = new TypeNode($id,$parent,$event,$internal);
-        $type->setGenerator($generator);
-        $type->setLocale($locale);
-        $type->setUtilities($utilities);
+        $type = new TypeNode($id,$event,$internal);
+        $type->setParent($parent);
         
-        $this->assertInstanceOf('\\Faker\\Components\\Engine\\Common\\Type\\TypeInterface',$type);
+        $this->assertInstanceOf('\\Faker\\Components\\Engine\\Common\\Composite\\CompositeInterface',$type);
         
     }
     
@@ -54,42 +52,12 @@ class TypeCompositeTest extends AbstractProject
         
         $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
         
-        $internal->expects($this->once())
-                ->method('setGenerator')
-                ->with($this->equalTo($generator));
-        
-        $internal->expects($this->once())
-                ->method('setLocale')
-                ->with($this->equalTo($locale));
-                
-        $internal->expects($this->once())
-                ->method('setUtilities')
-                ->with($this->equalTo($utilities));
-                
-         
-        $internal->expects($this->once())
-                ->method('getGenerator')
-                ->will($this->returnValue($generator));
-                
-        
-        $internal->expects($this->once())
-                ->method('getLocale')
-                ->will($this->returnValue($locale));
-                
-                
-        $internal->expects($this->once())
-                ->method('getUtilities')
-                ->will($this->returnValue($utilities));
-                
             
-        $type = new TypeNode($id,$parent,$event,$internal);
-        $type->setGenerator($generator);
-        $type->setLocale($locale);
-        $type->setUtilities($utilities);
+        $type = new TypeNode($id,$event,$internal);
+        $type->setParent($parent);
         
-        $this->assertEquals($generator,$type->getGenerator());
-        $this->assertEquals($locale,$type->getLocale());
-        $this->assertEquals($utilities,$type->getUtilities());
+        
+        $this->assertEquals($parent,$type->getParent());
         
     }
     
@@ -117,7 +85,8 @@ class TypeCompositeTest extends AbstractProject
         
         $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
         
-        $type = new TypeNode($id,$parent,$event,$internal);
+        $type = new TypeNode($id,$event,$internal);
+        $type->setParent($parent);
         
         $this->assertEquals($id,$type->getId());        
         $this->assertEquals($event,$type->getEventDispatcher());
@@ -151,10 +120,8 @@ class TypeCompositeTest extends AbstractProject
         $internal->expects($this->once())
                ->method('validate'); 
             
-        $type = new TypeNode($id,$parent,$event,$internal);
-        $type->setGenerator($generator);
-        $type->setLocale($locale);
-        $type->setUtilities($utilities);
+        $type = new TypeNode($id,$event,$internal);
+        $type->setParent($parent);
         
         $this->assertTrue($type->validate());
         
@@ -184,10 +151,8 @@ class TypeCompositeTest extends AbstractProject
         
         $id        = 'testnode';
 
-        $type = new TypeNode($id,$parent,$event,$internal);
-        $type->setGenerator($generator);
-        $type->setLocale($locale);
-        $type->setUtilities($utilities);
+        $type = new TypeNode($id,$event,$internal);
+        $type->setParent($parent);
         
         $this->assertEquals('a generated string',$type->generate(5,array('row1' => 6)));
         
