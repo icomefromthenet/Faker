@@ -32,10 +32,17 @@ class BooleanTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return $type;
+        return new TypeNode('Boolean',$this->eventDispatcher,$type);
     }
     
-    
+    /**
+      *  Set the boolean value to use
+      *
+      *  @access public
+      *  @return BooleanTypeDefinition
+      *  @param bool $value the bool value to use
+      *  @example $type->value(false);
+      */
     public function value($value)
     {
         $this->attribute('value',(boolean)$value);

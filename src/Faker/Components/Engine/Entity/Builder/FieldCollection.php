@@ -29,7 +29,7 @@ class FieldCollection extends NodeCollection
       */
     public function addField($name)
     {
-        $builder = new FieldBuilder($name,$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database);
+        $builder = new FieldBuilder($name,$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         $builder->setParent($this);
         
         return $builder;

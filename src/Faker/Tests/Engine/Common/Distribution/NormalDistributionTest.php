@@ -1,40 +1,35 @@
 <?php
-namespace Faker\Tests\Engine\Common\Type;
+namespace Faker\Tests\Engine\Common\Distribution;
 
 use Faker\Tests\Base\AbstractProject;
-use Faker\Components\Engine\Common\Distribution\PoissonDistribution;
+use Faker\Components\Engine\Common\Distribution\NormalDistribution;
     
-class PoissonDistributionTest extends AbstractProject
+class NormalDistributionTest extends AbstractProject
 {
     
     public function testDistributionInterfaceProperties()
     {
         $generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
         $basic     = $this->getMock('PHPStats\BasicStats');
-        $lambda    = 0.5;
         $internal = $this->getMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
         
-        $dist = new PoissonDistribution($generator,$basic,$lambda);
+        $dist = new NormalDistribution($generator,$basic);
         
         $this->assertInstanceOf('PHPStats\Generator\GeneratorInterface',$dist);
         $this->assertInstanceOf('Faker\Components\Engine\Common\Distribution\DistributionInterface',$dist);    
         
         # internal is the correct distribution
-        $this->assertInstanceOf('PHPStats\PDistribution\Poisson',$dist->getInternal());
+        $this->assertInstanceOf('PHPStats\PDistribution\Normal',$dist->getInternal());
         
         # internal setter works with mock
         $dist->setInternal($internal);
         $this->assertEquals($internal,$dist->getInternal());
-        
-        
-        
     }
     
     public function testGeneratorInterfaceProperties()
     {
         $generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
         $basic     = $this->getMock('PHPStats\BasicStats');
-        $lambda    = 0.5;
         $internal = $this->getMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
         
         $generator->expects($this->at(0))
@@ -57,7 +52,7 @@ class PoissonDistributionTest extends AbstractProject
                   ->method('seed')
                   ->with($this->equalTo(5000));
         
-        $dist = new PoissonDistribution($generator,$basic,$lambda);
+        $dist = new NormalDistribution($generator,$basic);
         
         $dist->max(100);
         $this->assertEquals(100,$dist->max());
@@ -75,7 +70,6 @@ class PoissonDistributionTest extends AbstractProject
         
         $generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
         $basic     = $this->getMock('PHPStats\BasicStats');
-        $lambda    = 0.5;
         $internal = $this->getMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
         
         $generator->expects($this->at(0))
@@ -90,7 +84,7 @@ class PoissonDistributionTest extends AbstractProject
                   ->method('rvs')
                   ->will($this->returnValue(10088));
                   
-        $dist = new PoissonDistribution($generator,$basic,$lambda);
+        $dist = new NormalDistribution($generator,$basic);
         
         $dist->setInternal($internal);
         $this->assertEquals(10088,$dist->generate(5,100));

@@ -17,7 +17,7 @@ class ConstantStringTypeDefinition extends AbstractDefinition
     /**
     * Instantiate and configure the node according to this definition
     *
-    * @return Faker\Components\Engine\Common\Composite\CompositeInterface The node instance
+    * @return Faker\Components\Engine\Common\Composite\TypeNode The node instance
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
@@ -32,20 +32,19 @@ class ConstantStringTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return $type;
+        return new TypeNode('ConstantString',$this->eventDispatcher,$type);
     }
     
-    
+    /**
+      *  Sets the string value to return
+      *
+      *  @access public
+      *  @return ConstantStringTypeDefinition
+      *  @param string $value the value to use
+      */
     public function value($value)
     {
         $this->attribute('value',$value);
-        return $this;
-    }
-    
-    
-    public function cast($value)
-    {
-        $this->attribute('type',$value);
         return $this;
     }
     

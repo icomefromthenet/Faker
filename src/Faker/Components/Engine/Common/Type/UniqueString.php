@@ -16,7 +16,7 @@ class UniqueString extends Type
 {
 
     /**
-     * A cache of previous generated GUIDs
+     * A cache of previous generated
      * 
      */
     static $generated = array();

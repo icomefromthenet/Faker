@@ -33,11 +33,19 @@ class CountryTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return $type;
+        return new TypeNode('Country',$this->eventDispatcher,$type);
     }
     
     
-    
+    /**
+      *  List of country codes to fetch full name, if not included
+      *  countries are chosen at random
+      *  
+      *  @link ftp://ftp.fu-berlin.de/doc/iso/iso3166-countrycodes.txt
+      *  @access public
+      *  @example $type->countries(array('AU','GB'))
+      *  @return CountryTypeDefinition
+      */
     public function countries(array $value)
     {
         $this->attribute('countries',$value);

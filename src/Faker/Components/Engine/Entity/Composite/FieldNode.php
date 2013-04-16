@@ -44,13 +44,6 @@ class FieldNode implements CompositeInterface
     //------------------------------------------------------------------
     # GeneratorInterface
     
-    
-    /**
-      *  Generate a value
-      *
-      *  @param integer $rows the current row number
-      *  @param mixed $array list of values generated in context
-      */
     public function generate($rows,$values = array())
     {
         $entity  = new GenericEntity();
@@ -77,22 +70,16 @@ class FieldNode implements CompositeInterface
         return $entity;
     }
     
-    /**
-      *  Get Event Dispatcher
-      *
-      *  @return Symfony\Component\EventDispatcher\EventDispatcherInterface 
-      */ 
     public function getEventDispatcher()
     {
         return $this->event;
     }
     
-    /**
-      *  Will Merge options with config definition and pass judgement
-      *
-      *  @access public
-      *  @return boolean true if passed
-      */
+    public function setEventDispatcher(EventDispatcherInterface $event)
+    {
+        $this->event = $event;
+    }
+    
     public function validate()
     {
        return $this->type->validate();
@@ -101,58 +88,26 @@ class FieldNode implements CompositeInterface
     //------------------------------------------------------------------
     # CompositeInterface
     
-    /**
-      *  Fetches the parent in this type composite
-      *
-      *  @return Faker\Components\Engine\Common\Composite\CompositeInterface
-      *  @access public
-      */
     public function getParent()
     {
         return $this->parent;
     }
 
-    /**
-      *  Sets the parent of this type composite
-      *
-      *  @access public
-      *  @param Faker\Components\Engine\Common\Composite\CompositeInterface $parent;
-      */
     public function setParent(CompositeInterface $parent)
     {
         $this->parent = $parent;
     }
     
-    
-    /**
-      *   Fetches the children of this type composite
-      *
-      *   @access public
-      *   @return Faker\Components\Engine\Common\Composite\CompositeInterface[] 
-      */
     public function getChildren()
     {
         return $this->type;
     }
     
-    
-    /**
-      *  Add's a child to this type composite
-      *
-      *  @param Faker\Components\Engine\Common\Composite\CompositeInterface $child
-      */
     public function addChild(CompositeInterface $child)
     {
         $this->children[] = $child;
     }
     
-    
-    /**
-      *  Return the nodes id
-      *
-      *  @access public
-      *  @return string the nodes id
-      */
     public function getId()
     {
         return $this->id;

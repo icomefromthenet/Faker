@@ -17,7 +17,7 @@ class EmailTypeDefinition extends AbstractDefinition
     /**
     * Instantiate and configure the node according to this definition
     *
-    * @return Faker\Components\Engine\Common\Composite\CompositeInterface The node instance
+    * @return Faker\Components\Engine\Common\Composite\TypeNode The node instance
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
@@ -32,24 +32,45 @@ class EmailTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return $type;
+       return new TypeNode('Email',$this->eventDispatcher,$type);
     }
     
-    
+    /**
+      *  List of custom params to evaluate in the format template
+      *
+      *  @access public
+      *  @return EmailTypeDefinition
+      *  @param array[string] $value
+      *  @example $type->params(array('custom1' => 'v','custon2'=> 'v2'));
+      */
     public function params(array $value)
     {
         $this->attribute('params',$value);
         return $this;
     }
     
-    
+    /**
+      *  List of domains suffixes to use if none included a small default list is used
+      *  these domains don't have to be valid.
+      *
+      *  @return EmailTypeDefinition
+      *  @access public
+      *  @example $type->domains(array('com.au','au','org'))
+      *  @param array[string] $value the list of domain suffixes to use
+      */
     public function domains(array $value)
     {
         $this->attribute('domains',$value);
         return $this;
     }
     
-    
+    /**
+      *  Format of the output to use
+      *
+      *  @example $type->format('{fname}{lname}{alpha}@{alpha}.{domain}');
+      *  @return EmailTypeDefinition
+      *  @access public
+      */
     public function format($value)
     {
         $this->attribute('format',$value);

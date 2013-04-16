@@ -120,40 +120,40 @@ class TypeNode implements CompositeInterface
     //------------------------------------------------------------------
     # GeneratorInterface
     
-    
-    /**
-      *  Get Event Dispatcher
-      *
-      *  @return Symfony\Component\EventDispatcher\EventDispatcherInterface 
-      */ 
     public function getEventDispatcher()
     {
         return $this->event;
     }
     
-    /**
-      *  Generate a value
-      *
-      *  @param integer $rows the current row number
-      *  @param mixed $array list of values generated in context
-      */
+    public function setEventDispatcher(EventDispatcherInterface $event)
+    {
+	$this->event = $event;
+    }
+
     public function generate($rows,$values = array())
     {
         return $this->type->generate($rows,$values);
     }
     
-    
-    /**
-      *  Will Merge options with config definition and pass judgement
-      *
-      *  @access public
-      *  @return boolean true if passed
-      */
     public function validate()
     {
         $this->type->validate();
         
         return true;        
+    }
+    
+    //------------------------------------------------------------------
+    # Custom
+    
+    /**
+      *  Fetch the internal type
+      *
+      *  @access public
+      *  @return TypeInterface
+      */
+    public function getType()
+    {
+        return $this->type;
     }
     
 }

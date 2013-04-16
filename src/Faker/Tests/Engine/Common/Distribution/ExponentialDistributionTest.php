@@ -1,5 +1,5 @@
 <?php
-namespace Faker\Tests\Engine\Common\Type;
+namespace Faker\Tests\Engine\Common\Distribution;
 
 use Faker\Tests\Base\AbstractProject;
 use Faker\Components\Engine\Common\Distribution\ExponentialDistribution;

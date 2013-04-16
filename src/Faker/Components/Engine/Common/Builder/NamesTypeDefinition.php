@@ -17,7 +17,7 @@ class NamesTypeDefinition extends AbstractDefinition
     /**
     * Instantiate and configure the node according to this definition
     *
-    * @return Faker\Components\Engine\Common\Composite\CompositeInterface The node instance
+    * @return Faker\Components\Engine\Common\Composite\TypeNode The node instance
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
@@ -32,11 +32,18 @@ class NamesTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return $type;
+        return new TypeNode('Names',$this->eventDispatcher,$type);
     }
     
  
- 
+    /**
+      *  The output format template
+      *
+      *  @access public
+      *  @example $type->format('{fname} {inital} {lname}');
+      *  @return NamesTypeDefinition
+      *  @param string $value the output template
+      */
     public function format($value)
     {
         $this->attribute('format',$value);

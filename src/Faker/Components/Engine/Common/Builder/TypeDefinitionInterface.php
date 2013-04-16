@@ -4,6 +4,7 @@ namespace Faker\Components\Engine\Common\Builder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Faker\Components\Engine\Common\Utilities;
 use Faker\Locale\LocaleInterface;
+use Faker\Components\Templating\Loader;
 use PHPStats\Generator\GeneratorInterface;
 use Doctrine\DBAL\Connection;
 
@@ -29,6 +30,10 @@ interface TypeDefinitionInterface
     
     
     public function database(Connection $conn);
+    
+    
+    public function templateLoader(Loader $template);
+    
     
     /**
     * Sets an attribute on the node.

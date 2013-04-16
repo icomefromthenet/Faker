@@ -4,7 +4,6 @@ namespace Faker\Components\Engine\Common\Type;
 use Faker\Locale\LocaleInterface;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\OptionInterface;
-use Faker\Components\Engine\Common\Composite\GeneratorInterface as CompositeGenInterface;
 use Faker\Components\Engine\Common\Utilities;
 
 use PHPStats\Generator\GeneratorInterface;
@@ -13,6 +12,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Base class for all type generators
@@ -21,7 +21,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  * @since 1.0.4
  *
  */
-class Type implements TypeInterface, OptionInterface 
+class Type implements TypeInterface, OptionInterface
 {
     
      /**
@@ -44,77 +44,53 @@ class Type implements TypeInterface, OptionInterface
       */
     protected $utilities;
     
+    /**
+      *  @var  Symfony\Component\EventDispatcher\EventDispatcherInterface
+      */
+    protected $eventDispatcher;
+    
     //------------------------------------------------------------------
     # TypeInterface
     
-    
-     /**
-      *  Get the utilities property
-      *
-      *  @access public
-      *  @return Faker\Components\Engine\Common\Utilities
-      */ 
     public function getUtilities()
     {
 	return $this->utilities;
     }
     
-    
-    /**
-      *  Sets the utilities property
-      *
-      *  @access public
-      *  @param $util Faker\Components\Engine\Common\Utilities
-      */
     public function setUtilities(Utilities $util)
     {
 	$this->utilities = $util;
     }
     
-    /**
-      *  Fetch the random number generator
-      *
-      *  @access public
-      *  @return PHPStats\Generator\GeneratorInterface
-      */
     public function getGenerator()
     {
 	return $this->generator;
     }
     
-    /**
-      *  Set the random number generator
-      *
-      *  @access public
-      *  @return PHPStats\Generator\GeneratorInterface
-      */
     public function setGenerator(GeneratorInterface $generator)
     {
 	$this->generator = $generator;
     }
     
-    /**
-      *  Set the type with a locale
-      *
-      *  @access public
-      *  @param Faker\Locale\LocaleInterface $locale
-      */
     public function setLocale(LocaleInterface $locale)
     {
 	$this->locale = $locale;
     }
     
-    /**
-      * Fetches this objects locale
-      * 
-      *  @return Faker\Locale\LocaleInterface
-      *  @access public
-      */
     public function getLocale()
     {
 	return $this->locale;
     }
+
+    public function getEventDispatcher()
+    {
+	return $this->eventDispatcher;
+    }
     
+    public function setEventDispatcher(EventDispatcherInterface $event)
+    {
+	$this->eventDispatcher = $event;
+    }
     
     /**
       *  Generate a value 

@@ -77,6 +77,8 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
         $field->database($this->connection);
         $field->locale($this->locale);
         $field->eventDispatcher($this->eventDispatcher);
+        $field->templateLoader($this->templateLoader);
+        $field->setParent($this);
         
         # return the definition for configuration by user
         return $field;
@@ -85,100 +87,88 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
     
     public function fieldAlphaNumeric()
     {
-        $node = $this->find('alphanumeric');
-        
-        $node->parent($this);
-        
-        return $node;
-        
+        return $this->find('alphanumeric');
     }
     
     public function fieldAutoIncrement()
     {
-        return $this->find();
+        return $this->find('autoincrement');
     }
     
     public function fieldBoolean()
     {
-        return $this->find();
+        return $this->find('boolean');
     }
     
     public function fieldCity()
     {
-        return $this->find();
+        return $this->find('city');
     }
     
     public function fieldConstant()
     {
-        return $this->find();
+        return $this->find('constant_number');
     }
     
     public function fieldCountry()
     {
-        return $this->find();
+        return $this->find('country');
     }
     
     public function fieldDate()
     {
-        return $this->find();
+        return $this->find('date');
     }
     
     public function fieldEmail()
     {
-        return $this->find();
+        return $this->find('email');
     }
     
     public function fieldPeople()
     {
-        return $this->find();
+        return $this->find('people');
     }
     
     public function fieldNull()
     {
-        return $this->find();
+        return $this->find('nulltype');
     }
     
     public function fieldNumeric()
     {
-        return $this->find();
+        return $this->find('numeric');
     }
     
     public function fieldRange()
     {
-        return $this->find();
+        return $this->find('range');
     }
     
     public function fieldRegex()
     {
-        return $this->find();
+        return $this->find('regex');
     }
     
     public function fieldTemplate()
     {
-        return $this->find();
+        return $this->find('template');
     }
     
     public function fieldText()
     {
-        return $this->find();
+        return $this->find('text');
     }
     
     public function fieldUniqueNumber()
     {
-        return $this->find();
+        return $this->find('unique_number');
     }
     
     public function fieldUniqueString()
     {
-        return $this->find();
+        return $this->find('unique_string');
     }
-    
-
-    public function fieldCustom($alias)
-    {
-        return $this->find($alias);
-    }
-    
 
     public function fieldClosure()
     {
@@ -194,7 +184,7 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
       */    
     public function selectorAlternate()
     {
-        $node = new SelectorAlternateBuilder('SelectorAlternate',$this->event,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database);
+        $node = new SelectorAlternateBuilder('SelectorAlternate',$this->event,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         $node->setParent($this);
                 
         return $node;
@@ -208,7 +198,7 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
       */
     public function selectorRandom()
     {
-        $node = new SelectorRandomBuilder('SelectorRandom',$this->event,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database);
+        $node = new SelectorRandomBuilder('SelectorRandom',$this->event,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         $node->setParent($this);
         
         return $node;
@@ -222,7 +212,7 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
       */
     public function selectorWeightAlternate()
     {
-        $node = new SelectorWeightBuilder('SelectorRandom',$this->event,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database);
+        $node = new SelectorWeightBuilder('SelectorRandom',$this->event,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         $node->setParent($this);
         
         return $node;
@@ -236,7 +226,7 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
       */
     public function selectorSwap()
     {
-        $node = new SelectorSwapBuilder('SelectorRandom',$this->event,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database);
+        $node = new SelectorSwapBuilder('SelectorRandom',$this->event,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         $node->setParent($this);
         
         return $node;
@@ -251,7 +241,7 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
     public function combination()
     {
         # this is a little evil (typebuilder is child of nodebuilder) but avoid alot of copy and paste
-        $node = new TypeBuilder($this->name,$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database);
+        $node = new TypeBuilder($this->name,$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         $node->setParent($this);
         return $node;
     }

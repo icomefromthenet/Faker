@@ -11,6 +11,7 @@ use Faker\Components\Engine\Common\Selector\AlternateSelector;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Faker\Components\Engine\Common\Utilities;
 use Faker\Locale\LocaleInterface;
+use Faker\Components\Templating\Loader;
 use PHPStats\Generator\GeneratorInterface;
 use Doctrine\DBAL\Connection;
 
@@ -66,14 +67,11 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
         return $this;
     }
     
-    /**
-    * Sets an attribute on the node.
-    *
-    * @param string $key
-    * @param mixed $value
-    *
-    * @return AbstractDefinition
-    */
+    public function templateLoader(Loader $template)
+    {
+        $this->templateLoader = $template;
+    }
+        
     public function attribute($key, $value)
     {
         $this->attributes[$key] = $value;
@@ -93,7 +91,7 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
     public function describe()
     {
         # create new node builder
-        $nodeBuilder = new NodeBuilder('randomSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database);
+        $nodeBuilder = new NodeBuilder('randomSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         
         # bind this definition as the parent of nodebuilder
         $nodeBuilder->setParent($this);

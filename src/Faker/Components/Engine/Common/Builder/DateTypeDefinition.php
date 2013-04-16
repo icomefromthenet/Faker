@@ -7,18 +7,18 @@ use Faker\Components\Engine\Common\Composite\TypeNode;
 use Faker\Components\Engine\Common\Type\Date;
 
 /**
-  *  Definition for the AutoIncrement Datatype
+  *  Definition for the Date Datatype
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class AutoIncrementTypeDefinition extends AbstractDefinition
+class DateTypeDefinition extends AbstractDefinition
 {
     
     /**
     * Instantiate and configure the node according to this definition
     *
-    * @return Faker\Components\Engine\Common\Composite\CompositeInterface The node instance
+    * @return Faker\Components\Engine\Common\Composite\TypeNode The node instance
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
@@ -33,33 +33,59 @@ class AutoIncrementTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return $type;
+        return new TypeNode('Date',$this->eventDispatcher,$type);
     }
     
-    
-    public function start(DateTime $value)
+    /**
+      *  Set the start time
+      *
+      *  @access public
+      *  @return DateTypeDefinition
+      *  @param DateTime $value 
+      */
+    public function startDate(DateTime $value)
     {
         $this->attribute('start',$value);
         return $this;
     }
     
-    
-    public function max(DateTime $value)
+    /**
+      *  Set the max date
+      *
+      *  @access public
+      *  @return DateTypeDefinition
+      *  @param DateTime $value
+      */
+    public function maxDate(DateTime $value)
     {
         $this->attribute('max',$value);
         return $this;
     }
     
-    
-    public function modify($value)
+    /**
+      *  Set the increment value
+      *
+      *  @access public
+      *  @return DateTypeDefinition
+      *  @param string $value a strtotime string
+      */
+    public function modifyTime($value)
     {
         $this->attribute('modify',$value);
         return $this;
     }
     
-    public function random($value)
+    /**
+      *  Use random increment between min and max
+      *
+      *  @access public
+      *  @return DateTypeDefinition
+      *  @param boolean $value use random increment
+      */
+    public function pickRandomBetweenMinMax($value)
     {
         $this->attribute('random',$value);
+        return $this;
     }
     
 }

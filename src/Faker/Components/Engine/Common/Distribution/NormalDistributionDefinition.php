@@ -1,9 +1,9 @@
 <?php
-namespace Faker\Components\Engine\Common\Builder;
+namespace Faker\Components\Engine\Common\Distribution;
 
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Composite\TypeNode;
-use Faker\Components\Engine\Common\Distribution\NormalDistribution;
+
 
 use PHPStats\BasicStats;
 

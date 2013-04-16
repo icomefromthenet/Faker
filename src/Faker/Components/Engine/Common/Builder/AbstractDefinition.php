@@ -4,12 +4,13 @@ namespace Faker\Components\Engine\Common\Builder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Faker\Components\Engine\Common\Utilities;
 use Faker\Locale\LocaleInterface;
-use PHPStats\Generator\GeneratorInterface;
+use Faker\Components\Templating\Loader;
 use Faker\Components\Engine\Common\Builder\TypeDefinitionInterface;
 use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\EngineException;
 use Doctrine\DBAL\Connection;
+use PHPStats\Generator\GeneratorInterface;
 
 
 /**
@@ -35,11 +36,8 @@ abstract class AbstractDefinition implements TypeDefinitionInterface , NodeInter
     
     protected $database;
     
+    protected $templateLoader;
     
-    /**
-      *  Force All children to not use constructor 
-      */    
-    public final function __construct(){}
     
     
     /**
@@ -57,11 +55,11 @@ abstract class AbstractDefinition implements TypeDefinitionInterface , NodeInter
     /**
     * Sets the parent node.
     *
-    * @param ParentNodeInterface $parent The parent
+    * @param NodeInterface $parent The parent
     *
-    * @return ParentNodeInterface
+    * @return NodeInterface
     */
-    public function setParent(ParentNodeInterface $parent)
+    public function setParent(NodeInterface $parent)
     {
         $this->parent = $parent;
 
@@ -118,7 +116,7 @@ abstract class AbstractDefinition implements TypeDefinitionInterface , NodeInter
     
     public function utilities(Utilities $util)
     {
-        $this->utilities = $utilities;
+        $this->utilities = $util;
         
         return $this;
     }
@@ -137,6 +135,12 @@ abstract class AbstractDefinition implements TypeDefinitionInterface , NodeInter
         $this->database = $conn;
         
         return $this;
+    }
+    
+    
+    public function templateLoader(Loader $template)
+    {
+        $this->templateLoader = $template;
     }
     
     /**

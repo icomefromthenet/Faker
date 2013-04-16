@@ -19,6 +19,15 @@ interface GeneratorInterface
       */ 
     public function getEventDispatcher();
     
+    /**
+      *  Set the Event Dispatcher
+      *
+      *  @access public
+      *  @param Symfony\Component\EventDispatcher\EventDispatcherInterface $event
+      */
+    public function setEventDispatcher(EventDispatcherInterface $event);
+    
+    
      /**
       *  Generate a value
       *
