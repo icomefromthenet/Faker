@@ -7,6 +7,7 @@ use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Utilities;
 use Faker\Components\Engine\Common\TypeRepository;
+use Faker\Components\Templating\Loader;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PHPStats\Generator\GeneratorInterface;
@@ -34,6 +35,7 @@ abstract class NodeCollection implements ParentNodeInterface
     protected $eventDispatcher;
     protected $database;
     protected $repo;
+    protected $templateLoader;
     
     /**
       *  Class Constructor
@@ -47,19 +49,19 @@ abstract class NodeCollection implements ParentNodeInterface
                                 Utilities $util,
                                 GeneratorInterface $generator,
                                 LocaleInterface $locale,
-                                Connection $conn
+                                Connection $conn,
+                                Loader $loader
                                 )
     {
         $this->name            = $name;
         
         $this->eventDispatcher = $event;
         $this->repo            = $repo;
-        
         $this->database        = $conn;
         $this->generator       = $generator;
-        
         $this->utilities       = $util;
-        $this->locale          = $locale;  
+        $this->locale          = $locale;
+        $this->templateLoader  = $loader;
     }
     
     

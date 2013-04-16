@@ -17,7 +17,7 @@ class ConstantNumberTypeDefinition extends AbstractDefinition
     /**
     * Instantiate and configure the node according to this definition
     *
-    * @return Faker\Components\Engine\Common\Composite\CompositeInterface The node instance
+    * @return Faker\Components\Engine\Common\Composite\TypeNode The node instance
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
@@ -32,17 +32,31 @@ class ConstantNumberTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return $type;
+        return new TypeNode('ConstantNumber',$this->eventDispatcher,$type);
     }
     
-    
+    /**
+      *  Sets the value to return.
+      *
+      *  @access public
+      *  @return ConstantNumberTypeDefinition
+      *  @param numeric $value
+      *  @example $type->value(100);
+      */
     public function value($value)
     {
         $this->attribute('value',$value);
         return $this;
     }
     
-    
+    /**
+      *  The Type to cast the geneated value into
+      *
+      *  @access public
+      *  @param string $type the type to use (string|boolean|integer|float|double)
+      *  @example $type->cast('float');
+      *  @return ConstantNumberTypeDefinition
+      */
     public function cast($value)
     {
         $this->attribute('type',$value);

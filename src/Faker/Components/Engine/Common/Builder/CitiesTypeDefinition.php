@@ -32,10 +32,17 @@ class CitiesTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return $type;
+        return new TypeNode('Cities',$this->eventDispatcher,$type);
     }
     
-    
+    /**
+      *  Set the countries to load cities from
+      *
+      *  @param array[string] $countries a list of  ISO_3166-1 country codes
+      *  @return CitiesTypeDefinition
+      *  @access public
+      *  @exaple $type->countries(array('AU','GB'));
+      */
     public function countries(array $countries)
     {
         $this->attribute('countries',$countries);

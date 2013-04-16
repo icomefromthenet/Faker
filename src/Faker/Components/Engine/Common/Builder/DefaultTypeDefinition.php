@@ -19,7 +19,7 @@ class DefaultTypeDefinition extends AbstractDefinition
     /**
     * Instantiate and configure the node according to this definition
     *
-    * @return Faker\Components\Engine\Common\Composite\CompositeInterface The node instance
+    * @return Faker\Components\Engine\Common\Composite\TypeNode The node instance
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
@@ -36,18 +36,19 @@ class DefaultTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return $type;
+        return new TypeNode('DefaultType',$this->eventDispatcher,$type);
     }
     
-    
-    public function className($class)
+    /**
+      *  FQN of the Custom Type
+      *
+      *  @param string the class name
+      *  @return DefaultTypeDefinition
+      *  @access protected
+      */    
+    public function typeName($class)
     {
         $this->className = $class;
-    }
-    
-    public function option($name,$value)
-    {
-        $this->attribute($name,$value);
         return $this;
     }
     

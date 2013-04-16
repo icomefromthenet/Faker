@@ -41,7 +41,7 @@ class ClosureTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return $type;
+        return new TypeNode('ClosureType',$this->eventDispatcher,$type);
     }
     
     /**

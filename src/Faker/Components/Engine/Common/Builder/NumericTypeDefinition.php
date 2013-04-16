@@ -17,11 +17,11 @@ class NumericTypeDefinition extends AbstractDefinition
     /**
     * Instantiate and configure the node according to this definition
     *
-    * @return Faker\Components\Engine\Common\Composite\CompositeInterface The node instance
+    * @return Faker\Components\Engine\Common\Composite\TypeNode The node instance
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
-    public function getNode($id, CompositeInterface $parent)
+    public function getNode()
     {
         $type = new Numeric();
         $type->setGenerator($this->generator);
@@ -32,10 +32,21 @@ class NumericTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return $type;
+        return new TypeNode('Numeric',$this->eventDispatcher,$type);
     }
     
-    
+    /**
+      *  The output format template
+      *
+      *   DSL is simple
+      *   x (0-9)
+      *   X (1-9)
+      *
+      *  @access public
+      *  @return NumericTypeDefinition
+      *  @example $type->format('xxxxx.xxxxx');
+      *  @param string $value the template 
+      */
     public function format($value)
     {
         $this->attribute('format',$value);

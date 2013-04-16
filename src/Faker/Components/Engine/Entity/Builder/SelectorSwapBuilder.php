@@ -11,6 +11,8 @@ use Faker\Components\Engine\Common\PositionManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Faker\Components\Engine\Common\Utilities;
 use Faker\Locale\LocaleInterface;
+use Faker\Components\Templating\Loader;
+
 use PHPStats\Generator\GeneratorInterface;
 use Doctrine\DBAL\Connection;
 
@@ -71,14 +73,11 @@ class SelectorSwapBuilder extends NodeCollection implements TypeDefinitionInterf
         return $this;
     }
     
-    /**
-      * Sets an attribute on the node.
-      *
-      * @param string $key
-      * @param mixed $value
-      *
-      * @return AbstractDefinition
-      */
+    public function templateLoader(Loader $template)
+    {
+        $this->templateLoader = $template;
+    }
+
     public function attribute($key, $value)
     {
         $this->attributes[$key] = $value;
@@ -98,7 +97,7 @@ class SelectorSwapBuilder extends NodeCollection implements TypeDefinitionInterf
     public function swapAt($number)
     {
         # create new node builder
-        $nodeBuilder = new TypeBuilder('randomSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database);
+        $nodeBuilder = new TypeBuilder('randomSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         
         $this->positionManagers[] = new PositionManager($number);
         

@@ -17,7 +17,7 @@ class AutoIncrementTypeDefinition extends AbstractDefinition
     /**
     * Instantiate and configure the node according to this definition
     *
-    * @return Faker\Components\Engine\Common\Composite\CompositeInterface The node instance
+    * @return Faker\Components\Engine\Common\Composite\TypeNode The node instance
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
@@ -32,13 +32,33 @@ class AutoIncrementTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return $type;
+        return new TypeNode('AutoIncrement',$this->eventDispatcher,$type);
     }
     
-    
-    public function format($value)
+    /**
+      *  Sets the start value
+      *
+      *  @access public
+      *  @param numeric $value a value to start on
+      *  @example $type->startAtValue(100);
+      *  @return AutoIncrementTypeDefinition
+      */
+    public function startAtValue($value)
     {
-        $this->attribute('format',$value);
+        $this->attribute('start',$value);
+        return $this;
+    }
+    
+    /**
+      *  Set the increment value
+      *
+      *  @access public
+      *  @return AutoIncrementTypeDefinition
+      *  @param numeric $value the value to increment by
+      */
+    public function incrementByValue($value)
+    {
+        $this->attribute('increment',$value);
         return $this;
     }
 }

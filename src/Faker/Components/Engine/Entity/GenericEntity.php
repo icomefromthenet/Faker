@@ -21,7 +21,7 @@ class GenericEntity
       */
     public function __construct($fields = array())
     {
-        foreach ($data as $name => $value) {
+        foreach ($fields as $name => $value) {
             $this->$name = $value;
         }
     }

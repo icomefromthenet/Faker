@@ -146,7 +146,7 @@ class Country extends Type
         $rootNode
             ->children()
                 ->scalarNode('countries')
-                    //ftp://ftp.fu-berlin.de/doc/iso/iso3166-countrycodes.txt
+                    #ftp://ftp.fu-berlin.de/doc/iso/iso3166-countrycodes.txt
                     ->defaultValue(null)
                     ->info('a list of country codes to use')
                     ->example('AU,US,UK')

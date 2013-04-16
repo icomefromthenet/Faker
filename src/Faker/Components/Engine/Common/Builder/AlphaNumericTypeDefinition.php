@@ -17,7 +17,7 @@ class AlphaNumericTypeDefinition extends AbstractDefinition
     /**
     * Instantiate and configure the node according to this definition
     *
-    * @return Faker\Components\Engine\Common\Composite\CompositeInterface The node instance
+    * @return Faker\Components\Engine\Common\Composite\TypeNode The node instance
     *
     * @throws InvalidDefinitionException When the definition is invalid
     */
@@ -32,24 +32,58 @@ class AlphaNumericTypeDefinition extends AbstractDefinition
             $type->setOption($attribute,$value);
         }
         
-        return $type;
+        return new TypeNode('AlphaNumeric',$this->eventDispatcher,$type);
     }
     
-    
+    /**
+      *  Set the output format to use.
+      *
+      *  @param string $value the string format
+      *  @example $type->format('CcVDx');
+      *  @return AlphaNumericTypeDefinition
+      *
+      *  1.   C, c, E - any consonant (Upper case, lower case, any)
+      *  2.   V, v, F - any vowel (Upper case, lower case, any)
+      *  3.   L, l, D - any letter (Upper case, lower case, any)
+      *  4.   X       - 1-9
+      *  5.   x       - 0-9
+      *  6.   H       - 0-F
+      *  
+      */
     public function format($value)
     {
         $this->attribute('format',$value);
         return $this;
     }
     
-    
+    /**
+      *  Set the minimum number of times to repeat the format string
+      *
+      *  If a max is used and not idential as the min value a middle value chosen at random
+      *  
+      *  @access public
+      *  @return AlphaNumericTypeDefinition
+      *  @example $type->repeatMin(3);
+      *  @param integer $value the min repeat value 
+      *  
+      */
     public function repeatMin($value)
     {
         $this->attribute('repeatMin',$value);
         return $this;
     }
     
-    
+    /**
+      *  Set the maximum number of times to repeat the format string
+      *
+      *  If a min is used and not idential as the max value a middle value chosen at random
+      *
+      *  @access public
+      *  @return AlphaNumericTypeDefinition
+      *  @param integer $value the max value
+      *  @example $type->repeatMax(5);
+      *  
+      */
     public function repeatMax($value)
     {
         $this->attribute('repeatMax',$value);

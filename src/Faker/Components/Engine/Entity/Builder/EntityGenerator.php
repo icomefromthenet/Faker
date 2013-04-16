@@ -11,6 +11,7 @@ use Faker\Components\Engine\Common\Utilities;
 use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Faker\Components\Engine\Common\TypeRepository;
 use Faker\Locale\LocaleInterface;
+use Faker\Components\Templating\Loader;
 use Faker\Components\Engine\Entity\Composite\EntityNode;
 
 /**
@@ -31,6 +32,8 @@ class EntityGenerator implements ParentNodeInterface
     protected $utilities;
     protected $generator;
     protected $typeRepo;
+    protected $templateLoader;
+    
     
     /**
       *  @var Symfony\Component\EventDispatcher\EventDispatcherInterface 
@@ -51,16 +54,19 @@ class EntityGenerator implements ParentNodeInterface
                                 LocaleInterface $locale,
                                 Utilities $util,
                                 GeneratorInterface $gen,
-                                Connection $conn)
+                                Connection $conn,
+                                Loader $loader
+                                )
     {
-        $this->name       = $name;
-        $this->event      = $event;
-        $this->typeRepo   = $repo;
-        $this->locale     = $locale;
-        $this->utilities  = $util;
-        $this->generator  = $gen;
-        $this->connection = $conn;
-        $this->children = array();
+        $this->name           = $name;
+        $this->event          = $event;
+        $this->typeRepo       = $repo;
+        $this->locale         = $locale;
+        $this->utilities      = $util;
+        $this->generator      = $gen;
+        $this->connection     = $conn;
+        $this->templateLoader = $loader;
+        $this->children       = array();
     }
 
  
@@ -112,7 +118,7 @@ class EntityGenerator implements ParentNodeInterface
             
             # instance new FieldBuilder only do this once per instance.
             # chain methods are optional.
-            $this->rootNode = new FieldBuilder($this->getNode(),$this->name,$event,$root,$this->typeRepo,$this->utilities,$this->generator,$this->locale,$this->connection);
+            $this->rootNode = new FieldBuilder($this->getNode(),$this->name,$event,$root,$this->typeRepo,$this->utilities,$this->generator,$this->locale,$this->connection,$this->templateLoader);
             
             # setup composite relationship 
             $this->rootNode->setParent($this);
@@ -164,6 +170,7 @@ class EntityGenerator implements ParentNodeInterface
       *  @param \Faker\Locale\LocaleInterface $locale to use
       *  @param \PHPStats\Generator\GeneratorInterface $util
       *  @param \Doctrine\DBAL\Connection $conn
+      *  @param \Faker\Components\Templating\Loader $loader
       */
     public static function create(Project $container,
                                   $name,
@@ -172,7 +179,8 @@ class EntityGenerator implements ParentNodeInterface
                                   LocaleInterface $locale = null,
                                   Utilities $util = null,
                                   GeneratorInterface $gen = null,
-                                  Connection $conn = null )
+                                  Connection $conn = null,
+                                  Loader $loader = null)
     {
         if($repo === null) {
             $repo = $container->getEngineTypeRepository();
@@ -198,8 +206,11 @@ class EntityGenerator implements ParentNodeInterface
             $util = $container->getGeneratorDatabase();
         }
         
+        if($loader === null) {
+            $loader = $this->getTemplatingManager()->getLoader();
+        }
     
-        return new self($name,$event,$repo,$locale,$util,$gen,$conn);
+        return new self($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
     }
     
     //------------------------------------------------------------------

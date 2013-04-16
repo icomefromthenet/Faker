@@ -21,47 +21,47 @@ interface FieldListInterface
     /**
       *  Return an  field for configuration
       *  
-      *  @return
+      *  @return \\Faker\\Components\\Engine\\Common\\Builder\\AutoIncrementTypeDefinition
       *  @access public   
       */
     public function fieldAutoIncrement();
     
     /**
-      * Return an  field for configuration
+      * Return an boolean field for configuration
       * 
-      *  @return
+      *  @return \\Faker\\Components\\Engine\\Common\\Builder\\BooleanTypeDefinition
       *  @access public   
       */
     public function fieldBoolean();
     
     /**
-      *  Return an  field for configuration
+      *  Return an City field for configuration
       *
-      *  @return
+      *  @return \\Faker\\Components\\Engine\\Common\\Builder\\CitiesTypeDefinition
       *  @access public
       */
     public function fieldCity();
     
     /**
-      *  Return an  field for configuration
+      *  Return an Constant field for configuration
       *
-      *  @return
+      *  @return \\Faker\\Components\\Engine\\Common\\Builder\\ConstantNumberTypeDefinition 
       *  @access public   
       */
     public function fieldConstant();
     
     /**
-      *  Return an  field for configuration
+      *  Return an Country field for configuration
       *
-      *  @return
+      *  @return \\Faker\\Components\\Engine\\Common\\Builder\\CountryTypeDefinition
       *  @access public
       */
-    public function fieldcountry();
+    public function fieldCountry();
     
     /**
-      * Return an  field for configuration
+      * Return an Date field for configuration
       * 
-      *  @return
+      *  @return \\Faker\\Components\\Engine\\Common\\Builder\\DateTypeDefinition
       *  @access public
       */
     public function fieldDate();
@@ -99,9 +99,9 @@ interface FieldListInterface
     public function fieldNumeric();
     
     /**
-     *  Return an  field for configuration
+     *  Return an Range Definition
      *
-     *  @return
+     *  @return \\Faker\\Components\\Engine\\Common\\Builder\\RangeTypeDefinition
      *  @access public   
      */
     public function fieldRange();
@@ -146,13 +146,6 @@ interface FieldListInterface
       */
     public function fieldUniqueString();
 
-    /**
-      *  Returns the custom type for configuration
-      *
-      *  @return \Faker\Components\Engine\Common\Builder\AbstractDefinition
-      *  @access public
-      */
-    public function fieldCustom($alias);
     
     /**
       *  Return a closure type for configuration

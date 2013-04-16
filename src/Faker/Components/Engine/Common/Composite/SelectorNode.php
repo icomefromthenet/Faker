@@ -120,23 +120,16 @@ class SelectorNode implements CompositeInterface
     //------------------------------------------------------------------
     # GeneratorInterface
     
-    /**
-      *  Get Event Dispatcher
-      *
-      *  @return Symfony\Component\EventDispatcher\EventDispatcherInterface 
-      */ 
     public function getEventDispatcher()
     {
         return $this->event;
     }
     
+    public function setEventDispatcher(EventDispatcherInterface $event)
+    {
+	$this->event = $event;
+    }
     
-    /**
-      *  Generate a value
-      *
-      *  @param integer $rows the current row number
-      *  @param mixed $array list of values generated in context
-      */
     public function generate($rows,$values = array())
     {
         $index = $this->selector->generate($rows,$values);
@@ -145,12 +138,6 @@ class SelectorNode implements CompositeInterface
     }
     
     
-    /**
-      *  Will Merge options with config definition and pass judgement
-      *
-      *  @access public
-      *  @return boolean true if passed
-      */
     public function validate()
     {
         $this->selector->validate();
