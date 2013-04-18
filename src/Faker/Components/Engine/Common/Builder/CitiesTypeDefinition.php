@@ -45,7 +45,7 @@ class CitiesTypeDefinition extends AbstractDefinition
       */
     public function countries(array $countries)
     {
-        $this->attribute('countries',$countries);
+        $this->attribute('countries',\implode('|',$countries));
         return $this;
     }
     

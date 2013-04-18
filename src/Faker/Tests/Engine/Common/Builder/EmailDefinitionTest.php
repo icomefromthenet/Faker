@@ -89,7 +89,7 @@ class EmailDefinitionTest extends AbstractProject
         
         $this->assertEquals($format,$interalType->getOption('format'));
         $this->assertEquals($domains,$interalType->getOption('domains'));
-        $this->assertEquals($params,$interalType->getOption('params'));
+        $this->assertEquals(json_encode($params),$interalType->getOption('params'));
 
         $this->assertEquals($generator,$interalType->getGenerator());
         $this->assertEquals($locale,$interalType->getLocale());

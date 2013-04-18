@@ -9,7 +9,7 @@ use Faker\Components\Engine\EngineException;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class GenericEntity
+class GenericEntity implements \ArrayAccess
 {
     
     protected $values = array();
@@ -48,11 +48,37 @@ class GenericEntity
             unset($this->values[$name]);
         }
     }
+    
+    
       
     public function toArray()
     {
         return $this->values;
     }             
 
+    // ----------------------------------------------------------------
+    # Array Access Interface
+    
+    
+    public function offsetSet($offset, $value)
+    {
+        $this->values[$offset] = $value;
+    }
+    
+    public function offsetExists($offset)
+    {
+        return isset($this->values[$offset]);
+    }
+    
+    public function offsetUnset($offset)
+    {
+        unset($this->values[$offset]);
+    }
+    
+    public function offsetGet($offset)
+    {
+        return isset($this->values[$offset]) ? $this->values[$offset] : null;
+    }
+    
 }
 /* End of File */

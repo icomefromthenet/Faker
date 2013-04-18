@@ -43,7 +43,7 @@ class RegexTypeDefinition extends AbstractDefinition
       *  @access public
       *  @exaple $type->format('[a-z]');
       */
-    public function format($format)
+    public function regex($format)
     {
         $this->attribute('format',$format);
         return $this;

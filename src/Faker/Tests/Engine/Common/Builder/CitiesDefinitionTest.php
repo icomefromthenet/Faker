@@ -76,10 +76,10 @@ class CitiesDefinitionTest extends AbstractProject
         $type->utilities($utilities);
         $type->generator($generator);
         
-        $typeNode = $type->countries(array('AU'))->getNode();
+        $typeNode = $type->countries(array('AU','EU'))->getNode();
         $interalType = $typeNode->getType();
         
-        $this->assertEquals(array('AU'),$interalType->getOption('countries'));
+        $this->assertEquals('AU|EU',$interalType->getOption('countries'));
  
         $this->assertEquals($generator,$interalType->getGenerator());
         $this->assertEquals($locale,$interalType->getLocale());

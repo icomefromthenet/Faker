@@ -1,18 +1,23 @@
 <?php
 namespace Faker\Components\Engine\Entity\Builder;
 
-use Closure;
-use PHPStats\Generator\GeneratorInterface;
-use Doctrine\DBAL\Connection;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Faker\Project;
+use Faker\Locale\LocaleInterface;
+use Faker\Components\Templating\Loader;
 use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
 use Faker\Components\Engine\Common\Utilities;
 use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Faker\Components\Engine\Common\TypeRepository;
-use Faker\Locale\LocaleInterface;
-use Faker\Components\Templating\Loader;
+use Faker\Components\Engine\Common\Composite\CompositeInterface;
+use Faker\Components\Engine\Common\Builder\NodeInterface;
 use Faker\Components\Engine\Entity\Composite\EntityNode;
+use Faker\Components\Engine\Entity\EntityIterator;
+
+use Closure;
+use PHPStats\Generator\GeneratorInterface;
+use Doctrine\DBAL\Connection;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 
 /**
   *  Used to construct generator composite to represent entities
@@ -23,7 +28,7 @@ use Faker\Components\Engine\Entity\Composite\EntityNode;
 class EntityGenerator implements ParentNodeInterface
 {
     protected $rootNode;
-    protected $rootEntity;
+    protected $children;
     protected $mapClosure;
     
     
@@ -67,6 +72,7 @@ class EntityGenerator implements ParentNodeInterface
         $this->connection     = $conn;
         $this->templateLoader = $loader;
         $this->children       = array();
+        $this->mapClosure     = null;  
     }
 
  
@@ -110,21 +116,21 @@ class EntityGenerator implements ParentNodeInterface
       *  Defines the fields and types that will be generated
       *
       *  @access public
-      *  @return FieldBuilderCollection
+      *  @return \Faker\Components\Engine\Entity\Builder\FieldCollection a field collection
       */
     public function describe()
     {
-        if($this->rootNode === null) {
-            
-            # instance new FieldBuilder only do this once per instance.
-            # chain methods are optional.
-            $this->rootNode = new FieldBuilder($this->getNode(),$this->name,$event,$root,$this->typeRepo,$this->utilities,$this->generator,$this->locale,$this->connection,$this->templateLoader);
-            
-            # setup composite relationship 
-            $this->rootNode->setParent($this);
-        }
+        $fieldsColl     = new FieldCollection($this->name.'-field_collection',
+                                              $this->event,
+                                              $this->typeRepo,
+                                              $this->utilities,
+                                              $this->generator,
+                                              $this->locale,
+                                              $this->connection,
+                                              $this->templateLoader);
+        $fieldsColl->setParent($this);
         
-        return $this->rootNode;
+        return $fieldsColl;
     }
     
     /**
@@ -142,18 +148,25 @@ class EntityGenerator implements ParentNodeInterface
         return $this;
     }
     
-    
-    public function generate($number)
+    /**
+      *  Setup the generate to make x entities
+      *
+      *  @access public
+      *  @param integer $number the number of entities to kaje
+      *  @return Faker\Components\Engine\Entity\EntityIterator
+      */
+    public function fake($number)
     {
        
-       $iterator = null;
+       if(is_int($number) === false) {
+            throw new EngineException('Number to generate must be an integer > 0');
+       }
        
-       # bind the map closure to the result iterator        
+       if($number < 0) {
+            throw new EngineException('Number to generate must be an integer > 0');
+       }
        
-       
-       
-       
-       return $iterator;
+       return new EntityIterator($number,$this->end(),$this->mapClosure,false);
        
     }
     
@@ -171,6 +184,7 @@ class EntityGenerator implements ParentNodeInterface
       *  @param \PHPStats\Generator\GeneratorInterface $util
       *  @param \Doctrine\DBAL\Connection $conn
       *  @param \Faker\Components\Templating\Loader $loader
+      *  @return \Faker\Components\Engine\Entity\Builder\EntityGenerator
       */
     public static function create(Project $container,
                                   $name,
@@ -203,11 +217,11 @@ class EntityGenerator implements ParentNodeInterface
         }
         
         if($conn === null) {
-            $util = $container->getGeneratorDatabase();
+            $conn = $container->getGeneratorDatabase();
         }
         
         if($loader === null) {
-            $loader = $this->getTemplatingManager()->getLoader();
+            $loader = $container->getTemplatingManager()->getLoader();
         }
     
         return new self($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
@@ -216,72 +230,49 @@ class EntityGenerator implements ParentNodeInterface
     //------------------------------------------------------------------
     # ParentNodeInterface
     
-    /**
-      *  Append a node to this one
-      *
-      *  @access public
-      *  @return NodeInterface
-      *  @param  Faker\Components\Engine\Common\Composite\CompositeInterface $node
-      */
     public function append(CompositeInterface $node)
     {
-        $this->rootEntity = $node;
+        $this->children[] = $node;
     }
     
-    /**
-      *  Return this nodes children
-      *
-      *  @access public
-      *  @return array[Faker\Components\Engine\Common\Composite\CompositeInterface]
-      */
     public function children()
     {
-        return $this->rootEntity;
+        return $this->children;
     }
     
-    
-    /**
-      *  Fetch the generator composite node managed by this builder node
-      *
-      *  @access public
-      *  @return Faker\Components\Engine\Common\Composite\CompositeInterface the new node
-      */
     public function getNode()
     {
         return new EntityNode($this->name,$this->event);
     }
     
     
-    /**
-    * Sets the parent node.
-    *
-    * @param ParentNodeInterface $parent The parent
-    */
     public function setParent(NodeInterface $parent)
     {
         return null;
     }
     
-    /**
-      *  Return the assigned parent
-      *
-      *  @param access
-      *  @return NodeInterface
-      */
     public function getParent()
     {
         return null;
     }
     
-    /**
-    * Return the parent node and build the node
-    * defined by this builder and append it to the parent.
-    *
-    * @return NodeInterface The builder of the parent node
-    */
     public function end()
     {
-        return $this;
+        if($this->rootNode === null) {
+            $this->rootNode   = $this->getNode();    
+        }
+        
+        $children = $this->children();
+        
+        # append the fieldNodes to the rootEntity
+        foreach($children as $child) {
+            $this->rootNode->addChild($child);
+        }
+        
+        # run validation routines
+        $this->rootNode->validate();
+        
+        return $this->rootNode;
     }
     
 }

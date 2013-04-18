@@ -31,6 +31,8 @@ class SelectorSwapBuilder extends NodeCollection implements TypeDefinitionInterf
     protected $positionManagers = array();
     
     
+    protected $attributes = array();
+    
     //------------------------------------------------------------------
     #TypeDefinitionInterface
     
@@ -97,7 +99,7 @@ class SelectorSwapBuilder extends NodeCollection implements TypeDefinitionInterf
     public function swapAt($number)
     {
         # create new node builder
-        $nodeBuilder = new TypeBuilder('randomSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        $nodeBuilder = new TypeBuilder('swapSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         
         $this->positionManagers[] = new PositionManager($number);
         
@@ -135,8 +137,15 @@ class SelectorSwapBuilder extends NodeCollection implements TypeDefinitionInterf
             $type->registerSwap($mgr);
         }
         
+        $node = new SelectorNode('selectorNode',$this->eventDispatcher,$type); 
+        
+        # register children
+        foreach($this->children as $aNode) {
+            $node->addChild($aNode);
+        }
+        
         # return the composite generator selectorNode
-        return new SelectorNode('selectorNode',$this->eventDispatcher,$type); 
+        return  $node;
     }
     
     

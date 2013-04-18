@@ -45,7 +45,7 @@ class DateTypeDefinition extends AbstractDefinition
       */
     public function startDate(DateTime $value)
     {
-        $this->attribute('start',$value);
+        $this->attribute('start',$value->format(DATE_ATOM));
         return $this;
     }
     
@@ -58,7 +58,7 @@ class DateTypeDefinition extends AbstractDefinition
       */
     public function maxDate(DateTime $value)
     {
-        $this->attribute('max',$value);
+        $this->attribute('max',$value->format(DATE_ATOM));
         return $this;
     }
     
@@ -80,11 +80,10 @@ class DateTypeDefinition extends AbstractDefinition
       *
       *  @access public
       *  @return DateTypeDefinition
-      *  @param boolean $value use random increment
       */
-    public function pickRandomBetweenMinMax($value)
+    public function pickRandomBetweenMinMax()
     {
-        $this->attribute('random',$value);
+        $this->attribute('random',true);
         return $this;
     }
     

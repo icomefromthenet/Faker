@@ -45,13 +45,13 @@ class ConstantNumber extends Type
             throw new EngineException('Can not use constant for this primitive');
            break;
            case self::DOUBLETYPE:
-            $this->find_value = $value +0;
+            $this->find_value = (double) $value;
            break;
            case self::FLOATTYPE:
-            $this->find_value = $value +0;
+            $this->find_value = (float) $value;
            break;
            case self::INTTYPE:
-            $this->find_value = $value +0;
+            $this->find_value = (int) $value;
            break;
            default:
             $this->find_value = (string) $value;

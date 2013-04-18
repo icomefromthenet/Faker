@@ -36,16 +36,17 @@ class EmailTypeDefinition extends AbstractDefinition
     }
     
     /**
-      *  List of custom params to evaluate in the format template
+      *  List of params to be evaluate by text generator used in alphanumeric type.
+      *  need to use the same DSL provided by AlphaNumericType 
       *
       *  @access public
       *  @return EmailTypeDefinition
       *  @param array[string] $value
-      *  @example $type->params(array('custom1' => 'v','custon2'=> 'v2'));
+      *  @example $type->params(array('custom1' => 'CCCCC','custon2'=> 'cccc'));
       */
     public function params(array $value)
     {
-        $this->attribute('params',$value);
+        $this->attribute('params',json_encode($value));
         return $this;
     }
     

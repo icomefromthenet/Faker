@@ -23,6 +23,9 @@ use Doctrine\DBAL\Connection;
 class SelectorRandomBuilder extends NodeCollection implements TypeDefinitionInterface 
 {
     
+    
+    protected $attributes = array();
+    
     //------------------------------------------------------------------
     #TypeDefinitionInterface
     
@@ -115,11 +118,12 @@ class SelectorRandomBuilder extends NodeCollection implements TypeDefinitionInte
         $type->setGenerator($this->generator);
         $type->setUtilities($this->utilities);
         $type->setLocale($this->locale);
-        
+        $type->setOption('set',count($this->children()));
         
         foreach($this->attributes as $attribute => $value) {
             $type->setOption($attribute,$value);
         }
+        
         
         # return the composite generator selectorNode
         return new SelectorNode('selectorNode',$this->eventDispatcher,$type); 
@@ -134,13 +138,20 @@ class SelectorRandomBuilder extends NodeCollection implements TypeDefinitionInte
     public function end()
     {
         # construct the node from this definition.
-        $node = $this->getNode();
+        $node     = $this->getNode();
+        $parent   = $this->getParent();
+        $children = $this->children();
+        
+        # bind the nodes to select at random from
+        foreach($children as $child) {
+            $node->addChild($child);
+        }
         
         # append generators compositeNode to the parent builder.
-        $this->parent->append($node);
+        $parent->append($node);
         
         # return the parent to continue chain.
-        return $this->parent;
+        return $parent;
     }
     
   

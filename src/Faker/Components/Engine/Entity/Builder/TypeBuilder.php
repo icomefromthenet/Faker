@@ -12,7 +12,7 @@ use Doctrine\DBAL\Connection;
 use Faker\Components\Engine\Common\TypeRepository;
 use Faker\Components\Engine\Common\Builder\DefaultTypeDefinition;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
-use Faker\Components\Engine\Common\Composite\TypeNode;
+use Faker\Components\Engine\Common\Composite\GenericNode;
 
 /**
   *  Builder that will compress child nodes into a single TypeNode.
@@ -33,7 +33,7 @@ class TypeBuilder extends NodeBuilder implements SelectorListInterface, FieldLis
       */
     public function getNode()
     {
-        return new TypeNode($this->name,$this->eventDispatcher);
+        return new GenericNode($this->name,$this->eventDispatcher);
     }
     
     

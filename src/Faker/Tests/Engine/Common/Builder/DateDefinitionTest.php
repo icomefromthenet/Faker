@@ -80,12 +80,12 @@ class DateDefinitionTest extends AbstractProject
         $max    = new \DateTime();
         $modify = '+ 1 hour';
         
-        $typeNode = $type->startDate($start)->maxDate($max)->modifyTime($modify)->pickRandomBetweenMinMax(false)->getNode(); 
+        $typeNode = $type->startDate($start)->maxDate($max)->modifyTime($modify)->pickRandomBetweenMinMax()->getNode(); 
         $interalType = $typeNode->getType();
         
-        $this->assertEquals($start,$interalType->getOption('start'));
-        $this->assertEquals($max,$interalType->getOption('max'));
-        $this->assertEquals(false,$interalType->getOption('random'));
+        $this->assertTrue($start == new \DateTime($interalType->getOption('start')));
+        $this->assertTrue($max == new \DateTime($interalType->getOption('max')));
+        $this->assertEquals(true,$interalType->getOption('random'));
         $this->assertEquals($modify,$interalType->getOption('modify'));
 
         $this->assertEquals($generator,$interalType->getGenerator());
