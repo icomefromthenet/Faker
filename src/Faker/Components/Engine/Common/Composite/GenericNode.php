@@ -9,18 +9,13 @@ use Faker\Components\Engine\Common\Utilities;
 use Faker\Locale\LocaleInterface;
 
 /**
-  *  Node to contain selectors
+  *  Node to contain other nodes used in combination nodes
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class SelectorNode implements CompositeInterface
+class GenericNode implements CompositeInterface
 {
-    
-    /**
-      *  @var Faker\Components\Engine\Common\Selector\TypeInterface 
-      */
-    protected $selector;
     
     /**
       *  @var Faker\Components\Engine\Common\Selector\TypeInterface 
@@ -47,10 +42,9 @@ class SelectorNode implements CompositeInterface
       *
       *  
       */
-    public function __construct($id, EventDispatcherInterface $event, TypeInterface $type)
+    public function __construct($id, EventDispatcherInterface $event)
     {
         $this->id       = $id;
-        $this->selector = $type;
         $this->children = array();
         $this->parent   = null;
         $this->event    = $event;
@@ -116,17 +110,6 @@ class SelectorNode implements CompositeInterface
         return $this->id;
     }
     
-    /**
-      *  Fetch the internal selector
-      *
-      *  @access public
-      *  @return Faker\Components\Engine\Common\Type\TypeInterface
-      */
-    public function getInternal()
-    {
-        return $this->selector;
-    }
-  
     
     //------------------------------------------------------------------
     # GeneratorInterface
@@ -143,16 +126,23 @@ class SelectorNode implements CompositeInterface
     
     public function generate($rows,$values = array())
     {
-        $index = $this->selector->generate($rows,$values);
-    
-        return $this->children[$index-1]->generate($rows,$values);
+        $result  = null;
+        $field   = $this->getId();
+        
+        if(count($this->children) > 1) {
+            foreach($this->children as $child) {
+                $result .= $child->generate($rows,$values);
+            }    
+        } else {
+            $result = $this->children[0]->generate($rows,$values);
+        }
+
+        return $result;
     }
     
     
     public function validate()
     {
-        $this->selector->validate();
-        
         foreach($this->getChildren() as $child) {
           $child->validate(); 
         }

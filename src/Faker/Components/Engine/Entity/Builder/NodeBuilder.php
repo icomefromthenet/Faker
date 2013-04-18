@@ -1,18 +1,19 @@
 <?php
 namespace Faker\Components\Engine\Entity\Builder;
 
-use Faker\Components\Engine\EngineException;
-use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Faker\Components\Engine\Common\Utilities;
 use Faker\Locale\LocaleInterface;
+use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\TypeRepository;
+use Faker\Components\Engine\Common\Utilities;
+use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
+use Faker\Components\Engine\Common\Builder\NodeInterface;
+use Faker\Components\Engine\Common\Builder\DefaultTypeDefinition;
+use Faker\Components\Engine\Common\Composite\CompositeInterface;
+use Faker\Components\Engine\Entity\Composite\FieldNode;
+
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PHPStats\Generator\GeneratorInterface;
 use Doctrine\DBAL\Connection;
-
-use Faker\Components\Engine\Common\TypeRepository;
-use Faker\Components\Engine\Common\Builder\DefaultTypeDefinition;
-use Faker\Components\Engine\Entity\Composite\FieldNode;
-use Faker\Components\Engine\Common\Composite\CompositeInterface;
 
 /**
   *  Builder to construct a .
@@ -63,7 +64,7 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
       *  @access protected
       *  @return \Faker\Components\Engine\Common\Builder\TypeDefinitionInterface
       */    
-    protected function find($alias)
+    public function find($alias)
     {
         if(($resolvedAlias = $this->repo->find($alias)) === null) {
             throw new EngineException("$alias not found in type repository unable to create");
@@ -74,7 +75,7 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
         # set the basic fields need by each type
         $field->generator($this->generator);
         $field->utilities($this->utilities);
-        $field->database($this->connection);
+        $field->database($this->database);
         $field->locale($this->locale);
         $field->eventDispatcher($this->eventDispatcher);
         $field->templateLoader($this->templateLoader);
@@ -83,7 +84,6 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
         # return the definition for configuration by user
         return $field;
     }
-    
     
     public function fieldAlphaNumeric()
     {
@@ -176,68 +176,38 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
     }
     
     
-    /**
-      *  Return a alternate selector builder that alternatve of values
-      *
-      *  @access public
-      *  @return \Faker\Components\Engine\Entity\Builder\SelectorAlternateBuilder
-      */    
     public function selectorAlternate()
     {
-        $node = new SelectorAlternateBuilder('SelectorAlternate',$this->event,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        $node = new SelectorAlternateBuilder('SelectorAlternate',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         $node->setParent($this);
                 
         return $node;
     }
     
-     /**
-      *  Return a builder that picks a type at random from the supplied list
-      *
-      *  @access public
-      *  @return \Faker\Components\Engine\Entity\Builder\SelectorRandomBuilder
-      */
     public function selectorRandom()
     {
-        $node = new SelectorRandomBuilder('SelectorRandom',$this->event,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        $node = new SelectorRandomBuilder('SelectorRandom',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         $node->setParent($this);
         
         return $node;
     }
     
-    /**
-      *  Return a builder that allows alternation that preferences the left or right value.
-      *
-      *  @access public
-      *  @return \Faker\Components\Engine\Entity\Builder\SelectorWeightBuilder
-      */
     public function selectorWeightAlternate()
     {
-        $node = new SelectorWeightBuilder('SelectorRandom',$this->event,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        $node = new SelectorWeightBuilder('SelectorRandom',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         $node->setParent($this);
         
         return $node;
     }
     
-    /**
-      *  Return a builder that allows fixed number of iterations per type.
-      *
-      *  @access public
-      *  @return \Faker\Components\Engine\Entity\Builder\SelectorSwapBuilder
-      */
     public function selectorSwap()
     {
-        $node = new SelectorSwapBuilder('SelectorRandom',$this->event,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        $node = new SelectorSwapBuilder('SelectorRandom',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         $node->setParent($this);
         
         return $node;
     }
     
-    /**
-      *  Return a builder that allows combination of types to combine in a single return value
-      *
-      *  @access public
-      *  @return \Faker\Components\Engine\Entity\Builder\TypeBuilder
-      */    
     public function combination()
     {
         # this is a little evil (typebuilder is child of nodebuilder) but avoid alot of copy and paste

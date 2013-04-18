@@ -14,13 +14,6 @@ use Faker\Components\Engine\Common\Type\AlphaNumeric;
 class AlphaNumericTypeDefinition extends AbstractDefinition
 {
     
-    /**
-    * Instantiate and configure the node according to this definition
-    *
-    * @return Faker\Components\Engine\Common\Composite\TypeNode The node instance
-    *
-    * @throws InvalidDefinitionException When the definition is invalid
-    */
     public function getNode()
     {
         $type = new AlphaNumeric();

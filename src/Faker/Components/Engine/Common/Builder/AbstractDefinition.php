@@ -19,7 +19,7 @@ use PHPStats\Generator\GeneratorInterface;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-abstract class AbstractDefinition implements TypeDefinitionInterface , NodeInterface
+abstract class AbstractDefinition implements TypeDefinitionInterface, NodeInterface
 {
     
     protected $attributes = array();
@@ -38,27 +38,11 @@ abstract class AbstractDefinition implements TypeDefinitionInterface , NodeInter
     
     protected $templateLoader;
     
+    //------------------------------------------------------------------
+    #NodeInterface
     
-    
-    /**
-      *  Fetch the node managed by this definition
-      *
-      *  @access public
-      *  @return Faker\Components\Engine\Common\Composite\CompositeInterface the new node
-      */
     abstract public function getNode();
     
-    
-    //------------------------------------------------------------------
-    #ParentNodeInterface
-    
-    /**
-    * Sets the parent node.
-    *
-    * @param NodeInterface $parent The parent
-    *
-    * @return NodeInterface
-    */
     public function setParent(NodeInterface $parent)
     {
         $this->parent = $parent;
@@ -66,23 +50,11 @@ abstract class AbstractDefinition implements TypeDefinitionInterface , NodeInter
         return $this;
     }    
     
-    
-    /**
-      *  Return the assigned parent
-      *
-      *  @param access
-      *  @return NodeInterface
-      */
     public function getParent()
     {
         return $this->parent;
     }
     
-    /**
-    * Returns the parent node.
-    *
-    * @return ParentNodeInterface The builder of the parent node
-    */
     public function end()
     {
         # construct the node from this definition.
@@ -143,14 +115,6 @@ abstract class AbstractDefinition implements TypeDefinitionInterface , NodeInter
         $this->templateLoader = $template;
     }
     
-    /**
-    * Sets an attribute on the node.
-    *
-    * @param string $key
-    * @param mixed $value
-    *
-    * @return AbstractDefinition
-    */
     public function attribute($key, $value)
     {
         $this->attributes[$key] = $value;

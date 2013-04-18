@@ -25,6 +25,9 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
 {
     
     
+    protected $attributes = array();
+    
+    
     //------------------------------------------------------------------
     #TypeDefinitionInterface
     
@@ -91,7 +94,7 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
     public function describe()
     {
         # create new node builder
-        $nodeBuilder = new NodeBuilder('randomSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        $nodeBuilder = new NodeBuilder('alternateSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         
         # bind this definition as the parent of nodebuilder
         $nodeBuilder->setParent($this);
@@ -116,6 +119,7 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
         $type->setGenerator($this->generator);
         $type->setUtilities($this->utilities);
         $type->setLocale($this->locale);
+        $type->setOption('set',count($this->children()));
         
         foreach($this->attributes as $attribute => $value) {
             $type->setOption($attribute,$value);
@@ -134,15 +138,36 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
     public function end()
     {
         # construct the node from this definition.
-        $node = $this->getNode();
+        $node     = $this->getNode();
+        $parent   = $this->getParent();
+        $children = $this->children();
+
+        foreach($children as $child) {
+            $node->addChild($child);
+        }    
         
         # append generators compositeNode to the parent builder.
-        $this->parent->append($node);
+        $parent->append($node);
         
         # return the parent to continue chain.
-        return $this->parent;
+        return $parent;
     }
     
+   /**
+    *  The number of passes to make before alternating
+    *
+    *  @param integer $value the step size
+    *  @return SelectorAlternateBuilder
+    *  @access public
+    */
+   public function step($value)
+   {
+        $this->attribute('step',$value);
+        
+        return $this;
+   }
+   
+   
   
 }
 /* End of file */

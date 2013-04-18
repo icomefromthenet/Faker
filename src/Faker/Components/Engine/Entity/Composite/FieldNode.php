@@ -46,28 +46,25 @@ class FieldNode implements CompositeInterface
     
     public function generate($rows,$values = array())
     {
-        $entity  = new GenericEntity();
         $result  = null;
         $field   = $this->getId();
         
-        $this->getEventDispatcher()->dispatch(FormatEvents::onColumnStart,new GenerateEvent($this,$entity,null));
-        
-        # bind result to the generic entity
+        $this->getEventDispatcher()->dispatch(FormatEvents::onColumnStart,new GenerateEvent($this,$values,null));
         
         if(count($this->children) > 1) {
-            
             foreach($this->children as $child) {
-               $entity->$field .= $child->generate($rows,$values);    
-            }
-            
+                $result .= $child->generate($rows,$values);
+            }    
         } else {
-             $entity->$field = $this->children[0]->generate($rows,$values);    
+            $result = $this->children[0]->generate($rows,$values);
         }
         
+        # bind result to the generic entity
+        $values->$field  = $result;
         
-        $this->getEventDispatcher()->dispatch(FormatEvents::onColumnEnd,new GenerateEvent($this,$entity,null));
+        $this->getEventDispatcher()->dispatch(FormatEvents::onColumnEnd,new GenerateEvent($this,$values,null));
                 
-        return $entity;
+        return $values;
     }
     
     public function getEventDispatcher()
@@ -82,7 +79,11 @@ class FieldNode implements CompositeInterface
     
     public function validate()
     {
-       return $this->type->validate();
+       foreach($this->children as $child) {
+            $child->validate();
+        }
+        
+        return true;
     }
     
     //------------------------------------------------------------------
@@ -100,7 +101,7 @@ class FieldNode implements CompositeInterface
     
     public function getChildren()
     {
-        return $this->type;
+        return $this->children;
     }
     
     public function addChild(CompositeInterface $child)

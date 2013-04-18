@@ -23,6 +23,9 @@ use Doctrine\DBAL\Connection;
 class SelectorWeightBuilder extends NodeCollection implements TypeDefinitionInterface 
 {
     
+    
+    protected $attributes = array();
+    
     //------------------------------------------------------------------
     #TypeDefinitionInterface
     
@@ -89,7 +92,7 @@ class SelectorWeightBuilder extends NodeCollection implements TypeDefinitionInte
     public function describe()
     {
         # create new node builder
-        $nodeBuilder = new TypeBuilder('randomSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        $nodeBuilder = new NodeBuilder('weightSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         
         # bind this definition as the parent of nodebuilder
         $nodeBuilder->setParent($this);
@@ -154,7 +157,7 @@ class SelectorWeightBuilder extends NodeCollection implements TypeDefinitionInte
         
         # append child compositeNodes to the selectorNode        
         foreach($children as $child) {
-            $node->append($child);
+            $node->addChild($child);
         }
         
         # append generators compositeNode to the parent builder.

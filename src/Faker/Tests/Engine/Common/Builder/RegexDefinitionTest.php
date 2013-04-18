@@ -76,7 +76,7 @@ class RegexDefinitionTest extends AbstractProject
         $type->utilities($utilities);
         $type->generator($generator);
         
-        $typeNode = $type->format('[a-z]')->getNode();  
+        $typeNode = $type->regex('[a-z]')->getNode();  
         $interalType = $typeNode->getType();
         
         $this->assertEquals('[a-z]',$interalType->getOption('format'));
