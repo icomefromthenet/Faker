@@ -12,11 +12,32 @@
 |
 */
 
-use Faker\ColumnTypeFactory;
+use Faker\PlatformFactory;
 use Faker\Components\Engine\Original\Formatter\FormatterFactory;
 use Faker\Components\Engine\Common\TypeFactory;
 use Faker\Locale\LocaleFactory;
 use Doctrine\DBAL\Types\Type;
+
+/*
+|--------------------------------------------------------------------------
+| Doctrine Platforms
+|--------------------------------------------------------------------------
+|
+| To include new platforms must tell Faker\\PlatformFactory what the new or overriden
+| extensions are.
+|
+|
+| Override Built-in Platform (mysql):
+|
+|   PlatformFactory::registerExtension('mysql','Faker\\Components\\Extension\\Doctrine\\Platforms\\MySqlPlatform');
+|
+| Include New MyPlatform:
+|
+| PlatformFactory::registerExtension('myplatform','Faker\\Components\\Extension\\Doctrine\\Platforms\\MyPlatform');
+|
+*/
+
+    PlatformFactory::registerExtension('mysql','Faker\\Extension\\Doctrine\\Platforms\\MySqlPlatform');
 
  
 /*
