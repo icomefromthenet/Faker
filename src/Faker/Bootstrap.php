@@ -204,7 +204,6 @@ class Bootstrap
       {
       
          $entity   = $project['config_file'];
-         $platform = $project['platform_factory'];
          
          $connectionParams = array(
               'dbname'      => $entity->getSchema(),
@@ -212,7 +211,6 @@ class Bootstrap
               'password'    => $entity->getPassword(),
               'host'        => $entity->getHost(),
               'driver'      => $entity->getType(),
-              'platform'    => $platform->createFromDriver($entity->getType()),
          );
          
          if($entity->getUnixSocket() != false) {
@@ -238,10 +236,6 @@ class Bootstrap
          
       });
       
-      $project['platform_factory'] = $project->share(function($project)
-      {
-         return new \Faker\PlatformFactory();
-      });
       
       
       $project['column_factory'] = $project->share(function($project)
@@ -252,8 +246,6 @@ class Bootstrap
       
       $project['faker_database'] =  $project->share(function($project)
       {
-         $platform = $project['platform_factory'];
-          
          if(strpos('@PHP-BIN@', '@PHP-BIN') === 0) {
             // stand-alone version is running
             $path = $project->getDataPath()->get() . DIRECTORY_SEPARATOR . 'faker.sqlite';
@@ -267,7 +259,6 @@ class Bootstrap
             'user' => 'faker',
             'password' => '',
             'driver' => 'pdo_sqlite',
-            'platform'    => $platform->createFromDriver('pdo_sqlite'),
          );
       
          return \Doctrine\DBAL\DriverManager::getConnection($connectionParams, new \Doctrine\DBAL\Configuration());
