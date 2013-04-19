@@ -1,11 +1,13 @@
 <?php
-namespace Faker\Tests\Engine\Original\Formatter;
+namespace Faker\Tests\Engine\Common\Formatter;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface,
-    Faker\Components\Writer\WriterInterface,
-    Doctrine\DBAL\Platforms\AbstractPlatform,
-    Faker\Components\Engine\Original\Formatter\FormatterFactory,
-    Faker\Tests\Base\AbstractProject;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+
+use Faker\Tests\Base\AbstractProject;
+use Faker\Components\Writer\WriterInterface;
+use Faker\Components\Engine\Common\Formatter\FormatterFactory;
+
 
 class FactoryTest extends AbstractProject
 {
@@ -19,7 +21,7 @@ class FactoryTest extends AbstractProject
         
         $factory = new FormatterFactory($event,$writer_manager);
         
-        $this->assertInstanceOf('Faker\Components\Engine\Original\Formatter\FormatterFactory',$factory);
+        $this->assertInstanceOf('Faker\Components\Engine\Common\Formatter\FormatterFactory',$factory);
         
     }
     
@@ -144,7 +146,7 @@ class FactoryTest extends AbstractProject
     }
     
     /**
-      *  @expectedException Faker\Components\Engine\Original\Exception 
+      *  @expectedException Faker\Components\Engine\EngineException 
       */
     public function testCreateBadKey()
     {

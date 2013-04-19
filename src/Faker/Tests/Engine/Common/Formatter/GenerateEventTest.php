@@ -1,16 +1,17 @@
 <?php
-namespace Faker\Tests\Engine\Original\Formatter;
+namespace Faker\Tests\Engine\Common\Formatter;
 
-use Faker\Components\Engine\Original\Formatter\GenerateEvent,
-    Faker\Components\Engine\Original\Composite\CompositeInterface,
-    Faker\Tests\Base\AbstractProject;
+use Faker\Tests\Base\AbstractProject;
+use Faker\Components\Engine\Common\Formatter\GenerateEvent;
+use Faker\Components\Engine\Common\Composite\CompositeInterface;
+    
 
 class GenerateEventTest extends AbstractProject
 {
     
     public function testEventInterface()
     {
-        $composite = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')
+        $composite = $this->getMockBuilder('Faker\Components\Engine\Common\Composite\CompositeInterface')
                           ->getMock();
                           
         $type = new GenerateEvent($composite,array(),'table1');                  
@@ -21,7 +22,7 @@ class GenerateEventTest extends AbstractProject
     
     public function testProperties()
     {
-        $composite = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')
+        $composite = $this->getMockBuilder('Faker\Components\Engine\Common\Composite\CompositeInterface')
                           ->getMock();
                           
         $values = array('value'=> 1);                  

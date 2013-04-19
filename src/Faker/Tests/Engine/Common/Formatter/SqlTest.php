@@ -1,12 +1,14 @@
 <?php
-namespace Faker\Tests\Engine\Original\Formatter;
+namespace Faker\Tests\Engine\Common\Formatter;
 
-use Faker\Components\Engine\Original\Builder,
-    Faker\Components\Engine\Original\Formatter\GenerateEvent,
-    Faker\Components\Engine\Original\Formatter\FormatterInterface,
-    Doctrine\DBAL\Platforms\MySqlPlatform,
-    Faker\Components\Engine\Original\Formatter\Sql,
-    Faker\Tests\Base\AbstractProject;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
+
+use Faker\Tests\Base\AbstractProject;
+use Faker\Components\Engine\Original\Builder;
+use Faker\Components\Engine\Common\Formatter\GenerateEvent;
+use Faker\Components\Engine\Common\Formatter\FormatterInterface;
+use Faker\Components\Engine\Common\Formatter\Sql;
+
 
 class SqlTest extends AbstractProject
 {
@@ -93,9 +95,7 @@ class SqlTest extends AbstractProject
     }
     
     
-    /**
-      *   
-      */
+
     public function testonSchemaStart()
     {
         # mock the writer dep 

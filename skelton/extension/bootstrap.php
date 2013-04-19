@@ -16,7 +16,7 @@ use Faker\ColumnTypeFactory;
 use Faker\Components\Engine\Original\Formatter\FormatterFactory;
 use Faker\Components\Engine\Common\TypeFactory;
 use Faker\Locale\LocaleFactory;
-
+use Doctrine\DBAL\Types\Type;
 
  
 /*
@@ -24,18 +24,16 @@ use Faker\Locale\LocaleFactory;
 | Doctrine Column Types
 |--------------------------------------------------------------------------
 |
-| To include new column types use the Faker\\ColumnTypeFactory
-| 
+| To include new column types use the Doctine Type Static Factory
+| You don't need to add these types to a platform, Faker pull them directly.
 |
 |  Add new Column types (mysql):
 |
-|   ColumnTypeFactory::registerExtension('cus_array','Faker\\Components\\Extension\\Doctrine\\Type\\ArrayType');
+|  //Type::addType('point', 'Geo\Types\Point'); 
 |
-| To use new column types you will need to also create a platform extension, and add the key used above to the initializeDoctrineTypeMappings()
 */ 
 
-    //ColumnTypeFactory::registerExtension('cus_array','Faker\\Components\\Extension\\Doctrine\\Type\\ArrayType');
-
+   //Type::addType('point', 'Geo\Types\Point');
     
 /*
 |--------------------------------------------------------------------------
