@@ -5,7 +5,6 @@ use Faker\Components\Engine\Entity\Builder\EntityGenerator;
 use Faker\Components\Engine\Entity\GenericEntity;
 use Faker\Tests\Base\AbstractProject;
 
-
 class BuilderExamplesTest extends AbstractProject
 {
     
@@ -410,5 +409,120 @@ class BuilderExamplesTest extends AbstractProject
         }
         
     }
+    
+    public function testExample8()
+    {
+        $container  = $this->getProject();
+        $name       = 'example1';
+        $repo       = $container->getEngineTypeRepository();
+        $event      = $container->getEventDispatcher();
+        $locale     = $container->getLocaleFactory()->create('en');
+        $util       = $container->getEngineUtilities();
+        $gen        = $container->getDefaultRandom();
+        $conn       = $container->getGeneratorDatabase();
+        $loader     = $container->getTemplatingManager()->getLoader();
+    
+        $builder = new EntityGenerator($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
+        
+        $entityIterator = $builder
+                ->describe()
+                    ->addField('myField')
+                        ->selectorSwap()
+                            ->swapAt(2)
+                                ->selectorRandom()
+                                    ->describe()
+                                        ->fieldAutoIncrement()
+                                            ->startAtValue(5)
+                                            ->incrementByValue(1)
+                                        ->end()
+                                        ->fieldAutoIncrement()
+                                            ->startAtValue(10)
+                                            ->incrementByValue(1)
+                                        ->end()                    
+                                    ->end()
+                                ->end()
+                            ->end()
+                            ->swapAt(5)
+                                ->fieldAlphaNumeric()
+                                    ->format('cccc')
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->map(function (GenericEntity $entity) {
+                    return $entity;
+                })
+                ->fake(20);
+        
+        foreach($entityIterator as $result) {
+            $this->assertRegExp('/[0-9]*[a-zA-Z]{0,4}/',(string)$result->myField);
+        }
+        
+    }
+    
+    
+    public function testExample9()
+    {
+        $container  = $this->getProject();
+        $name       = 'example1';
+        $repo       = $container->getEngineTypeRepository();
+        $event      = $container->getEventDispatcher();
+        $locale     = $container->getLocaleFactory()->create('en');
+        $util       = $container->getEngineUtilities();
+        $gen        = $container->getDefaultRandom();
+        $conn       = $container->getGeneratorDatabase();
+        $loader     = $container->getTemplatingManager()->getLoader();
+    
+        $builder = new EntityGenerator($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
+        
+        $entityIterator = $builder
+                ->describe()
+                    ->addField('myField')
+                        ->selectorSwap()
+                            ->swapAt(2)
+                                ->selectorRandom()
+                                    ->describe()
+                                        ->fieldAutoIncrement()
+                                            ->startAtValue(5)
+                                            ->incrementByValue(1)
+                                        ->end()
+                                        ->combination()
+                                            ->fieldAutoIncrement()
+                                                ->startAtValue(10)
+                                                ->incrementByValue(1)
+                                            ->end()
+                                            ->fieldConstant()
+                                                ->value('_')
+                                                ->cast('string')
+                                            ->end()
+                                            ->fieldRegex()
+                                                ->regex('[a-zA-Z]{5,10}')
+                                            ->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                            ->swapAt(5)
+                                ->fieldAlphaNumeric()
+                                    ->format('cccc')
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->map(function (GenericEntity $entity) {
+                    return $entity;
+                })
+                ->fake(20);
+        
+        
+        foreach($entityIterator as $result) {
+            $this->assertRegExp('/[0-9]*[a-zA-Z_]{0,10}/',(string)$result->myField);
+        }
+        
+    }
+    
+    
 }
 /* End of Class */

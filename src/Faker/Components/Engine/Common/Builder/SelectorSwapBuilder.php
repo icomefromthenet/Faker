@@ -1,27 +1,32 @@
 <?php
-namespace Faker\Components\Engine\Entity\Builder;
+namespace Faker\Components\Engine\Common\Builder;
 
-use Faker\Components\Engine\EngineException;
-use Faker\Components\Engine\Common\Builder\TypeDefinitionInterface;
-use Faker\Components\Engine\Common\Composite\SelectorNode;
-use Faker\Components\Engine\Common\Composite\CompositeInterface;
-use Faker\Components\Engine\Common\Selector\PickSelector;
-
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Faker\Components\Engine\Common\Utilities;
 use Faker\Locale\LocaleInterface;
 use Faker\Components\Templating\Loader;
+use Faker\Components\Engine\Common\Utilities;
+use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\Composite\SelectorNode;
+use Faker\Components\Engine\Common\Composite\CompositeInterface;
+use Faker\Components\Engine\Common\Selector\SwapSelector;
+use Faker\Components\Engine\Common\PositionManager;
+
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PHPStats\Generator\GeneratorInterface;
 use Doctrine\DBAL\Connection;
 
 /**
-  *  Allows the Weighted Alternate Selector to be created and populated with types
+  *  Allows the Swap Selector to be created and populated with types
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class SelectorWeightBuilder extends NodeCollection implements TypeDefinitionInterface 
+class SelectorSwapBuilder extends NodeCollection implements TypeDefinitionInterface 
 {
+    
+    /**
+      *  @var array[PositionManager] 
+      */
+    protected $positionManagers = array();
     
     
     protected $attributes = array();
@@ -72,7 +77,7 @@ class SelectorWeightBuilder extends NodeCollection implements TypeDefinitionInte
     {
         $this->templateLoader = $template;
     }
-    
+
     public function attribute($key, $value)
     {
         $this->attributes[$key] = $value;
@@ -87,32 +92,20 @@ class SelectorWeightBuilder extends NodeCollection implements TypeDefinitionInte
       *  Allows the description of the selector
       *
       *  @access public
-      *  @return \Faker\Components\Engine\Entity\Builder\TypeBuilder
+      *  @return \Faker\Components\Engine\Entity\Builder\NodeBuilder
       */
-    public function describe()
+    public function swapAt($number)
     {
         # create new node builder
-        $nodeBuilder = new NodeBuilder('weightSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        $nodeBuilder = new TypeBuilder('swapSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        
+        $this->positionManagers[] = new PositionManager($number);
         
         # bind this definition as the parent of nodebuilder
         $nodeBuilder->setParent($this);
         
         # return node builder to continue chain
         return $nodeBuilder;
-    }
-    
-    /**
-      *  Set the weighted probability value
-      *
-      *  @access public
-      *  @param float the probability e.g 0.3 | 0.4 | 0.5
-      *  @example $this->weight(0.6); 
-      */
-    public function weight($value)
-    {
-        $this->attribute('probability',$value);
-        
-        return $this;
     }
     
     
@@ -128,39 +121,44 @@ class SelectorWeightBuilder extends NodeCollection implements TypeDefinitionInte
     public function getNode()
     {
         # construct the selector type
-        $type = new PickSelector();
+        $type = new SwapSelector();
         $type->setGenerator($this->generator);
         $type->setUtilities($this->utilities);
         $type->setLocale($this->locale);
-        
-        
+             
         foreach($this->attributes as $attribute => $value) {
             $type->setOption($attribute,$value);
         }
         
+        # register position managers 
+        foreach($this->positionManagers as $mgr) {
+            $type->registerSwap($mgr);
+        }
+        
+        $node = new SelectorNode('selectorNode',$this->eventDispatcher,$type); 
+        
+        # register children
+        foreach($this->children as $aNode) {
+            $node->addChild($aNode);
+        }
+        
         # return the composite generator selectorNode
-        return new SelectorNode('selectorNode',$this->eventDispatcher,$type); 
+        return  $node;
     }
     
     
-     /**
-    * Returns the parent node.
-    *
-    * @return ParentNodeInterface The builder of the parent node
-    */
+    /**
+      * Returns the parent node.
+      *
+      * @return ParentNodeInterface The builder of the parent node
+      */
     public function end()
     {
         # construct the node from this definition.
         $node     = $this->getNode();
-        $children = $this->children();
         $parent   = $this->getParent();
         
-        # append child compositeNodes to the selectorNode        
-        foreach($children as $child) {
-            $node->addChild($child);
-        }
-        
-        # append generators compositeNode to the parent builder.
+        # append compositeNode to the parent builder.
         $parent->append($node);
         
         # return the parent to continue chain.

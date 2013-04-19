@@ -5,6 +5,7 @@ use Faker\Locale\LocaleInterface;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\Utilities;
 use Faker\Components\Engine\Common\TypeRepository;
+use Faker\Components\Engine\Common\Builder\NodeCollection;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PHPStats\Generator\GeneratorInterface;

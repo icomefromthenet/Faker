@@ -1,5 +1,5 @@
 <?php
-namespace Faker\Components\Engine\Entity\Builder;
+namespace Faker\Components\Engine\Common\Builder;
 
 /**
   *  List of type fields 

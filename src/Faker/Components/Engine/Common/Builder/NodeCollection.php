@@ -1,5 +1,5 @@
 <?php
-namespace Faker\Components\Engine\Entity\Builder;
+namespace Faker\Components\Engine\Common\Builder;
 
 use Faker\Locale\LocaleInterface;
 use Faker\Components\Engine\EngineException;

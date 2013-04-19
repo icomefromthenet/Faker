@@ -1,32 +1,30 @@
 <?php
-namespace Faker\Components\Engine\Entity\Builder;
+namespace Faker\Components\Engine\Common\Builder;
 
-use Faker\Components\Engine\EngineException;
-use Faker\Components\Engine\Common\Builder\TypeDefinitionInterface;
-use Faker\Components\Engine\Common\Builder\AbstractDefinition;
-use Faker\Components\Engine\Common\Composite\SelectorNode;
-use Faker\Components\Engine\Common\Composite\CompositeInterface;
-use Faker\Components\Engine\Common\Selector\AlternateSelector;
-
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Faker\Components\Engine\Common\Utilities;
 use Faker\Locale\LocaleInterface;
 use Faker\Components\Templating\Loader;
+use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\Composite\SelectorNode;
+use Faker\Components\Engine\Common\Composite\CompositeInterface;
+use Faker\Components\Engine\Common\Selector\RandomSelector;
+
+
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PHPStats\Generator\GeneratorInterface;
 use Doctrine\DBAL\Connection;
 
 /**
-  *  Allows the Alternate Selector to be created and populated with types
+  *  Allows the Random Selector to be created and populated with types
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionInterface
+class SelectorRandomBuilder extends NodeCollection implements TypeDefinitionInterface 
 {
     
     
     protected $attributes = array();
-    
     
     //------------------------------------------------------------------
     #TypeDefinitionInterface
@@ -74,7 +72,7 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
     {
         $this->templateLoader = $template;
     }
-        
+    
     public function attribute($key, $value)
     {
         $this->attributes[$key] = $value;
@@ -94,7 +92,7 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
     public function describe()
     {
         # create new node builder
-        $nodeBuilder = new NodeBuilder('alternateSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        $nodeBuilder = new NodeBuilder('randomSelectorBuilder',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         
         # bind this definition as the parent of nodebuilder
         $nodeBuilder->setParent($this);
@@ -103,8 +101,9 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
         return $nodeBuilder;
     }
     
+    
     //------------------------------------------------------------------
-    # NodeCollection
+    # Node Collection
     
     /**
       *  Fetch the node managed by this definition
@@ -115,7 +114,7 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
     public function getNode()
     {
         # construct the selector type
-        $type = new AlternateSelector();
+        $type = new RandomSelector();
         $type->setGenerator($this->generator);
         $type->setUtilities($this->utilities);
         $type->setLocale($this->locale);
@@ -124,6 +123,7 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
         foreach($this->attributes as $attribute => $value) {
             $type->setOption($attribute,$value);
         }
+        
         
         # return the composite generator selectorNode
         return new SelectorNode('selectorNode',$this->eventDispatcher,$type); 
@@ -141,10 +141,11 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
         $node     = $this->getNode();
         $parent   = $this->getParent();
         $children = $this->children();
-
+        
+        # bind the nodes to select at random from
         foreach($children as $child) {
             $node->addChild($child);
-        }    
+        }
         
         # append generators compositeNode to the parent builder.
         $parent->append($node);
@@ -153,21 +154,6 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
         return $parent;
     }
     
-   /**
-    *  The number of passes to make before alternating
-    *
-    *  @param integer $value the step size
-    *  @return SelectorAlternateBuilder
-    *  @access public
-    */
-   public function step($value)
-   {
-        $this->attribute('step',$value);
-        
-        return $this;
-   }
-   
-   
   
 }
 /* End of file */

@@ -2,11 +2,11 @@
 namespace Faker\Tests\Engine\Entity;
 
 use Faker\Components\Engine\Common\TypeRepository;
-use Faker\Components\Engine\Entity\Builder\NodeBuilder;
-use Faker\Components\Engine\Entity\Builder\SelectorAlternateBuilder;
-use Faker\Components\Engine\Entity\Builder\SelectorRandomBuilder;
-use Faker\Components\Engine\Entity\Builder\SelectorSwapBuilder;
-use Faker\Components\Engine\Entity\Builder\SelectorWeightBuilder;
+use Faker\Components\Engine\Common\Builder\NodeBuilder;
+use Faker\Components\Engine\Common\Builder\SelectorAlternateBuilder;
+use Faker\Components\Engine\Common\Builder\SelectorRandomBuilder;
+use Faker\Components\Engine\Common\Builder\SelectorSwapBuilder;
+use Faker\Components\Engine\Common\Builder\SelectorWeightBuilder;
 use Faker\Tests\Base\AbstractProject;
 
 class SelectorDefinitionTest extends AbstractProject
@@ -55,20 +55,20 @@ class SelectorDefinitionTest extends AbstractProject
         $repo      = $this->getMockBuilder('Faker\Components\Engine\Common\TypeRepository')->getMock(); 
         
         $alternateBuilder = new SelectorAlternateBuilder($name,$event,$repo,$utilities,$generator,$locale,$database,$template);
-        $this->assertInstanceOf('Faker\Components\Engine\Entity\Builder\NodeBuilder',$alternateBuilder->describe());
+        $this->assertInstanceOf('Faker\Components\Engine\Common\Builder\NodeBuilder',$alternateBuilder->describe());
         $this->assertEquals($alternateBuilder,$alternateBuilder->describe()->getParent());
         
         $randomBuilder    = new SelectorRandomBuilder($name,$event,$repo,$utilities,$generator,$locale,$database,$template);
-        $this->assertInstanceOf('Faker\Components\Engine\Entity\Builder\NodeBuilder',$randomBuilder->describe());
+        $this->assertInstanceOf('Faker\Components\Engine\Common\Builder\NodeBuilder',$randomBuilder->describe());
         $this->assertEquals($randomBuilder,$randomBuilder->describe()->getParent());
         
         $weightBuilder    = new SelectorWeightBuilder($name,$event,$repo,$utilities,$generator,$locale,$database,$template);
-        $this->assertInstanceOf('Faker\Components\Engine\Entity\Builder\NodeBuilder',$weightBuilder->describe());
+        $this->assertInstanceOf('Faker\Components\Engine\Common\Builder\NodeBuilder',$weightBuilder->describe());
         $this->assertEquals($weightBuilder,$weightBuilder->describe()->getParent());
         
         # use swapAt not describe 
         $swapBuilder      = new SelectorSwapBuilder($name,$event,$repo,$utilities,$generator,$locale,$database,$template);
-        $this->assertInstanceOf('Faker\Components\Engine\Entity\Builder\TypeBuilder',$swapBuilder->swapAt(100));
+        $this->assertInstanceOf('Faker\Components\Engine\Common\Builder\TypeBuilder',$swapBuilder->swapAt(100));
         $this->assertEquals($swapBuilder,$swapBuilder->swapAt(100)->getParent());
     }
     
@@ -156,7 +156,7 @@ class SelectorDefinitionTest extends AbstractProject
         
         $typeBuilder = $swapBuilder->swapAt(100);
     
-        $this->assertInstanceOf('Faker\Components\Engine\Entity\Builder\TypeBuilder',$typeBuilder);
+        $this->assertInstanceOf('Faker\Components\Engine\Common\Builder\TypeBuilder',$typeBuilder);
         
     }
     

@@ -2,7 +2,7 @@
 namespace Faker\Tests\Engine\Entity;
 
 use Faker\Components\Engine\Common\TypeRepository;
-use Faker\Components\Engine\Entity\Builder\NodeBuilder;
+use Faker\Components\Engine\Common\Builder\NodeBuilder;
 use Faker\Tests\Base\AbstractProject;
 
 class NodeBuilderTest extends AbstractProject

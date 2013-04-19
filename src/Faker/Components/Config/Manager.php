@@ -3,13 +3,13 @@ namespace Faker\Components\Config;
 
 use Faker\Io\IoInterface;
 use Faker\Project;
-use Faker\Components\ManagerInterface;
+
 
 /*
  * class Manager
  */
 
-class Manager implements ManagerInterface
+class Manager 
 {
 
     protected $loader;
