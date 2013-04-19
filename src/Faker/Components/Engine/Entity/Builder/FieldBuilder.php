@@ -1,16 +1,19 @@
 <?php
 namespace Faker\Components\Engine\Entity\Builder;
 
-use Faker\Components\Engine\EngineException;
-use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Faker\Components\Engine\Common\Utilities;
-use Faker\Locale\LocaleInterface;
 use PHPStats\Generator\GeneratorInterface;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+use Faker\Components\Engine\EngineException;
+use Faker\Locale\LocaleInterface;
 use Faker\Components\Engine\Common\TypeRepository;
+use Faker\Components\Engine\Common\Utilities;
+use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
 use Faker\Components\Engine\Common\Builder\DefaultTypeDefinition;
+use Faker\Components\Engine\Common\Builder\FieldListInterface;
+use Faker\Components\Engine\Common\Builder\SelectorListInterface;
+use Faker\Components\Engine\Common\Builder\NodeBuilder;
 use Faker\Components\Engine\Entity\Composite\FieldNode;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 

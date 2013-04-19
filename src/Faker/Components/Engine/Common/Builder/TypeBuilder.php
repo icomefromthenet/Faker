@@ -1,18 +1,18 @@
 <?php
-namespace Faker\Components\Engine\Entity\Builder;
+namespace Faker\Components\Engine\Common\Builder;
 
-use Faker\Components\Engine\EngineException;
-use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Faker\Components\Engine\Common\Utilities;
-use Faker\Locale\LocaleInterface;
 use PHPStats\Generator\GeneratorInterface;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+
+use Faker\Locale\LocaleInterface;
+use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\Utilities;
 use Faker\Components\Engine\Common\TypeRepository;
-use Faker\Components\Engine\Common\Builder\DefaultTypeDefinition;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Composite\GenericNode;
+
 
 /**
   *  Builder that will compress child nodes into a single TypeNode.

@@ -1,13 +1,10 @@
 <?php
-namespace Faker\Components\Engine\Entity\Builder;
+namespace Faker\Components\Engine\Common\Builder;
 
 use Faker\Locale\LocaleInterface;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\TypeRepository;
 use Faker\Components\Engine\Common\Utilities;
-use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
-use Faker\Components\Engine\Common\Builder\NodeInterface;
-use Faker\Components\Engine\Common\Builder\DefaultTypeDefinition;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Entity\Composite\FieldNode;
 

@@ -3,7 +3,6 @@ namespace Faker\Components\Writer;
 
 use Faker\Io\IoInterface,
     Faker\Project,
-    Faker\Components\ManagerInterface,
     Faker\Io\FileNotExistException;
 
 /*

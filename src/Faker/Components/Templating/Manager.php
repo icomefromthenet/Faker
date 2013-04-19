@@ -3,8 +3,6 @@ namespace Faker\Components\Templating;
 
 use Faker\Io\IoInterface;
 use Faker\Project;
-use Faker\Components\ManagerInterface;
-
 
 use Faker\Components\Templating\Exception as TemplatingException;
 
@@ -12,7 +10,7 @@ use Faker\Components\Templating\Exception as TemplatingException;
  * class Manager
  */
 
-class Manager implements ManagerInterface
+class Manager 
 {
 
     protected $loader;

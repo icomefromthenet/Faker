@@ -1,7 +1,5 @@
 <?php
-namespace Faker\Components\Engine\Entity\Builder;
-
-use Faker\Components\Engine\EngineException;
+namespace Faker\Components\Engine\Common\Builder;
 
 
 /**
