@@ -1,9 +1,10 @@
 <?php
-namespace Faker\Tests\Engine\Original\Formatter;
+namespace Faker\Tests\Engine\Common\Formatter;
 
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition,
-    Faker\Tests\Base\AbstractProject,
-    Faker\Components\Engine\Original\Formatter\BaseFormatter;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+
+use Faker\Tests\Base\AbstractProject;
+use Faker\Components\Engine\Common\Formatter\BaseFormatter;
 
 class MockFormatter extends BaseFormatter
 {
@@ -53,7 +54,7 @@ class BaseFormatterTest extends AbstractProject
     }
     
     /**
-      *  @expectedException \Faker\Components\Engine\Original\Exception
+      *  @expectedException \Faker\Components\Engine\EngineException
       *  @expectedExceptionMessage Option at option100 does not exist
       */
     public function testMissingOptionException()
@@ -109,7 +110,7 @@ class BaseFormatterTest extends AbstractProject
     }
     
     /**
-      *  @expectedException \Faker\Components\Engine\Original\Exception
+      *  @expectedException \Faker\Components\Engine\EngineException
       *  @expectedExceptionMessage  Invalid type for path "config.splitOnTable". Expected boolean, but got string
       */
     public function testMergeBadValues()
