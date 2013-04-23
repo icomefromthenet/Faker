@@ -34,25 +34,31 @@ class ColumnNode extends BaseColumnNode implements GeneratorInterface, VisitorIn
     
     public function generate($rows,$values = array())
     {
-         # dispatch the start event
+        $id       = $this->getId();
+        $event    = $this->getEventDispatcher();
+        $children = $this->getChildren();
+        $cache    = $this->getResultCache();
         
-        $this->event->dispatch(
+        
+        # dispatch the start event
+        
+        $event->dispatch(
                         FormatEvents::onColumnStart,
-                        new GenerateEvent($this,$values,$this->getOption('name'))
+                        new GenerateEvent($this,$values,$id)
         );
         
         # send the generate command to the type
         $value = array();
         
-        foreach($this->child_types as $type) {
+        foreach($children as $type) {
                          
             # if we have many types we concatinate
             $value[] = $type->generate($rows,$values);
         
             # dispatch the generate event
-            $this->event->dispatch(
+            $event->dispatch(
                 FormatEvents::onColumnGenerate,
-                new GenerateEvent($this,array( $this->getId() => $value ),$this->getOption('name'))
+                new GenerateEvent($this,array( $id => $value ),$id)
             );
         }
         
@@ -60,20 +66,20 @@ class ColumnNode extends BaseColumnNode implements GeneratorInterface, VisitorIn
         # if one value we want to keep the type the same
         
         if(count($value) > 1) {
-            $values[$this->getOption('name')] = implode('',$value); # join as a string 
+            $values[$id] = implode('',$value); # join as a string 
         } else {
-            $values[$this->getOption('name')] = $value[0]; 
+            $values[$id] = $value[0]; 
         }
         
         # test if the value needs to be cached
-        if($this->use_cache === true) {
-            $this->cache->add($values[$this->getOption('name')]);
+        if($cache instanceof GeneratorCache) {
+            $cache->add($values[$id]);
         }
         
         # dispatch the stop event
-        $this->event->dispatch(
+        $event->dispatch(
                 FormatEvents::onColumnEnd,
-                new GenerateEvent($this,$values,$this->getOption('name'))
+                new GenerateEvent($this,$values,$id)
         );
         
         # return values so they can be grouped in table parent

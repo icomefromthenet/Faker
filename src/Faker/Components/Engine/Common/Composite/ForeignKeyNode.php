@@ -2,7 +2,6 @@
 namespace Faker\Components\Engine\Common\Composite;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Faker\Components\Engine\EngineException;
 
 /**
   *  Basic Implementation of a Foreign Key Node this will be
@@ -65,9 +64,8 @@ class ForeignKeyNode implements CompositeInterface
     
     public function validate()
     {
-        
         if(empty($this->id)) {
-            throw new EngineException('Schema must have a name');
+            throw new CompositeException($this,'ForeignKey must have a name');
         }
         
         foreach($this->children as $child) {
@@ -97,6 +95,7 @@ class ForeignKeyNode implements CompositeInterface
     public function addChild(CompositeInterface $child)
     {
         $this->children[] = $child;
+        $child->setParent($this);
     }
     
     public function getId()

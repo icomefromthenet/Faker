@@ -2,7 +2,6 @@
 namespace Faker\Components\Engine\Common\Composite;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Faker\Components\Engine\EngineException;
 
 /**
   *  Basic Implementation of a Schema Node this will be
@@ -59,9 +58,15 @@ class SchemaNode implements CompositeInterface
     
     public function validate()
     {
+        $id       = $this->getId();  
+        $children = $this->getChildren();
         
-        if(empty($this->id)) {
-            throw new EngineException('Schema must have a name');
+        if(empty($id)) {
+            throw new CompositeException($this,'Schema must have a name');
+        }
+        
+        if(count($children) === 0) {
+            throw new CompositeException($this,'Schema must have at least 1 child node');
         }
         
         foreach($this->children as $child) {
@@ -79,7 +84,7 @@ class SchemaNode implements CompositeInterface
 
     public function setParent(CompositeInterface $parent)
     {
-        throw new EngineException('not implemented');
+        throw new CompositeException($this,'not implemented');
     }
     
     public function getChildren()

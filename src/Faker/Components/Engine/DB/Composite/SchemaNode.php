@@ -1,5 +1,5 @@
 <?php
-namespace Faker\Components\Engine\Common\Composite;
+namespace Faker\Components\Engine\DB\Composite;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Faker\Components\Engine\EngineException;
@@ -32,16 +32,26 @@ class SchemaNode extends BaseSchemaNode implements GeneratorInterface, VisitorIn
     
     public function generate($rows,$values = array())
     {
+        $id       = $this->getId(); 
+        $event    = $this->getEventDispatcher();
+        $children = $this->getChildren();
         
-        $this->getEventDispatcher()->dispatch(FormatEvents::onRowStart,new GenerateEvent($this,$values,null));
         
-        foreach($this->getChildren() as $child) {
+        $event->dispatch(
+               FormatEvents::onSchemaStart,
+               new GenerateEvent($this,array(),$id)
+        );
+        
+        foreach($children as $child) {
             if($child instanceof GeneratorInterface) {
                 $child->generate($rows,$values);    
             }
         }
         
-        $this->getEventDispatcher()->dispatch(FormatEvents::onRowEnd,new GenerateEvent($this,$values,null));
+       $event->dispatch(
+               FormatEvents::onSchemaEnd,
+               new GenerateEvent($this,array(),$id)
+          );
                 
         return $values;
     }
