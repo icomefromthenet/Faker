@@ -7,7 +7,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform as Platform;
 use Faker\ExtensionInterface;
 use Faker\Components\Writer\Manager as WriterManager;
 use Faker\Components\Engine\EngineException;
-
+use Faker\Components\Engine\Common\Visitor\DBALGathererVisitor;
 
 /*
  * Factory for creating formatters 
@@ -22,8 +22,8 @@ class FormatterFactory implements ExtensionInterface
       *  @var array[] of namespaces 
       */
     protected static $formatters = array(
-        'sql'     => 'Faker\\Components\\Engine\\Original\\Formatter\\Sql',                
-        'phpunit' => 'Faker\\Components\\Engine\\Original\\Formatter\\Phpunit'
+        'sql'     => 'Faker\\Components\\Engine\\Common\\Formatter\\Sql',                
+        'phpunit' => 'Faker\\Components\\Engine\\Common\\Formatter\\Phpunit'
     );
     
     
@@ -38,23 +38,30 @@ class FormatterFactory implements ExtensionInterface
     protected $event;
     
     /**
+      *  @var  Faker\Components\Engine\Common\Visitor\DBALGathererVisitor
+      */
+    protected $visitor;
+    
+    
+    /**
       * Class Constructor
       *
       * @param EventDispatcherInterface $event
       * @param WriterManager $writer
       * @param Connection $connection doctine db object
       */
-    public function __construct(EventDispatcherInterface $event, WriterManager $writer)
+    public function __construct(EventDispatcherInterface $event, WriterManager $writer, DBALGathererVisitor $visitor)
     {
-        $this->event = $event;
-        $this->writer = $writer;
+        $this->event   = $event;
+        $this->writer  = $writer;
+        $this->visitor = $visitor;
     }
  
  
     public function create($formatter, Platform $platform,$options = array())
     {
         $formatter = strtolower($formatter);
-        
+
         if(isset(self::$formatters[$formatter]) === false) {
             throw new EngineException('Formatter does not exist at::'.$formatter);
         }
@@ -62,6 +69,7 @@ class FormatterFactory implements ExtensionInterface
         $class = new self::$formatters[$formatter]($this->event,
                                                    $this->writer->getWriter($platform->getName(),$formatter),
                                                    $platform,
+                                                   $this->visitor,
                                                    $options
                                                    );
        

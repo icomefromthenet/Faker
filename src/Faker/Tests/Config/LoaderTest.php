@@ -1,5 +1,5 @@
 <?php
-namespace Faker\Test\Config;
+namespace Faker\Tests\Config;
 
 use Faker\Io\Io,
     Faker\Components\Config\EntityInterface,

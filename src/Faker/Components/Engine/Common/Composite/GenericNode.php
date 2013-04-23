@@ -6,7 +6,9 @@ use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Type\TypeInterface;
 use Faker\Components\Engine\Common\Type\Type;
 use Faker\Components\Engine\Common\Utilities;
+use Faker\Components\Engine\Common\Visitor\BasicVisitor;
 use Faker\Locale\LocaleInterface;
+use Faker\Components\Engine\Common\GeneratorCache;
 
 /**
   *  Node to contain other nodes used in combination nodes
@@ -14,7 +16,7 @@ use Faker\Locale\LocaleInterface;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class GenericNode implements CompositeInterface
+class GenericNode implements CompositeInterface, GeneratorInterface, VisitorInterface
 {
     
     /**
@@ -36,6 +38,11 @@ class GenericNode implements CompositeInterface
       *  @var the nodes id 
       */
     protected $id;
+    
+    /**
+      *  @var GeneratorCache 
+      */
+    protected $resultCache;
     
     /**
       *  Class Constructor
@@ -96,6 +103,7 @@ class GenericNode implements CompositeInterface
     public function addChild(CompositeInterface $child)
     {
         $this->children[] = $child;
+        $child->setParent($this);
     }
     
     
@@ -110,10 +118,6 @@ class GenericNode implements CompositeInterface
         return $this->id;
     }
     
-    
-    //------------------------------------------------------------------
-    # GeneratorInterface
-    
     public function getEventDispatcher()
     {
         return $this->event;
@@ -123,6 +127,21 @@ class GenericNode implements CompositeInterface
     {
 	$this->event = $event;
     }
+    
+     
+    public function validate()
+    {
+        foreach($this->getChildren() as $child) {
+          $child->validate(); 
+        }
+        
+        return true;        
+    }
+    
+    //------------------------------------------------------------------
+    # GeneratorInterface
+    
+    
     
     public function generate($rows,$values = array())
     {
@@ -140,15 +159,44 @@ class GenericNode implements CompositeInterface
         return $result;
     }
     
-    
-    public function validate()
+      /**
+      *  Sets the Generator Result Cache
+      *
+      *  @access public
+      *  @param GeneratorCache $cache
+      */
+    public function setResultCache(GeneratorCache $cache)
     {
-        foreach($this->getChildren() as $child) {
-          $child->validate(); 
+        $this->resultCache = $cache;
+    }
+    
+    /**
+      *  Return the Generator Result Cache
+      *
+      *  @access public
+      *  @return GeneratorCache
+      */
+    public function getResultCache()
+    {
+        return $this->resultCache;
+    }
+   
+    
+     //------------------------------------------------------------------
+    # VisitorInterface
+    
+     public function acceptVisitor(BasicVisitor $visitor)
+     {
+        $children = $this->getChildren();
+        
+        foreach($children as $child) {
+            if($child instanceof VisitorInterface) {
+                $child->acceptVisitor($visitor);                    
+            }
         }
         
-        return true;        
-    }
+        return $visitor;
+     }
     
 }
 /* End of File */

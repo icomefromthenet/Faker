@@ -3,7 +3,7 @@ namespace Faker\Components\Engine\Common\Type;
 
 use Closure;
 use Faker\Components\Engine\EngineException;
-use Faker\Components\Engine\Original\Utilities;
+use Faker\Components\Engine\Common\Utilities;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 /**

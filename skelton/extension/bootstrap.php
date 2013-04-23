@@ -13,7 +13,7 @@
 */
 
 use Faker\PlatformFactory;
-use Faker\Components\Engine\Original\Formatter\FormatterFactory;
+use Faker\Components\Engine\Common\Formatter\FormatterFactory;
 use Faker\Components\Engine\Common\TypeFactory;
 use Faker\Locale\LocaleFactory;
 use Doctrine\DBAL\Types\Type;

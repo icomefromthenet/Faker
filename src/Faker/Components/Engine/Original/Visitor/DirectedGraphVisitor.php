@@ -1,22 +1,21 @@
 <?php
-namespace Faker\Components\Engine\Original\Visitor;
+namespace Faker\Components\Engine\Common\Visitor;
 
-use Faker\Components\Engine\Original\Composite\CompositeInterface,
-    Faker\Components\Engine\Original\Exception as FakerException,
-    Faker\Components\Engine\Original\Compiler\Graph\DirectedGraph,
-    Faker\Components\Engine\Original\Composite\Schema,
-    Faker\Components\Engine\Original\Composite\Table,
-    Faker\Components\Engine\Original\Composite\Column,
-    Faker\Components\Engine\Original\Composite\ForeignKey,
-    Faker\Components\Engine\Original\Composite\SelectorInterface,
-    Faker\Components\Engine\Original\Composite\CompositeFinder,
-    Faker\Components\Engine\Original\Type\Type as BaseType,
-    Faker\Components\Engine\Original\BaseNode;
+use Faker\Components\Engine\Common\Composite\CompositeInterface;
+use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\Compiler\Graph\DirectedGraph;
+use Faker\Components\Engine\Common\Composite\SchemaNode;
+use Faker\Components\Engine\Common\Composite\TableNode;
+use Faker\Components\Engine\Common\Composite\ColumnNode;
+use Faker\Components\Engine\Common\Composite\ForeignKeyNode;
+use Faker\Components\Engine\Common\Composite\SelectorNode;
+use Faker\Components\Engine\Common\Composite\CompositeFinder;
+use Faker\Components\Engine\Common\Type\Type as BaseType;
+    
 
 /*
- * class DirectedGraphVisitor
+ * DirectedGraphVisitor will build a directed graph from a composite
  *
- * Will gather all Table relationships
  *
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0.3
@@ -44,41 +43,32 @@ class DirectedGraphVisitor extends BaseVisitor
     //------------------------------------------------------------------
     # Visitor Methods
     
-    public function visitCacheInjector(CompositeInterface $composite)
-    {
-        throw new FakerException('Not Implemented');
-    }
+   public function visitLocaleInjector(CompositeInterface $node)
+   {
+        return null;
+   }
+   
+   public function visitDBALGatherer(CompositeInterface $node)
+   {
+        return null;
+   }
+   
     
-    public function visitRefCheck(CompositeInterface $composite)
+    public function visitDirectedGraphBuilder(CompositeInterface $composite)
     {
-        throw new FakerException('Not implemented');
-    }
-    
-    public function visitGeneratorInjector(CompositeInterface $composite)
-    {
-         throw new FakerException('Not implemented');
-    }
-    
-    public function visitLocale(CompositeInterface $composite)
-    {
-        throw new FakerException('Not Implemented');
-    }
-    
-    public function visitDirectedGraph(CompositeInterface $composite)
-    {
-        if($composite instanceof Schema) {
+        if($composite instanceof SchemaNode) {
             # schema add to the graph    
             $this->graph->setSchema($composite);
         
-        } elseif($composite instanceof Table) {
+        } elseif($composite instanceof TableNode) {
             # if we have a table connect to schema
             $this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());
             
-        } elseif($composite instanceof Column) {
+        } elseif($composite instanceof ColumnNode) {
             # if instance of column connect to table
             $this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
                 
-        } elseif($composite instanceof ForeignKey) {
+        } elseif($composite instanceof ForeignKeyNode) {
             # if have a fk connect two columns together and connect the fk with parent element          
             #$this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
         
@@ -124,20 +114,12 @@ class DirectedGraphVisitor extends BaseVisitor
     }
     
     
-    public function visitMapBuilder(CompositeInterface $composite)
+    public function reset()
     {
-        throw new FakerException('Not Implemented');
+        throw new EngineException('This Visitor can not be reset');
     }
     
-    //------------------------------------------------------------------
-    
-    /**
-      *  Will fetch the results map
-      *
-      *  @access public
-      *  @return Faker\Components\Engine\Original\Compiler\Graph\DirectedGraph
-      */
-    public function getDirectedGraph()
+    public function getResult()
     {
         return $this->graph;
     }

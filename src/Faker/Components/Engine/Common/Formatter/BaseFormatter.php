@@ -14,6 +14,7 @@ use Faker\Components\Writer\WriterInterface;
 use Faker\Text\SimpleStringInterface;
 use Faker\Components\Engine\Common\OptionInterface;
 use Faker\Components\Engine\Common\Formatter\FormatEvents;
+use Faker\Components\Engine\Common\Visitor\DBALGathererVisitor;
 
 /*
  * All formatters should implement this base class, provides the option interface
@@ -47,14 +48,39 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
     protected $writer;
     
     /**
-      *  @var \Doctrine\DBAL\Types\Type[] 
+      *  @var Faker\Components\Engine\Common\Visitor\DBALGathererVisitor 
       */
-    protected $column_map = array();
+    protected $dbalVisitor;
     
      /**
-      *  @var use Doctrine\DBAL\Platforms\AbstractPlatform;
+      *  @var Doctrine\DBAL\Platforms\AbstractPlatform;
       */
     protected $platform;
+    
+    /**
+      *  @var Faker\Components\Engine\Common\Formatter\ValueConverter 
+      */
+    protected $valueConverter;
+    
+     //  -------------------------------------------------------------------------
+    # Constructor
+    
+    /**
+      *  class constructor
+      *
+      *  @param EventDispatcherInterface $event
+      *  @param WriterInterface $writer
+      *  @param AbstractPlatform $platform the doctine platform class
+      *  @param mixed[] array of options
+      */
+    public function __construct(EventDispatcherInterface $event, WriterInterface $writer, AbstractPlatform $platform, DBALGathererVisitor $visitor,$options = array())
+    {
+        $this->setEventDispatcher($event);
+        $this->setWriter($writer);
+        $this->setPlatform($platform);
+        $this->setVisitor($visitor);
+        $this->options = $options;
+    }
     
     //  ----------------------------------------------------------------------------
     # EventSubscriberInterface
@@ -68,18 +94,51 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
     static public function getSubscribedEvents()
     {
         return array(
-            FormatEvents::onSchemaStart    => array('onSchemaStart', 0),
-            FormatEvents::onSchemaEnd      => array('onSchemaEnd', 0),
-            FormatEvents::onTableStart     => array('onTableStart',0),
-            FormatEvents::onTableEnd       => array('onTableEnd',0),
-            FormatEvents::onRowStart       => array('onRowStart',0),
-            FormatEvents::onRowEnd         => array('onRowEnd',0),
-            FormatEvents::onColumnStart    => array('onColumnStart',0),
-            FormatEvents::onColumnGenerate => array('onColumnGenerate',0),
-            FormatEvents::onColumnEnd      => array('onColumnEnd',0),
+            FormatEvents::onSchemaStart    => array('onSchemaStart', 1),
+            FormatEvents::onSchemaEnd      => array('onSchemaEnd', 1),
+            FormatEvents::onTableStart     => array(
+                                                    array('beforeTableStart',255),
+                                                    array('onTableStart',1),
+                                              ),   
+            FormatEvents::onTableEnd       => array(
+                                                    array('afterTableEnd',0),
+                                                    array('onTableEnd',1),
+                                                ),
+            FormatEvents::onRowStart       => array('onRowStart',1),
+            FormatEvents::onRowEnd         => array('onRowEnd',1),
+            FormatEvents::onColumnStart    => array('onColumnStart',1),
+            FormatEvents::onColumnGenerate => array('onColumnGenerate',1),
+            FormatEvents::onColumnEnd      => array('onColumnEnd',1),
         
         );
     }    
+    
+    /**
+      *  Event hander for  FormatEvents::onTableStart run before
+      *  other event handlers and will execute the DBALGathererVisitor
+      *
+      *  @access public
+      */
+    public function beforeTableStart(GenerateEvent $event)
+    {
+        $node    = $event->getType();
+        $visitor = $this->getVisitor();
+        
+        $node->acceptVisitor($visitor);
+        
+        $this->valueConverter = $visitor->getResult();
+    }
+    
+    /**
+      *  Event hander for the FormatEvents::onTableEnd run after
+      *  other event handlers will run after other event handlers
+      */
+    public function afterTableEnd(GenerateEvent $event)
+    {
+        unset($this->valueConverter);
+        $this->getVisitor()->reset();
+    }
+    
     
     //  ----------------------------------------------------------------------------
     # Option Interface
@@ -235,41 +294,29 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
     }
     
     /**
-      *  Fetch a associative array column id => Doctrine\DBAL\Types\Type
+      *  Fetch the DBALVisitor which can convert values through
+      *  the internal ValueConverter
       *
-      *  @return \Doctrine\DBAL\Types\Type[]
+      *  @return Faker\Components\Engine\Common\Visitor\DBALGathererVisitor
+      *  @access public
       */
-    public function getColumnMap()
+    public function getVisitor()
     {
-         return $this->column_map;
+         return $this->dbalVisitor;
     }
     
     /**
-      *  Set the column map
+      *  Set the DBALVisitor which can convert values through
+      *  the internal ValueConverter
       *
       *  @access public
-      *  @param mixed[] $map
+      *  @param Faker\Components\Engine\Common\Visitor\DBALGathererVisitor $visitor
       */
-    public function setColumnMap($map)
+    public function setVisitor($visitor)
     {
-        $this->column_map = $map;
+        $this->dbalVisitor = $visitor;
     }
     
-    /**
-      *   Process a single column with the column map
-      *   convert the php type into a database representaion for the given platform
-      *   assigned to the formatter
-      */
-    public function processColumnWithMap($key,$value)
-    {
-        $map = $this->getColumnMap();
-        
-        if(isset($map[$key]) === false) {
-            throw new EngineException('Unknown column mapping at key::'.$key);
-        }
-        
-        return $map[$key]->convertToDatabaseValue($value,$this->getPlatform());
-    }
     
     /**
       *  Return the assigned platform

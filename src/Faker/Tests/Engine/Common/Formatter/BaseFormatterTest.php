@@ -64,31 +64,22 @@ class BaseFormatterTest extends AbstractProject
         
     }
     
-    public function testColumnMapProperties()
-    {
-        $map = array('v1' => 1);
-        $base = new MockFormatter();
-        
-        $base->setColumnMap($map);
-        $this->assertEquals($map,$base->getColumnMap());
-    }
     
-    public function testWriterProperties()
+    public function testProperties()
     {
         $writer = $this->getMock('\Faker\Components\Writer\WriterInterface');
+        $visitor = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
+        $event = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        
         $base = new MockFormatter();
         $base->setWriter($writer);
-        $this->assertEquals($writer,$base->getWriter());
-        
-    }
-    
-    
-    public function testEventDispatcherProperty()
-    {
-        $event = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $base = new MockFormatter();
+        $base->setVisitor($visitor);
         $base->setEventDispatcher($event);
+
+        $this->assertEquals($writer,$base->getWriter());
+        $this->assertEquals($visitor,$base->getVisitor());
         $this->assertEquals($event,$base->getEventDispatcher());
+        
     }
     
     

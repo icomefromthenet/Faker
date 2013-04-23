@@ -2,7 +2,7 @@
 namespace Faker\Components\Engine\Common\Type;
 
 use Faker\Components\Engine\EngineException;
-use Faker\Components\Engine\Original\Utilities;
+use Faker\Components\Engine\Common\Utilities;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 /**
@@ -89,12 +89,12 @@ class ConstantString extends Type
                         ->ifTrue(function($v){
                             
                             $valid_values = array(
-                                \Faker\Components\Engine\Original\Type\ConstantString::INTTYPE,
-                                \Faker\Components\Engine\Original\Type\ConstantString::STRINGTYPE,
-                                \Faker\Components\Engine\Original\Type\ConstantString::BOOLTYPE,
-                                \Faker\Components\Engine\Original\Type\ConstantString::BOOLEANTYPE,
-                                \Faker\Components\Engine\Original\Type\ConstantString::FLOATTYPE,
-                                \Faker\Components\Engine\Original\Type\ConstantString::DOUBLETYPE,
+                                \Faker\Components\Engine\Common\Type\ConstantString::INTTYPE,
+                                \Faker\Components\Engine\Common\Type\ConstantString::STRINGTYPE,
+                                \Faker\Components\Engine\Common\Type\ConstantString::BOOLTYPE,
+                                \Faker\Components\Engine\Common\Type\ConstantString::BOOLEANTYPE,
+                                \Faker\Components\Engine\Common\Type\ConstantString::FLOATTYPE,
+                                \Faker\Components\Engine\Common\Type\ConstantString::DOUBLETYPE,
                             );
                             
                             return !in_array($v,$valid_values);  

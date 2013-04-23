@@ -1,5 +1,5 @@
 <?php
-namespace Faker\Components\Engine\Original\Formatter;
+namespace Faker\Components\Engine\Common\Formatter;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -26,24 +26,7 @@ class Sql extends BaseFormatter implements FormatterInterface
     
     const CONFIG_OPTION_SINGLE_FILE_MODE = 'singleFileMode';
     
-    //  -------------------------------------------------------------------------
-    # Constructor
-    
-    /**
-      *  class constructor
-      *
-      *  @param EventDispatcherInterface $event
-      *  @param WriterInterface $writer
-      *  @param AbstractPlatform $platform the doctine platform class
-      *  @param mixed[] array of options
-      */
-    public function __construct(EventDispatcherInterface $event, WriterInterface $writer, AbstractPlatform $platform,$options = array())
-    {
-        $this->setEventDispatcher($event);
-        $this->setWriter($writer);
-        $this->setPlatform($platform);
-        $this->options = $options;
-    }
+   
     
     public function getName()
     {
@@ -78,12 +61,13 @@ class Sql extends BaseFormatter implements FormatterInterface
       */
     public function onSchemaStart(GenerateEvent $event)
     {
-
+        $writer = $this->getWriter();
+    
         # set the schema prefix on writter
-        $this->writer->getStream()->getSequence()->setPrefix(strtolower($event->getType()->getOption('name')));
-        $this->writer->getStream()->getSequence()->setSuffix($this->platform->getName());
-        $this->writer->getStream()->getSequence()->setExtension('sql');
-        $this->writer->getStream()->getEncoder()->setOutEncoding($this->getOption(self::CONFIG_OPTION_OUT_ENCODING));
+        $writer->getStream()->getSequence()->setPrefix(strtolower($event->getType()->getOption('name')));
+        $writer->getStream()->getSequence()->setSuffix($this->platform->getName());
+        $writer->getStream()->getSequence()->setExtension('sql');
+        $writer->getStream()->getEncoder()->setOutEncoding($this->getOption(self::CONFIG_OPTION_OUT_ENCODING));
         
         $now = new \DateTime();
         
@@ -94,8 +78,8 @@ class Sql extends BaseFormatter implements FormatterInterface
                                         'host'          => $server_name,
                                         'datetime'      => $now->format(DATE_W3C),
                                         'phpversion'    => PHP_VERSION,
-                                        'schema'        => $event->getType()->getOption('name'),
-                                        'platform'      => $this->platform->getName(),
+                                        'schema'        => $event->getType()->getId(),
+                                        'platform'      => $this->gePlatform()->getName(),
                                         ));
     }
     
@@ -107,7 +91,7 @@ class Sql extends BaseFormatter implements FormatterInterface
       */
     public function onSchemaEnd(GenerateEvent $event)
     {
-        $this->writer->flush();
+        $this->getWriter()->flush();
     }
     
     
@@ -118,30 +102,23 @@ class Sql extends BaseFormatter implements FormatterInterface
       */
     public function onTableStart(GenerateEvent $event)
     {
+       $writer     = $this->getWriter();
+       $tableName  = $event->getType()->getId();
        
        # set the prefix on the writer for table 
-       $this->writer->getStream()->getSequence()->setBody(strtolower($event->getType()->getOption('name')));
+       $writer->getStream()->getSequence()->setBody(strtolower($tableName));
        
-       # build a column map
-       $map = array();
-
-       foreach($event->getType()->getChildren() as $column) {
-            $map[$column->getOption('name')] = $column->getColumnType();
-       }
+       $writer->write(PHP_EOL);
+       $writer->write(PHP_EOL);
+       $writer->write('--'.PHP_EOL);
+       $writer->write('-- Table: '.$tableName.PHP_EOL);
+       $writer->write('--'.PHP_EOL);
+       $writer->write(PHP_EOL);
+       $writer->write(PHP_EOL);
        
-       $this->column_map = $map;
-       
-       $this->writer->write(PHP_EOL);
-       $this->writer->write(PHP_EOL);
-       $this->writer->write('--'.PHP_EOL);
-       $this->writer->write('-- Table: '.$event->getType()->getOption('name').PHP_EOL);
-       $this->writer->write('--'.PHP_EOL);
-       $this->writer->write(PHP_EOL);
-       $this->writer->write(PHP_EOL);
-       
-       $this->writer->write('USE '.$event->getType()->getParent()->getOption('name').';');        
-       $this->writer->write(PHP_EOL);
-       $this->writer->write(PHP_EOL);
+       $writer->write('USE '.$event->getType()->getParent()->getOption('name').';');        
+       $writer->write(PHP_EOL);
+       $writer->write(PHP_EOL);
 
     }
     
@@ -154,16 +131,15 @@ class Sql extends BaseFormatter implements FormatterInterface
     public function onTableEnd(GenerateEvent $event)
     {
        
-       # unset the column map for next table
-       $this->column_map = null;
+       $writer     = $this->getWriter();
        
-       $this->writer->write(PHP_EOL);
-       $this->writer->write(PHP_EOL);
-       $this->writer->write('--'.PHP_EOL);
-       $this->writer->write('-- Finished Table: '.$event->getType()->getOption('name').PHP_EOL);
-       $this->writer->write('--'.PHP_EOL);
-       $this->writer->write(PHP_EOL);
-       $this->writer->write(PHP_EOL);
+       $writer->write(PHP_EOL);
+       $writer->write(PHP_EOL);
+       $writer->write('--'.PHP_EOL);
+       $writer->write('-- Finished Table: '.$event->getType()->getOption('name').PHP_EOL);
+       $writer->write('--'.PHP_EOL);
+       $writer->write(PHP_EOL);
+       $writer->write(PHP_EOL);
        
        # flush the writer for next table
        if($this->getOption(self::CONFIG_OPTION_SPLIT_ON_TABLE) === true) {
@@ -192,18 +168,18 @@ class Sql extends BaseFormatter implements FormatterInterface
     public function onRowEnd(GenerateEvent $event)
     {
         # iterate over the values and convert run them through the column map
-        $map    = $this->getColumnMap();
-        $values = $event->getValues();
+        $map      = $this->getColumnMap();
+        $values   = $event->getValues();
+        $platform = $this->getPlatform();
+        $writer   = $this->getWriter();
+        $table    = $event->getType()->getOption('name');
+        $q       = $platform->getIdentifierQuoteCharacter();
         
         foreach($values as $key => &$value) {
-            $value = $this->processColumnWithMap($key,$value);
+            $value = $this->valueConverter->convertValue($key,$platform,$value);
         }
         
         # build insert statement 
-        
-        $q      = $this->platform->getIdentifierQuoteCharacter();
-        $table  = $event->getType()->getOption('name');
-        
         # column names add quotes to them
         
         $column_keys = array_map(function($value) use ($q){
@@ -228,13 +204,13 @@ class Sql extends BaseFormatter implements FormatterInterface
             throw new EngineException('Keys do not have enough values');
         }
         
-        $stm = 'INSERT INTO '.$q. $table .$q.' (' .implode(',',$column_keys). ') VALUES ('. implode(',',$column_values) .');'.PHP_EOL;
+        $stm = 'INSERT INTO '.$q. $table .$q.' (' .implode(',',$column_keys). ') VALUES ('. implode(',',$column_values) .');'. PHP_EOL;
 
         unset($values);
         unset($column_keys);
         unset($column_values);
         
-        $this->writer->write($stm);
+        $writer->write($stm);
         
         return $stm;
         

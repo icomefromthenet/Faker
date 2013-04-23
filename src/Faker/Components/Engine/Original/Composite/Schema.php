@@ -245,7 +245,7 @@ class Schema extends BaseComposite
                 ->scalarNode('locale')
                     ->treatNullLike('en')
                     ->defaultValue('en')
-                    ->info('The Default Local for this schema')
+                    ->info('The Default Locale for this schema')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_string($v);

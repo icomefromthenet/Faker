@@ -5,6 +5,7 @@ use Faker\Locale\LocaleInterface;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\OptionInterface;
 use Faker\Components\Engine\Common\Utilities;
+use Faker\Components\Engine\Common\GeneratorCache;
 
 use PHPStats\Generator\GeneratorInterface;
 
@@ -13,6 +14,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 
 /**
  * Base class for all type generators
@@ -48,6 +50,9 @@ class Type implements TypeInterface, OptionInterface
       *  @var  Symfony\Component\EventDispatcher\EventDispatcherInterface
       */
     protected $eventDispatcher;
+    
+    
+    protected $resultCache;
     
     //------------------------------------------------------------------
     # TypeInterface
@@ -92,21 +97,25 @@ class Type implements TypeInterface, OptionInterface
 	$this->eventDispatcher = $event;
     }
     
-    /**
-      *  Generate a value 
-      */
+    //------------------------------------------------------------------
+    # GeneratorInterface
+    
     public function generate($rows,$values = array())
     {
         throw new EngineException('not implemented');        
     }
     
+    public function setResultCache(GeneratorCache $cache)
+    {
+	$this->resultCache = $cache;
+    }
     
-    /**
-      *  Will Merge options with config definition and pass judgement
-      *
-      *  @access public
-      *  @return boolean true if passed
-      */
+    public function getResultCache()
+    {
+	return $this->resultCache;
+    }
+    
+    
     public function validate()
     {
 	try {

@@ -3,12 +3,14 @@ namespace Faker\Components\Engine\Entity\Composite;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
+use Faker\Components\Engine\Common\Composite\GeneratorInterface;
 use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Faker\Components\Engine\Entity\Event\GenerateEvent;
 use Faker\Components\Engine\Entity\GenericEntity;
 use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\GeneratorCache;
 
-class EntityNode implements CompositeInterface
+class EntityNode implements CompositeInterface, GeneratorInterface
 {
     
     protected $id; 
@@ -32,15 +34,6 @@ class EntityNode implements CompositeInterface
     //------------------------------------------------------------------
     # GeneratorInterface
     
-    public function getEventDispatcher()
-    {
-        return $this->event;
-    }
-    
-    public function setEventDispatcher(EventDispatcherInterface $event)
-    {
-        $this->event = $event;
-    }
 
     public function generate($rows,$values = array())
     {
@@ -57,6 +50,29 @@ class EntityNode implements CompositeInterface
         return $entity;
     }
     
+    public function setResultCache(GeneratorCache $cache)
+    {
+        throw new EngineException('not implemented');
+    }
+    
+    public function getResultCache()
+    {
+        throw new EngineException('not implemented');
+    }
+    
+    //------------------------------------------------------------------
+    # Composite Interface
+    
+    
+    public function getEventDispatcher()
+    {
+        return $this->event;
+    }
+    
+    public function setEventDispatcher(EventDispatcherInterface $event)
+    {
+        $this->event = $event;
+    }
     
     public function validate()
     {
@@ -67,8 +83,6 @@ class EntityNode implements CompositeInterface
         return true;
     }
     
-    //------------------------------------------------------------------
-    # Composite Interface
     
     public function getParent()
     {
@@ -89,6 +103,8 @@ class EntityNode implements CompositeInterface
     public function addChild(CompositeInterface $child)
     {
         $this->children[] = $child;
+        $child->setParent($this);
+        
     }
     
     public function getId()

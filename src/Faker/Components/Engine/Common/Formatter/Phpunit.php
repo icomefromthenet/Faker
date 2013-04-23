@@ -18,25 +18,6 @@ use Faker\Components\Engine\Common\Formatter\FormatEvents;
 class Phpunit extends BaseFormatter implements FormatterInterface
 {
     
-    //  -------------------------------------------------------------------------
-    # Constructor
-    
-    /**
-      *  class constructor
-      *
-      *  @param EventDispatcherInterface $event
-      *  @param WriterInterface $writer
-      *  @param AbstractPlatform $platform the doctine platform class
-      *  @param array mixed[] options
-      */
-    public function __construct(EventDispatcherInterface $event, WriterInterface $writer, AbstractPlatform $platform, $options = array())
-    {
-        $this->setEventDispatcher($event);
-        $this->setWriter($writer);
-        $this->setPlatform($platform);
-        $this->options = $options;
-       
-    }
     
     public function getName()
     {
@@ -71,27 +52,33 @@ class Phpunit extends BaseFormatter implements FormatterInterface
       */
     public function onSchemaStart(GenerateEvent $event)
     {
+        $writer       = $this->getWriter();
+        $stream       = $writer->getStream();
+        $sequence     = $stream->getSequence();
+        $platform     = $this->getPlatform();
+        $schemaName   = $event->getType()->getId();
+        
         # set the schema prefix on writter
-        $this->writer->getStream()->getSequence()->setPrefix(strtolower($event->getType()->getOption('name')));
-        $this->writer->getStream()->getSequence()->setBody('fixture');
-        $this->writer->getStream()->getSequence()->setSuffix($this->platform->getName());
-        $this->writer->getStream()->getSequence()->setExtension('xml');
+        $sequence->setPrefix(strtolower($schemaName));
+        $sequence->setBody('fixture');
+        $sequence->setSuffix($platform->getName());
+        $sequence->setExtension('xml');
         
         
-        $now = new \DateTime();
+        $now         = new \DateTime();
         $server_name = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost'; 
         
-        $this->writer->getStream()->getHeaderTemplate()->setData(array(
+        $stream->getHeaderTemplate()->setData(array(
                                         'faker_version' => FAKER_VERSION,
                                         'host'          => $server_name,
                                         'datetime'      => $now->format(DATE_W3C),
                                         'phpversion'    => PHP_VERSION,
-                                        'schema'        => $event->getType()->getOption('name'),
-                                        'platform'      => $this->platform->getName(),
+                                        'schema'        => $schemaName,
+                                        'platform'      => $$platform,
                                         ));
         # start writing here
     
-        $this->writer->write('<dataset>' . PHP_EOL);
+        $writer->write('<dataset>' . PHP_EOL);
         
         
     }
@@ -104,10 +91,12 @@ class Phpunit extends BaseFormatter implements FormatterInterface
       */
     public function onSchemaEnd(GenerateEvent $event)
     {
-        $this->writer->write('</dataset>' . PHP_EOL);
+        $writer = $this->getWriter();
+        
+        $writer->write('</dataset>' . PHP_EOL);
         
         # we only flush at the end to keep all lines in single file
-        $this->writer->flush();
+        $writer->flush();
     }
     
     
@@ -118,21 +107,17 @@ class Phpunit extends BaseFormatter implements FormatterInterface
       */
     public function onTableStart(GenerateEvent $event)
     {
-        # build a column map
-        $map = array();
-
-        foreach($event->getType()->getChildren() as $column) {
-            $map[$column->getOption('name')] = $column->getColumnType();
-        }
-       
-        $this->column_map = $map;
-        
+        $table    = $event->getType();
+        $tableId  = $table->getId();
+        $children = $table->getChildren();
+        $writer   = $this->getWriter();
+                
         # write table tag        
-        $this->writer->write(sprintf('<table name="%s">'. PHP_EOL,$event->getType()->getOption('name')));
+        $writer->write(sprintf('<table name="%s">'. PHP_EOL,$tableId));
     
          # fetch the columns for each table   
-         foreach($event->getType()->getChildren() as $column) {
-            $this->writer->write('<column>'.trim($column->getOption('name')).'</column>' .PHP_EOL);
+         foreach($children as $column) {
+            $this->writer->write('<column>'.trim($column->getId()).'</column>' .PHP_EOL);
          }
             
     }
@@ -145,7 +130,7 @@ class Phpunit extends BaseFormatter implements FormatterInterface
       */
     public function onTableEnd(GenerateEvent $event)
     {
-        $this->writer->write('</table>' . PHP_EOL);
+        $this->getWriter()->write('</table>' . PHP_EOL);
         
     }
     
@@ -157,7 +142,7 @@ class Phpunit extends BaseFormatter implements FormatterInterface
       */
     public function onRowStart(GenerateEvent $event)
     {
-        $this->writer->write('<row>'.PHP_EOL);
+        $this->getWriter()->write('<row>'.PHP_EOL);
     }
     
     
@@ -168,7 +153,7 @@ class Phpunit extends BaseFormatter implements FormatterInterface
       */
     public function onRowEnd(GenerateEvent $event)
     {
-        $this->writer->write('</row>'.PHP_EOL);
+        $this->getWriter()->write('</row>'.PHP_EOL);
         
     }
     
@@ -201,15 +186,17 @@ class Phpunit extends BaseFormatter implements FormatterInterface
       */
     public function onColumnEnd(GenerateEvent $event)
     {
-        $values = $event->getValues();
-        $value = $this->processColumnWithMap($event->getType()->getOption('name'),$values[$event->getType()->getOption('name')]);
+        $values   = $event->getValues();
+        $columnId = $event->getType()->getId();
+        $writer   = $this->getWriter();
+        
+        
+        $value = $this->valueConverter->convertValue($columnId,$values[$columnId]);
         
         if($value !== null) {
-            $this->writer->write('<value>');
-            $this->writer->write(htmlentities($value));
-            $this->writer->write('</value>'.PHP_EOL);
+            $writer->write('<value>' . \htmlentities($value) .'</value>'.PHP_EOL);
         } else {
-            $this->writer->write('<null />');            
+            $writer->write('<null />');            
         } 
     }
     
@@ -238,9 +225,11 @@ class Phpunit extends BaseFormatter implements FormatterInterface
         
         # change the format on the writer to remove the seq number
         # since we are using a single file format
-
-        $this->getWriter()->getStream()->getLimit()->changeLimit(null);
-        $this->writer->getStream()->getSequence()->setFormat($this->getOption(self::CONFIG_OPTION_OUT_FILE_FORMAT));
+        $writer = $this->getWriter();
+        $stream = $writer->getStream();
+        
+        $stream->getLimit()->changeLimit(null);
+        $stream->getSequence()->setFormat($this->getOption(self::CONFIG_OPTION_OUT_FILE_FORMAT));
         
     }
     

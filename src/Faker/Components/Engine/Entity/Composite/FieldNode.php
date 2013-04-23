@@ -3,11 +3,13 @@ namespace Faker\Components\Engine\Entity\Composite;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
+use Faker\Components\Engine\Common\Composite\GeneratorInterface;
 use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Faker\Components\Engine\Entity\Event\GenerateEvent;
 use Faker\Components\Engine\Entity\GenericEntity;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\Type\TypeInterface;
+use Faker\Components\Engine\Common\GeneratorCache;
 
 
 /**
@@ -16,7 +18,7 @@ use Faker\Components\Engine\Common\Type\TypeInterface;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class FieldNode implements CompositeInterface
+class FieldNode implements CompositeInterface, GeneratorInterface
 {
     
     protected $id; 
@@ -67,6 +69,20 @@ class FieldNode implements CompositeInterface
         return $values;
     }
     
+    public function setResultCache(GeneratorCache $cache)
+    {
+        throw new EngineException('not implemented');
+    }
+    
+    public function getResultCache()
+    {
+        throw new EngineException('not implemented');
+    }
+    
+    
+    //------------------------------------------------------------------
+    # CompositeInterface
+    
     public function getEventDispatcher()
     {
         return $this->event;
@@ -86,8 +102,6 @@ class FieldNode implements CompositeInterface
         return true;
     }
     
-    //------------------------------------------------------------------
-    # CompositeInterface
     
     public function getParent()
     {
@@ -107,6 +121,7 @@ class FieldNode implements CompositeInterface
     public function addChild(CompositeInterface $child)
     {
         $this->children[] = $child;
+        $child->setParent($this);
     }
     
     public function getId()

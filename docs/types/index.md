@@ -36,7 +36,7 @@ I have provided an example below that can be used as a base for **datatypes**.
     
     use Faker\Components\Engine\Original\Exception as FakerException,
         Faker\Components\Engine\Original\Type\Type,
-        Faker\Components\Engine\Original\Utilities,
+        Faker\Components\Engine\Common\Utilities,
         Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
     
     class ClassName extends Type
