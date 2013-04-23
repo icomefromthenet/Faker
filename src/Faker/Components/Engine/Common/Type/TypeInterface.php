@@ -3,8 +3,9 @@ namespace Faker\Components\Engine\Common\Type;
 
 use Faker\Locale\LocaleInterface;
 use Faker\Components\Engine\Common\Utilities;
-use PHPStats\Generator\GeneratorInterface;
 use Faker\Components\Engine\Common\Composite\GeneratorInterface as CompositeGenInterface;
+use PHPStats\Generator\GeneratorInterface;
+
 
 /**
  * Interface for a type generator.

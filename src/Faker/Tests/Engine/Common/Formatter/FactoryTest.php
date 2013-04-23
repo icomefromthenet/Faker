@@ -18,8 +18,9 @@ class FactoryTest extends AbstractProject
         $writer_manager   = $this->getMockBuilder('\Faker\Components\Writer\Manager')
                          ->disableOriginalConstructor()
                          ->getMock();
+        $visitor  = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
         
-        $factory = new FormatterFactory($event,$writer_manager);
+        $factory = new FormatterFactory($event,$writer_manager,$visitor);
         
         $this->assertInstanceOf('Faker\Components\Engine\Common\Formatter\FormatterFactory',$factory);
         
@@ -29,7 +30,7 @@ class FactoryTest extends AbstractProject
     public function testCreateNoOptons()
     {
        
-        $formatter_full = '\\Faker\\Components\\Engine\\Original\\Formatter\\Sql';
+        $formatter_full = '\\Faker\\Components\\Engine\\Common\\Formatter\\Sql';
         $formatter_key = 'Sql';
         
         $event    = $this->getMockBuilder('\\Symfony\\Component\\EventDispatcher\\EventDispatcherInterface')->getMock();
@@ -56,8 +57,9 @@ class FactoryTest extends AbstractProject
                   ->method('getName')
                   ->will($this->returnValue('mysql'));
         
+        $visitor  = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
         
-        $factory = new FormatterFactory($event,$writer_manager);
+        $factory = new FormatterFactory($event,$writer_manager,$visitor);
         
         $this->assertInstanceOf($formatter_full,$factory->create($formatter_key,$platform,array()));
         
@@ -66,7 +68,7 @@ class FactoryTest extends AbstractProject
      
     public function testPhpunitFormatterCreateWithOptions()
     {
-        $formatter_full = '\\Faker\\Components\\Engine\\Original\\Formatter\\Phpunit';
+        $formatter_full = '\\Faker\\Components\\Engine\\Common\\Formatter\\Phpunit';
         $formatter_key = 'Phpunit';
         
         $event    = $this->getMockBuilder('\Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
@@ -93,8 +95,9 @@ class FactoryTest extends AbstractProject
                   ->method('getName')
                   ->will($this->returnValue('mysql'));
         
+        $visitor  = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
         
-        $factory = new FormatterFactory($event,$writer_manager);
+        $factory = new FormatterFactory($event,$writer_manager,$visitor);
         
         $this->assertInstanceOf($formatter_full,$instance = $factory->create($formatter_key,$platform,array('opt1' => '1', 'opt2' => 2)));
         
@@ -107,7 +110,7 @@ class FactoryTest extends AbstractProject
     
     public function testCreateLowercaseKeyWithOptions()
     {
-        $formatter_full = '\\Faker\\Components\\Engine\\Original\\Formatter\\phpunit';
+        $formatter_full = '\\Faker\\Components\\Engine\\Common\\Formatter\\Phpunit';
         $formatter_key = 'phpunit';
         
         $event    = $this->getMockBuilder('\Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
@@ -135,8 +138,9 @@ class FactoryTest extends AbstractProject
                   ->method('getName')
                   ->will($this->returnValue('mysql'));
         
+        $visitor  = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
         
-        $factory = new FormatterFactory($event,$writer_manager);
+        $factory = new FormatterFactory($event,$writer_manager,$visitor);
         
         $this->assertInstanceOf($formatter_full,$instance = $factory->create($formatter_key,$platform,array('opt1' => '1', 'opt2' => 2)));
         
@@ -161,7 +165,9 @@ class FactoryTest extends AbstractProject
         $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
                          ->getMockForAbstractClass();
         
-        $factory = new FormatterFactory($event,$writer_manager);
+        $visitor  = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
+        
+        $factory = new FormatterFactory($event,$writer_manager,$visitor);
         
         $factory->create($formatter_key,$platform,array());
         

@@ -2,12 +2,15 @@
 namespace Faker\Components\Engine\Common\Composite;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Faker\Components\Engine\Common\Composite\CompositeInterface;
-use Faker\Components\Engine\Common\Type\TypeInterface;
-use Faker\Components\Engine\Common\Type\Type;
-use Faker\Components\Engine\Common\Utilities;
+
 use Faker\Locale\LocaleInterface;
 use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\Utilities;
+use Faker\Components\Engine\Common\Type\Type;
+use Faker\Components\Engine\Common\Type\TypeInterface;
+use Faker\Components\Engine\Common\Composite\CompositeInterface;
+use Faker\Components\Engine\Common\Visitor\BasicVisitor;
+use Faker\Components\Engine\Common\GeneratorCache;
 
 /**
   *  Node to contain datatypes
@@ -15,7 +18,7 @@ use Faker\Components\Engine\EngineException;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class TypeNode implements CompositeInterface
+class TypeNode implements CompositeInterface, GeneratorInterface, VisitorInterface
 {
     
     /**
@@ -42,6 +45,11 @@ class TypeNode implements CompositeInterface
       *  @var the nodes id 
       */
     protected $id;
+    
+    /**
+      *  @var GeneratorCache 
+      */
+    protected $resultCache;
     
     /**
       *  Class Constructor
@@ -116,10 +124,6 @@ class TypeNode implements CompositeInterface
         return $this->id;
     }
     
-    
-    //------------------------------------------------------------------
-    # GeneratorInterface
-    
     public function getEventDispatcher()
     {
         return $this->event;
@@ -129,11 +133,6 @@ class TypeNode implements CompositeInterface
     {
 	$this->event = $event;
     }
-
-    public function generate($rows,$values = array())
-    {
-        return $this->type->generate($rows,$values);
-    }
     
     public function validate()
     {
@@ -141,6 +140,41 @@ class TypeNode implements CompositeInterface
         
         return true;        
     }
+    
+    //------------------------------------------------------------------
+    # GeneratorInterface
+    
+    public function generate($rows,$values = array())
+    {
+        return $this->type->generate($rows,$values);
+    }
+    
+    public function setResultCache(GeneratorCache $cache)
+    {
+        $this->resultCache = $cache;
+    }
+    
+    public function getResultCache()
+    {
+        return $this->resultCache;
+    }
+    
+    
+    //------------------------------------------------------------------
+    # VisitorInterface
+    
+     public function acceptVisitor(BasicVisitor $visitor)
+     {
+        $children = $this->getChildren();
+        
+        foreach($children as $child) {
+            if($child instanceof VisitorInterface) {
+                $child->acceptVisitor($visitor);                    
+            }
+        }
+        
+        return $visitor;
+     }
     
     //------------------------------------------------------------------
     # Custom

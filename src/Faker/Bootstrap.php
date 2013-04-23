@@ -243,10 +243,9 @@ class Bootstrap
          return new \Faker\PlatformFactory();
       });
       
-      
-      $project['column_factory'] = $project->share(function($project)
+      $project['formatter_factory'] = $project->share(function($project)
       {
-         return new \Faker\ColumnTypeFactory();
+         return new \Faker\Components\Engine\Common\Formatter\FormatterFactory($project['event_dispatcher'],$project['writer_manager']);   
       });
       
       

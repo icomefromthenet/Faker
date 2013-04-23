@@ -10,8 +10,30 @@ use Faker\Components\Engine\Common\Type\TypeInterface;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-interface CompositeInterface extends GeneratorInterface 
+interface CompositeInterface
 {
+    /**
+      *  Get Event Dispatcher
+      *
+      *  @return Symfony\Component\EventDispatcher\EventDispatcherInterface 
+      */ 
+    public function getEventDispatcher();
+    
+    /**
+      *  Set the Event Dispatcher
+      *
+      *  @access public
+      *  @param Symfony\Component\EventDispatcher\EventDispatcherInterface $event
+      */
+    public function setEventDispatcher(EventDispatcherInterface $event);
+    
+    /**
+      *  Will Merge options with config definition and pass judgement
+      *
+      *  @access public
+      *  @return boolean true if passed
+      */
+    public function validate();    
 
     /**
       *  Fetches the parent in this type composite

@@ -1,7 +1,7 @@
 <?php
 namespace Faker\Components\Engine\Original\Type;
 
-use Faker\Components\Engine\Original\Utilities,
+use Faker\Components\Engine\Common\Utilities,
     Faker\Components\Engine\Original\Composite\CompositeInterface,
     Faker\Components\Engine\Original\Exception as FakerException,
     Faker\Components\Engine\Original\TypeInterface,
@@ -42,7 +42,7 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
     protected $parent_type;
 
     /**
-      * @var  Faker\Components\Engine\Original\Utilities 
+      * @var  Faker\Components\Engine\Common\Utilities 
       */
     protected $utilities;
     

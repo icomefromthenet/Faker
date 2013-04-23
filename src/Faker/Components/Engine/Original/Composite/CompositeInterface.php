@@ -1,7 +1,7 @@
 <?php
 namespace Faker\Components\Engine\Original\Composite;
 
-use Faker\Components\Engine\Original\TypeInterface;
+use Faker\Components\Engine\Common\Type\TypeInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 interface CompositeInterface extends TypeInterface

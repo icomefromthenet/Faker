@@ -1,10 +1,10 @@
 <?php
 namespace Faker\Components\Engine\Common\Composite;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Faker\Components\Engine\Common\GeneratorCache;
 
 /**
-  *  Interface for Generators
+  *  Interface for Generators Nodes
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
@@ -13,22 +13,6 @@ interface GeneratorInterface
 {
 
     /**
-      *  Get Event Dispatcher
-      *
-      *  @return Symfony\Component\EventDispatcher\EventDispatcherInterface 
-      */ 
-    public function getEventDispatcher();
-    
-    /**
-      *  Set the Event Dispatcher
-      *
-      *  @access public
-      *  @param Symfony\Component\EventDispatcher\EventDispatcherInterface $event
-      */
-    public function setEventDispatcher(EventDispatcherInterface $event);
-    
-    
-     /**
       *  Generate a value
       *
       *  @param integer $rows the current row number
@@ -38,12 +22,20 @@ interface GeneratorInterface
     
     
     /**
-      *  Will Merge options with config definition and pass judgement
+      *  Sets the Generator Result Cache
       *
       *  @access public
-      *  @return boolean true if passed
+      *  @param GeneratorCache $cache
       */
-    public function validate();    
+    public function setResultCache(GeneratorCache $cache);
+    
+    /**
+      *  Return the Generator Result Cache
+      *
+      *  @access public
+      *  @return GeneratorCache
+      */
+    public function getResultCache();
     
 }
 /* End of File */

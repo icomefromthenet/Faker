@@ -1,13 +1,16 @@
 <?php
 namespace Faker\Components\Engine\Common;
 
-use Faker\Components\Engine\Common\Utilities;
-use Faker\Components\Engine\EngineException as FakerException;
-use Faker\Components\Engine\Common\Type\TypeInterface;
-use Faker\Components\Engine\Common\Composite\CompositeInterface;
-use Faker\ExtensionInterface;
 use PHPStats\Generator\GeneratorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+
+use Faker\ExtensionInterface;
+use Faker\Components\Engine\EngineException as FakerException;
+use Faker\Components\Engine\Common\Utilities;
+use Faker\Components\Engine\Common\Type\TypeInterface;
+use Faker\Components\Engine\Common\Composite\CompositeInterface;
+
 
 /**
   *  Repository of types and their builders

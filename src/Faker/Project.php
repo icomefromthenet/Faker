@@ -376,6 +376,29 @@ class Project extends Pimple
           return $this['event_dispatcher'];
      }
    
+     /**
+       *  Fetch the DBAL Platform Factory
+       *
+       *  @access public
+       *  @return Faker\PlatformFactory
+       */
+     public function getDBALPlatformFactory()
+     {
+          return  $this['platform_factory'];
+     }
+     
+     
+     /**
+      *  Create a new Formatter Factory
+      *  
+      *  @access public
+      *  @return Faker\Components\Engine\Common\Formatter\FormatterFactory
+      */
+    public function getFormatterFactory()
+    {
+        return $this['formatter_factory'];
+    }
+   
    
     //  -------------------------------------------------------------------------
     # Symfony Console

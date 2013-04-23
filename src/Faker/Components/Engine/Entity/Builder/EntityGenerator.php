@@ -12,6 +12,8 @@ use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Builder\NodeInterface;
 use Faker\Components\Engine\Entity\Composite\EntityNode;
 use Faker\Components\Engine\Entity\EntityIterator;
+use Faker\Components\Engine\Common\BuildEvents;
+use Faker\Components\Engine\Common\BuildEvent;
 
 use Closure;
 use PHPStats\Generator\GeneratorInterface;
@@ -158,6 +160,9 @@ class EntityGenerator implements ParentNodeInterface
     public function fake($number)
     {
        
+       
+       
+       
        if(is_int($number) === false) {
             throw new EngineException('Number to generate must be an integer > 0');
        }
@@ -240,11 +245,6 @@ class EntityGenerator implements ParentNodeInterface
         return $this->children;
     }
     
-    public function getNode()
-    {
-        return new EntityNode($this->name,$this->event);
-    }
-    
     
     public function setParent(NodeInterface $parent)
     {
@@ -256,23 +256,42 @@ class EntityGenerator implements ParentNodeInterface
         return null;
     }
     
-    public function end()
+    public function getNode()
     {
         if($this->rootNode === null) {
-            $this->rootNode   = $this->getNode();    
+            $this->rootNode  = new EntityNode($this->name,$this->event); 
         }
         
+        return $this->rootNode;
+    }
+    
+    public function end()
+    {
+        $this->event->dispatch(BuildEvents::onBuildingStart,new BuildEvent($this,'Started to build entity' .$this->name));
+       
+        # attach child nodes to root
+        $node     = $this->getNode(); 
         $children = $this->children();
         
         # append the fieldNodes to the rootEntity
         foreach($children as $child) {
-            $this->rootNode->addChild($child);
+            $node->addChild($child);
         }
         
-        # run validation routines
-        $this->rootNode->validate();
+        # run validation routines        
+        $this->event->dispatch(BuildEvents::onValidationStart,new BuildEvent($this,'Started validation of entity '.$this->name));
+        $node->validate();
+        $this->event->dispatch(BuildEvents::onValidationEnd,new BuildEvent($this,'Finished validation of entity '.$this->name));
         
-        return $this->rootNode;
+        # run compiler  
+        $this->event->dispatch(BuildEvents::onCompileStart,new BuildEvent($this,'Started compile of entity '.$this->name));
+        $this->event->dispatch(BuildEvents::onCompileEnd,new BuildEvent($this,'Finished compile of entity '.$this->name));    
+        
+        
+        $this->event->dispatch(BuildEvents::onBuildingEnd,new BuildEvent($this,'Finished build of entity '.$this->name));
+    
+            
+        return $node;
     }
     
 }

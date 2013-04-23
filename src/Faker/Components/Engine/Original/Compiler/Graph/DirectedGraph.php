@@ -1,8 +1,7 @@
 <?php
 namespace Faker\Components\Engine\Original\Compiler\Graph;
 
-use Faker\Components\Engine\Original\Exception as FakerException,
-    Faker\Components\Engine\Original\Composite\Schema;
+use Faker\Components\Engine\Original\Exception as FakerException;
 
 /**
 * This is a directed graph of your services.
@@ -18,10 +17,6 @@ class DirectedGraph
       */
     protected $nodes;
 
-    /**
-      *  @var Faker\Components\Engine\Original\Composite\Schema
-      */
-    protected $schema;
 
     /**
       *  Class Constructor 
@@ -124,29 +119,6 @@ class DirectedGraph
         }
 
         return $this->nodes[$id] = new GraphNode($id, $value);
-    }
-    
-    /**
-      *  Sets the schema (root node)
-      *
-      *  @param Schema $schema
-      *  @return void
-      *  @access public
-      */
-    public function setSchema(Schema $schema)
-    {
-        $this->schema = $schema;
-    }
-    
-    /**
-      *  Fetches the schema (root)
-      *
-      *  @return Schema
-      *  @access public
-      */
-    public function getSchema()
-    {
-        return $this->schema;
     }
     
 }

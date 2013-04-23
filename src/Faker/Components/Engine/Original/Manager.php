@@ -95,18 +95,7 @@ class Manager implements ManagerInterface
         return new PlatformFactory();
     }
     
-    /**
-      *  Create a new Doctrine Column Type Factory
-      *
-      *  @access public
-      *  @return Faker\ColumnTypeFactory
-      */
-    public function getColumnTypeFactory()
-    {
-        return new ColumnTypeFactory();
-        
-    }
-    
+       
     /**
       *  Create a new Formatter Factory
       *  

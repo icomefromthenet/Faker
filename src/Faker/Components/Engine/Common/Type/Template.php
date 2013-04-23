@@ -2,7 +2,7 @@
 namespace Faker\Components\Engine\Common\Type;
 
 use Faker\Components\Engine\EngineException;
-use Faker\Components\Engine\Original\Utilities;
+use Faker\Components\Engine\Common\Utilities;
 use Faker\Components\Templating\Loader as TemplateLoader;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;  
 

@@ -1,11 +1,11 @@
 <?php
 namespace Faker\Extension\Faker\Type;
 
-use Faker\Components\Engine\Original\Exception as FakerException,
-    Faker\Components\Engine\Original\Type\Type,
-    Faker\Components\Engine\Original\Utilities,
-    Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition,
-    Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\Type\Type;
+use Faker\Components\Engine\Common\Utilities;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 class Demo extends Type
 {

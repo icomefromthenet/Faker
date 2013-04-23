@@ -3,7 +3,7 @@ namespace Faker\Components\Engine\Common\Type;
 
 use PDO;
 use Faker\Components\Engine\EngineException;
-use Faker\Components\Engine\Original\Utilities;
+use Faker\Components\Engine\Common\Utilities;
 use Faker\Components\Engine\Common\TokenIterator;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Doctrine\DBAL\Connection;
