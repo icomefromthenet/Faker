@@ -3,7 +3,6 @@ namespace Faker\Components\Engine\Common\Composite;
 
 use Doctrine\DBAL\Types\Type;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Faker\Components\Engine\EngineException;
 
 /**
   *  Basic Implementation of a Column Node this will be
@@ -83,12 +82,18 @@ class ColumnNode implements CompositeInterface, DBALTypeInterface
     
     public function validate()
     {
+        $id       = $this->getId();
+        $children = $this->getChildren();
         
-        if(empty($this->id)) {
-            throw new EngineException('Column must have a name');
+        if(empty($id)) {
+            throw new CompositeException($this,'Column must have a name');
         }
         
-        foreach($this->children as $child) {
+        if(count($children) === 0) {
+            throw new CompositeException($this,'Column must have at least on child node');
+        }
+        
+        foreach($children as $child) {
             $child->validate();
         }
         

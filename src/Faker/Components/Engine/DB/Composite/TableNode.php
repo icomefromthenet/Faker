@@ -2,7 +2,7 @@
 namespace Faker\Components\Engine\DB\Composite;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\Composite\CompositeException;
 use Faker\Components\Engine\Common\GeneratorCache;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Composite\GeneratorInterface;
@@ -28,16 +28,65 @@ class TableNode extends BaseTableNode implements GeneratorInterface, VisitorInte
       */
     protected $resultCache;
 
+    /**
+      *  @var integer the number of rows to generate 
+      */
+    protected $rowsToGenerate;
+    
+    /**
+      *  Return the number of rows that this table node will generate
+      *
+      *  @access public
+      *  @return integer
+      */
+    public function getRowsToGenerate()
+    {
+        return $this->rowsToGenerate;
+    }
+    
+    /**
+      *  Sets the number of rows to generate
+      *
+      *  @access public
+      *  @param integer $value the number of rows to generate for this table
+      */
+    public function setRowsToGenerate($value)
+    {
+        $this->rowsToGenerate = $value;
+    }
+    
+    
+    public function validate()
+    {
+        $rowsToGenerate = $this->getRowsToGenerate();
+        
+        if(is_integer($rowsToGenerate) === false) {
+            throw new CompositeException($this,'rows to generate must be an integer');
+        }
+        
+        if($rowsToGenerate <= 0) {
+            throw new CompositeException($this,'rows to generate must be > 0');
+        }
+        
+        parent::validate();
+        
+    }
+    
      //------------------------------------------------------------------
     # GeneratorInterface
     
     public function generate($rows,$values = array())
     {
+        $id         = $this->getId();
+        $children   = $this->getChildren();
+        $event      = $this->getEventDispatcher();
+        $toGenerate = $this->getRowsToGenerate();
+        
          # dispatch the start table event
        
-        $this->event->dispatch(
+        $event->dispatch(
                 FormatEvents::onTableStart,
-                new GenerateEvent($this,$values,$this->getOption('name'))
+                new GenerateEvent($this,$values,$id)
         );
    
    
@@ -49,37 +98,39 @@ class TableNode extends BaseTableNode implements GeneratorInterface, VisitorInte
                 
                 # dispatch the row start event
             
-                $this->event->dispatch(
+                $event->dispatch(
                     FormatEvents::onRowStart,
-                    new GenerateEvent($this,$values,$this->getOption('name'))
+                    new GenerateEvent($this,$values,$id)
                 );
 
                 # send the generate event to the columns
        
-                foreach($this->child_types as $type) {
-                    $values = $type->generate($rows,$values);            
+                foreach($children as $type) {
+                    if($type instanceof GeneratorInterface) {
+                        $type->generate($rows,$values);                
+                    }
+                    
                 }
-        
                 
                 # dispatch the row stop event
                 
-                $this->event->dispatch(
+                $event->dispatch(
                     FormatEvents::onRowEnd,
-                    new GenerateEvent($this,$values,$this->getOption('name'))
+                    new GenerateEvent($this,$values,$id)
                 );
 
                     
                 # increment the rows needed by datatypes. 
                 $rows = $rows +1;
         }
-        while($rows <= $this->rows);
+        while($rows <= $toGenerate);
         
         
         # dispatch the stop table event
         
-        $this->event->dispatch(
+        $event->dispatch(
                     FormatEvents::onTableEnd,
-                    new GenerateEvent($this,$values,$this->getOption('name'))
+                    new GenerateEvent($this,$values,$id)
         );
 
     }

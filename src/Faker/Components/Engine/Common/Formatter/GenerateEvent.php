@@ -5,7 +5,10 @@ use Symfony\Component\EventDispatcher\Event;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 
 /**
-  *  Event is used for events found in \Faker\Components\Engine\Original\FormatEvents; 
+  *  Event is used for events found in \Faker\Components\Engine\Original\FormatEvents;
+  *
+  *  @author Lewis Dyer <getintouch@icomefromthenet.com>
+  *  @since 1.0.0
   */
 class GenerateEvent extends Event
 {
@@ -22,7 +25,7 @@ class GenerateEvent extends Event
     /**
       *  @var  Faker\Components\Engine\Original\Composite\CompositeInterface
       */
-    protected $type;
+    protected $node;
     
     /**
       *  Class constructor
@@ -31,11 +34,11 @@ class GenerateEvent extends Event
       *  @param mixed[] $values associate array of values generated
       *  @param string $id the component id example to schema name
       */
-    public function __construct(CompositeInterface $type  ,array $values,$id)
+    public function __construct(CompositeInterface $node, array $values, $id)
     {
         $this->values = $values;
-        $this->id = $id;
-        $this->type = $type;
+        $this->id     = $id;
+        $this->node   = $node;
     }
     
     /**
@@ -63,9 +66,9 @@ class GenerateEvent extends Event
       *
       *  @return CompositeInterface
       */
-    public function getType()
+    public function getNode()
     {
-        return $this->type;
+        return $this->node;
     }
 }
 

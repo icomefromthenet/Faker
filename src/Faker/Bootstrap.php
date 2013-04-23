@@ -245,9 +245,12 @@ class Bootstrap
       
       $project['formatter_factory'] = $project->share(function($project)
       {
-         return new \Faker\Components\Engine\Common\Formatter\FormatterFactory($project['event_dispatcher'],$project['writer_manager']);   
+         return new \Faker\Components\Engine\Common\Formatter\FormatterFactory($project['event_dispatcher'],$project['writer_manager'],$project['dbal_visitor']);   
       });
       
+      $project['dbal_visitor'] = $project->share(function($project) {
+         return new \Faker\Components\Engine\Common\Visitor\DBALGathererVisitor(new \Faker\Components\Engine\Common\Formatter\ValueConverter());
+      });
       
       $project['faker_database'] =  $project->share(function($project)
       {

@@ -3,7 +3,7 @@ namespace Faker\Components\Engine\DB\Composite;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\Composite\CompositeException;
 use Faker\Components\Engine\Common\GeneratorCache;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Composite\GeneratorInterface;
@@ -41,21 +41,23 @@ class ForeignKeyNode extends BaseForeignKeyNode implements GeneratorInterface, V
     
     public function generate($rows,$values = array())
     {
-        # return null if cache turned off 
-        if($this->getOption('useCache') === false) {
+        $cache = $this->getResultCache();
+        
+        # return null if cache not set 
+        if(!$cache instanceof GeneratorCache ) {
             return null;
         }
             
         # rewind on the first row
         if($rows === 1) {
-            $this->cache->rewind();
+            $cache->rewind();
         }
         
         # fetch the current value
-        $value = $this->cache->current();
+        $value = $cache->current();
         
         # iterate to next value
-        $this->cache->next();
+        $cache->next();
         
         return $value;
     }
