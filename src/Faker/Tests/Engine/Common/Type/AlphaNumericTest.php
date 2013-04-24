@@ -50,8 +50,10 @@ class AlphaNumericTest extends AbstractProject
         $type->setUtilities($utilities);
         $type->setOption('format','ccCC');
 
-        $this->assertTrue($type->validate()); 
-        $this->assertEquals('dgHJ',$type->generate(1,array()));
+        $this->assertTrue($type->validate());
+        
+        $values = array();
+        $this->assertEquals('dgHJ',$type->generate(1,$values));
     }
     
     
@@ -80,8 +82,9 @@ class AlphaNumericTest extends AbstractProject
         $type->setOption('repeatMax',1);
         $type->setOption('repeatMin',1);
         $type->validate(); 
-         
-        $this->assertEquals('dgHJ',$type->generate(1,array()));
+        
+        $values = array();
+        $this->assertEquals('dgHJ',$type->generate(1,$values));
     }
     
     
@@ -115,18 +118,19 @@ class AlphaNumericTest extends AbstractProject
         $type->setOption('repeatMax',5);
         $type->setOption('repeatMin',1);
         $type->validate(); 
-         
-        $length = strlen($type->generate(1,array())); 
+        
+        $values = array(); 
+        $length = strlen($type->generate(1,$values)); 
         $this->assertGreaterThanOrEqual(4, $length);
         $this->assertLessThanOrEqual(20, $length);
 
-        
-        $length = strlen($type->generate(2,array())); 
+        $values = array(); 
+        $length = strlen($type->generate(2,$values)); 
         $this->assertGreaterThanOrEqual(8, $length);
         $this->assertLessThanOrEqual(20, $length);
 
-        
-        $length = strlen($type->generate(3,array())); 
+        $values = array(); 
+        $length = strlen($type->generate(3,$values)); 
         $this->assertGreaterThanOrEqual(12, $length);
         $this->assertLessThanOrEqual(20, $length);
 

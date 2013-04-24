@@ -58,7 +58,7 @@ class Schema extends BaseComposite
     /**
       *  @inheritdoc 
       */
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
           # dispatch the start event
        

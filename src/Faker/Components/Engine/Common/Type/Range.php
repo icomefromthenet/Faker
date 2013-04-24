@@ -28,7 +28,7 @@ class Range extends Type
     /**
       *  @inheritdoc  
       */
-    public function generate($rows, $values = array())
+    public function generate($rows, &$values = array())
     {
         $min         = $this->getOption('min');
         $max         = $this->getOption('max');

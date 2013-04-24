@@ -1,13 +1,36 @@
 <?php
 namespace Faker\Tests\Engine\DB;
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Faker\Components\Engine\DB\Builder\SchemaBuilder;
+use Faker\Components\Engine\Common\Formatter\FormatEvents;
+use Faker\Components\Engine\Common\Formatter\GenerateEvent;
 use Faker\Tests\Base\AbstractProject;
 
 class BuilderExamplesTest extends AbstractProject
 {
     
+    public function testStaticBuilderCreate()
+    {
+       $container       = $this->getProject(); 
+       $name            = 'test_db'; 
+       
+       $this->assertInstanceOf('Faker\Components\Engine\DB\Builder\SchemaBuilder',SchemaBuilder::create($container,$name));
+       
+        $repo            = $container->getEngineTypeRepository();
+        $event           = $container->getEventDispatcher();
+        $locale          = $container->getLocaleFactory()->create('en');
+        $util            = $container->getEngineUtilities();
+        $gen             = $container->getDefaultRandom();
+        $conn            = $container->getGeneratorDatabase();
+        $loader          = $container->getTemplatingManager()->getLoader();
+        $platformFactory = $container->getDBALPlatformFactory();
+        $formatterFactory= $container->getFormatterFactory(); 
     
+        
+        $this->assertInstanceOf('Faker\Components\Engine\DB\Builder\SchemaBuilder',SchemaBuilder::create($container,$name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory));
+           
+    }
     
     public function testExample1()
     {
@@ -42,6 +65,7 @@ class BuilderExamplesTest extends AbstractProject
                                 ->typeName('sql')
                             ->end()
                         ->end()
+                        
                     ->end();
         
         # builder has returned a generator composite and a schema node as root
@@ -60,7 +84,46 @@ class BuilderExamplesTest extends AbstractProject
         
     }
     
-   
+    public function testExample2()
+    {
+        $container       = $this->getProject(); 
+        $name            = 'test_db'; 
+        $event           = new EventDispatcher(); 
+        
+        $event->addListener(FormatEvents::onRowEnd,function(GenerateEvent $generateEvent) {
+            var_dump($generateEvent->getValues());
+            
+        });
+        
+        $schema = SchemaBuilder::create($container,$name,$event)
+                        ->describe()
+                            ->addTable('table1')
+                                ->toGenerate(1)
+                                ->addColumn('column1')
+                                    ->dbalType('string')
+                                    ->addField()
+                                        ->fieldConstant()
+                                            ->value('myfield')
+                                            ->cast('string')
+                                        ->end()
+                                    ->end()
+                                    ->addField()
+                                        ->fieldAlphaNumeric()
+                                            ->format('ccCCCC')
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end();
+        
+        $this->assertInstanceOf('Faker\Components\Engine\DB\Composite\SchemaNode',$schema);
+        
+        $values = array();
+        
+        $schema->generate(1,$values);
+        
+    }
     
     
 }

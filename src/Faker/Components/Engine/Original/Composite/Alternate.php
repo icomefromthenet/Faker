@@ -98,7 +98,7 @@ class Alternate extends BaseComposite implements CompositeInterface , SelectorIn
     /**
       *  @inheritdoc 
       */
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         # set alternate loop counter if at 0
         if($this->current_step === 0) {

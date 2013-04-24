@@ -71,7 +71,8 @@ class TableNodeTest extends AbstractProject
         $tableNode->addChild($child);
         $tableNode->setRowsToGenerate($toGenerate);
         
-        $tableNode->generate(1,array());
+        $values = array();
+        $tableNode->generate(1,$values);
         
         
     }
@@ -104,8 +105,8 @@ class TableNodeTest extends AbstractProject
        
         $tableNode->addChild($child_a);        
         $tableNode->addChild($child_b);        
-        
-        $tableNode->generate(1,array());
+        $values = array();
+        $tableNode->generate(1,$values);
    
     }
     
@@ -136,8 +137,8 @@ class TableNodeTest extends AbstractProject
        
         $tableNode->addChild($child_a);        
         $tableNode->addChild($child_b);        
-        
-        $tableNode->generate(1,array());
+        $values = array();
+        $tableNode->generate(1,$values);
    
     }
     

@@ -19,7 +19,7 @@ class AutoIncrement extends Type
      * 
      * @return string 
      */
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         
         $start = $this->getOption('start');

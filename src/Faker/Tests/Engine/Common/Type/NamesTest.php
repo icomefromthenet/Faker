@@ -110,33 +110,34 @@ class NamesTest extends AbstractProject
         $type->setOption('format','{fname} {lname}');
         
         $type->validate(); 
-         
-        $this->assertEquals('Kristina Chung',$type->generate(1,array()));
+        
+        $values = array();          
+        $this->assertEquals('Kristina Chung',$type->generate(1,$values));
     
         $type->setOption('format','{fname} {inital} {lname}');
         $type->validate(); 
          
-        $this->assertEquals('Kristina H Chung',$type->generate(1,array()));
+        $this->assertEquals('Kristina H Chung',$type->generate(1,$values));
     
         $type->setOption('format','{fname},{inital} {lname}');
         $type->validate(); 
          
-        $this->assertEquals('Kristina,H Chung',$type->generate(1,array()));
+        $this->assertEquals('Kristina,H Chung',$type->generate(1,$values));
         
         $type->setOption('format','{fname},{lname} {inital}');
         $type->validate(); 
          
-        $this->assertEquals('Kristina,Chung H',$type->generate(1,array()));
+        $this->assertEquals('Kristina,Chung H',$type->generate(1,$values));
         
         $type->setOption('format','{lname}');
         $type->validate(); 
          
-        $this->assertEquals('Chung',$type->generate(1,array()));
+        $this->assertEquals('Chung',$type->generate(1,$values));
         
         $type->setOption('format','{fname},{lname} {inital}');
         $type->validate();
         
-        $this->assertEquals('Kristina,Chung H',$type->generate(1,array()));
+        $this->assertEquals('Kristina,Chung H',$type->generate(1,$values));
          
     }
     

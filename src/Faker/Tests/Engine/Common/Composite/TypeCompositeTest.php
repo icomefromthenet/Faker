@@ -154,7 +154,8 @@ class TypeCompositeTest extends AbstractProject
         $type = new TypeNode($id,$event,$internal);
         $type->setParent($parent);
         
-        $this->assertEquals('a generated string',$type->generate(5,array('row1' => 6)));
+        $values = array('row1' => 6);
+        $this->assertEquals('a generated string',$type->generate(5,$values));
         
     }
     

@@ -100,12 +100,13 @@ class RegexTest extends AbstractProject
         
         $type->setOption('format','aaaa[0-9]{4}');
         $type->validate(); 
-         
-        $this->assertRegExp('/a{4}[0-9]{4}/',$type->generate(1,array()));
-        $this->assertRegExp('/a{4}[0-9]{4}/',$type->generate(1,array()));
-        $this->assertRegExp('/a{4}[0-9]{4}/',$type->generate(1,array()));
-        $this->assertRegExp('/a{4}[0-9]{4}/',$type->generate(1,array()));
-        $this->assertRegExp('/a{4}[0-9]{4}/',$type->generate(1,array()));
+        
+        $values = array();          
+        $this->assertRegExp('/a{4}[0-9]{4}/',$type->generate(1,$values));
+        $this->assertRegExp('/a{4}[0-9]{4}/',$type->generate(1,$values));
+        $this->assertRegExp('/a{4}[0-9]{4}/',$type->generate(1,$values));
+        $this->assertRegExp('/a{4}[0-9]{4}/',$type->generate(1,$values));
+        $this->assertRegExp('/a{4}[0-9]{4}/',$type->generate(1,$values));
     }
     
 }

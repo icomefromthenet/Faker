@@ -162,9 +162,10 @@ class DateTest extends AbstractProject
         $type->setOption('start','today');
         $type->setOption('modify','+ 1 hour');
         $type->validate(); 
-         
-        $this->assertInstanceOf('\DateTime',$type->generate(1,array()));
-        $this->assertInstanceOf('\DateTime',$type->generate(1,array()));
+        
+        $values = array(); 
+        $this->assertInstanceOf('\DateTime',$type->generate(1,$values));
+        $this->assertInstanceOf('\DateTime',$type->generate(1,$values));
       
     
         # test with max
@@ -172,12 +173,13 @@ class DateTest extends AbstractProject
         $type->setOption('modify','+ 1 hour');
         $type->setOption('max','today +3 hours');
         $type->validate(); 
-        
-       $dte1 = $type->generate(1,array());
-       $dte2 = $type->generate(2,array());
-       $dte3 = $type->generate(3,array());
-       $dte4 = $type->generate(4,array());
-       $dte5 = $type->generate(4,array());
+       
+       $values = array();  
+       $dte1 = $type->generate(1,$values);
+       $dte2 = $type->generate(2,$values);
+       $dte3 = $type->generate(3,$values);
+       $dte4 = $type->generate(4,$values);
+       $dte5 = $type->generate(4,$values);
       
        # test if date has been reset once max reached
        $this->assertEquals($dte1->format('U'),$dte5->format('U'));
@@ -191,16 +193,16 @@ class DateTest extends AbstractProject
        # test with modify
        $type->setOption('modify',false);
        $type->setOption('random',true);
-       $this->assertEquals($rnd_date->getTimestamp(),$type->generate(1,array())->getTimestamp());
+       $this->assertEquals($rnd_date->getTimestamp(),$type->generate(1,$values)->getTimestamp());
        
        # test fixed date
        $start = new \DateTime();
        $type->setOption('modify',false);
        $type->setOption('random',false);
        $type->setOption('start',$start);
-       $this->assertEquals($start->getTimestamp(),$type->generate(1,array())->getTimestamp());
-       $this->assertEquals($start->getTimestamp(),$type->generate(2,array())->getTimestamp());
-       $this->assertEquals($start->getTimestamp(),$type->generate(3,array())->getTimestamp());
+       $this->assertEquals($start->getTimestamp(),$type->generate(1,$values)->getTimestamp());
+       $this->assertEquals($start->getTimestamp(),$type->generate(2,$values)->getTimestamp());
+       $this->assertEquals($start->getTimestamp(),$type->generate(3,$values)->getTimestamp());
     }
     
     

@@ -92,8 +92,8 @@ class UniqueTest extends AbstractProject
         
         $type->setOption('format','ccCC');
         $type->validate(); 
-         
-        $this->assertEquals('dgHJ',$type->generate(1,array()));
+        $values = array();  
+        $this->assertEquals('dgHJ',$type->generate(1,$values));
         
         
     }
@@ -122,8 +122,8 @@ class UniqueTest extends AbstractProject
         
         $type->setOption('format','XXxx');
         $type->validate(); 
-         
-        $this->assertEquals(1207,$type->generate(1,array()));
+        $values = array();  
+        $this->assertEquals(1207,$type->generate(1,$values));
         
         
     }

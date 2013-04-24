@@ -1,55 +1,29 @@
 <?php
 namespace Faker\Tests\Engine\Common\Formatter;
 
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-
 use Faker\Tests\Base\AbstractProject;
-use Faker\Components\Engine\Common\Formatter\BaseFormatter;
-
-class MockFormatter extends BaseFormatter
-{
-    
-    public function getName()
-    {
-        return 'mockFormatter';
-    }
-    
-    public function toXml()
-    {
-        return '';
-    }
-    
-    public function getConfigExtension(ArrayNodeDefinition $rootNode)
-    {
-        return $rootNode;
-    }
-    
-    public function getOuputFileFormat()
-    {
-        return '{prefix}_{body}_{suffix}_{seq}.{ext}';
-    }
-    
-    public function getDefaultOutEncoding()
-    {
-        return 'UTF-8';
-    }
-    
-};    
+use Faker\Tests\Engine\Common\Formatter\Mock\MockFormatter;
     
     
 class BaseFormatterTest extends AbstractProject
 {
-    public function testOptionProperties()
+
+    public function testOptionInterface()
     {
-        $base = new MockFormatter();
+        $event    = $this->getMockBuilder('\Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $writer   = $this->getMock('Faker\Components\Writer\WriterInterface');
+        $visitor  = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
+        $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
+                         ->getMockForAbstractClass();
         
-        $mock = new \stdClass();
+        $base = new MockFormatter($event,$writer,$platform,$visitor);
+        
+        
         $base->setOption('option1',1);
         $base->setOption('option2','anoption');
-        $base->setOption('option3',$mock);
+        
         $this->assertEquals(1,$base->getOption('option1'));
         $this->assertEquals('anoption',$base->getOption('option2'));
-        $this->assertEquals($mock,$base->getOption('option3'));
         
     }
     
@@ -59,7 +33,13 @@ class BaseFormatterTest extends AbstractProject
       */
     public function testMissingOptionException()
     {
-        $base = new MockFormatter();
+         $event    = $this->getMockBuilder('\Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $writer   = $this->getMock('Faker\Components\Writer\WriterInterface');
+        $visitor  = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
+        $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
+                         ->getMockForAbstractClass();
+        
+        $base = new MockFormatter($event,$writer,$platform,$visitor);
         $base->getOption('option100');
         
     }
@@ -70,23 +50,47 @@ class BaseFormatterTest extends AbstractProject
         $writer = $this->getMock('\Faker\Components\Writer\WriterInterface');
         $visitor = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
         $event = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
+                         ->getMockForAbstractClass();
         
-        $base = new MockFormatter();
-        $base->setWriter($writer);
-        $base->setVisitor($visitor);
-        $base->setEventDispatcher($event);
-
-        $this->assertEquals($writer,$base->getWriter());
-        $this->assertEquals($visitor,$base->getVisitor());
+        $base = new MockFormatter($event,$writer,$platform,$visitor);
+        
         $this->assertEquals($event,$base->getEventDispatcher());
+        $this->assertEquals($writer,$base->getWriter());    
+        $this->assertEquals($platform,$base->getPlatform());
+        $this->assertEquals($visitor,$base->getVisitor());
+        
+        
+        $writerB = $this->getMock('\Faker\Components\Writer\WriterInterface');
+        $visitorB = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
+        $eventB = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $platformB = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
+                         ->getMockForAbstractClass();
+        
+        $base->setWriter($writerB);
+        $base->setVisitor($visitorB);
+        $base->setEventDispatcher($eventB);
+        $base->setPlatform($platformB);
+
+        $this->assertEquals($writerB,$base->getWriter());
+        $this->assertEquals($visitorB,$base->getVisitor());
+        $this->assertEquals($eventB,$base->getEventDispatcher());
+        $this->assertEquals($platformB,$base->getPlatform());
         
     }
     
     
     public function testMergeMissingDefaults()
     {
-        $base = new MockFormatter();
-        $base->merge();
+        $writer = $this->getMock('\Faker\Components\Writer\WriterInterface');
+        $visitor = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
+        $event = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
+                         ->getMockForAbstractClass();
+        
+        $base = new MockFormatter($event,$writer,$platform,$visitor);
+        
+        $base->validate();
         $this->assertEquals(false,$base->getOption('splitOnTable'));
         $this->assertEquals('{prefix}_{body}_{suffix}_{seq}.{ext}',$base->getOption('outFileFormat'));
             
@@ -94,9 +98,16 @@ class BaseFormatterTest extends AbstractProject
     
     public function testMergeMissingValues()
     {
-        $base = new MockFormatter();
+        $writer = $this->getMock('\Faker\Components\Writer\WriterInterface');
+        $visitor = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
+        $event = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
+                         ->getMockForAbstractClass();
+        
+        $base = new MockFormatter($event,$writer,$platform,$visitor);
+        
         $base->setOption('splitOnTable',null);
-        $base->merge();
+        $base->validate();
         $this->assertFalse($base->getOption('splitOnTable'));
     }
     
@@ -106,19 +117,34 @@ class BaseFormatterTest extends AbstractProject
       */
     public function testMergeBadValues()
     {
-        $base = new MockFormatter();
+        $writer = $this->getMock('\Faker\Components\Writer\WriterInterface');
+        $visitor = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
+        $event = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
+                         ->getMockForAbstractClass();
+        
+        $base = new MockFormatter($event,$writer,$platform,$visitor);
+        
         $base->setOption('splitOnTable','true');
-        $base->merge();
+        $base->validate();
         
     }
     
     
     public function testMergeGoodValues()
     {
-        $base = new MockFormatter();
+        $writer = $this->getMock('\Faker\Components\Writer\WriterInterface');
+        $visitor = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
+        $event = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
+                         ->getMockForAbstractClass();
+        
+        $base = new MockFormatter($event,$writer,$platform,$visitor);
+        
         $base->setOption('splitOnTable',true);
         $base->setOption('outFileFormat','{suffix}_{seq}.{ext}');
-        $base->merge();
+        $base->validate();
+        
         $this->assertTrue($base->getOption('splitOnTable'));
         $this->assertEquals('{suffix}_{seq}.{ext}',$base->getOption('outFileFormat'));
     }

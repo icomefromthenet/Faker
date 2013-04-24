@@ -188,7 +188,7 @@ class AlternateSelectorTest extends AbstractProject
     
     public function testGenerate()
     {
-        
+        $values = array(); 
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock(); 
@@ -208,37 +208,37 @@ class AlternateSelectorTest extends AbstractProject
         
         $this->assertTrue($type->validate());
         
-        $this->assertEquals(1,$type->generate(0,array()));
-        $this->assertEquals(2,$type->generate(0,array()));
-        $this->assertEquals(3,$type->generate(0,array()));
-        $this->assertEquals(4,$type->generate(0,array()));
-        $this->assertEquals(5,$type->generate(0,array()));
+        $this->assertEquals(1,$type->generate(0,$values));
+        $this->assertEquals(2,$type->generate(0,$values));
+        $this->assertEquals(3,$type->generate(0,$values));
+        $this->assertEquals(4,$type->generate(0,$values));
+        $this->assertEquals(5,$type->generate(0,$values));
         
         $type->setOption('set',3);
         $type->setOption('step',3);
         
         $this->assertTrue($type->validate());
         
-        $this->assertEquals(1,$type->generate(0,array()));
-        $this->assertEquals(1,$type->generate(0,array()));
-        $this->assertEquals(1,$type->generate(0,array()));
-        $this->assertEquals(2,$type->generate(0,array()));
-        $this->assertEquals(2,$type->generate(0,array()));
-        $this->assertEquals(2,$type->generate(0,array()));
-        $this->assertEquals(3,$type->generate(0,array()));
-        $this->assertEquals(3,$type->generate(0,array()));
-        $this->assertEquals(3,$type->generate(0,array()));
+        $this->assertEquals(1,$type->generate(0,$values));
+        $this->assertEquals(1,$type->generate(0,$values));
+        $this->assertEquals(1,$type->generate(0,$values));
+        $this->assertEquals(2,$type->generate(0,$values));
+        $this->assertEquals(2,$type->generate(0,$values));
+        $this->assertEquals(2,$type->generate(0,$values));
+        $this->assertEquals(3,$type->generate(0,$values));
+        $this->assertEquals(3,$type->generate(0,$values));
+        $this->assertEquals(3,$type->generate(0,$values));
         
         # loop ok
-        $this->assertEquals(1,$type->generate(0,array()));
-        $this->assertEquals(1,$type->generate(0,array()));
-        $this->assertEquals(1,$type->generate(0,array()));
-        $this->assertEquals(2,$type->generate(0,array()));
-        $this->assertEquals(2,$type->generate(0,array()));
-        $this->assertEquals(2,$type->generate(0,array()));
-        $this->assertEquals(3,$type->generate(0,array()));
-        $this->assertEquals(3,$type->generate(0,array()));
-        $this->assertEquals(3,$type->generate(0,array()));
+        $this->assertEquals(1,$type->generate(0,$values));
+        $this->assertEquals(1,$type->generate(0,$values));
+        $this->assertEquals(1,$type->generate(0,$values));
+        $this->assertEquals(2,$type->generate(0,$values));
+        $this->assertEquals(2,$type->generate(0,$values));
+        $this->assertEquals(2,$type->generate(0,$values));
+        $this->assertEquals(3,$type->generate(0,$values));
+        $this->assertEquals(3,$type->generate(0,$values));
+        $this->assertEquals(3,$type->generate(0,$values));
         
     }
     

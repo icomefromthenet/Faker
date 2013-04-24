@@ -360,9 +360,11 @@ class TextTest extends AbstractProject
           $type->setOption('paragraphs',5);
           $type->setOption('maxlines',30);
           $type->setOption('minlines',5);
-
-          $this->assertTrue($type->validate()); 
-          $this->assertContains('enim nisl elementum purus, accumsan interdum libero dui nec ipsum.',$type->generate(1,array()));
+     
+          $this->assertTrue($type->validate());
+          
+          $values = array(); 
+          $this->assertContains('enim nisl elementum purus, accumsan interdum libero dui nec ipsum.',$type->generate(1,$values));
         
     }
     
@@ -399,8 +401,10 @@ class TextTest extends AbstractProject
           $type->setOption('maxlines',30);
           $type->setOption('minlines',5);
           
-          $this->assertTrue($type->validate()); 
-          $this->assertContains('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Lorem ipsum dolor sit amet',$type->generate(1,array()));
+          $this->assertTrue($type->validate());
+          
+          $values = array(); 
+          $this->assertContains('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Lorem ipsum dolor sit amet',$type->generate(1,$values));
         
     }
     

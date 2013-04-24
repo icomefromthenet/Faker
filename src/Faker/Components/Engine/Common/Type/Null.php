@@ -15,7 +15,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 class Null extends Type
 {
 
-    public function generate($rows, $values = array())
+    public function generate($rows, &$values = array())
     {
         return NULL;
     }

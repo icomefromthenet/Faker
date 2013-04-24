@@ -72,10 +72,10 @@ class ClosureTypeTest extends AbstractProject
         
        
         $type->validate(); 
-         
-        $this->assertEquals(5,$type->generate(1,array()));
-        $this->assertEquals(5,$type->generate(1,array()));
-        $this->assertEquals(5,$type->generate(1,array()));
+        $values = array();          
+        $this->assertEquals(5,$type->generate(1,$values));
+        $this->assertEquals(5,$type->generate(1,$values));
+        $this->assertEquals(5,$type->generate(1,$values));
         
     }
     

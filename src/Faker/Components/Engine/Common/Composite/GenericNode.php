@@ -143,7 +143,7 @@ class GenericNode implements CompositeInterface, GeneratorInterface, VisitorInte
     
     
     
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         $result  = null;
         $field   = $this->getId();

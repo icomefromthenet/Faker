@@ -60,7 +60,7 @@ class Random extends BaseComposite implements CompositeInterface , SelectorInter
     /**
       *  @inheritdoc 
       */
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         
         $return = $this->generator->generate(0,(count($this->child_types)-1));

@@ -249,16 +249,17 @@ class RangeTest extends AbstractProject
         $type->setOption('step',1);
         
         $type->validate(); 
-         
-        $this->assertEquals(1,$type->generate(1,array()));
-        $this->assertEquals(2,$type->generate(2,array()));
-        $this->assertEquals(3,$type->generate(3,array()));
-        $this->assertEquals(4,$type->generate(4,array()));
         
-        $this->assertEquals(1,$type->generate(5,array()));
-        $this->assertEquals(2,$type->generate(6,array()));
-        $this->assertEquals(3,$type->generate(7,array()));
-        $this->assertEquals(4,$type->generate(8,array()));
+        $values = array();  
+        $this->assertEquals(1,$type->generate(1,$values));
+        $this->assertEquals(2,$type->generate(2,$values));
+        $this->assertEquals(3,$type->generate(3,$values));
+        $this->assertEquals(4,$type->generate(4,$values));
+        
+        $this->assertEquals(1,$type->generate(5,$values));
+        $this->assertEquals(2,$type->generate(6,$values));
+        $this->assertEquals(3,$type->generate(7,$values));
+        $this->assertEquals(4,$type->generate(8,$values));
         
     }
     
@@ -284,16 +285,17 @@ class RangeTest extends AbstractProject
         $type->setOption('windowStep',1);
         
         $type->validate(); 
-         
-        $this->assertEquals(1,$type->generate(1,array()));
-        $this->assertEquals(2,$type->generate(2,array()));
-        $this->assertEquals(3,$type->generate(3,array()));
-        $this->assertEquals(4,$type->generate(4,array()));
         
-        $this->assertEquals(2,$type->generate(5,array()));
-        $this->assertEquals(3,$type->generate(6,array()));
-        $this->assertEquals(4,$type->generate(7,array()));
-        $this->assertEquals(5,$type->generate(8,array()));
+        $values = array();  
+        $this->assertEquals(1,$type->generate(1,$values));
+        $this->assertEquals(2,$type->generate(2,$values));
+        $this->assertEquals(3,$type->generate(3,$values));
+        $this->assertEquals(4,$type->generate(4,$values));
+        
+        $this->assertEquals(2,$type->generate(5,$values));
+        $this->assertEquals(3,$type->generate(6,$values));
+        $this->assertEquals(4,$type->generate(7,$values));
+        $this->assertEquals(5,$type->generate(8,$values));
         
     }
     
@@ -323,8 +325,8 @@ class RangeTest extends AbstractProject
         $type->setOption('random',true);
         
         $type->validate(); 
-         
-        $this->assertEquals(1,$type->generate(1,array()));
+        $values = array();  
+        $this->assertEquals(1,$type->generate(1,$values));
         
     }
     
@@ -355,8 +357,8 @@ class RangeTest extends AbstractProject
         $type->setOption('round',2);
         
         $type->validate(); 
-         
-        $this->assertEquals(2.33,$type->generate(1,array()));
+        $values = array(); 
+        $this->assertEquals(2.33,$type->generate(1,$values));
         
     }
     

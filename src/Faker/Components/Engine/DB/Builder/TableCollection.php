@@ -5,6 +5,12 @@ use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\Builder\NodeCollection;
 use Faker\Components\Engine\DB\Composite\TableNode;
 
+/**
+  *  Build a collection of TableNode
+  *
+  *  @author Lewis Dyer <getintouch@icomefromthenet.com>
+  *  @since 1.0.4
+  */
 class TableCollection extends NodeCollection
 {
     
@@ -19,8 +25,14 @@ class TableCollection extends NodeCollection
     public function addTable($name)
     {
         $builder = new TableBuilder($name,
-                                    
-                                    );
+                                    $this->eventDispatcher,
+                                    $this->repo,
+                                    $this->utilities,
+                                    $this->generator,
+                                    $this->locale,
+                                    $this->database,
+                                    $this->templateLoader
+                                );
         
         
         $builder->setParent($this);
@@ -57,6 +69,7 @@ class TableCollection extends NodeCollection
         return $parent;
         
     }
+    
     
     
 }

@@ -6,42 +6,42 @@ use PHPStats\Generator\GeneratorInterface;
 use Faker\Locale\LocaleInterface;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\Builder\NodeCollection;
+use Faker\Components\Engine\Common\Builder\NodeBuilder;
 use Faker\Components\Engine\DB\Composite\TableNode;
 use Faker\Components\Engine\DB\Composite\ColumnNode;
-
+use Doctrine\DBAL\Types\Type;
 
 /**
-  *  Build a TableNode 
+  *  Build a ColumnNode 
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class TableBuilder extends NodeCollection
+class ColumnBuilder extends NodeCollection
 {
     /**
-      *  @var integer the number of rows to generate 
+      *  @var string the dbaltype used in type conversion
       */
-    protected $toGenerate;
+    protected $dbalType;
     
     /**
-      *  Adds a new column to the table
+      * Adds a new Field To Column
       *
       * @access public
       * @param string the table database name
-      * @return Faker\Components\Engine\DB\Builder\ColumnBuilder
+      * @return Faker\Components\Engine\Common\Builder\NodeBuilder
       */
-    public function addColumn($name)
+    public function addField()
     {
-        $builder = new ColumnBuilder($name,
-                                     $this->eventDispatcher,
-                                     $this->repo,
-                                     $this->utilities,
-                                     $this->generator,
-                                     $this->locale,
-                                     $this->database,
-                                     $this->templateLoader
-                                );
-                                    
+        $builder = new NodeBuilder('columnField',
+                                   $this->eventDispatcher,
+                                   $this->repo,
+                                   $this->utilities,
+                                   $this->generator,
+                                   $this->locale,
+                                   $this->database,
+                                   $this->templateLoader);
+        
         $builder->setParent($this);
         
         return $builder;
@@ -52,12 +52,10 @@ class TableBuilder extends NodeCollection
     {
         $name  = $this->name;
         $event = $this->eventDispatcher;
-        
-        $node = new TableNode($name,$event);
+        $node  = new ColumnNode($name,$event);
         
         # bind properties
-        $node->setRowsToGenerate($this->toGenerate);
-        
+        $node->setDBALType($this->dbalType);
         
         return $node;
     }
@@ -76,16 +74,12 @@ class TableBuilder extends NodeCollection
         $children = $this->children();
         $parent   = $this->getParent();
         
-        # add child columns to this TableNode        
+        # add child columns to this ColumnNode        
         foreach($children as $child) {
-            if(!$child instanceof ColumnNode) {
-                throw new EngineException('TableBuilder has a non column node as a children and is not allowed');
-            }
-            
             $node->addChild($child);
         }
         
-        # appent TableNode to parent builder
+        # appent ColumnNode to parent builder
         $parent->append($node);
         
         return $parent;
@@ -94,25 +88,11 @@ class TableBuilder extends NodeCollection
     
     
     /**
-      *   Sets the number of rows to generate within this table
-      *
-      *   @access public
-      *   @param integer $number the number of rows
-      *   @return TableBuilder
-      */
-    public function toGenerate($number)
-    {
-        $this->toGenerate = $number;
-        
-        return $this;
-    }
-    
-    /**
       *  Set the default locale on this table
       *
       *  @access public
       *  @param LocaleInterface $locale
-      *  @return TableBuilder
+      *  @return ColumnBuilder
       */
     public function defaultLocale(LocaleInterface $locale)
     {
@@ -126,11 +106,29 @@ class TableBuilder extends NodeCollection
       *
       *  @access public
       *  @param GeneratorInterface $random
-      *  @return TableBuilder
+      *  @return ColumnBuilder
       */
     public function defaultGenerator(GeneratorInterface $random)
     {
         $this->generator = $random;
+        
+        return $this;
+    }
+    
+    /**
+      *  Sets the DBALType name to be used to convert
+      *  the php value to database representation
+      *
+      *  @access public
+      *  @return ColumnBuilder
+      */
+    public function dbalType($dbalTypeName)
+    {
+        if(Type::hasType($dbalTypeName) === false) {
+            throw new EngineException('The doctrine DBAL Type::'.$dbalTypeName.' does not exist');
+        }
+        
+        $this->dbalType = Type::getType($dbalTypeName);
         
         return $this;
     }

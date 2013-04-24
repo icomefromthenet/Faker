@@ -63,8 +63,9 @@ class EntityIterator implements \Iterator
             
         } else {
          
+            $values = array();
             # ask generator to make use a generic result
-            $result = $this->generator->generate($this->position,array());
+            $result = $this->generator->generate($this->position,$values);
             
             # run the map closure to get final entity
             if($this->mapClosure instanceof \Closure) {

@@ -32,7 +32,7 @@ class ConstantNumber extends Type
      * @return string
      * @param interger $rows
      */
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         if($this->find_value == null) {
           

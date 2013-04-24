@@ -141,10 +141,12 @@ class ConstantTest extends AbstractProject
         $type->setGenerator($generator);
         
         $type->setOption('value','ccCC');
-        $type->validate(); 
-        $this->assertEquals('ccCC',$type->generate(1,array()));
-        $this->assertEquals('ccCC',$type->generate(2,array()));
-        $this->assertEquals('ccCC',$type->generate(3,array()));
+        $type->validate();
+        
+        $values = array(); 
+        $this->assertEquals('ccCC',$type->generate(1,$values));
+        $this->assertEquals('ccCC',$type->generate(2,$values));
+        $this->assertEquals('ccCC',$type->generate(3,$values));
             
         $type = new ConstantNumber();
         $type->setGenerator($generator);
@@ -153,7 +155,7 @@ class ConstantTest extends AbstractProject
         
         $type->setOption('value','123');
         $type->validate(); 
-        $this->assertEquals(123,$type->generate(1,array()));
+        $this->assertEquals(123,$type->generate(1,$values));
         
         $type = new ConstantString();
         $type->setGenerator($generator);
@@ -162,7 +164,7 @@ class ConstantTest extends AbstractProject
 
         $type->setOption('value','1');
         $type->validate(); 
-        $this->assertSame('1',$type->generate(1,array()));
+        $this->assertSame('1',$type->generate(1,$values));
        
        
     }

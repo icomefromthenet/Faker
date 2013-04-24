@@ -99,7 +99,7 @@ class MockNode implements CompositeInterface, VisitorInterface, GeneratorInterfa
         return true;        
     }
     
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
 	return null;
     }

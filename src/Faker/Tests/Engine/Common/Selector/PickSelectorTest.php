@@ -153,12 +153,13 @@ class PickSelectorTest extends AbstractProject
                   ->with($this->equalTo(0),$this->equalTo(100))
                   ->will($this->returnValue(100));
     
+        $values = array();
         
-        $this->assertEquals(1,$type->generate(1,array()));
-        $this->assertEquals(2,$type->generate(1,array()));
-        $this->assertEquals(2,$type->generate(1,array()));
-        $this->assertEquals(1,$type->generate(1,array()));
-        $this->assertEquals(1,$type->generate(1,array()));
+        $this->assertEquals(1,$type->generate(1,$values));
+        $this->assertEquals(2,$type->generate(1,$values));
+        $this->assertEquals(2,$type->generate(1,$values));
+        $this->assertEquals(1,$type->generate(1,$values));
+        $this->assertEquals(1,$type->generate(1,$values));
         
         
     }

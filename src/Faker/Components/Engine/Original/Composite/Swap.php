@@ -60,7 +60,7 @@ class Swap extends BaseComposite implements CompositeInterface , SelectorInterfa
     //  -------------------------------------------------------------------------
     
     
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
       
        # has the switch map been populated?

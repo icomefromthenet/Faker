@@ -18,7 +18,7 @@ class PickSelector extends Type
 {
     
    
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         $prob      = $this->getOption('probability');
         $generated = round($this->getGenerator()->generate(0,100));
