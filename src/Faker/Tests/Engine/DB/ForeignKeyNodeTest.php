@@ -23,10 +23,8 @@ class ForeignKeyNodeTest extends AbstractProject
         $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
         
         $id        = 'foreignKeyNode';
-        
-        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
             
-        $type = new ForeignKeyNode($id,$event,$internal);
+        $type = new ForeignKeyNode($id,$event);
         $type->setResultCache($cache);
         
         $this->assertInstanceOf('\\Faker\\Components\\Engine\\Common\\Composite\\ForeignKeyNode',$type);
@@ -37,62 +35,61 @@ class ForeignKeyNodeTest extends AbstractProject
     }
     
     
-    public function testSchemaDispatchesEvent()
+    public function testUsesCache()
     {
-        $id = 'schema_1';
+        $id = 'foreignKeyNode';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-
-        $event->expects($this->exactly(2))
-              ->method('dispatch')
-              ->with(
-                     $this->logicalOr(
-                                      $this->stringContains(FormatEvents::onSchemaStart),
-                                      $this->stringContains(FormatEvents::onSchemaEnd)
-                                      ),
-                     $this->isInstanceOf('\Faker\Components\Engine\Common\Formatter\GenerateEvent'));
+        $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
               
-        $schema = new ForeignKeyNode($id,$event);
-        $schema->generate(1,array());
+        $cache->expects($this->once())
+              ->method('rewind');
+    
+        $cache->expects($this->once())
+              ->method('current')
+              ->will($this->returnValue(5));
+              
+        $cache->expects($this->once())
+              ->method('next');
+              
+        $foreignKey = new ForeignKeyNode($id,$event);
+        $foreignKey->setResultCache($cache);
+        $values = array();
+        $this->assertEquals(5,$foreignKey->generate(1,$values));
         
         
     }
     
-    
-    public function testChildrenGenerateCalled()
+    public function testNotRewindCacheRowNotEqualToFirst()
     {
-        $id = 'schema_1';
+        $id = 'foreignKeyNode';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new ForeignKeyNode($id,$event);
-     
-        $child_a = $this->getMockBuilder('Faker\Tests\Engine\DB\Mock\MockNode')
-                        ->disableOriginalConstructor()
-                        ->getMock();
-                        
-        $child_a->expects($this->once())
-                ->method('generate')
-                ->with($this->equalTo(1),$this->isType('array'));
-       
-        $child_b = $this->getMockBuilder('Faker\Tests\Engine\DB\Mock\MockNode')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-                            
-        $child_b->expects($this->once())
-                ->method('generate')
-                ->with($this->equalTo(1),$this->isType('array'));
-       
-        $schema->addChild($child_a);        
-        $schema->addChild($child_b);        
+        $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
+              
+        $cache->expects($this->exactly(0))
+              ->method('rewind');
+    
+        $cache->expects($this->once())
+              ->method('current')
+              ->will($this->returnValue(5));
+              
+        $cache->expects($this->once())
+              ->method('next');
+              
+        $foreignKey = new ForeignKeyNode($id,$event);
+        $foreignKey->setResultCache($cache);
+        $values = array();
+        $this->assertEquals(5,$foreignKey->generate(2,$values));
         
-        $schema->generate(1,array());
-   
+        
     }
+    
     
     
     public function testVisititorVisitsChildren()
     {
-        $id = 'schema_1';
+        $id = 'foreignKeyNode';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $schema = new ForeignKeyNode($id,$event);
+        $foreignKey = new ForeignKeyNode($id,$event);
      
         $child_a = $this->getMockBuilder('Faker\Tests\Engine\DB\Mock\MockNode')
                         ->disableOriginalConstructor()
@@ -115,13 +112,94 @@ class ForeignKeyNodeTest extends AbstractProject
                         ->disableOriginalConstructor()
                         ->getMock();
         
-        $schema->addChild($child_a);        
-        $schema->addChild($child_b); 
+        $foreignKey->addChild($child_a);        
+        $foreignKey->addChild($child_b); 
         
-        $schema->acceptVisitor($visitor);
+        $foreignKey->acceptVisitor($visitor);
         
     }
     
+    /**
+      *  @expectedException Faker\Components\Engine\Common\Composite\CompositeException
+      *  @expectedExceptionMessage Foreign-key requires a cache to be set
+      */
+    public function testValidationFailsNoCacheSet()
+    {
+        $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $id        = 'foreignKeyNode';
+            
+        $type = new ForeignKeyNode($id,$event);
+        
+        $type->validate();
+        
+    }
+    
+     /**
+      *  @expectedException Faker\Components\Engine\Common\Composite\CompositeException
+      *  @expectedExceptionMessage The child node "foreignTable" at path "config" must be configured
+      */
+    public function testValidationFailsNoForignTableSet()
+    {
+        $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $id        = 'foreignKeyNode';
+        $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
+         
+        $type = new ForeignKeyNode($id,$event);
+        $type->setResultCache($cache);
+        
+        $type->setOption('foreignColumn','aaaa');
+        
+        $type->validate();
+        
+    }
+    
+    
+     /**
+      *  @expectedException Faker\Components\Engine\Common\Composite\CompositeException
+      *  @expectedExceptionMessage The child node "foreignColumn" at path "config" must be configured
+      */
+    public function testValidationFailsNoForignColumnSet()
+    {
+        $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $id        = 'foreignKeyNode';
+        $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
+         
+        $type = new ForeignKeyNode($id,$event);
+        $type->setResultCache($cache);
+        
+        $type->setOption('foreignTable','aaaa');
+        
+        $type->validate();
+        
+    }
+    
+    
+    public function testValidationPass()
+    {
+        $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $id        = 'foreignKeyNode';
+        $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
+         
+        $type = new ForeignKeyNode($id,$event);
+        $type->setResultCache($cache);
+        
+        $type->setOption('foreignTable','aaaa');
+        $type->setOption('foreignColumn','aaaa');
+        $type->validate();
+        
+    }
     
 }
 /* End of File */

@@ -32,7 +32,7 @@ class ColumnNode extends BaseColumnNode implements GeneratorInterface, VisitorIn
      //------------------------------------------------------------------
     # GeneratorInterface
     
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         $id       = $this->getId();
         $event    = $this->getEventDispatcher();

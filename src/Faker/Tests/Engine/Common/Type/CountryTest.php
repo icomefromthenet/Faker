@@ -89,10 +89,10 @@ class CountryTest extends AbstractProject
         $type->setUtilities($utilities);
         
         $type->validate(); 
-         
-        $this->assertEquals('Albania',$type->generate(1,array()));
-        $this->assertEquals('Albania',$type->generate(1,array()));
-        $this->assertEquals('Albania',$type->generate(1,array()));
+        $values = array();  
+        $this->assertEquals('Albania',$type->generate(1,$values));
+        $this->assertEquals('Albania',$type->generate(1,$values));
+        $this->assertEquals('Albania',$type->generate(1,$values));
        
     }
     
@@ -119,11 +119,12 @@ class CountryTest extends AbstractProject
         $type->setUtilities($utilities);
         
         $type->setOption('countries','AU');
-        $type->validate(); 
-         
-        $this->assertEquals('Australia',$type->generate(1,array()));
-        $this->assertEquals('Australia',$type->generate(1,array()));
-        $this->assertEquals('Australia',$type->generate(1,array()));
+        $type->validate();
+        
+        $values = array();  
+        $this->assertEquals('Australia',$type->generate(1,$values));
+        $this->assertEquals('Australia',$type->generate(1,$values));
+        $this->assertEquals('Australia',$type->generate(1,$values));
     }
     
     /**
@@ -153,8 +154,8 @@ class CountryTest extends AbstractProject
         
         $type->setOption('countries','AU,UK,US');
         $type->validate(); 
-         
-        $this->assertEquals('',$type->generate(1,array()));
+        $values = array();  
+        $this->assertEquals('',$type->generate(1,$values));
     
         
     }
@@ -184,10 +185,10 @@ class CountryTest extends AbstractProject
         
         $type->setOption('countries','AU,GB,US');
         $type->validate(); 
-         
-        $this->assertEquals('United States',$type->generate(1,array()));
-        $this->assertEquals('United States',$type->generate(1,array()));
-        $this->assertEquals('United States',$type->generate(1,array()));
+        $values = array();  
+        $this->assertEquals('United States',$type->generate(1,$values));
+        $this->assertEquals('United States',$type->generate(1,$values));
+        $this->assertEquals('United States',$type->generate(1,$values));
     
         
     }

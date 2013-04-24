@@ -52,7 +52,9 @@ class SchemaNodeTest extends AbstractProject
                      $this->isInstanceOf('\Faker\Components\Engine\Common\Formatter\GenerateEvent'));
               
         $schema = new SchemaNode($id,$event);
-        $schema->generate(1,array());
+        
+        $values = array();
+        $schema->generate(1,$values);
         
         
     }
@@ -83,7 +85,8 @@ class SchemaNodeTest extends AbstractProject
         $schema->addChild($child_a);        
         $schema->addChild($child_b);        
         
-        $schema->generate(1,array());
+        $values = array();
+        $schema->generate(1,$values);
    
     }
     

@@ -89,7 +89,7 @@ class Type extends BaseNode implements CompositeInterface, TypeConfigInterface
    
     //  -------------------------------------------------------------------------
 	
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         throw new FakerException('not implemented');        
     }

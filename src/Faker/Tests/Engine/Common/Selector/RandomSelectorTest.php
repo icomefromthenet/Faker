@@ -141,16 +141,17 @@ class RandomSelectorTest extends AbstractProject
                   ->with($this->equalTo(1),$this->equalTo(1))
                   ->will($this->returnValue(1.3));
         
-         $type = new RandomSelector();
+        $type = new RandomSelector();
         $type->setGenerator($generatorA);
         $type->setLocale($locale);
         $type->setUtilities($utilities);
         $type->setOption('set',1);
         $type->validate();
         
-        $this->assertEquals(1,$type->generate(1,array()));
-        $this->assertEquals(2,$type->generate(1,array())); # rounds up
-        $this->assertEquals(1,$type->generate(1,array())); # rounds down
+        $values = array(); 
+        $this->assertEquals(1,$type->generate(1,$values));
+        $this->assertEquals(2,$type->generate(1,$values)); # rounds up
+        $this->assertEquals(1,$type->generate(1,$values)); # rounds down
         
         
     }

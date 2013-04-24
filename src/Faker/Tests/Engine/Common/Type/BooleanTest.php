@@ -72,8 +72,9 @@ class BooleanTest extends AbstractProject
         
         $type->setOption('value',true);
         $type->validate(); 
-         
-        $this->assertEquals(true,$type->generate(1,array()));
+        
+        $values = array();         
+        $this->assertEquals(true,$type->generate(1,$values));
         
         $type = new BooleanType();
         $type->setGenerator($generator);
@@ -83,7 +84,7 @@ class BooleanTest extends AbstractProject
         $type->setOption('value',false);
         $type->validate(); 
 
-        $this->assertEquals(false,$type->generate(1,array()));
+        $this->assertEquals(false,$type->generate(1,$values));
     
     }
     

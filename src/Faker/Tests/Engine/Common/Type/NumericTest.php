@@ -99,8 +99,9 @@ class NumericTest extends AbstractProject
         
         $type->setOption('format','xxxx');
         $type->validate(); 
-         
-        $this->assertEquals(1234,$type->generate(1,array()));
+        
+        $values = array();  
+        $this->assertEquals(1234,$type->generate(1,$values));
     }
     
     public function testGenerateWithDecimal()
@@ -128,8 +129,8 @@ class NumericTest extends AbstractProject
         
         $type->setOption('format','xxxx.xx');
         $type->validate(); 
-         
-        $this->assertEquals(1234.22,$type->generate(1,array()));
+        $values = array(); 
+        $this->assertEquals(1234.22,$type->generate(1,$values));
     }
 }
 /*End of file */

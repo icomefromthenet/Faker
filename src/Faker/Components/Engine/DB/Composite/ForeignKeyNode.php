@@ -1,8 +1,11 @@
 <?php
 namespace Faker\Components\Engine\DB\Composite;
 
+use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+
 use Faker\Components\Engine\Common\Composite\CompositeException;
 use Faker\Components\Engine\Common\GeneratorCache;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
@@ -39,7 +42,35 @@ class ForeignKeyNode extends BaseForeignKeyNode implements GeneratorInterface, V
      //------------------------------------------------------------------
     # GeneratorInterface
     
-    public function generate($rows,$values = array())
+    
+    public function validate()
+    {
+        $cache = $this->getResultCache();
+        
+        # check if cache has been set
+        if(!$cache instanceof GeneratorCache) {
+            throw new CompositeException($this,'Foreign-key requires a cache to be set');
+        }
+        
+       # validate the options passed into config
+        try {
+            $processor = new Processor();
+            $options = $processor->processConfiguration($this, array('config' => $this->options));
+            
+            # reset the options as they be modified by the config processor
+            foreach($options as $name => $value) {
+                $this->setOption($name,$value);
+            }
+            
+        }catch(InvalidConfigurationException $e) {
+            throw new CompositeException($this,$e->getMessage(),0,$e);
+        }
+        
+    }
+
+    
+    
+    public function generate($rows,&$values = array())
     {
         $cache = $this->getResultCache();
         
@@ -75,13 +106,8 @@ class ForeignKeyNode extends BaseForeignKeyNode implements GeneratorInterface, V
     
     //------------------------------------------------------------------
     # VisitorInterface
-    /**
-      *  Accept a visitor
-      *
-      *  @return void
-      *  @access public
-      *  @param BasicVisitor $visitor the visitor to accept
-      */
+  
+  
     public function acceptVisitor(BasicVisitor $visitor)
     {
         # execute visitors that apply to this node
@@ -101,29 +127,16 @@ class ForeignKeyNode extends BaseForeignKeyNode implements GeneratorInterface, V
     //------------------------------------------------------------------
     # OptionInterface
     
-    /**
-      *  @inheritdoc 
-      */
     public function setOption($name,$value)
     {
         $this->options[$name]= $value;
     }
     
-    /**
-      *  @inheritdoc 
-      */
     public function getOption($name)
     {
         return $this->options[$name];
     }
     
-    /**
-      *  Check if the option is set
-      *
-      *  @param string $name the option name
-      *  @return boolean true if set
-      *  @access public
-      */
     public function hasOption($name)
     {
          return isset($this->options[$name]);

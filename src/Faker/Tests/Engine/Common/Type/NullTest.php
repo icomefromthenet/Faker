@@ -66,10 +66,10 @@ class NullTest extends AbstractProject
         $type->setUtilities($utilities);
         
         $type->validate(); 
-         
-        $this->assertEquals(null,$type->generate(1,array()));
-        $this->assertEquals(null,$type->generate(2,array()));
-        $this->assertEquals(null,$type->generate(3,array()));
+        $values = array();          
+        $this->assertEquals(null,$type->generate(1,$values));
+        $this->assertEquals(null,$type->generate(2,$values));
+        $this->assertEquals(null,$type->generate(3,$values));
     }
     
 }

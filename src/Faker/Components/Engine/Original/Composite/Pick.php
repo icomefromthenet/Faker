@@ -82,7 +82,7 @@ class Pick extends BaseComposite implements  CompositeInterface , SelectorInterf
     /**
       *  @inheritdoc 
       */
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         $index = (round($this->generator->generate(0,100)) <= $this->probability) ? 0 : 1;
         

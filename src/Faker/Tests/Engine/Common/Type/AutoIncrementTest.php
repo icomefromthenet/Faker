@@ -148,10 +148,11 @@ class AutoIncrementTest extends AbstractProject
         $type->setOption('start',1);
         $type->setOption('increment',4);
         $type->validate(); 
-         
-        $this->assertEquals(1,$type->generate(1,array()));
-        $this->assertEquals(5,$type->generate(2,array()));
-        $this->assertEquals(9,$type->generate(3,array()));
+        
+        $values = array();          
+        $this->assertEquals(1,$type->generate(1,$values));
+        $this->assertEquals(5,$type->generate(2,$values));
+        $this->assertEquals(9,$type->generate(3,$values));
         
         
         # test with start at 0
@@ -165,10 +166,10 @@ class AutoIncrementTest extends AbstractProject
         
         
         $type->validate(); 
-         
-        $this->assertEquals(0,$type->generate(1,array()));
-        $this->assertEquals(4,$type->generate(2,array()));
-        $this->assertEquals(8,$type->generate(3,array()));
+        $values = array();         
+        $this->assertEquals(0,$type->generate(1,$values));
+        $this->assertEquals(4,$type->generate(2,$values));
+        $this->assertEquals(8,$type->generate(3,$values));
  
  
  
@@ -181,10 +182,11 @@ class AutoIncrementTest extends AbstractProject
         $type->setOption('start',0);
         $type->setOption('increment',0.5);
         $type->validate(); 
-         
-        $this->assertEquals(0,$type->generate(1,array()));
-        $this->assertEquals(0.5,$type->generate(2,array()));
-        $this->assertEquals(1,$type->generate(3,array()));
+        
+        $values = array();          
+        $this->assertEquals(0,$type->generate(1,$values));
+        $this->assertEquals(0.5,$type->generate(2,$values));
+        $this->assertEquals(1,$type->generate(3,$values));
         
  
     }

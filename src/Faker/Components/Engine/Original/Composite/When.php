@@ -74,7 +74,7 @@ class When extends BaseComposite implements CompositeInterface, SelectorInterfac
     /**
       *  @inheritdoc 
       */
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         if(isset($this->child_types[0]) === false) {
             throw new FakerException('Switch has not been given a type to use');

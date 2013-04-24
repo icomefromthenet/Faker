@@ -81,9 +81,9 @@ class CitiesTest extends AbstractProject
         
         $type->setOption('countries','AU');
         $type->validate(); 
-        
-        $this->assertStringMatchesFormat('Traralgon',$type->generate(1,array()));
-        $this->assertStringMatchesFormat('Traralgon',$type->generate(2,array()));
+        $values = array(); 
+        $this->assertStringMatchesFormat('Traralgon',$type->generate(1,$values));
+        $this->assertStringMatchesFormat('Traralgon',$type->generate(2,$values));
         
     }
     
@@ -112,8 +112,9 @@ class CitiesTest extends AbstractProject
         $type->setOption('countries','AU');
         $type->validate(); 
         
-        $this->assertStringMatchesFormat('St Albans',$type->generate(1,array()));
-        $this->assertStringMatchesFormat('St Albans',$type->generate(2,array()));
+        $values = array();         
+        $this->assertStringMatchesFormat('St Albans',$type->generate(1,$values));
+        $this->assertStringMatchesFormat('St Albans',$type->generate(2,$values));
         
     }
     
@@ -141,9 +142,9 @@ class CitiesTest extends AbstractProject
         
         $type->setOption('countries','AU');
         $type->validate(); 
-        
-        $this->assertStringMatchesFormat('Roebourne',$type->generate(1,array()));
-        $this->assertStringMatchesFormat('Roebourne',$type->generate(2,array()));
+        $values = array(); 
+        $this->assertStringMatchesFormat('Roebourne',$type->generate(1,$values));
+        $this->assertStringMatchesFormat('Roebourne',$type->generate(2,$values));
         
     }
     
@@ -173,8 +174,8 @@ class CitiesTest extends AbstractProject
         
         $type->setOption('countries','ASASAASAAU');
         $type->validate(); 
-        
-        $type->generate(1,array());
+        $values = array(); 
+        $type->generate(1,$values);
         
     }
     

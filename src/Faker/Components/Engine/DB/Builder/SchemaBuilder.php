@@ -21,6 +21,12 @@ use Faker\Components\Engine\DB\Composite\SchemaNode;
 use Faker\Components\Engine\Common\Formatter\FormatterBuilder;
 use Faker\Components\Engine\Common\Formatter\FormatterFactory;
 
+/**
+  *  Build a SchemaNode 
+  *
+  *  @author Lewis Dyer <getintouch@icomefromthenet.com>
+  *  @since 1.0.4
+  */
 class SchemaBuilder implements ParentNodeInterface
 {
     protected $rootNode;
@@ -91,7 +97,15 @@ class SchemaBuilder implements ParentNodeInterface
       */
     public function describe()
     {
-        $tableCollection = new TableCollection();
+        $tableCollection = new TableCollection($this->name,
+                                               $this->event,
+                                               $this->typeRepo,
+                                               $this->utilities,
+                                               $this->generator,
+                                               $this->locale,
+                                               $this->connection,
+                                               $this->templateLoader
+                                            );
         
         $tableCollection->setParent($this);
         
@@ -170,15 +184,16 @@ class SchemaBuilder implements ParentNodeInterface
       *
       *  @param Faker\Project the DI container
       *  @param string $name of the entity
-      *  @param Faker\Components\Engine\Common\TypeRepository $repo;
       *  @param Symfony\Component\EventDispatcher\EventDispatcherInterface $event
+      *  @param Faker\Components\Engine\Common\TypeRepository $repo;
       *  @param Faker\Locale\LocaleInterface $locale to use
+      *  @param Faker\Components\Engine\Common\Utilities  $util
       *  @param PHPStats\Generator\GeneratorInterface $util
       *  @param Doctrine\DBAL\Connection $conn
       *  @param Faker\Components\Templating\Loader $loader
       *  @param Faker\PlatformFactory $platformFactory
       *  @param Faker\Components\Engine\Common\Formatter\FormatterFactory $formatterFactory
-      *  @return Faker\Components\Engine\Entity\Builder\EntityGenerator
+      *  @return Faker\Components\Engine\DB\Builder\SchemaBuilder
       */
     public static function create(Project $container,
                                   $name,

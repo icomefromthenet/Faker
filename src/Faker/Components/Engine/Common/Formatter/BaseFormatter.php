@@ -62,6 +62,7 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
       */
     protected $valueConverter;
     
+    
      //  -------------------------------------------------------------------------
     # Constructor
     
@@ -81,6 +82,9 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
         $this->setVisitor($visitor);
         $this->options = $options;
     }
+    
+    
+    
     
     //  ----------------------------------------------------------------------------
     # EventSubscriberInterface
@@ -227,14 +231,20 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
     //  ----------------------------------------------------------------------------
     # Default Methods
     
-     /**
-      *  Will validate the configuration
-      *
-      *  @throws EngineException when config validation fails
-      */
-    public function merge()
+    public function getEventDispatcher()
     {
-        try {
+        return $this->event;
+    }
+    
+    public function setEventDispatcher(EventDispatcherInterface $event)
+    {
+	$this->event = $event;
+    }
+    
+     
+    public function validate()
+    {
+       try {
             
             $processor = new Processor();
             $options = $processor->processConfiguration($this, array('config' => $this->options));
@@ -248,30 +258,8 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
             throw new EngineException($e->getMessage(),0,$e);
         }
         
+        return true;        
     }
-    
-    /**
-      *  Sets the event dispatcher dependency
-      *
-      *  @param Symfony\Component\EventDispatcher\EventDispatcherInterface $event
-      *  @access public
-      */
-    public function setEventDispatcher(EventDispatcherInterface $event)
-    {
-        $this->event_dispatcher = $event;
-    }
-    
-    /**
-      *  Fetch the event dispatcher
-      *
-      *  @access public
-      *  @return Symfony\Component\EventDispatcher\EventDispatcherInterface
-      */
-    public function getEventDispatcher()
-    {
-        return $this->event_dispatcher;
-    }
-    
     
     /**
       *  Sets the write to send formatted string to
@@ -352,13 +340,6 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
       */
     abstract public function getName();
     
-    /**
-      *  Convert the formatter to xml representation
-      *
-      *  @return string the xml rep
-      *  @access public
-      */    
-    abstract public function toXml();
     
     /**
       *  Will fetch config extensions used in child formatters that

@@ -31,7 +31,7 @@ class GenerateEventTest extends AbstractProject
         
         $this->assertSame($values,$type->getValues());
         $this->assertSame($id,$type->getId());
-        $this->assertSame($composite,$type->getType());
+        $this->assertSame($composite,$type->getNode());
         
     }
     

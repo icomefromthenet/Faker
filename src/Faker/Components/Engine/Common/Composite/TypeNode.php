@@ -144,7 +144,7 @@ class TypeNode implements CompositeInterface, GeneratorInterface, VisitorInterfa
     //------------------------------------------------------------------
     # GeneratorInterface
     
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         return $this->type->generate($rows,$values);
     }

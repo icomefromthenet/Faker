@@ -75,7 +75,7 @@ class TableNode extends BaseTableNode implements GeneratorInterface, VisitorInte
      //------------------------------------------------------------------
     # GeneratorInterface
     
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         $id         = $this->getId();
         $children   = $this->getChildren();

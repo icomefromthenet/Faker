@@ -72,7 +72,7 @@ class Column extends BaseComposite implements CacheInterface
     /**
       *  @inheritdoc 
       */
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         # dispatch the start event
         

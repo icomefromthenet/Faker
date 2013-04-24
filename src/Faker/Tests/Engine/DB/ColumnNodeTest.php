@@ -62,7 +62,9 @@ class ColumnNodeTest extends AbstractProject
         $columnNode = new ColumnNode($id,$event);
         $columnNode->addChild($child_a);
         
-        $columnNode->generate(1,array());
+        $values = array();
+        
+        $columnNode->generate(1,$values);
     }
     
     
@@ -91,7 +93,9 @@ class ColumnNodeTest extends AbstractProject
         $columnNode->addChild($child_a);        
         $columnNode->addChild($child_b);        
         
-        $columnNode->generate(1,array());
+        $values = array();
+        
+        $columnNode->generate(1,$values);
    
     }
     
@@ -119,8 +123,10 @@ class ColumnNodeTest extends AbstractProject
        
         $columnNode->addChild($child_a);        
         $columnNode->addChild($child_b);        
-        $columnNode->setResultCache($cache);        
-        $columnNode->generate(1,array());
+        $columnNode->setResultCache($cache);
+        
+        $values = array();
+        $columnNode->generate(1,$values);
         
     }
     

@@ -10,7 +10,7 @@ use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\Formatter\FormatEvents;
 
 /*
- * Formats output into SQL Create Statements
+ * Formats output into SQL Create Statements 
  *
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0.0
@@ -61,25 +61,29 @@ class Sql extends BaseFormatter implements FormatterInterface
       */
     public function onSchemaStart(GenerateEvent $event)
     {
-        $writer = $this->getWriter();
-    
+        $nodeId       = $event->getNode()->getId();
+        $writer       = $this->getWriter();
+        $seqeunce     = $writer->getStream();
+        $encoder      = $writer->getEncoder();
+        $platformName = $this->getPlatform()->getName();
+        $outEncoding  = $this->getOption(self::CONFIG_OPTION_OUT_ENCODING);
+        $now          = new \DateTime();
+        $server_name  = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost'; 
+        
+        
         # set the schema prefix on writter
-        $writer->getStream()->getSequence()->setPrefix(strtolower($event->getType()->getOption('name')));
-        $writer->getStream()->getSequence()->setSuffix($this->platform->getName());
-        $writer->getStream()->getSequence()->setExtension('sql');
-        $writer->getStream()->getEncoder()->setOutEncoding($this->getOption(self::CONFIG_OPTION_OUT_ENCODING));
+        $sequence->setPrefix(strtolower($nodeId));
+        $sequence->setSuffix($platformName);
+        $sequence->setExtension('sql');
+        $encoder->setOutEncoding($outEncoding);
         
-        $now = new \DateTime();
-        
-        $server_name = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost'; 
-        
-        $this->writer->getStream()->getHeaderTemplate()->setData(array(
+        $stream->getHeaderTemplate()->setData(array(
                                         'faker_version' => FAKER_VERSION,
                                         'host'          => $server_name,
                                         'datetime'      => $now->format(DATE_W3C),
                                         'phpversion'    => PHP_VERSION,
-                                        'schema'        => $event->getType()->getId(),
-                                        'platform'      => $this->gePlatform()->getName(),
+                                        'schema'        => $nodeId,
+                                        'platform'      => $platformName,
                                         ));
     }
     
@@ -102,11 +106,14 @@ class Sql extends BaseFormatter implements FormatterInterface
       */
     public function onTableStart(GenerateEvent $event)
     {
-       $writer     = $this->getWriter();
-       $tableName  = $event->getType()->getId();
+       $writer         = $this->getWriter();
+       $stream         = $writer->getStream();
+       $sequence       = $stream->getSequence();
+       $tableName      = $event->getType()->getId();
+       $parentNodeName = $event->getNode()->getParent()->getId();
        
        # set the prefix on the writer for table 
-       $writer->getStream()->getSequence()->setBody(strtolower($tableName));
+       $sequence->setBody(strtolower($tableName));
        
        $writer->write(PHP_EOL);
        $writer->write(PHP_EOL);
@@ -116,7 +123,7 @@ class Sql extends BaseFormatter implements FormatterInterface
        $writer->write(PHP_EOL);
        $writer->write(PHP_EOL);
        
-       $writer->write('USE '.$event->getType()->getParent()->getOption('name').';');        
+       $writer->write('USE '.$parentNodeName.';');        
        $writer->write(PHP_EOL);
        $writer->write(PHP_EOL);
 
@@ -130,20 +137,21 @@ class Sql extends BaseFormatter implements FormatterInterface
       */
     public function onTableEnd(GenerateEvent $event)
     {
-       
-       $writer     = $this->getWriter();
+       $writer       = $this->getWriter();
+       $nodeName     = $event->getNode()->getId();
+       $splitOnTable = $this->getOption(self::CONFIG_OPTION_SPLIT_ON_TABLE);
        
        $writer->write(PHP_EOL);
        $writer->write(PHP_EOL);
        $writer->write('--'.PHP_EOL);
-       $writer->write('-- Finished Table: '.$event->getType()->getOption('name').PHP_EOL);
+       $writer->write('-- Finished Table: '.$nodeName.PHP_EOL);
        $writer->write('--'.PHP_EOL);
        $writer->write(PHP_EOL);
        $writer->write(PHP_EOL);
        
        # flush the writer for next table
-       if($this->getOption(self::CONFIG_OPTION_SPLIT_ON_TABLE) === true) {
-            $this->writer->flush(); 
+       if( $splitOnTable === true) {
+            $writer->flush(); 
        }
        
     }
@@ -250,45 +258,36 @@ class Sql extends BaseFormatter implements FormatterInterface
     
     //  -------------------------------------------------------------------------
     
-    /**
-      *  Convert the formatter to xml representation
-      *
-      *  @return string the xml rep
-      *  @access public
-      */  
-    public function toXml()
+    public function validate()
     {
-        return '<writer platform="'.$this->getPlatform()->getName().'" format="'.$this->getName().'" />' . PHP_EOL;
-    }
-
-    //  -------------------------------------------------------------------------
-    
-    /**
-      *  Overrides the base class merge to configure the writer
-      *  after the definitions are merged.
-      */
-    public function merge()
-    {
-        parent::merge();
+        # run merge and validate of the config options
+        parent::validate();
         
-        if(! $this->writer instanceof WriterInterface) {
+        $writer         = $this->getWriter();
+        $limit          = $writer->getStream()->getLimit();
+        $sequence       = $writer->getStream()->getSequence();
+        $singleFileMode = $this->getOption(self::CONFIG_OPTION_SINGLE_FILE_MODE);
+        $outFileFormat  = $this->getOption(self::CONFIG_OPTION_OUT_FILE_FORMAT);
+        $maxLines       = $this->getOption(self::CONFIG_OPTION_MAX_LINES);
+                
+        if(!$writer instanceof WriterInterface) {
             throw new EngineException('Writter not been set can not finish merging config');
         }
         
-        if($this->getOption(self::CONFIG_OPTION_SINGLE_FILE_MODE) === true) {
+        if( $singleFileMode === true) {
             
             # reverse the split on table and remove line limit to keep single file mode. 
             $this->setOption(self::CONFIG_OPTION_SPLIT_ON_TABLE,false);
             $this->setOption(self::CONFIG_OPTION_MAX_LINES,null);
-            $this->getWriter()->getStream()->getLimit()->changeLimit(null);
+            $limit->changeLimit(null);
         }
         else {
             # set the maxLines
-            $this->getWriter()->getStream()->getLimit()->changeLimit($this->getOption(self::CONFIG_OPTION_MAX_LINES));
+            $limit->changeLimit($maxLines);
         }
         
         # set output format
-        $this->writer->getStream()->getSequence()->setFormat($this->getOption(self::CONFIG_OPTION_OUT_FILE_FORMAT));
+        $sequence->setFormat($outFileFormat);
         
     }
     

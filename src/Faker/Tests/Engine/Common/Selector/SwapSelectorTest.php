@@ -52,20 +52,21 @@ class SwapSelectorTest extends AbstractProject
         
         $type->validate();
         
-        $this->assertEquals(1,$type->generate(0,array()));
-        $this->assertEquals(1,$type->generate(0,array()));
-        $this->assertEquals(1,$type->generate(0,array()));
-        $this->assertEquals(2,$type->generate(0,array()));
-        $this->assertEquals(2,$type->generate(0,array()));
-        $this->assertEquals(2,$type->generate(0,array()));
+        $values = array(); 
+        $this->assertEquals(1,$type->generate(0,$values));
+        $this->assertEquals(1,$type->generate(0,$values));
+        $this->assertEquals(1,$type->generate(0,$values));
+        $this->assertEquals(2,$type->generate(0,$values));
+        $this->assertEquals(2,$type->generate(0,$values));
+        $this->assertEquals(2,$type->generate(0,$values));
         
         # loops?
-        $this->assertEquals(1,$type->generate(0,array()));
-        $this->assertEquals(1,$type->generate(0,array()));
-        $this->assertEquals(1,$type->generate(0,array()));
-        $this->assertEquals(2,$type->generate(0,array()));
-        $this->assertEquals(2,$type->generate(0,array()));
-        $this->assertEquals(2,$type->generate(0,array()));
+        $this->assertEquals(1,$type->generate(0,$values));
+        $this->assertEquals(1,$type->generate(0,$values));
+        $this->assertEquals(1,$type->generate(0,$values));
+        $this->assertEquals(2,$type->generate(0,$values));
+        $this->assertEquals(2,$type->generate(0,$values));
+        $this->assertEquals(2,$type->generate(0,$values));
         
         
     }

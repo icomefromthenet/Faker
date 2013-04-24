@@ -179,7 +179,8 @@ class SelectorCompositeTest extends AbstractProject
         $type->addChild($childA);
         $type->addChild($childB);
         
-        $this->assertEquals('a generated string',$type->generate(5,array('row1' => 6)));
+        $values = array('row1' => 6);         
+        $this->assertEquals('a generated string',$type->generate(5,$values));
         
         
     }

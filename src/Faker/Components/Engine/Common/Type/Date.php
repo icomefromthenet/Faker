@@ -28,7 +28,7 @@ class Date extends Type
      *
      * @return string 
      */
-    public function generate($rows, $values = array())
+    public function generate($rows, &$values = array())
     {
         $date   = $this->getOption('start');
         $modify = $this->getOption('modify');

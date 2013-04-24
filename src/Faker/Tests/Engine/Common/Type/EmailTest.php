@@ -115,8 +115,8 @@ class EmailTest extends AbstractProject
         $type->setOption('format','{fname}\'{lname}{alpha2}@{alpha1}.{domain}');
         $type->setOption('params','{"alpha1":"ccCCC","alpha2":"xxxx"}');
         $type->validate(); 
-         
-        $this->assertEquals('Kristina\'Chung1111@ddDDD.edu',$type->generate(1,array()));
+        $values = array();  
+        $this->assertEquals('Kristina\'Chung1111@ddDDD.edu',$type->generate(1,$values));
     }
     
     

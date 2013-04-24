@@ -17,27 +17,7 @@ class SqlTest extends AbstractProject
     protected function getBuilderWithBasicComposite()
     {
          # build a composite for this formatter 
-        $project = $this->getProject();
-        $builder = $project['faker_manager']->getCompositeBuilder();
        
-        $builder->addSchema('schema_1',array('name' =>'schema_1'))
-                    ->addTable('table_1',array('generate' => 1000,'name' =>'table_1'))
-                        ->addColumn('column_1',array('type' => 'text','name' =>'column_1'))
-                            ->addType('alphanumeric',array('name' => 'alphanumeric'))
-                                ->setTypeOption('format','Ccccc')
-                            ->end()
-                        ->end()
-                        ->addColumn('column_2',array('type' => 'integer','name' =>'column_2'))
-                            ->addType('alphanumeric',array('name' => 'alphanumeric'))
-                                ->setTypeOption('format','Ccccc')
-                            ->end()
-                        ->end()
-                    ->end()
-                    ->addWriter('mysql','sql')
-                ->end();
-            
-        
-        return $builder->build();
         
     }
     
@@ -51,6 +31,10 @@ class SqlTest extends AbstractProject
     
     public function setUp()
     {
+        
+        $project = $this->getProject();
+       
+        
         $event      = $this->getMockBuilder('\Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $writer     = $this->getMockBuilder('Faker\Components\Writer\WriterInterface')->setMethods(array('getStream','flush','write'))->getMock();
         $platform   =  new MySqlPlatform();

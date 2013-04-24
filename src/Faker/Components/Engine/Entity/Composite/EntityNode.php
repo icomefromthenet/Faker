@@ -35,7 +35,7 @@ class EntityNode implements CompositeInterface, GeneratorInterface
     # GeneratorInterface
     
 
-    public function generate($rows,$values = array())
+    public function generate($rows,&$values = array())
     {
         $entity  = new GenericEntity();
         
