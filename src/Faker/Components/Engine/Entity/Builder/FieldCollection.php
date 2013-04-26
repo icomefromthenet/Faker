@@ -53,7 +53,7 @@ class FieldCollection extends NodeCollection
     * Append the fields to the parent builder for example an EntityGenerator.
     * Assume children are all FieldNodes. 
     *
-    * @return \Faker\Components\Engine\Common\Builder\NodeInterface The builder of the parent node
+    * @return \Faker\Components\Engine\Common\Entity\Builder\EntityGenerator
     */
     public function end()
     {

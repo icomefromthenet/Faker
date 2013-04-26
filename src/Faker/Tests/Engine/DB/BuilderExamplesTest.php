@@ -102,19 +102,23 @@ class BuilderExamplesTest extends AbstractProject
                                 ->addColumn('column1')
                                     ->dbalType('string')
                                     ->addField()
-                                        ->fieldConstant()
-                                            ->value('myfield')
-                                            ->cast('string')
-                                        ->end()
+                                        ->fieldBoolean()
+                                            ->value(true)
+                                        ->end()`
                                     ->end()
+                                    
+                                    
                                     ->addField()
-                                        ->fieldAlphaNumeric()
-                                            ->format('ccCCCC')
-                                        ->end()
                                     ->end()
+                                    
+                                ->end()
+                                ->addColumn()
                                 ->end()
                             ->end()
                         ->end()
+                        ->addWriter()
+                        ->end()
+                        
                     ->end();
         
         $this->assertInstanceOf('Faker\Components\Engine\DB\Composite\SchemaNode',$schema);

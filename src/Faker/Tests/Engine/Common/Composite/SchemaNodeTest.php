@@ -21,10 +21,8 @@ class SchemaNodeTest extends AbstractProject
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         
         $id        = 'schemaNode';
-        
-        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
             
-        $type = new SchemaNode($id,$event,$internal);
+        $type = new SchemaNode($id,$event);
         
         $this->assertInstanceOf('\\Faker\\Components\\Engine\\Common\\Composite\\CompositeInterface',$type);
         
