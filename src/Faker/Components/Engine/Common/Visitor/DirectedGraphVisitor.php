@@ -1,17 +1,19 @@
 <?php
 namespace Faker\Components\Engine\Original\Visitor;
 
-use Faker\Components\Engine\Original\Composite\CompositeInterface,
-    Faker\Components\Engine\Original\Exception as FakerException,
-    Faker\Components\Engine\Original\Compiler\Graph\DirectedGraph,
-    Faker\Components\Engine\Original\Composite\Schema,
-    Faker\Components\Engine\Original\Composite\Table,
-    Faker\Components\Engine\Original\Composite\Column,
-    Faker\Components\Engine\Original\Composite\ForeignKey,
-    Faker\Components\Engine\Original\Composite\SelectorInterface,
-    Faker\Components\Engine\Original\Composite\CompositeFinder,
-    Faker\Components\Engine\Original\Type\Type as BaseType,
-    Faker\Components\Engine\Original\BaseNode;
+
+use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\Composite\CompositeException;
+use Faker\Components\Engine\Common\Composite\CompositeInterface;
+use Faker\Components\Engine\Common\Compiler\Graph\DirectedGraph;
+
+use Faker\Components\Engine\Common\Composite\SchemaNode;
+use Faker\Components\Engine\Common\Composite\TableNode;
+use Faker\Components\Engine\Common\Composite\ColumnNode;
+use Faker\Components\Engine\Common\Composite\ForeignKeyNode;
+use Faker\Components\Engine\Common\Composite\CompositeFinder;
+use Faker\Components\Engine\Common\Type\Type as BaseType;
+
 
 /*
  * class DirectedGraphVisitor
@@ -27,7 +29,7 @@ class DirectedGraphVisitor extends BaseVisitor
     /**
       *  @var DirectedGraph
       */
-    protected $graph = array();
+    protected $graph = null;
     
     /**
       *  Class Constructor
@@ -44,90 +46,80 @@ class DirectedGraphVisitor extends BaseVisitor
     //------------------------------------------------------------------
     # Visitor Methods
     
-    public function visitCacheInjector(CompositeInterface $composite)
+    public function visitLocaleInjector(CompositeInterface $node)
     {
-        throw new FakerException('Not Implemented');
+        return null;
     }
     
-    public function visitRefCheck(CompositeInterface $composite)
+    public function visitDBALGatherer(CompositeInterface $node)
     {
-        throw new FakerException('Not implemented');
-    }
-    
-    public function visitGeneratorInjector(CompositeInterface $composite)
-    {
-         throw new FakerException('Not implemented');
-    }
-    
-    public function visitLocale(CompositeInterface $composite)
-    {
-        throw new FakerException('Not Implemented');
+        return null;
     }
     
     public function visitDirectedGraph(CompositeInterface $composite)
     {
-        if($composite instanceof Schema) {
-            # schema add to the graph    
-            $this->graph->setSchema($composite);
+        if($composite instanceof SchemaNode) {
+            $this->graph->setRoot($composite);    
         
-        } elseif($composite instanceof Table) {
+        } elseif($composite instanceof TableNode) {
             # if we have a table connect to schema
             $this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());
             
-        } elseif($composite instanceof Column) {
+        } elseif($composite instanceof ColumnNode) {
             # if instance of column connect to table
             $this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
                 
-        } elseif($composite instanceof ForeignKey) {
-            # if have a fk connect two columns together and connect the fk with parent element          
-            #$this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
-        
-           $finder = new CompositeFinder();
-        
-           $parent_table = $finder->set($composite)->parentTable()->get(); 
-        
-           # Find the column referenced by the ForeignKey and connect it.
-           # If the reference is bad no exception is thrown, need to run compiler ReferenceCheckPass.
-           $schema  = $this->graph->getSchema();
-           foreach($schema->getChildren() as $table) {
-                if($table->getOption('name') === $composite->getOption('foreignTable')) {
-                    # scan the columns
-                    foreach($table->getChildren() as $column) {
-                        if($column->getOption('name') === $composite->getOption('foreignColumn')) {
-                            
-                            # connect the fk type to the referenced column
-                            $this->graph->connect($composite->getId(),$composite,$column->getId(),$column);
-                            
-                            # tables are now related connect them
-                            $this->graph->connect($parent_table->getId(),$parent_table,$table->getId(),$table);
-                            
-                            break;
-                        }
-                    }
-                    break;
-                }
+        } elseif($composite instanceof ForeignKeyNode) {
+            # if have a fk connect two columns and tables as well as the FKNode to FKColumn 
+           $finder      = new CompositeFinder();
+           $parentTable = $finder
+                            ->set($composite)
+                            ->parentTable()
+                            ->get();
+           
+           $parentColumn = $finder
+                            ->set($composite)
+                            ->parentColumn()
+                            ->get();
+           
+           
+           $fkTableName  = $composite->getOption('foreignTable');
+           $fkColumnName = $composite->getOption('foreignColumn');
+           $fkTable      = $finder
+                            ->set($composite)
+                            ->table($fkTableName)
+                            ->get();
+           
+           # Does the foreign table exist
+           if($fkTable === null) {
+                throw new CompositeException($composite,sprintf('The Foreign Table %s does not exist',$fkTableName));
+           }
+            
+           # match the column
+           $fkColumn    = $finder
+                            ->set($composite)
+                            ->table($fkTableName)
+                            ->column($fkColumnName)
+                            ->get();
+           
+           if($fkColumn === null) {
+                return new CompositeException($composite,sprintf('The Foreign Column %s.%s does not exist',$fkTableName,$fkColumnName));
            }
            
-        } elseif ($composite instanceof SelectorInterface) {
-           # process selectors add to parent 
-           $this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
+            # a Column could be related to many others for examaple as a composite primary key so
+            # the ResultCache can't be attached to a column but instead to the ForeignKeyNode child of the column
+            $this->graph->connect($composite->getId(),$composite,$fkColumn->getId(),$fkColumn);
+            
+            # connect the two columns for easy lookup for Circular Reference checks
+            $this->graph->connect($parentColumn->getId(),$parentColumn,$fkColumn->getId(),$fkColumn);
+                            
+            # tables are now related connect them for easy lookup for Circular Reference checks
+            $this->graph->connect($parentTable->getId(),$parentTable,$fkTable->getId(),$fkTable);
            
-        } elseif ($composite instanceof BaseType) {
-           # process add datatype to parent could be column or selector
-           $this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
-           
-        } else {
-            # could be writer but we will ignore those
         }
         
-        
     }
     
-    
-    public function visitMapBuilder(CompositeInterface $composite)
-    {
-        throw new FakerException('Not Implemented');
-    }
     
     //------------------------------------------------------------------
     
@@ -137,9 +129,21 @@ class DirectedGraphVisitor extends BaseVisitor
       *  @access public
       *  @return Faker\Components\Engine\Original\Compiler\Graph\DirectedGraph
       */
-    public function getDirectedGraph()
+    public function getResult()
     {
         return $this->graph;
+    }
+    
+    /**
+     * Reset the Directed Graph
+     
+     * @access public
+     * @return void
+     *
+    */
+    public function reset()
+    {
+        $this->graph->clear();
     }
     
    

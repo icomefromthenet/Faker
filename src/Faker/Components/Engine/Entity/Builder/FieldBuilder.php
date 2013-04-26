@@ -13,7 +13,6 @@ use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
 use Faker\Components\Engine\Common\Builder\DefaultTypeDefinition;
 use Faker\Components\Engine\Common\Builder\FieldListInterface;
 use Faker\Components\Engine\Common\Builder\SelectorListInterface;
-use Faker\Components\Engine\Common\Builder\NodeBuilder;
 use Faker\Components\Engine\Entity\Composite\FieldNode;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 
@@ -43,7 +42,7 @@ class FieldBuilder extends NodeBuilder implements SelectorListInterface, FieldLi
     /**
     *  Wrap the child compositeNodes (Types and Selectors) into a single field node.  
     *
-    *  @return NodeInterface The builder of the parent node
+    *  @return Faker\Components\Engine\Entity\Builder\FieldCollection
     *  @access public
     */
     public function end()

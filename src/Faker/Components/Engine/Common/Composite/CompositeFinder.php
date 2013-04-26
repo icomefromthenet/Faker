@@ -64,21 +64,30 @@ class CompositeFinder
       */
     public function parentTable()
     {
+        # can't search schema for a parent table        
         if($this->head instanceof SchemaNode) {
             throw new EngineException('Has no parent table');
         }
         
+        # if table is current head it must be the parentTable
+        if($this->head instanceof TableNode) {
+            return $this;
+        }
+        
+        # iterate up till find the first table node
         do {
               $parent = $this->head->getParent();
                 
                 if($parent === null) {
-                    return null;
+                    $this->head = null;
+                    break;
                 }
                 
                 $this->head = $parent;
         }
         while(!$this->head instanceof TableNode);
         
+        # return the finder
         return $this;
     }
     
@@ -91,11 +100,7 @@ class CompositeFinder
       */
     public function parentColumn()
     {
-        if($this->head instanceof SchemaNode) {
-            throw new EngineException('Has no parent column');
-        }
-        
-        if($this->head instanceof TableNode) {
+        if($this->head instanceof SchemaNode || $this->head instanceof TableNode) {
             throw new EngineException('Has no parent column');
         }
         
@@ -103,7 +108,8 @@ class CompositeFinder
               $parent = $this->head->getParent();
                 
                 if($parent === null) {
-                    return null;
+                    $this->head = null;
+                    break;
                 }
                 
                 $this->head = $parent;
@@ -127,7 +133,8 @@ class CompositeFinder
                 $parent = $this->head->getParent();
                 
                 if($parent === null) {
-                    return null;
+                    $this->head = null;
+                    break;
                 }
                 
                 $this->head = $parent;
@@ -139,40 +146,6 @@ class CompositeFinder
     }
     
     /**
-      *   Fetches the parent selector
-      *
-      *   @return CompositeFinder
-      *   @access public
-      *   @throws EngineException
-      */
-    public function parentSelector()
-    {
-        if($this->head instanceof SchemaNode) {
-            throw new EngineException('Has no parent selector');
-        }
-        
-        if($this->head instanceof TableNode) {
-            throw new EngineException('Has no parent selector');
-        }
-        
-        if($this->head instanceof ColumnNode) {
-            throw new EngineException('Has no parent selector');
-        }
-        
-        do {
-            # break loop at first column node
-            if($this->head instanceof ColumnNode) {
-                break;
-            }
-            
-            $this->head = $this->head->getParent();
-        }
-        while(!$this->head instanceof SelectorNode);
-        
-        return $this;
-    }
-    
-    /**
       *   Fetches the table using name
       *
       *   @return CompositeFinder
@@ -181,13 +154,21 @@ class CompositeFinder
       */
     public function table($name)
     {
+       if($this->head instanceof TableNode && $this->head->getId() === $name) {
+            return $this;    
+       } 
+       
        # iterate up to schema
-       if($this->head instanceof SchemaNode) {
+       if(!$this->head instanceof SchemaNode) {
             $this->parentSchema();
        }
        
-       # find the table
-       foreach($this->head->getChildren() as $table) {
+       $schema = $this->head;
+       #assume won't match to a table
+       $this->head = null;
+       
+       # search for the table
+       foreach($schema->getChildren() as $table) {
          if($table->getId() === $name) {
             $this->head = $table;
             break;
@@ -195,10 +176,7 @@ class CompositeFinder
         
        }
        
-       if(!$this->head instanceof TableNode) {
-            return null;
-       }
-
+       
        return $this; 
     }
     
@@ -211,10 +189,20 @@ class CompositeFinder
       */
     public function column($name)
     {
-       # iterate up to schema
-       if($this->head instanceof TableNode) {
-            $this->parentTable();
+       # head a schema can't find a column, need under a table
+       if($this->head instanceof SchemaNode) {
+            $this->head = null;
+            return $this;
        }
+       
+       # current head is the column search?
+       if($this->head instanceof ColumnNode && $this->head->getId() === $name) {
+            return $this;
+       }
+       
+       # iterate up to table
+       $this->parentTable();
+       
        
        # find the table
        foreach($this->head->getChildren() as $column) {
@@ -225,38 +213,9 @@ class CompositeFinder
         
        }
        
+       # if head is not a column we can't have matched
        if(!$this->head instanceof ColumnNode) {
-            return null;
-       }
-        
-       return $this;
-    }
-    
-     /**
-      *   Fetches the type using name
-      *
-      *   @return CompositeFinder
-      *   @access public
-      *   @throws EngineException
-      */
-    public function child($name)
-    {
-       # iterate up to schema
-       if($this->head instanceof ColumnNode) {
-            $this->parentColumn();
-       }
-       
-       # find the table
-       foreach($this->head->getChildren() as $columnChild) {
-         if($columnChild->getId() === $name) {
-            $this->head = $columnChild;
-            break;
-         }
-        
-       }
-       
-       if(!$this->head instanceof TypeNode) {
-            return null;
+           $this->head = null;
        }
         
        return $this;

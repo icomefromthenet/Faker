@@ -19,7 +19,7 @@ interface SelectorListInterface
       */    
     public function selectorAlternate();
     
-     /**
+    /**
       *  Return a builder that picks a type at random from the supplied list
       *
       *  @access public
@@ -35,7 +35,7 @@ interface SelectorListInterface
       */
     public function selectorWeightAlternate();
     
-     /**
+    /**
       *  Return a builder that allows fixed number of iterations per type.
       *
       *  @access public
@@ -44,7 +44,7 @@ interface SelectorListInterface
     public function selectorSwap();
     
     
-     /**
+    /**
       *  Return a builder that allows combination of types to combine in a single return value
       *
       *  @access public

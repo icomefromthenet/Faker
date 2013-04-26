@@ -1,12 +1,16 @@
 <?php
-namespace Faker\Components\Engine\Common\Builder;
+namespace Faker\Components\Engine\Entity\Builder;
 
 use Faker\Locale\LocaleInterface;
 use Faker\Components\Engine\EngineException;
-use Faker\Components\Engine\Common\TypeRepository;
-use Faker\Components\Engine\Common\Utilities;
-use Faker\Components\Engine\Common\Composite\CompositeInterface;
+use Faker\Components\Engine\Common\Builder\NodeCollection;
+use Faker\Components\Engine\Common\Builder\SelectorListInterface;
+use Faker\Components\Engine\Common\Builder\FieldListInterface;
 use Faker\Components\Engine\Entity\Composite\FieldNode;
+use Faker\Components\Engine\Entity\Builder\Selector\SelectorAlternateBuilder;
+use Faker\Components\Engine\Entity\Builder\Selector\SelectorRandomBuilder;
+use Faker\Components\Engine\Entity\Builder\Selector\SelectorSwapBuilder;
+use Faker\Components\Engine\Entity\Builder\Selector\SelectorWeightBuilder;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PHPStats\Generator\GeneratorInterface;
@@ -33,12 +37,11 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
     {
         return new null;
     }
-    
-    
+   
     /**
     *  Send the child compositeNodes to parent builder
     *
-    *  @return NodeInterface The parent builder 
+    *  @return FieldBuilder The parent builder 
     *  @access public
     */
     public function end()
@@ -55,19 +58,17 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
         return $parent;
     }
     
+    
+    
     /**
       *  Find the Type from the TypeDefinitionRepo and return an instanced definition
       *
       *  @access protected
-      *  @return \Faker\Components\Engine\Common\Builder\TypeDefinitionInterface
+      *  @return Faker\Components\Engine\Entity\Builder\Type\TypeDefinitionInterface
       */    
-    public function find($alias)
+    protected function create($alias)
     {
-        if(($resolvedAlias = $this->repo->find($alias)) === null) {
-            throw new EngineException("$alias not found in type repository unable to create");
-        }
-        
-        $field = new $resolvedAlias();
+        $field = new $alias();
         
         # set the basic fields need by each type
         $field->generator($this->generator);
@@ -85,206 +86,206 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
     /**
       *  Return an Alphnumeric field for configuration
       *  
-      *  @return Faker\Components\Engine\Common\Builder\AlphaNumericTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\AlphaNumericTypeDefinition
       *  @access public   
       */
     public function fieldAlphaNumeric()
     {
-        return $this->find('alphanumeric');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\AlphaNumericTypeDefinition');
     }
     
     /**
       *  Return an  field for configuration
       *  
-      *  @return \Faker\Components\Engine\Common\Builder\AutoIncrementTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\AutoIncrementTypeDefinition
       *  @access public   
       */
     public function fieldAutoIncrement()
     {
-        return $this->find('autoincrement');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\AutoIncrementTypeDefinition');
     }
     
     /**
       * Return an boolean field for configuration
       * 
-      *  @return \Faker\Components\Engine\Common\Builder\BooleanTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\BooleanTypeDefinition
       *  @access public   
       */
     public function fieldBoolean()
     {
-        return $this->find('boolean');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\BooleanTypeDefinition');
     }
     
     /**
       *  Return an City field for configuration
       *
-      *  @return \Faker\Components\Engine\Common\Builder\CitiesTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\CitiesTypeDefinition
       *  @access public
       */
     public function fieldCity()
     {
-        return $this->find('city');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\CitiesTypeDefinition');
     }
     
     /**
       *  Return an Constant field for configuration
       *
-      *  @return \Faker\Components\Engine\Common\Builder\ConstantNumberTypeDefinition 
+      *  @return Faker\Components\Engine\Entity\Builder\Type\ConstantNumberTypeDefinition 
       *  @access public   
       */
     public function fieldConstant()
     {
-        return $this->find('constant_number');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\ConstantNumberTypeDefinition');
     }
     
     /**
       *  Return an Country field for configuration
       *
-      *  @return \Faker\Components\Engine\Common\Builder\CountryTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\CountryTypeDefinition
       *  @access public
       */
     public function fieldCountry()
     {
-        return $this->find('country');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\CountryTypeDefinition');
     }
     
     /**
       * Return an Date field for configuration
       * 
-      *  @return \Faker\Components\Engine\Common\Builder\DateTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\DateTypeDefinition
       *  @access public
       */
     public function fieldDate()
     {
-        return $this->find('date');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\DateTypeDefinition');
     }
     
     /**
       * Return an Email field for configuration
       *
-      *  @return \Faker\Components\Engine\Common\Builder\EmailTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\EmailTypeDefinition
       *  @access public
       */
     public function fieldEmail()
     {
-        return $this->find('email');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\EmailTypeDefinition');
     }
     
     /**
       * Return a People field for configuration
       *
-      *  @return \Faker\Components\Engine\Common\Builder\NamesTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\NamesTypeDefinition
       *  @access public
       */
     public function fieldPeople()
     {
-        return $this->find('people');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\NamesTypeDefinition');
     }
     
     /**
       * Return a Null field for configuration
       *
-      *  @return \Faker\Components\Engine\Common\Builder\NullTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\NullTypeDefinition
       *  @access public
       */
     public function fieldNull()
     {
-        return $this->find('nulltype');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\NullTypeDefinition');
     }
     
     /**
       * Return a Numeric field for configuration
       *  
-      *  @return \Faker\Components\Engine\Common\Builder\NumericTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\NumericTypeDefinition
       *  @access public
       */
     public function fieldNumeric()
     {
-        return $this->find('numeric');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\NumericTypeDefinition');
     }
     
     /**
      *  Return an Range Definition
      *
-     *  @return \Faker\Components\Engine\Common\Builder\RangeTypeDefinition
+     *  @return Faker\Components\Engine\Entity\Builder\Type\RangeTypeDefinition
      *  @access public   
      */
     public function fieldRange()
     {
-        return $this->find('range');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\RangeTypeDefinition');
     }
     
     /**
       *  Return a Regex field for configuration
       * 
-      *  @return \Faker\Components\Engine\Common\Builder\RegexTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\RegexTypeDefinition
       *  @access public   
       */
     public function fieldRegex()
     {
-        return $this->find('regex');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\RegexTypeDefinition');
     }
     
     /**
       * Return a Template field for configuration
       * 
-      * @return \Faker\Components\Engine\Common\Builder\TemplateTypeDefinition
+      * @return Faker\Components\Engine\Entity\Builder\Type\TemplateTypeDefinition
       * @access public
       */
     public function fieldTemplate()
     {
-        return $this->find('template');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\TemplateTypeDefinition');
     }
     
     /**
       * Return a Text field for configuration
       *
-      *  @return \Faker\Components\Engine\Common\Builder\TextTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\TextTypeDefinition
       *  @access public   
       */
     public function fieldText()
     {
-        return $this->find('text');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\TextTypeDefinition');
     }
     
     /**
       *  Return a Unique Number  field for configuration
       *
-      *  @return \Faker\Components\Engine\Common\Builder\UniqueNumberTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\UniqueNumberTypeDefinition
       *  @access public   
       */
     public function fieldUniqueNumber()
     {
-        return $this->find('unique_number');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\UniqueNumberTypeDefinition');
     }
     
     /**
       *  Return a Unique String field for configuration
       *  
-      *  @return \Faker\Components\Engine\Common\Builder\UniqueStringTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\UniqueStringTypeDefinition
       *  @access public
       */
     public function fieldUniqueString()
     {
-        return $this->find('unique_string');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\UniqueStringTypeDefinition');
     }
     
     /**
       *  Return a closure type for configuration
       *
       *  @access public
-      *  @return \Faker\Components\Engine\Common\Builder\ClosureTypeDefinition
+      *  @return Faker\Components\Engine\Entity\Builder\Type\ClosureTypeDefinition
       */
     public function fieldClosure()
     {
-        return $this->find('closure');
+        return $this->create('\Faker\Components\Engine\Entity\Builder\Type\ClosureTypeDefinition');
     }
     
      /**
       *  Return a alternate selector builder that alternatve of values
       *
       *  @access public
-      *  @return \Faker\Components\Engine\Entity\Builder\SelectorAlternateBuilder
+      *  @return Faker\Components\Engine\Entity\Builder\Selector\SelectorAlternateBuilder
       */ 
     public function selectorAlternate()
     {
@@ -298,7 +299,7 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
       *  Return a builder that picks a type at random from the supplied list
       *
       *  @access public
-      *  @return \Faker\Components\Engine\Entity\Builder\SelectorRandomBuilder
+      *  @return Faker\Components\Engine\Entity\Builder\Selector\SelectorRandomBuilder
       */
     public function selectorRandom()
     {
@@ -312,7 +313,7 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
       *  Return a builder that allows alternation that preferences the left or right value.
       *
       *  @access public
-      *  @return \Faker\Components\Engine\Entity\Builder\SelectorWeightBuilder
+      *  @return Faker\Components\Engine\Entity\Builder\Selector\SelectorWeightBuilder
       */
     public function selectorWeightAlternate()
     {
@@ -326,7 +327,7 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
       *  Return a builder that allows fixed number of iterations per type.
       *
       *  @access public
-      *  @return \Faker\Components\Engine\Entity\Builder\SelectorSwapBuilder
+      *  @return Faker\Components\Engine\Entity\Builder\Selector\SelectorSwapBuilder
       */
     public function selectorSwap()
     {
@@ -340,12 +341,12 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
       *  Return a builder that allows combination of types to combine in a single return value
       *
       *  @access public
-      *  @return \Faker\Components\Engine\Entity\Builder\TypeBuilder
+      *  @return Faker\Components\Engine\Entity\Builder\NodeBuilder
       */    
     public function combination()
     {
         # this is a little evil (typebuilder is child of nodebuilder) but avoid alot of copy and paste
-        $node = new TypeBuilder($this->name,$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        $node = new NodeBuilder($this->name,$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         $node->setParent($this);
         return $node;
     }

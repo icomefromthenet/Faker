@@ -55,6 +55,12 @@ abstract class AbstractDefinition implements TypeDefinitionInterface, NodeInterf
         return $this->parent;
     }
     
+    /**
+      *  Returns the parent NodeBuilder
+      *
+      *  @access public
+      *  @return Faker\Components\Engine\Common\Builder\NodeBuilder
+      */
     public function end()
     {
         # construct the node from this definition.

@@ -6,7 +6,6 @@ use PHPStats\Generator\GeneratorInterface;
 use Faker\Locale\LocaleInterface;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\Builder\NodeCollection;
-use Faker\Components\Engine\Common\Builder\NodeBuilder;
 use Faker\Components\Engine\DB\Composite\TableNode;
 use Faker\Components\Engine\DB\Composite\ColumnNode;
 use Doctrine\DBAL\Types\Type;
@@ -29,11 +28,11 @@ class ColumnBuilder extends NodeCollection
       *
       * @access public
       * @param string the table database name
-      * @return Faker\Components\Engine\Common\Builder\NodeBuilder
+      * @return Faker\Components\Engine\DB\Builder\FieldBuilder
       */
     public function addField()
     {
-        $builder = new NodeBuilder('columnField',
+        $builder = new FieldBuilder('columnField',
                                    $this->eventDispatcher,
                                    $this->repo,
                                    $this->utilities,
@@ -65,7 +64,7 @@ class ColumnBuilder extends NodeCollection
     * Build a TableNode and append all children columnNodes to it
     * before passing TableNode to a parent NodeCollection
     *
-    * @return \Faker\Components\Engine\DB\Builder\TableCollection
+    * @return \Faker\Components\Engine\DB\Builder\TableBuilder
     * @access public
     */
     public function end()
