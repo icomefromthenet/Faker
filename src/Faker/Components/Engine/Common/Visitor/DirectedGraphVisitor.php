@@ -1,18 +1,16 @@
 <?php
-namespace Faker\Components\Engine\Original\Visitor;
-
+namespace Faker\Components\Engine\Common\Visitor;
 
 use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\Compiler\Graph\DirectedGraph;
 use Faker\Components\Engine\Common\Composite\CompositeException;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
-use Faker\Components\Engine\Common\Compiler\Graph\DirectedGraph;
-
+use Faker\Components\Engine\Common\Composite\PathBuilder;
 use Faker\Components\Engine\Common\Composite\SchemaNode;
 use Faker\Components\Engine\Common\Composite\TableNode;
 use Faker\Components\Engine\Common\Composite\ColumnNode;
 use Faker\Components\Engine\Common\Composite\ForeignKeyNode;
 use Faker\Components\Engine\Common\Composite\CompositeFinder;
-use Faker\Components\Engine\Common\Type\Type as BaseType;
 
 
 /*
@@ -23,7 +21,7 @@ use Faker\Components\Engine\Common\Type\Type as BaseType;
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0.3
  */
-class DirectedGraphVisitor extends BaseVisitor
+class DirectedGraphVisitor extends BasicVisitor
 {
     
     /**
@@ -32,14 +30,20 @@ class DirectedGraphVisitor extends BaseVisitor
     protected $graph = null;
     
     /**
+     * @var PathBuilder
+    */
+    protected $pathBuilder;
+    
+    /**
       *  Class Constructor
       *
       *  @return void
       *  @access public 
       */
-    public function __construct(DirectedGraph $graph)
+    public function __construct(DirectedGraph $graph, PathBuilder $pathBuilder)
     {
-        $this->graph = $graph;
+        $this->graph       = $graph;
+        $this->pathBuilder = $pathBuilder;
     }
     
     
@@ -56,18 +60,21 @@ class DirectedGraphVisitor extends BaseVisitor
         return null;
     }
     
-    public function visitDirectedGraph(CompositeInterface $composite)
+    public function visitDirectedGraphBuilder(CompositeInterface $composite)
     {
+        $builder     = $this->pathBuilder;
+        $parentNode  = $composite->getParent();
+                
         if($composite instanceof SchemaNode) {
             $this->graph->setRoot($composite);    
         
         } elseif($composite instanceof TableNode) {
             # if we have a table connect to schema
-            $this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());
+            $this->graph->connect($builder->buildPath($composite),$composite,$builder->buildPath($parentNode),$parentNode);
             
         } elseif($composite instanceof ColumnNode) {
             # if instance of column connect to table
-            $this->graph->connect($composite->getId(),$composite,$composite->getParent()->getId(),$composite->getParent());            
+            $this->graph->connect($builder->buildPath($composite),$composite,$builder->buildPath($parentNode),$parentNode);            
                 
         } elseif($composite instanceof ForeignKeyNode) {
             # if have a fk connect two columns and tables as well as the FKNode to FKColumn 
@@ -108,13 +115,13 @@ class DirectedGraphVisitor extends BaseVisitor
            
             # a Column could be related to many others for examaple as a composite primary key so
             # the ResultCache can't be attached to a column but instead to the ForeignKeyNode child of the column
-            $this->graph->connect($composite->getId(),$composite,$fkColumn->getId(),$fkColumn);
+            $this->graph->connect($builder->buildPath($composite),$composite,$builder->buildPath($fkColumn),$fkColumn);
             
             # connect the two columns for easy lookup for Circular Reference checks
-            $this->graph->connect($parentColumn->getId(),$parentColumn,$fkColumn->getId(),$fkColumn);
+            $this->graph->connect($builder->buildPath($parentColumn),$parentColumn,$builder->buildPath($fkColumn),$fkColumn);
                             
             # tables are now related connect them for easy lookup for Circular Reference checks
-            $this->graph->connect($parentTable->getId(),$parentTable,$fkTable->getId(),$fkTable);
+            $this->graph->connect($builder->buildPath($parentTable),$parentTable,$builder->buildPath($fkTable),$fkTable);
            
         }
         

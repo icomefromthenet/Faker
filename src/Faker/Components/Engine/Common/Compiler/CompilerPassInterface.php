@@ -1,7 +1,7 @@
 <?php
-namespace Faker\Components\Engine\Original\Compiler;
+namespace Faker\Components\Engine\Common\Compiler;
 
-use Faker\Components\Engine\Original\Composite\CompositeInterface;
+use Faker\Components\Engine\Common\Composite\CompositeInterface;
 
 
 /*

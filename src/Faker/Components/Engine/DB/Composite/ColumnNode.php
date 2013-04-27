@@ -111,6 +111,7 @@ class ColumnNode extends BaseColumnNode implements GeneratorInterface, VisitorIn
     {
         # execute visitors that apply to this node
         $visitor->visitDBALGatherer($this);
+        $visitor->visitDirectedGraphBuilder($this);
         
         # execute accept on children
         $children = $this->getChildren();

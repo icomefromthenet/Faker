@@ -79,6 +79,7 @@ class SchemaNode extends BaseSchemaNode implements GeneratorInterface, VisitorIn
     public function acceptVisitor(BasicVisitor $visitor)
     {
         # execute visitors that apply to this node
+        $visitor->visitDirectedGraphBuilder($this);
         
         # execute accept on children
         $children = $this->getChildren();

@@ -118,6 +118,12 @@ class FieldNode implements CompositeInterface, GeneratorInterface
         return $this->children;
     }
     
+    public function clearChildren()
+    {
+        $this->children = null;
+        $this->children = array();
+    }
+    
     public function addChild(CompositeInterface $child)
     {
         $this->children[] = $child;

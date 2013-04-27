@@ -53,13 +53,20 @@ interface CompositeInterface
     
     
     /**
-      *   Fetches the children of this type composite
+      *  Fetches the children of this type composite
       *
-      *   @access public
-      *   @return Faker\Components\Engine\Common\Composite\CompositeInterface[] 
+      *  @access public
+      *  @return Faker\Components\Engine\Common\Composite\CompositeInterface[] 
       */
     public function getChildren();
     
+    /**
+     *  Clear the child nodes from the composite node
+     * 
+     *  @access public
+     *  @return void
+    */
+    public function clearChildren();
     
     /**
       *  Add's a child to this type composite

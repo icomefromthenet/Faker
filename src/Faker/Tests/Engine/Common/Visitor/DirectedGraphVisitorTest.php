@@ -4,6 +4,12 @@ namespace Faker\Tests\Engine\Common\Visitor;
 use Faker\Tests\Base\AbstractProject;
 use Faker\Components\Engine\Common\Visitor\DirectedGraphVisitor;
 use Faker\Components\Engine\Common\Compiler\Graph\DirectedGraph;
+use Faker\Components\Engine\Common\Composite\PathBuilder;
+use Faker\Components\Engine\DB\Composite\SchemaNode;
+use Faker\Components\Engine\DB\Composite\TableNode;
+use Faker\Components\Engine\DB\Composite\ColumnNode;
+use Faker\Components\Engine\DB\Composite\ForeignKeyNode;
+
 
 class DBALVisitorTest extends AbstractProject
 {
@@ -26,6 +32,9 @@ class DBALVisitorTest extends AbstractProject
         $columnC2  = new ColumnNode('columnC2',$event);
         $fkc1      = new ForeignKeyNode('fkc1',$event);
         
+        $fkc1->setOption('foreignTable',$tableA->getId());
+        $fkc1->setOption('foreignColumn',$columnA1->getId());
+        
         
         $columnC2->addChild($fkc1);
         $tableC->addChild($columnC1);
@@ -41,62 +50,51 @@ class DBALVisitorTest extends AbstractProject
         $schema->addChild($tableB);
         $schema->addChild($tableC);
         
+        return $schema;
+        
     }
 
 
     public function testImplementsBaiscVisitor()
     {
         $graph   = new DirectedGraph();
-        $visitor = new DirectedGraphVisitor($graph);
+        $path    = new PathBuilder();
+        $visitor = new DirectedGraphVisitor($graph,$path);
         
         $this->assertInstanceOf('Faker\Components\Engine\Common\Visitor\BasicVisitor',$visitor);
         
     }
     
     
-    public function testProperties()
-    {
-        $graph   = new DirectedGraph();
-        $visitor = new DirectedGraphVisitor($graph);
-        
-        $this->assertEquals($valueMapper,$visitor->getResult($graph));
-    }
-
     
     public function testVisitorAccept()
     {
+        $visitor   = new DirectedGraphVisitor(new DirectedGraph(),new PathBuilder());
         $composite = $this->getComposite();    
-        
-        $visitor   = new DirectedGraphVisitor(new DirectedGraph());
-        
         $composite->acceptVisitor($visitor);
+        $graph     = $visitor->getResult();
+        $tables    = $composite->getChildren();
         
-        $graph = $visitor->getResult();
+        # have 11 graphNodes
+        $this->assertEquals(11,count($graph->getNodes()));
         
-        # have 7 graphNodes
-        $this->assertEquals(7,count($graph->getNodes()));
-        
+        # they are graph nodes which contain reference to composite
         foreach($graph->getNodes() as $node) {
-            $this->assertInstanceOf('Faker\Components\Engine\Original\Compiler\Graph\GraphNode',$node);
+            $this->assertInstanceOf('Faker\Components\Engine\Common\Compiler\Graph\GraphNode',$node);
+            $this->assertInstanceOf('Faker\Components\Engine\Common\Composite\CompositeInterface',$node->getValue());
         }
        
         # test tables connected to schema
-        $this->assertEquals(2,count($graph->getNode('schema1')->getInEdges()));
+        $this->assertEquals(3,count($graph->getNode('schema')->getInEdges()));
         
-        # check the relations between table1 and table 2
-        $finder = new CompositeFinder();
+        # Related column has extra in edge
+        $this->assertEquals(2,count($graph->getNode('columnA1.tableA.schema')->getInEdges()));
         
-        $table1 = $graph->getNode('');
-        $table2 = $graph->getNode('');
+        # related tables have extra inEdge (3 = 2 columns + 1 Foriegn key relation )
+        $this->assertEquals(3,count($graph->getNode('tableA.schema')->getInEdges()));
         
-        $this->assertEquals(1,count($table1->getOutEdges()));
-        $this->assertEquals(2,count($table1->getInEdges()));
-        
-        # check if relation from table2 to table1
-        
-        $this->assertEquals(2,count($table2->getOutEdges()));
-        $this->assertEquals(1,count($table2->getInEdges()));
-        
+        # related table has extra outEdge (2 = 1 schema + 1 Foreign table relation)
+        $this->assertEquals(2,count($graph->getNode('tableC.schema')->getOutEdges()));
     }
     
     
