@@ -87,7 +87,7 @@ class FormatterBuilder extends NodeCollection
       *   @access public
       *   @return PhpunitFormatterDefinition
       */
-    public function phpUnitFormatter()
+    public function phpUnitWritter()
     {
         $formatter = new PhpunitFormatterDefinition($this->eventDispatcher,$this->formatterFactory,$this->platformFactory);
         
@@ -102,7 +102,7 @@ class FormatterBuilder extends NodeCollection
       * @access public
       * @return SqlFormatterDefinition
       */
-    public function sqlFormatter()
+    public function sqlWritter()
     {
         $formatter = new SqlFormatterDefinition($this->eventDispatcher,$this->formatterFactory,$this->platformFactory);
         $formatter->setParent($this);

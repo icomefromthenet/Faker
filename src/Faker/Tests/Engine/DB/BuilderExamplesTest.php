@@ -25,7 +25,7 @@ class BuilderExamplesTest extends AbstractProject
         $conn            = $container->getGeneratorDatabase();
         $loader          = $container->getTemplatingManager()->getLoader();
         $platformFactory = $container->getDBALPlatformFactory();
-        $formatterFactory= $container->getFormatterFactory(); 
+        $formatterFactory= $container->getFormatterFactory();
     
         
         $this->assertInstanceOf('Faker\Components\Engine\DB\Builder\SchemaBuilder',SchemaBuilder::create($container,$name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory));
@@ -44,18 +44,19 @@ class BuilderExamplesTest extends AbstractProject
         $conn            = $container->getGeneratorDatabase();
         $loader          = $container->getTemplatingManager()->getLoader();
         $platformFactory = $container->getDBALPlatformFactory();
-        $formatterFactory= $container->getFormatterFactory(); 
+        $formatterFactory= $container->getFormatterFactory();
+        $compiler        = $container->getEngineCompiler();
     
-        $builder = new SchemaBuilder($name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory);
+        $builder = new SchemaBuilder($name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory,$compiler);
         
         $generatorComposite = $builder
                         ->addWriter()
-                            ->sqlFormatter()
+                            ->sqlWritter()
                                 ->singleFileMode(true)
                             ->end()
                         ->end()
                         ->addWriter()
-                            ->phpUnitFormatter()
+                            ->phpUnitWritter()
                                 ->outputEncoding('utf8')
                                 ->outFileFormat('{prefix}_{body}_{suffix}.{ext}')
                             ->end()
@@ -104,19 +105,14 @@ class BuilderExamplesTest extends AbstractProject
                                     ->addField()
                                         ->fieldBoolean()
                                             ->value(true)
-                                        ->end()`
+                                        ->end()
                                     ->end()
-                                    
-                                    
-                                    ->addField()
-                                    ->end()
-                                    
-                                ->end()
-                                ->addColumn()
                                 ->end()
                             ->end()
                         ->end()
                         ->addWriter()
+                            ->sqlWritter()
+                            ->end()
                         ->end()
                         
                     ->end();

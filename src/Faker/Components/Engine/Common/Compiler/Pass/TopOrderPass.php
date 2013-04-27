@@ -2,6 +2,7 @@
 namespace Faker\Components\Engine\Common\Compiler\Pass;
 
 use Faker\Components\Engine\Common\Composite\TableNode;
+use Faker\Components\Engine\Common\Composite\FormatterNode;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Compiler\Graph\GraphNode;
 use Faker\Components\Engine\Common\Compiler\CompilerPassInterface;
@@ -19,20 +20,20 @@ class TopOrderPass implements CompilerPassInterface
     /**
       *  @var array the new order of the composite 
       */
-    protected $new_order;
+    protected $newOrder;
     
     /**
       *  @var array a list of nodes with no out edges 
       */
-    protected $nodes_no_out_edges;
+    protected $nodesNoOutEdges;
     
     /**
       *  Class Constructor 
       */
     public function __construct()
     {
-        $this->new_order = array();
-        $this->nodes_no_out_edges = array();
+        $this->newOrder = array();
+        $this->nodesNoOutEdges = array();
     }
     
     
@@ -50,21 +51,21 @@ class TopOrderPass implements CompilerPassInterface
         
         # Find table nodes with no out-edges.
         foreach($graph->getNodes() as $node) {
-            if($node->getValue() instanceof TableNode) {
+            if($node->getValue() instanceof TableNode || $node->getValue() instanceof FormatterNode) {
                 
                 $tmp_nodes = $node->getOutEdges();
                 $table_node_count = 0;
                 
                 # count how many outer edges are just tables
                 foreach($tmp_nodes as $tmpnode) {
-                    if($tmpnode->getDestNode()->getValue() instanceof TableNode) {
+                    if($tmpnode->getDestNode()->getValue() instanceof TableNode || $tmpnode->getDestNode()->getValue() instanceof FormatterNode) {
                         $table_node_count += 1;
                     }
                 }
                 
                 # test if no tables found in outer edges
                 if($table_node_count === 0) {
-                    $this->nodes_no_out_edges[] = $node;
+                    $this->nodesNoOutEdges[] = $node;
                 }
                 
                 $tmp_nodes = null;
@@ -73,11 +74,11 @@ class TopOrderPass implements CompilerPassInterface
         
         # Call breath first search on each table node with no outer-edges
         # As we have a directed acyclic graph there is guarantee of minimum 1 node without outer-edges.
-        foreach($this->nodes_no_out_edges as $node) {
+        foreach($this->nodesNoOutEdges as $node) {
                 $this->visitNode($node);
         }
         
-        $this->sortComposite($composite,$this->new_order);
+        $this->sortComposite($composite,$this->newOrder);
     
         # clear for another possible pass
         $this->clear();
@@ -86,17 +87,22 @@ class TopOrderPass implements CompilerPassInterface
     
     public function visitNode(GraphNode $node)
     {
-        if($node->getValue() instanceof TableNode && $node->getVisited() === false) {
+        if(($node->getValue() instanceof TableNode || $node->getValue() instanceof FormatterNode)  && $node->getVisited() === false) {
             $node->setVisited(true);
             
             # follow the nodes inEdges to find its ansestors.
             foreach($node->getInEdges() as $childnode) {
-                if($childnode->getSourceNode()->getValue() instanceof TableNode) {
-                    $this->visitNode($childnode->getSourceNode());    
+                $sourceNode = $childnode->getSourceNode();
+                $sourceNodeValue = $sourceNode ->getValue();
+                
+                if($sourceNodeValue instanceof TableNode || $sourceNodeValue instanceof FormatterNode ) {
+                    $this->visitNode($sourceNode);    
                 }
+                
+                $sourceNode = null;
             }
-            array_unshift($this->new_order,$node);
-        }
+            array_unshift($this->newOrder,$node);
+        } 
         
     }
     
@@ -125,8 +131,8 @@ class TopOrderPass implements CompilerPassInterface
       */
     public function clear()
     {
-        $this->new_order          = array();
-        $this->nodes_no_out_edges = array();
+        $this->newOrder          = array();
+        $this->nodesNoOutEdges = array();
     }
     
 }

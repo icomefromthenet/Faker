@@ -11,6 +11,7 @@ use Faker\Components\Engine\Common\Composite\TableNode;
 use Faker\Components\Engine\Common\Composite\ColumnNode;
 use Faker\Components\Engine\Common\Composite\ForeignKeyNode;
 use Faker\Components\Engine\Common\Composite\CompositeFinder;
+use Faker\Components\Engine\Common\Composite\FormatterNode;
 
 
 /*
@@ -76,7 +77,12 @@ class DirectedGraphVisitor extends BasicVisitor
             # if instance of column connect to table
             $this->graph->connect($builder->buildPath($composite),$composite,$builder->buildPath($parentNode),$parentNode);            
                 
-        } elseif($composite instanceof ForeignKeyNode) {
+        }
+        elseif ($composite instanceof FormatterNode) {
+            # if instance of formatterNode connect to schema
+            $this->graph->connect($builder->buildPath($composite),$composite,$builder->buildPath($parentNode),$parentNode);            
+        }
+        elseif($composite instanceof ForeignKeyNode) {
             # if have a fk connect two columns and tables as well as the FKNode to FKColumn 
            $finder      = new CompositeFinder();
            $parentTable = $finder

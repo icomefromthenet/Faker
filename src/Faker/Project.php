@@ -311,7 +311,20 @@ class Project extends Pimple
    
    
      //  ----------------------------------------------------------------------------
-     # Locale And SimpleText Factories 
+     # Others
+     
+     /**
+      *  Return an engine compiler
+      *
+      *  @access public
+      *  @return Faker\Components\Engine\Common\Compiler\CompilerInterface
+      *
+     */
+     public function getEngineCompiler()
+     {
+          return  $this['engine_common_compiler'];      
+     }
+     
      
      /**
        *  Fetch the Simple String Factory

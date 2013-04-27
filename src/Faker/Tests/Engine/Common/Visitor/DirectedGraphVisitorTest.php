@@ -9,15 +9,17 @@ use Faker\Components\Engine\DB\Composite\SchemaNode;
 use Faker\Components\Engine\DB\Composite\TableNode;
 use Faker\Components\Engine\DB\Composite\ColumnNode;
 use Faker\Components\Engine\DB\Composite\ForeignKeyNode;
+use Faker\Components\Engine\Common\Composite\FormatterNode;
 
 
-class DBALVisitorTest extends AbstractProject
+class DirectedGraphVisitorTest extends AbstractProject
 {
 
     protected function getComposite()
     {
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $schema    = new SchemaNode('schema',$event);
+        $formatter = $this->getMockBuilder('Faker\Tests\Engine\Common\Formatter\Mock\MockFormatter')->disableOriginalConstructor()->getMock();
         
         $tableA    = new TableNode('tableA',$event);
         $columnA1  = new ColumnNode('columnA1',$event);
@@ -31,6 +33,8 @@ class DBALVisitorTest extends AbstractProject
         $columnC1  = new ColumnNode('columnC1',$event);
         $columnC2  = new ColumnNode('columnC2',$event);
         $fkc1      = new ForeignKeyNode('fkc1',$event);
+        
+        $fmNode    = new FormatterNode('fmnode',$event,$formatter);
         
         $fkc1->setOption('foreignTable',$tableA->getId());
         $fkc1->setOption('foreignColumn',$columnA1->getId());
@@ -49,6 +53,7 @@ class DBALVisitorTest extends AbstractProject
         $schema->addChild($tableA);
         $schema->addChild($tableB);
         $schema->addChild($tableC);
+        $schema->addChild($fmNode);
         
         return $schema;
         
@@ -75,8 +80,8 @@ class DBALVisitorTest extends AbstractProject
         $graph     = $visitor->getResult();
         $tables    = $composite->getChildren();
         
-        # have 11 graphNodes
-        $this->assertEquals(11,count($graph->getNodes()));
+        # have 12 graphNodes
+        $this->assertEquals(12,count($graph->getNodes()));
         
         # they are graph nodes which contain reference to composite
         foreach($graph->getNodes() as $node) {
@@ -84,8 +89,8 @@ class DBALVisitorTest extends AbstractProject
             $this->assertInstanceOf('Faker\Components\Engine\Common\Composite\CompositeInterface',$node->getValue());
         }
        
-        # test tables connected to schema
-        $this->assertEquals(3,count($graph->getNode('schema')->getInEdges()));
+        # test tables connected to schema + 1 formatter
+        $this->assertEquals(4,count($graph->getNode('schema')->getInEdges()));
         
         # Related column has extra in edge
         $this->assertEquals(2,count($graph->getNode('columnA1.tableA.schema')->getInEdges()));
