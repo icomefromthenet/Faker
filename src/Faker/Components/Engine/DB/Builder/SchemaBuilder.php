@@ -11,16 +11,18 @@ use Faker\Project;
 use Faker\Locale\LocaleInterface;
 use Faker\PlatformFactory;
 use Faker\Components\Templating\Loader;
+use Faker\Components\Engine\Common\BuildEvents;
+use Faker\Components\Engine\Common\BuildEvent;
 use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
 use Faker\Components\Engine\Common\Utilities;
 use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Faker\Components\Engine\Common\TypeRepository;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Builder\NodeInterface;
-use Faker\Components\Engine\DB\Composite\SchemaNode;
 use Faker\Components\Engine\Common\Formatter\FormatterBuilder;
 use Faker\Components\Engine\Common\Formatter\FormatterFactory;
-
+use Faker\Components\Engine\Common\Compiler\CompilerInterface;
+use Faker\Components\Engine\DB\Composite\SchemaNode;
 /**
   *  Build a SchemaNode 
   *
@@ -59,6 +61,15 @@ class SchemaBuilder implements ParentNodeInterface
       */
     protected $platformFactory;
     
+    /**
+     *  @var CompilerInterface
+    */
+    protected $compiler;
+    
+    /**
+     *  @var DirectedGraphVisitor
+    */
+    protected $visitor;
     
      /**
       *  Class Constructor 
@@ -72,7 +83,8 @@ class SchemaBuilder implements ParentNodeInterface
                                 Connection $conn,
                                 Loader $loader,
                                 PlatformFactory $platformFactory,
-                                FormatterFactory $formatterFactory
+                                FormatterFactory $formatterFactory,
+                                CompilerInterface $compiler
                                 )
     {
         $this->name             = $name;
@@ -86,6 +98,7 @@ class SchemaBuilder implements ParentNodeInterface
         $this->children         = array();
         $this->platformFactory  = $platformFactory;
         $this->formatterFactory = $formatterFactory;
+        $this->compiler         = $compiler;
     }
     
     
@@ -167,16 +180,26 @@ class SchemaBuilder implements ParentNodeInterface
       */
     public function end()
     {
-        $node     = $this->getNode();
-        $children = $this->children();
+        $node      = $this->getNode();
+        $children  = $this->children();
+        $compiiler = $this->compiler;
         
         foreach($children as $child) {
             $node->addChild($child);
         }
         
-        # run validation routines, the composite is fully constructed via child builders
+        # run validation routines        
+        $this->event->dispatch(BuildEvents::onValidationStart,new BuildEvent($this,'Started validation of entity '.$this->name));
         $node->validate();
+        $this->event->dispatch(BuildEvents::onValidationEnd,new BuildEvent($this,'Finished validation of entity '.$this->name));
         
+        # run compiler  
+        $this->event->dispatch(BuildEvents::onCompileStart,new BuildEvent($this,'Started compile of entity '.$this->name));
+        $this->compiler->compile($node);
+        $this->event->dispatch(BuildEvents::onCompileEnd,new BuildEvent($this,'Finished compile of entity '.$this->name));    
+        
+        $this->event->dispatch(BuildEvents::onBuildingEnd,new BuildEvent($this,'Finished build of entity '.$this->name));
+    
         return $node;
     }
     
@@ -249,8 +272,9 @@ class SchemaBuilder implements ParentNodeInterface
             $formatterFactory = $container->getFormatterFactory();
         }
         
+        $compiler = $container->getEngineCompiler();
     
-        return new self($name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory);
+        return new self($name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory,$compiler);
     }
     
 }

@@ -119,9 +119,7 @@ class FormatterNode implements CompositeInterface, VisitorInterface
     
     public function validate()
     {
-        foreach($this->getChildren() as $child) {
-          $child->validate(); 
-        }
+        $this->formatter->validate();
         
         return true;        
     }
@@ -132,6 +130,9 @@ class FormatterNode implements CompositeInterface, VisitorInterface
     
      public function acceptVisitor(BasicVisitor $visitor)
      {
+        
+        $visitor->visitDirectedGraphBuilder($this);
+        
         $children = $this->getChildren();
         
         foreach($children as $child) {

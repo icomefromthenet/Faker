@@ -461,7 +461,24 @@ class Bootstrap
            return new \Faker\Components\Engine\Common\TypeRepository(); 
       });
       
-      
+      $project['engine_common_compiler'] = function(Project $project) {
+         
+         $pathBuilder     = new \Faker\Components\Engine\Common\Composite\PathBuilder();
+         $directedGraph   = new \Faker\Components\Engine\Common\Compiler\Graph\DirectedGraph();
+         $visitor         = new \Faker\Components\Engine\Common\Visitor\DirectedGraphVisitor($directedGraph,$pathBuilder);
+         $compiler        = new \Faker\Components\Engine\Common\Compiler\Compiler($visitor);
+         
+         $topOrderPass    = new \Faker\Components\Engine\Common\Compiler\Pass\TopOrderPass();
+         $circularRefPass = new \Faker\Components\Engine\Common\Compiler\Pass\CircularRefPass();
+         $cacheInjectPass = new \Faker\Components\Engine\Common\Compiler\Pass\CacheInjectorPass();
+         
+         $compiler->addPass($circularRefPass);
+         $compiler->addPass($topOrderPass);
+         $compiler->addPass($cacheInjectPass);
+         
+         return $compiler;
+      };
+          
       
       return $project;
    }

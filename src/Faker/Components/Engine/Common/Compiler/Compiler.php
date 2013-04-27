@@ -27,14 +27,14 @@ class Compiler implements CompilerInterface
     /**
       *  @var DirectedGraphVisitor 
       */
-    protected $graph_visitor;
+    protected $graphVisitor;
     
     /**
       *  Class Constructor  
       */
     public function __construct(DirectedGraphVisitor $visitor)
     {
-        $this->graph_visitor = $visitor;
+        $this->graphVisitor = $visitor;
     }
     
     
@@ -57,8 +57,8 @@ class Compiler implements CompilerInterface
       */
     public function compile(CompositeInterface $composite)
     {
-        $composite->acceptVisitor($this->graph_visitor);
-        $this->setGraph($this->graph_visitor->getDirectedGraph());
+        $composite->acceptVisitor($this->graphVisitor);
+        $this->setGraph($this->graphVisitor->getResult());
         
         foreach($this->passes as $pass) {
             $pass->process($composite,$this);    

@@ -34,7 +34,7 @@ class CustomFormatterDefinition extends AbstractDefinition
         $formatter = $this->formatterFactory->create($this->className,$platform,$this->attributes);
         
         # return a CompositeInterface Node
-        return new FormatterNode('formatterNode',$this->eventDispatcher,$formatter);
+        return new FormatterNode('formatterNode'.rand(100,1000),$this->eventDispatcher,$formatter);
     }
     
     /**
