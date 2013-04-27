@@ -102,6 +102,11 @@ class TypeNode implements CompositeInterface, GeneratorInterface, VisitorInterfa
         return array();
     }
     
+    public function clearChildren()
+    {
+        $this->children = null;
+        $this->children = array();
+    }
     
     /**
       *  Add's a child to this type composite

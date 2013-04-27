@@ -1,5 +1,5 @@
 <?php
-namespace Faker\Components\Engine\Original\Compiler\Graph;
+namespace Faker\Components\Engine\Common\Compiler\Graph;
 
 use Faker\Components\Engine\EngineException;
 

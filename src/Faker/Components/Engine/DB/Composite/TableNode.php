@@ -158,6 +158,7 @@ class TableNode extends BaseTableNode implements GeneratorInterface, VisitorInte
     public function acceptVisitor(BasicVisitor $visitor)
     {
         # execute visitors that apply to this node
+        $visitor->visitDirectedGraphBuilder($this);
         
         # execute accept on children
         $children = $this->getChildren();

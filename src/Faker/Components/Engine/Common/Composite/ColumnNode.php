@@ -116,6 +116,12 @@ class ColumnNode implements CompositeInterface, DBALTypeInterface
         return $this->children;
     }
     
+    public function clearChildren()
+    {
+        $this->children = null;
+        $this->children = array();
+    }
+    
     
     public function addChild(CompositeInterface $child)
     {

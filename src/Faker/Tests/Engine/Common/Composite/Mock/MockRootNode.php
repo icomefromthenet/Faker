@@ -52,6 +52,11 @@ class MockRootNode implements CompositeInterface
         throw new CompositeException($this,'not implemented',0);
     }
     
+    public function clearChildren()
+    {
+        $this->children = null;
+        $this->children = array();
+    }
     
     public function getChildren()
     {

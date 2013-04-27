@@ -60,60 +60,33 @@ class FormatterNode implements CompositeInterface, VisitorInterface
     }
     
     
-    /**
-      *  Fetches the parent in this type composite
-      *
-      *  @return Faker\Components\Engine\Common\Composite\CompositeInterface
-      *  @access public
-      */
     public function getParent()
     {
         return $this->parent;
     }
 
-    /**
-      *  Sets the parent of this type composite
-      *
-      *  @access public
-      *  @param Faker\Components\Engine\Common\Composite\CompositeInterface $parent;
-      */
     public function setParent(CompositeInterface $parent)
     {
         $this->parent = $parent;
     }
     
-    
-    
-    /**
-      *   Fetches the children of this type composite
-      *
-      *   @access public
-      *   @return Faker\Components\Engine\Common\Composite\CompositeInterface[] 
-      */
     public function getChildren()
     {
         return $this->children;
     }
     
+    public function clearChildren()
+    {
+        $this->children = null;
+        $this->children = array();
+    }
     
-    /**
-      *  Add's a child to this type composite
-      *
-      *  @param Faker\Components\Engine\Common\Composite\CompositeInterface $child
-      */
     public function addChild(CompositeInterface $child)
     {
         $this->children[] = $child;
         $child->setParent($this);
     }
     
-    
-    /**
-      *  Return the nodes id
-      *
-      *  @access public
-      *  @return string the nodes id
-      */
     public function getId()
     {
         return $this->id;
