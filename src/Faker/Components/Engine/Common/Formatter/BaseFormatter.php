@@ -125,7 +125,7 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
       */
     public function beforeTableStart(GenerateEvent $event)
     {
-        $node    = $event->getType();
+        $node    = $event->getNode();
         $visitor = $this->getVisitor();
         
         $node->acceptVisitor($visitor);

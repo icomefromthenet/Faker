@@ -46,7 +46,6 @@ class SwapSelector extends Type
     
     public function getConfigTreeBuilder()
     {
-
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('config');
         

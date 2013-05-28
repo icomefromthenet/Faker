@@ -1,6 +1,8 @@
 <?php
 namespace Faker\Components\Engine\Common\Formatter;
 
+use Faker\Components\Engine\Common\OptionInterface;
+
 /*
  * Interface for child formatters to implement to events defined
  * in BaseFormatter 
@@ -8,7 +10,7 @@ namespace Faker\Components\Engine\Common\Formatter;
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0.0
  */
-interface FormatterInterface
+interface FormatterInterface extends OptionInterface
 {
     
     

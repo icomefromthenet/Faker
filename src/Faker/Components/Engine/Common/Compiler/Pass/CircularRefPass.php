@@ -64,7 +64,6 @@ class CircularRefPass implements CompilerPassInterface
             $node = $edge->getDestNode();
             $this->current_path[] = $id = $node->getId();
 
-            # if the top node (current_id) is found elseware in this path we have circular reference
             if ($this->current_id === $id) {
                 throw new CircularReferenceException($this->current_id, $this->current_path);
             }

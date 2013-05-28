@@ -6,6 +6,7 @@ use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\OptionInterface;
 use Faker\Components\Engine\Common\Utilities;
 use Faker\Components\Engine\Common\GeneratorCache;
+use Faker\Components\Engine\Common\Composite\SerializationInterface;
 
 use PHPStats\Generator\GeneratorInterface;
 
@@ -23,7 +24,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @since 1.0.4
  *
  */
-class Type implements TypeInterface, OptionInterface
+class Type implements TypeInterface, OptionInterface, SerializationInterface
 {
     
      /**
@@ -169,8 +170,31 @@ class Type implements TypeInterface, OptionInterface
      */
     public function getConfigTreeBuilder()
     {
-	throw new EngineException('not implemented');
+	$treeBuilder = new TreeBuilder();
+        $rootNode = $treeBuilder->root('config');
+        
+        return $treeBuilder;  
     }
+    
+    //-------------------------------------------------------
+    # SerializationInterface
+    
+    public function toXml()
+    {
+       $str =  '<datatype name="'.$this->getId().'">' . PHP_EOL;
+       
+       foreach($this->options as $name => $option) {
+	    if($name !== 'locale' && $name !== 'name' ) {
+		$str .= '<option name="'.$name.'" value="'.$option.'" />' . PHP_EOL;
+	    }
+       }
+       
+       return $str . '</datatype>' . PHP_EOL;
+    }
+    
+    
+    //-------------------------------------------------------
+    # SerializationInterface
     
 }
 /* End of File */

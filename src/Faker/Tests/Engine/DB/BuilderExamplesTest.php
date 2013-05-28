@@ -16,38 +16,17 @@ class BuilderExamplesTest extends AbstractProject
        $name            = 'test_db'; 
        
        $this->assertInstanceOf('Faker\Components\Engine\DB\Builder\SchemaBuilder',SchemaBuilder::create($container,$name));
-       
-        $repo            = $container->getEngineTypeRepository();
-        $event           = $container->getEventDispatcher();
-        $locale          = $container->getLocaleFactory()->create('en');
-        $util            = $container->getEngineUtilities();
-        $gen             = $container->getDefaultRandom();
-        $conn            = $container->getGeneratorDatabase();
-        $loader          = $container->getTemplatingManager()->getLoader();
-        $platformFactory = $container->getDBALPlatformFactory();
-        $formatterFactory= $container->getFormatterFactory();
-    
-        
-        $this->assertInstanceOf('Faker\Components\Engine\DB\Builder\SchemaBuilder',SchemaBuilder::create($container,$name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory));
-           
     }
     
     public function testExample1()
     {
         $container       = $this->getProject();
         $name            = 'test_db';
-        $repo            = $container->getEngineTypeRepository();
-        $event           = $container->getEventDispatcher();
         $locale          = $container->getLocaleFactory()->create('en');
         $util            = $container->getEngineUtilities();
         $gen             = $container->getDefaultRandom();
-        $conn            = $container->getGeneratorDatabase();
-        $loader          = $container->getTemplatingManager()->getLoader();
-        $platformFactory = $container->getDBALPlatformFactory();
-        $formatterFactory= $container->getFormatterFactory();
-        $compiler        = $container->getEngineCompiler();
     
-        $builder = new SchemaBuilder($name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory,$compiler);
+        $builder = SchemaBuilder::create($container,$name,$locale,$util,$gen);
         
         $generatorComposite = $builder
                         ->addWriter()
@@ -89,22 +68,26 @@ class BuilderExamplesTest extends AbstractProject
     {
         $container       = $this->getProject(); 
         $name            = 'test_db'; 
-        $event           = new EventDispatcher(); 
+        $event           = $container->getEventDispatcher();
         
-        $event->addListener(FormatEvents::onRowEnd,function(GenerateEvent $generateEvent) {
-            var_dump($generateEvent->getValues());
-            
-        });
-        
-        $schema = SchemaBuilder::create($container,$name,$event)
+        $schema = SchemaBuilder::create($container,$name)
                         ->describe()
                             ->addTable('table1')
-                                ->toGenerate(1)
+                                ->toGenerate(100)
+                                ->addColumn('column2')
+                                    ->dbalType('string')
+                                    ->addField('column2')
+                                        ->fieldAlphaNumeric()
+                                            ->format('cccCCCCCCC')
+                                        ->end()
+                                    ->end()
+                                ->end()
                                 ->addColumn('column1')
                                     ->dbalType('string')
                                     ->addField()
-                                        ->fieldBoolean()
-                                            ->value(true)
+                                        ->fieldAutoIncrement()
+                                            ->incrementByValue(1)
+                                            ->startAtValue(1)
                                         ->end()
                                     ->end()
                                 ->end()
@@ -114,14 +97,65 @@ class BuilderExamplesTest extends AbstractProject
                             ->sqlWritter()
                             ->end()
                         ->end()
-                        
                     ->end();
         
         $this->assertInstanceOf('Faker\Components\Engine\DB\Composite\SchemaNode',$schema);
         
-        $values = array();
+        # assert composite
         
-        $schema->generate(1,$values);
+        
+
+        
+    }
+    
+    public function testExample3()
+    {
+        $container       = $this->getProject(); 
+        $name            = 'test_db'; 
+        $event           = $container->getEventDispatcher();
+        
+        $schema = SchemaBuilder::create($container,$name)
+                        ->describe()
+                            ->addTable('table1')
+                                ->toGenerate(100)
+                                ->addColumn('column2')
+                                    ->dbalType('string')
+                                    ->addField('column2')
+                                        ->fieldAlphaNumeric()
+                                            ->format('cccCCCCCCC')
+                                        ->end()
+                                    ->end()
+                                ->end()
+                                ->addColumn('column1')
+                                    ->dbalType('string')
+                                    ->addField()
+                                        ->fieldAutoIncrement()
+                                            ->incrementByValue(1)
+                                            ->startAtValue(1)
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                             ->addTable('table2')
+                                ->toGenerate(5)
+                                ->addColumn('id')
+                                    ->dbalType('string')
+                                    ->addForeignField()
+                                        ->foreignTable('table1')
+                                        ->foreignColumn('column1')
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->addWriter()
+                            ->sqlWritter()
+                            ->end()
+                        ->end()
+                    ->end();
+        
+        $this->assertInstanceOf('Faker\Components\Engine\DB\Composite\SchemaNode',$schema);
+        
+        # assert composite
         
     }
     

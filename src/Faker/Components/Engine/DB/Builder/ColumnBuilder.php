@@ -27,7 +27,6 @@ class ColumnBuilder extends NodeCollection
       * Adds a new Field To Column
       *
       * @access public
-      * @param string the table database name
       * @return Faker\Components\Engine\DB\Builder\FieldBuilder
       */
     public function addField()
@@ -41,6 +40,22 @@ class ColumnBuilder extends NodeCollection
                                    $this->database,
                                    $this->templateLoader);
         
+        $builder->setParent($this);
+        
+        return $builder;
+    }
+    
+    /**
+     *  Return a foreign Key Builder
+     *
+     *  @access public
+     *  @return Faker\Components\Engine\DB\Builder\ForeignKeyBuilder
+     *
+    */
+    public function addForeignField()
+    {
+        $builder = new ForeignKeyBuilder();
+        $builder->eventDispatcher($this->eventDispatcher);
         $builder->setParent($this);
         
         return $builder;

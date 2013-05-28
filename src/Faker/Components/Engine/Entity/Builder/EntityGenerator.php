@@ -183,31 +183,21 @@ class EntityGenerator implements ParentNodeInterface
       *
       *  @param \Faker\Project the DI container
       *  @param string $name of the entity
-      *  @param \Faker\Components\Engine\Common\TypeRepository $repo;
-      *  @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event
       *  @param \Faker\Locale\LocaleInterface $locale to use
       *  @param \PHPStats\Generator\GeneratorInterface $util
-      *  @param \Doctrine\DBAL\Connection $conn
-      *  @param \Faker\Components\Templating\Loader $loader
       *  @return \Faker\Components\Engine\Entity\Builder\EntityGenerator
       */
     public static function create(Project $container,
                                   $name,
-                                  EventDispatcherInterface $event = null,
-                                  TypeRepository $repo = null,
                                   LocaleInterface $locale = null,
                                   Utilities $util = null,
-                                  GeneratorInterface $gen = null,
-                                  Connection $conn = null,
-                                  Loader $loader = null)
+                                  GeneratorInterface $gen = null
+                                 )
     {
-        if($repo === null) {
-            $repo = $container->getEngineTypeRepository();
-        }
-        
-        if($event === null) {
-            $event = $container->getEventDispatcher();
-        }
+        $repo   = $container->getEngineTypeRepository();
+        $event  = $container->getEventDispatcher();
+        $conn   = $container->getGeneratorDatabase();
+        $loader = $container->getTemplatingManager()->getLoader();
         
         if($locale === null) {
             $locale = $container->getLocaleFactory()->create('en');
@@ -219,14 +209,6 @@ class EntityGenerator implements ParentNodeInterface
         
         if($gen === null) {
             $gen = $container->getDefaultRandom();
-        }
-        
-        if($conn === null) {
-            $conn = $container->getGeneratorDatabase();
-        }
-        
-        if($loader === null) {
-            $loader = $container->getTemplatingManager()->getLoader();
         }
     
         return new self($name,$event,$repo,$locale,$util,$gen,$conn,$loader);

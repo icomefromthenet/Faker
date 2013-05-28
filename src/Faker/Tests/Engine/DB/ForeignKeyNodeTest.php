@@ -56,7 +56,8 @@ class ForeignKeyNodeTest extends AbstractProject
         $values = array();
         $this->assertEquals(5,$foreignKey->generate(1,$values));
         
-        
+        $foreignKey->setUseCache(false);
+        $this->assertEquals(null,$foreignKey->generate(1,$values));
     }
     
     public function testNotRewindCacheRowNotEqualToFirst()
@@ -116,24 +117,6 @@ class ForeignKeyNodeTest extends AbstractProject
         $foreignKey->addChild($child_b); 
         
         $foreignKey->acceptVisitor($visitor);
-        
-    }
-    
-    /**
-      *  @expectedException Faker\Components\Engine\Common\Composite\CompositeException
-      *  @expectedExceptionMessage Foreign-key requires a cache to be set
-      */
-    public function testValidationFailsNoCacheSet()
-    {
-        $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
-        $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $id        = 'foreignKeyNode';
-            
-        $type = new ForeignKeyNode($id,$event);
-        
-        $type->validate();
         
     }
     
@@ -197,8 +180,14 @@ class ForeignKeyNodeTest extends AbstractProject
         
         $type->setOption('foreignTable','aaaa');
         $type->setOption('foreignColumn','aaaa');
+        $type->setOption('foreignColumn','aaaa');
         $type->validate();
+        $this->assertTrue($type->getUseCache());
         
+                    
+        $type->setOption('silent',true);
+        $type->validate();
+        $this->assertFalse($type->getUseCache());
     }
     
 }

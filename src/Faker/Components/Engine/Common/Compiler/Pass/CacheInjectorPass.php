@@ -46,14 +46,21 @@ class CacheInjectorPass implements CompilerPassInterface
                     $compositeType = $inEdge->getSourceNode()->getValue();
                     
                     if($compositeType instanceof ForeignKeyNode) {
-
-                        $compositeType->setResultCache($cache);
                         
-                        # assign cache to column that assigned to the FK
-                        # do it here as don't know if a column has foreignkeys
-                        # until matched.
-                        if($compositeNode->getResultCache() === null ) {
-                            $compositeNode->setResultCache($cache);
+                        # set the cache if the silent option not true
+                        # if all relations are set to silent no cache
+                        # will be set on the original Column.
+                        if($compositeType->getUseCache() === true) {
+                    
+                            $compositeType->setResultCache($cache);
+                        
+                            # assign cache to column that assigned to the FK
+                            # do it here as don't know if a column has foreignkeys
+                            # until matched.
+                            if($compositeNode->getResultCache() === null ) {
+                                $compositeNode->setResultCache($cache);
+                            }
+                        
                         }
                         
                     }

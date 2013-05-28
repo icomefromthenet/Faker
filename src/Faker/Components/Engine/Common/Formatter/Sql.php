@@ -63,8 +63,9 @@ class Sql extends BaseFormatter implements FormatterInterface
     {
         $nodeId       = $event->getNode()->getId();
         $writer       = $this->getWriter();
-        $seqeunce     = $writer->getStream();
-        $encoder      = $writer->getEncoder();
+        $stream       = $writer->getStream();
+        $sequence     = $stream->getSequence();
+        $encoder      = $stream->getEncoder();
         $platformName = $this->getPlatform()->getName();
         $outEncoding  = $this->getOption(self::CONFIG_OPTION_OUT_ENCODING);
         $now          = new \DateTime();
@@ -109,7 +110,7 @@ class Sql extends BaseFormatter implements FormatterInterface
        $writer         = $this->getWriter();
        $stream         = $writer->getStream();
        $sequence       = $stream->getSequence();
-       $tableName      = $event->getType()->getId();
+       $tableName      = $event->getNode()->getId();
        $parentNodeName = $event->getNode()->getParent()->getId();
        
        # set the prefix on the writer for table 
@@ -176,11 +177,10 @@ class Sql extends BaseFormatter implements FormatterInterface
     public function onRowEnd(GenerateEvent $event)
     {
         # iterate over the values and convert run them through the column map
-        $map      = $this->getColumnMap();
         $values   = $event->getValues();
         $platform = $this->getPlatform();
         $writer   = $this->getWriter();
-        $table    = $event->getType()->getOption('name');
+        $table    = $event->getNode()->getId();
         $q       = $platform->getIdentifierQuoteCharacter();
         
         foreach($values as $key => &$value) {

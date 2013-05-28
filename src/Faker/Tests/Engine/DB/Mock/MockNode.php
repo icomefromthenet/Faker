@@ -74,6 +74,13 @@ class MockNode implements CompositeInterface, VisitorInterface, GeneratorInterfa
     }
     
     
+    public function clearChildren()
+    {
+	unset($this->children);
+	$this->children = array();
+    }
+    
+    
     public function getId()
     {
         return $this->id;

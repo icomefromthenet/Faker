@@ -14,12 +14,22 @@ use Faker\Components\Engine\Common\Composite\CompositeInterface;
   */    
 abstract class BasicVisitor
 {
+    
+    /**
+     *  Inject Random Number Generator
+     *
+     *  @access public
+     *  @param CompositeInterface $node
+     *
+    */
+    abstract public function visitGeneratorInjector(CompositeInterface $node);
+    
     /**
       *  Will inject a locale into composite, which locale is
       *  decided by the composite locale option.
       *
       *  @access public
-      *  @param CompositeInterface $composite
+      *  @param CompositeInterface $node
       */
     abstract public function visitLocaleInjector(CompositeInterface $node);
     
@@ -27,7 +37,7 @@ abstract class BasicVisitor
       *  Will Gather the dbal column types if the node implements the DBALTypeInterface
       *
       *  @access public
-      *  @param CompositeInterface $composite
+      *  @param CompositeInterface $node
       */
     abstract public function visitDBALGatherer(CompositeInterface $node);
     
@@ -35,7 +45,7 @@ abstract class BasicVisitor
       *  Will build a directed graph from a composite
       *
       *  @access public
-      *  @param CompositeInterface $composite
+      *  @param CompositeInterface $node
       */
     abstract public function visitDirectedGraphBuilder(CompositeInterface $node);
     

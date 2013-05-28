@@ -51,6 +51,11 @@ class DirectedGraphVisitor extends BasicVisitor
     //------------------------------------------------------------------
     # Visitor Methods
     
+    public function visitGeneratorInjector(CompositeInterface $node)
+    {
+        return null;
+    }
+    
     public function visitLocaleInjector(CompositeInterface $node)
     {
         return null;

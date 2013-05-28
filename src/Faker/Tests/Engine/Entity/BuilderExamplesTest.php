@@ -23,15 +23,11 @@ class BuilderExamplesTest extends AbstractProject
     {
         $container  = $this->getProject();
         $name       = 'example1';
-        $repo       = $container->getEngineTypeRepository();
-        $event      = $container->getEventDispatcher();
         $locale     = $container->getLocaleFactory()->create('en');
         $util       = $container->getEngineUtilities();
         $gen        = $container->getDefaultRandom();
-        $conn       = $container->getGeneratorDatabase();
-        $loader     = $container->getTemplatingManager()->getLoader();
     
-        $builder = new EntityGenerator($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
+        $builder    =  EntityGenerator::create($container,$name,$locale,$util,$gen);
         
         $entityIterator = $builder
                 ->describe()
@@ -63,15 +59,11 @@ class BuilderExamplesTest extends AbstractProject
     {
         $container  = $this->getProject();
         $name       = 'example1';
-        $repo       = $container->getEngineTypeRepository();
-        $event      = $container->getEventDispatcher();
         $locale     = $container->getLocaleFactory()->create('en');
         $util       = $container->getEngineUtilities();
         $gen        = $container->getDefaultRandom();
-        $conn       = $container->getGeneratorDatabase();
-        $loader     = $container->getTemplatingManager()->getLoader();
     
-        $builder = new EntityGenerator($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
+        $builder    =  EntityGenerator::create($container,$name,$locale,$util,$gen);
         
         $nowDate = new \DateTime();
         $maxDate = clone $nowDate;
@@ -203,15 +195,12 @@ class BuilderExamplesTest extends AbstractProject
         
         $container  = $this->getProject();
         $name       = 'example1';
-        $repo       = $container->getEngineTypeRepository();
-        $event      = $container->getEventDispatcher();
         $locale     = $container->getLocaleFactory()->create('en');
         $util       = $container->getEngineUtilities();
         $gen        = $container->getDefaultRandom();
-        $conn       = $container->getGeneratorDatabase();
-        $loader     = $container->getTemplatingManager()->getLoader();
+
     
-        $builder = new EntityGenerator($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
+        $builder    =  EntityGenerator::create($container,$name,$locale,$util,$gen);
         
         $entityIterator = $builder
                 ->describe()
@@ -244,15 +233,12 @@ class BuilderExamplesTest extends AbstractProject
     {
         $container  = $this->getProject();
         $name       = 'example1';
-        $repo       = $container->getEngineTypeRepository();
-        $event      = $container->getEventDispatcher();
         $locale     = $container->getLocaleFactory()->create('en');
         $util       = $container->getEngineUtilities();
         $gen        = $container->getDefaultRandom();
-        $conn       = $container->getGeneratorDatabase();
-        $loader     = $container->getTemplatingManager()->getLoader();
+
     
-        $builder = new EntityGenerator($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
+        $builder    =  EntityGenerator::create($container,$name,$locale,$util,$gen);
         
         $entityIterator = $builder
                 ->describe()
@@ -287,15 +273,12 @@ class BuilderExamplesTest extends AbstractProject
     {
         $container  = $this->getProject();
         $name       = 'example1';
-        $repo       = $container->getEngineTypeRepository();
-        $event      = $container->getEventDispatcher();
         $locale     = $container->getLocaleFactory()->create('en');
         $util       = $container->getEngineUtilities();
         $gen        = $container->getDefaultRandom();
-        $conn       = $container->getGeneratorDatabase();
-        $loader     = $container->getTemplatingManager()->getLoader();
+
     
-        $builder = new EntityGenerator($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
+        $builder    =  EntityGenerator::create($container,$name,$locale,$util,$gen);
         
         $entityIterator = $builder
                 ->describe()
@@ -329,15 +312,12 @@ class BuilderExamplesTest extends AbstractProject
     {
         $container  = $this->getProject();
         $name       = 'example1';
-        $repo       = $container->getEngineTypeRepository();
-        $event      = $container->getEventDispatcher();
         $locale     = $container->getLocaleFactory()->create('en');
         $util       = $container->getEngineUtilities();
         $gen        = $container->getDefaultRandom();
-        $conn       = $container->getGeneratorDatabase();
-        $loader     = $container->getTemplatingManager()->getLoader();
+
     
-        $builder = new EntityGenerator($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
+        $builder    =  EntityGenerator::create($container,$name,$locale,$util,$gen);
         
         $entityIterator = $builder
                 ->describe()
@@ -371,15 +351,12 @@ class BuilderExamplesTest extends AbstractProject
     {
         $container  = $this->getProject();
         $name       = 'example1';
-        $repo       = $container->getEngineTypeRepository();
-        $event      = $container->getEventDispatcher();
         $locale     = $container->getLocaleFactory()->create('en');
         $util       = $container->getEngineUtilities();
         $gen        = $container->getDefaultRandom();
-        $conn       = $container->getGeneratorDatabase();
-        $loader     = $container->getTemplatingManager()->getLoader();
+
     
-        $builder = new EntityGenerator($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
+        $builder    =  EntityGenerator::create($container,$name,$locale,$util,$gen);
         
         $entityIterator = $builder
                 ->describe()
@@ -414,15 +391,12 @@ class BuilderExamplesTest extends AbstractProject
     {
         $container  = $this->getProject();
         $name       = 'example1';
-        $repo       = $container->getEngineTypeRepository();
-        $event      = $container->getEventDispatcher();
         $locale     = $container->getLocaleFactory()->create('en');
         $util       = $container->getEngineUtilities();
         $gen        = $container->getDefaultRandom();
-        $conn       = $container->getGeneratorDatabase();
-        $loader     = $container->getTemplatingManager()->getLoader();
+
     
-        $builder = new EntityGenerator($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
+        $builder    =  EntityGenerator::create($container,$name,$locale,$util,$gen);
         
         $entityIterator = $builder
                 ->describe()
@@ -466,15 +440,11 @@ class BuilderExamplesTest extends AbstractProject
     {
         $container  = $this->getProject();
         $name       = 'example1';
-        $repo       = $container->getEngineTypeRepository();
-        $event      = $container->getEventDispatcher();
         $locale     = $container->getLocaleFactory()->create('en');
         $util       = $container->getEngineUtilities();
         $gen        = $container->getDefaultRandom();
-        $conn       = $container->getGeneratorDatabase();
-        $loader     = $container->getTemplatingManager()->getLoader();
     
-        $builder = new EntityGenerator($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
+        $builder    =  EntityGenerator::create($container,$name,$locale,$util,$gen);
         
         $entityIterator = $builder
                 ->describe()

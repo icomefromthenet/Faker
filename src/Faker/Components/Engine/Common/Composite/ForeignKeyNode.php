@@ -108,6 +108,38 @@ class ForeignKeyNode implements CompositeInterface
         return $this->id;
     }
     
-  
+    //-------------------------------------------------------
+    # Custom
+    
+    /*
+     *  @var boolean use the cache during generation
+     */
+    protected $useCache = true;
+    
+    /**
+     *  Set the property that turn cache usage off
+     *
+     *  @access public
+     *  @return void
+     *  @param boolean $bool
+     *
+    */
+    public function setUseCache($bool)
+    {
+        $this->useCache = (boolean) $bool;
+    }
+    
+    /**
+     *  Fetch the property turn cache usage off
+     *
+     *  @access public
+     *  @return boolean
+     *
+    */
+    public function getUseCache()
+    {
+        return $this->useCache;
+    }
+    
 }
 /* End of File */

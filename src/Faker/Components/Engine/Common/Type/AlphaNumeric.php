@@ -1,9 +1,12 @@
 <?php
 namespace Faker\Components\Engine\Common\Type;
 
-use Faker\Components\Engine\EngineException;
-use Faker\Components\Engine\Common\Utilities;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+
+use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\Composite\CompositeException;
+use Faker\Components\Engine\Common\Utilities;
 
 /**
  * AlphaNumeric Type
@@ -93,12 +96,12 @@ class AlphaNumeric extends Type
                             
                             $minText = \Faker\Components\Engine\Common\Type\AlphaNumeric::REPEAT_MIN;
                             
-                            throw new EngineException('AlphaNumeric::'.$minText.' value must be an integer greater than or equal to zero');
+                            throw new InvalidConfigurationException('AlphaNumeric::'.$minText.' value must be an integer greater than or equal to zero');
                         })
                     ->end()
                 ->end()
                 ->scalarNode(self::REPEAT_MAX)
-                    ->info('Maxium number of times to repear the format')
+                    ->info('Maximum number of times to repear the format')
                     ->example('6')
                     ->defaultValue(1)
                     ->validate()
@@ -107,11 +110,8 @@ class AlphaNumeric extends Type
                         
                         })
                         ->then(function($x){
-                            
                             $maxText = \Faker\Components\Engine\Common\Type\AlphaNumeric::REPEAT_MAX ;
-                            
-                            throw new EngineException('AlphaNumeric::'.$maxText.' value must be an integer greater than zero');
-                        
+                            throw new InvalidConfigurationException('AlphaNumeric::'.$maxText.' value must be an integer greater than zero');
                         })
                     ->end()
                 ->end()

@@ -3,6 +3,7 @@ namespace Faker\Components\Engine\Common\Composite;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
+use Faker\Components\Engine\Common\Formatter\FormatterInterface;
 use Faker\Components\Engine\Common\Formatter\BaseFormatter;
 use Faker\Components\Engine\Common\Type\TypeInterface;
 use Faker\Components\Engine\Common\Type\Type;
@@ -49,7 +50,7 @@ class FormatterNode implements CompositeInterface, VisitorInterface
       *
       *  
       */
-    public function __construct($id, EventDispatcherInterface $event,BaseFormatter $formatter)
+    public function __construct($id, EventDispatcherInterface $event,FormatterInterface $formatter)
     {
         $this->id        = $id;
         $this->children  = array();
