@@ -68,6 +68,12 @@ class MockRootNode implements CompositeInterface, VisitorInterface, GeneratorInt
 	$child->setParent($this);
     }
     
+    public function clearChildren()
+    {
+	unset($this->children);
+	$this->children = array();
+    }
+    
     public function getId()
     {
         return $this->id;

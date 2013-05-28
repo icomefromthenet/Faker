@@ -45,14 +45,7 @@ class ForeignKeyNode extends BaseForeignKeyNode implements GeneratorInterface, V
     
     public function validate()
     {
-        $cache = $this->getResultCache();
-        
-        # check if cache has been set
-        if(!$cache instanceof GeneratorCache) {
-            throw new CompositeException($this,'Foreign-key requires a cache to be set');
-        }
-        
-       # validate the options passed into config
+        # validate the options passed into config
         try {
             $processor = new Processor();
             $options = $processor->processConfiguration($this, array('config' => $this->options));
@@ -66,12 +59,21 @@ class ForeignKeyNode extends BaseForeignKeyNode implements GeneratorInterface, V
             throw new CompositeException($this,$e->getMessage(),0,$e);
         }
         
+        # disable the cache if option is set
+        if($this->getOption('silent') === true) {
+            
+            $this->setUseCache(false);
+        }
     }
 
     
     
     public function generate($rows,&$values = array())
     {
+        if((boolean)$this->getUseCache() === false) {
+            return null;
+        }
+        
         $cache = $this->getResultCache();
         
         # return null if cache not set 
@@ -160,8 +162,12 @@ class ForeignKeyNode extends BaseForeignKeyNode implements GeneratorInterface, V
                     ->info('Name of the Foreign Column')
                     ->cannotBeEmpty()
                 ->end()
+                ->booleanNode('silent')
+                    ->defaultFalse()
+                    ->info('Use option to supress value generation but keep Foreign Key Reference Checks and Toplogical Reorder')  
                 ->end()
-            ->end();
+            ->end()
+        ->end();
             
         return $treeBuilder;
     }

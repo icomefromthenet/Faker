@@ -56,7 +56,7 @@ class Phpunit extends BaseFormatter implements FormatterInterface
         $stream       = $writer->getStream();
         $sequence     = $stream->getSequence();
         $platform     = $this->getPlatform();
-        $schemaName   = $event->getType()->getId();
+        $schemaName   = $event->getNode()->getId();
         
         # set the schema prefix on writter
         $sequence->setPrefix(strtolower($schemaName));
@@ -74,7 +74,7 @@ class Phpunit extends BaseFormatter implements FormatterInterface
                                         'datetime'      => $now->format(DATE_W3C),
                                         'phpversion'    => PHP_VERSION,
                                         'schema'        => $schemaName,
-                                        'platform'      => $$platform,
+                                        'platform'      => $platform->getName(),
                                         ));
         # start writing here
     
@@ -107,7 +107,7 @@ class Phpunit extends BaseFormatter implements FormatterInterface
       */
     public function onTableStart(GenerateEvent $event)
     {
-        $table    = $event->getType();
+        $table    = $event->getNode();
         $tableId  = $table->getId();
         $children = $table->getChildren();
         $writer   = $this->getWriter();
@@ -187,11 +187,11 @@ class Phpunit extends BaseFormatter implements FormatterInterface
     public function onColumnEnd(GenerateEvent $event)
     {
         $values   = $event->getValues();
-        $columnId = $event->getType()->getId();
+        $columnId = $event->getNode()->getId();
         $writer   = $this->getWriter();
+        $platform = $this->platform;
         
-        
-        $value = $this->valueConverter->convertValue($columnId,$values[$columnId]);
+        $value = $this->valueConverter->convertValue($columnId,$platform,$values[$columnId]);
         
         if($value !== null) {
             $writer->write('<value>' . \htmlentities($value) .'</value>'.PHP_EOL);

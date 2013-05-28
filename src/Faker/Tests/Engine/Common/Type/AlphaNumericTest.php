@@ -139,7 +139,7 @@ class AlphaNumericTest extends AbstractProject
     
     /**
       *  @expectedException Faker\Components\Engine\EngineException
-      *  @expectedExceptionMessage Invalid configuration for path "config.repeatMin": AlphaNumeric::repeatMin value must be an integer greater than or equal to zero
+      *  @expectedExceptionMessage AlphaNumeric::repeatMin value must be an integer greater than or equal to zero
       */
     public function testConfigExceptionRepeatMinZero()
     {

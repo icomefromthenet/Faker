@@ -243,9 +243,13 @@ class Bootstrap
          return new \Faker\PlatformFactory();
       });
       
-      $project['formatter_factory'] = $project->share(function($project)
+      $project['formatter_factory'] = $project->share(function($project, $event = null)
       {
-         return new \Faker\Components\Engine\Common\Formatter\FormatterFactory($project['event_dispatcher'],$project['writer_manager'],$project['dbal_visitor']);   
+         if($event === null) {
+            $event = $project['event_dispatcher'];
+         }
+         
+         return new \Faker\Components\Engine\Common\Formatter\FormatterFactory($event,$project['writer_manager'],$project['dbal_visitor']);   
       });
       
       $project['dbal_visitor'] = $project->share(function($project) {
@@ -346,19 +350,6 @@ class Bootstrap
       
       });
       
-      //---------------------------------------------------------------
-      // Setup Faker Manager 
-      //
-      //---------------------------------------------------------------
-      
-      
-      $project['faker_manager'] = $project->share(function($project)
-      {
-          $io = new \Faker\Components\Engine\Common\Io($project->getPath()->get());
-         
-          return new \Faker\Components\Engine\Original\Manager($io,$project);
-         
-      });
       
       //---------------------------------------------------------------
       // Event Dispatcher
@@ -440,6 +431,11 @@ class Bootstrap
       // Locale
       //
       //---------------------------------------------------------------
+      
+      $project['default_locale'] = $project->share(function($project)
+      {
+         return $project['locale_factory']->create('en');
+      });
        
       $project['locale_factory'] = $project->share(function($project)
       {
@@ -480,6 +476,56 @@ class Bootstrap
       };
           
       
+      $project['engine_xml_compiler'] = function(Project $project) {
+     
+         $compiler         = $project['engine_common_compiler'];
+         $localeFactory    = $project['locale_factory'];
+         $defaultGenerator = $project['random_generator'];
+         $generatorFactory = $project['generator_factory'];
+         
+         $localeVisitor    = new \Faker\Components\Engine\XML\Visitor\LocaleVisitor($localeFactory);
+         $generatorVisitor = new \Faker\Components\Engine\XML\Visitor\GeneratorInjectorVisitor($generatorFactory,$defaultGenerator);
+      
+         $generatorPass = new \Faker\Components\Engine\XML\Compiler\Pass\GeneratorInjectorPass($generatorVisitor);
+         $localePass    = new \Faker\Components\Engine\XML\Compiler\Pass\LocalePass($localeVisitor);
+      
+         $compiler->addPass($generatorPass);
+         $compiler->addPass($localePass);
+      
+         return  $compiler;
+      };
+      
+      $project['engine_xml_builder'] = function(Project $project) {
+
+         $eventDispatcher  = $project['event_dispatcher'];
+         $compiler         = $project['engine_xml_compiler'];   
+         $typeRepository   = $project['engine_common_typerepo'];
+         $connection       = $project['faker_database'];
+         $utilities        = $project['engine_common_utilities'];
+         $platformFactory  = $project['platform_factory'];
+         $formatterFactory = $project['formatter_factory'];
+         $templateLoader   = $project['template_manager']->getLoader();
+         $defaultLocale    = $project['default_locale'];
+         $defaultGenerator = $project['random_generator'];
+         
+         $builder = new \Faker\Components\Engine\XML\Builder\NodeBuilder($eventDispatcher,
+                                                                         $typeRepository,
+                                                                         $connection,
+                                                                         $utilities,
+                                                                         $compiler,
+                                                                         $platformFactory,
+                                                                         $formatterFactory,
+                                                                         $templateLoader,
+                                                                         $defaultGenerator,
+                                                                         $defaultLocale
+                                                                        );
+         return $builder;
+         
+      };
+      
+      
       return $project;
+   
+   
    }
 };

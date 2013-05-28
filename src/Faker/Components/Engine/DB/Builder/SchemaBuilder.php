@@ -212,37 +212,24 @@ class SchemaBuilder implements ParentNodeInterface
       *
       *  @param Faker\Project the DI container
       *  @param string $name of the entity
-      *  @param Symfony\Component\EventDispatcher\EventDispatcherInterface $event
-      *  @param Faker\Components\Engine\Common\TypeRepository $repo;
       *  @param Faker\Locale\LocaleInterface $locale to use
       *  @param Faker\Components\Engine\Common\Utilities  $util
       *  @param PHPStats\Generator\GeneratorInterface $util
-      *  @param Doctrine\DBAL\Connection $conn
-      *  @param Faker\Components\Templating\Loader $loader
-      *  @param Faker\PlatformFactory $platformFactory
-      *  @param Faker\Components\Engine\Common\Formatter\FormatterFactory $formatterFactory
-      *  @return Faker\Components\Engine\DB\Builder\SchemaBuilder
       */
     public static function create(Project $container,
                                   $name,
-                                  EventDispatcherInterface $event = null,
-                                  TypeRepository $repo = null,
                                   LocaleInterface $locale = null,
                                   Utilities $util = null,
-                                  GeneratorInterface $gen = null,
-                                  Connection $conn = null,
-                                  Loader $loader = null,
-                                  PlatformFactory $platformFactory = null,
-                                  FormatterFactory $formatterFactory = null
+                                  GeneratorInterface $gen = null
                                   )
     {
-        if($repo === null) {
-            $repo = $container->getEngineTypeRepository();
-        }
-        
-        if($event === null) {
-            $event = $container->getEventDispatcher();
-        }
+        $repo               = $container->getEngineTypeRepository();
+        $event              = $container->getEventDispatcher();
+        $conn               = $container->getGeneratorDatabase();
+        $loader             = $container->getTemplatingManager()->getLoader();
+        $platformFactory    = $container->getDBALPlatformFactory();
+        $formatterFactory   = $container->getFormatterFactory($event);
+        $compiler           = $container->getEngineCompiler();
         
         if($locale === null) {
             $locale = $container->getLocaleFactory()->create('en');
@@ -256,23 +243,6 @@ class SchemaBuilder implements ParentNodeInterface
             $gen = $container->getDefaultRandom();
         }
         
-        if($conn === null) {
-            $conn = $container->getGeneratorDatabase();
-        }
-        
-        if($loader === null) {
-            $loader = $container->getTemplatingManager()->getLoader();
-        }
-        
-        if($platformFactory === null) {
-            $platformFactory = $container->getDBALPlatformFactory();
-        }
-        
-        if($formatterFactory === null) {
-            $formatterFactory = $container->getFormatterFactory();
-        }
-        
-        $compiler = $container->getEngineCompiler();
     
         return new self($name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory,$compiler);
     }

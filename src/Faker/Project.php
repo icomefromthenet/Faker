@@ -1,12 +1,19 @@
 <?php
 namespace Faker;
 
-use  Symfony\Component\Console\Output\OutputInterface,
-     Symfony\Component\Finder\Finder,
-     Pimple,
-     Faker\Exception as FakerException,
-     Faker\Path;
+use  Pimple;
+use  Symfony\Component\Console\Output\OutputInterface;
+use  Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use  Symfony\Component\Finder\Finder;
+use  Faker\Exception as FakerException;
 
+/**
+  *  Di Container for A Project
+  *
+  *  @since 1.0.0
+  *  @author Lewis Dyer <getintouch@icomefromthenet.com>
+  * 
+  */
 class Project extends Pimple
 {
 
@@ -245,17 +252,6 @@ class Project extends Pimple
       *  @access public
       *  @return \Faker\Components\Engine\Original\Manager an instance of the Faker component manager
       */
-    public function getFakerManager()
-    {
-        return $this['faker_manager'];
-    }
-
-     /**
-      *  function getFakerManager
-      *
-      *  @access public
-      *  @return \Faker\Components\Engine\Original\Manager an instance of the Faker component manager
-      */
     public function getWritterManager()
     {
         return $this['writer_manager'];
@@ -325,6 +321,31 @@ class Project extends Pimple
           return  $this['engine_common_compiler'];      
      }
      
+     /**
+      *  Return an engine compiler
+      *
+      *  @access public
+      *  @return Faker\Components\Engine\Common\Compiler\CompilerInterface
+      *
+     */
+     public function getXMLEngineCompiler()
+     {
+          return  $this['engine_xml_compiler'];      
+     }
+     
+     
+     /**
+      *  Return an engine compiler
+      *
+      *  @access public
+      *  @return Faker\Components\Engine\XML\Builder\NodeBuilder
+      *
+     */
+     public function getXMLEngineBuilder()
+     {
+          return  $this['engine_xml_builder'];      
+     }
+     
      
      /**
        *  Fetch the Simple String Factory
@@ -348,7 +369,16 @@ class Project extends Pimple
           return $this['locale_factory'];
      }
      
-   
+      /**
+       *  Fetch the Default Locale
+       *
+       *  @access public
+       *  @return Faker\Locale\LocaleInterface
+       */
+     public function getDefaultLocale()
+     {
+          return $this['default_locale'];
+     }
    
      public function getDefaultRandom()
      {
@@ -407,9 +437,10 @@ class Project extends Pimple
       *  @access public
       *  @return Faker\Components\Engine\Common\Formatter\FormatterFactory
       */
-    public function getFormatterFactory()
+    public function getFormatterFactory(EventDispatcherInterface $event = null)
     {
-        return $this['formatter_factory'];
+        $create = $this->raw('formatter_factory');
+        return $create($this,$event);
     }
    
    

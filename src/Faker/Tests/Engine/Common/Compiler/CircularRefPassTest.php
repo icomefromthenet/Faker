@@ -38,6 +38,26 @@ class CircularRefPassTest extends AbstractProject
         
     }
     
+    /**
+      *  @expectedException \Faker\Components\Engine\Common\Compiler\Pass\CircularReferenceException
+      *  @expectedExceptionMessage path: "table2.schema1 -> table2.schema1
+      */
+    public function testCircularRefPassBadSelfRef()
+    {
+        $pass = new CircularRefPass();
+        
+        $composite = $this->getCompositeCircularRefOnSelf();
+        $graph = $this->buildDirectedGraph($composite);
+
+        $compiler = $this->getMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
+        $compiler->expects($this->once())
+                 ->method('getGraph')
+                 ->will($this->returnValue($graph));
+        
+        $pass->process($composite,$compiler);
+        
+    }
+    
     public function testCircularRefPass()
     {
         $pass = new CircularRefPass();
@@ -92,6 +112,28 @@ class CircularRefPassTest extends AbstractProject
         $table1->addChild($column1B);
         
         $schema->addChild($table1);
+        $schema->addChild($table2);
+                
+        return $schema;
+    }
+    
+    protected function getCompositeCircularRefOnSelf()
+    {
+        $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schema    = new SchemaNode('schema1',$event);
+        
+        $table2     = new TableNode('table2',$event);
+        $column2A   = new ColumnNode('column2A',$event);
+        $column2B   = new ColumnNode('column2B',$event);
+
+        $fk2        = new ForeignKeyNode('fk2',$event);
+        $fk2->setOption('foreignTable','table2');
+        $fk2->setOption('foreignColumn','column2B');
+
+        $column2B->addChild($fk2);
+        $table2->addChild($column2A);
+        $table2->addChild($column2B);
+        
         $schema->addChild($table2);
                 
         return $schema;

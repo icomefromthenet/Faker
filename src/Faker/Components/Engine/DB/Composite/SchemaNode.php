@@ -69,13 +69,7 @@ class SchemaNode extends BaseSchemaNode implements GeneratorInterface, VisitorIn
     
     //------------------------------------------------------------------
     # VisitorInterface
-    /**
-      *  Accept a visitor
-      *
-      *  @return void
-      *  @access public
-      *  @param BasicVisitor $visitor the visitor to accept
-      */
+
     public function acceptVisitor(BasicVisitor $visitor)
     {
         # execute visitors that apply to this node

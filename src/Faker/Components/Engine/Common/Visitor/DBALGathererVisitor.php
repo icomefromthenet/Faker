@@ -38,7 +38,11 @@ class DBALGathererVisitor extends BasicVisitor
     }
     
     
-       
+    public function visitGeneratorInjector(CompositeInterface $node)
+    {
+        return null;   
+    }
+    
     public function visitLocaleInjector(CompositeInterface $node)
     {
         return null;

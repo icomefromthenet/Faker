@@ -49,12 +49,90 @@ class CacheInjectorPassTest extends AbstractProject
         $this->assertInstanceOf('\Faker\Components\Engine\Common\GeneratorCache',$fk[0]->getResultCache());
     }
     
-    protected function getComposite()
+    
+    public function testCacheInjectorSilentPreventsInjection()
     {
-         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $pass           = new CacheInjectorPass();
+        $visitor        = new DirectedGraphVisitor(new DirectedGraph(),new PathBuilder());
+        
+        $composite      = $this->getComposite();
+        $composite->acceptVisitor($visitor);
+        
+        $tables         = $composite->getChildren();
+        $columnsTable1  = $tables[0]->getChildren();
+        $columnsTable2  = $tables[1]->getChildren();
+        $columnsTable3  = $tables[2]->getChildren();
+        
+        $graph          =  $visitor->getResult();
+        
+        $compiler       = $this->getMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
+        $compiler->expects($this->once())
+                 ->method('getGraph')
+                 ->will($this->returnValue($graph));
+        
+        $pass->process($composite,$compiler);
+        
+        
+        # test that the cache been injected into the ColumnNode (producer)
+        $this->assertNull(null,$columnsTable1[0]->getResultCache());
+        
+        #test that the cache been injected into the ForeignKeyNode (consumer)
+        $fk = $columnsTable3[1]->getChildren();
+        $this->assertNull(null,$fk[0]->getResultCache());
+        
+    }
+    
+    
+      protected function getSilentComposite()
+    {
+        $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $schema    = new SchemaNode('schema',$event);
         
         $tableA    = new TableNode('tableA',$event);
+        
+        $columnA1  = new ColumnNode('columnA1',$event);
+        $columnA2  = new ColumnNode('columnA2',$event);
+        
+        $tableB    = new TableNode('tableB',$event);
+        $columnB1  = new ColumnNode('columnB1',$event);
+        $columnB2  = new ColumnNode('columnB2',$event);
+        
+        $tableC    = new TableNode('tableC',$event);
+        $columnC1  = new ColumnNode('columnC1',$event);
+        $columnC2  = new ColumnNode('columnC2',$event);
+        $fkc1      = new ForeignKeyNode('fkc1',$event);
+        
+        $fkc1->setOption('foreignTable',$tableA->getId());
+        $fkc1->setOption('foreignColumn',$columnA1->getId());
+        $fkc1->setOption('silent',true);
+        $fkc1->validate();
+        
+        $columnC2->addChild($fkc1);
+        $tableC->addChild($columnC1);
+        $tableC->addChild($columnC2);
+        
+        $tableB->addChild($columnB1);
+        $tableB->addChild($columnB2);
+        
+        $tableA->addChild($columnA1);
+        $tableA->addChild($columnA2);
+        
+        $schema->addChild($tableA);
+        $schema->addChild($tableB);
+        $schema->addChild($tableC);
+        
+        
+        
+        return $schema;
+    }
+    
+    protected function getComposite()
+    {
+        $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schema    = new SchemaNode('schema',$event);
+        
+        $tableA    = new TableNode('tableA',$event);
+        
         $columnA1  = new ColumnNode('columnA1',$event);
         $columnA2  = new ColumnNode('columnA2',$event);
         
@@ -70,6 +148,7 @@ class CacheInjectorPassTest extends AbstractProject
         $fkc1->setOption('foreignTable',$tableA->getId());
         $fkc1->setOption('foreignColumn',$columnA1->getId());
         
+        $fkc1->validate();
         
         $columnC2->addChild($fkc1);
         $tableC->addChild($columnC1);
@@ -84,6 +163,8 @@ class CacheInjectorPassTest extends AbstractProject
         $schema->addChild($tableA);
         $schema->addChild($tableB);
         $schema->addChild($tableC);
+        
+        
         
         return $schema;
     }

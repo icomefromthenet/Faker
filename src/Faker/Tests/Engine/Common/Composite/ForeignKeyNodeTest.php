@@ -50,14 +50,18 @@ class ForeignKeyNodeTest extends AbstractProject
         
         $type = new ForeignKeyNode($id,$event);
         $type->setParent($parent);
+        $type->setUseCache(false);
         
         $this->assertEquals($id,$type->getId());        
         $this->assertEquals($event,$type->getEventDispatcher());
         $this->assertEquals($parent,$type->getParent());
+        $this->assertEquals(false,$type->getUseCache());
         
+        $type->setUseCache(true);
         $type->setParent($parentB);
         $this->assertEquals($parentB,$type->getParent());
         $this->assertEquals(array(),$type->getChildren());
+        $this->assertEquals(true,$type->getUseCache());
         
         $type->addChild($parentB);
         
