@@ -101,13 +101,21 @@ class FormatterNode extends BaseNode implements OptionInterface, SerializationIn
     //-------------------------------------------------------
     # SerializationInterface
     
+   /**
+    * Convert the formatter to xml representation
+    *
+    * @return string the xml rep
+    * @access public
+    */
     public function toXml()
     {
-       return $this->getInternal()->toXml();
+        return '<writer platform="'.$this->getInternal()->getPlatform()->getName().'" format="'.$this->getInternal()->getName().'" />';
     }
     
+    //-------------------------------------------------------
+    # SerializationInterface
     
-     /**
+    /**
       *  Generate a value
       *
       *  @param integer $rows the current row number

@@ -1,19 +1,21 @@
 <?php
 namespace Faker\Command;
 
-use Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Helper\DialogHelper,
-    Symfony\Component\Console\Output\OutputInterface,
-    Faker\Command\Base\Command,
-    Faker\Components\Engine\Original\DebugOutputter,
-    Faker\Components\Engine\Original\ProgressBarOutputter,
-    Faker\Components\Engine\Original\BuilderConsoleOutput,
-    Faker\Parser\FileFactory,
-    Faker\Parser\ParseOptions,
-    Faker\Command\Base\FakerCommand,
-    Zend\ProgressBar\ProgressBar,
-    Zend\ProgressBar\Adapter\Console as ZendConsoleAdapter;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Output\OutputInterface;
+use Faker\Command\Base\Command;
+use Faker\Components\Engine\Common\ResultPrinterInterface;
+use Faker\Components\Engine\Common\Output\DebugOutputter;
+use Faker\Components\Engine\Common\Output\ProgressBarOutputter;
+use Faker\Components\Engine\Common\Output\BuilderConsoleOutput;
+use Faker\Parser\FileFactory;
+use Faker\Parser\ParseOptions;
+use Faker\Command\Base\FakerCommand;
+use Zend\ProgressBar\ProgressBar;
+use Zend\ProgressBar\Adapter\Console as ZendConsoleAdapter;
+use Faker\Components\Engine\Common\Composite\TableNode;
 
 class GenerateCommand extends Command
 {
@@ -23,16 +25,11 @@ class GenerateCommand extends Command
         # get the di container 
         $project  = $this->getApplication()->getProject();
            
-        # load the faker component manager
-        $faker_manager  = $project['faker_manager'];
-       
         #event manager
         $event = $project['event_dispatcher'];
        
-        $faker_manager->enableCRCheck();
-       
-         # fetch the schem parser        
-        $parser = $faker_manager->getSchemaParser();
+        # fetch the schem parser        
+        $parser = $project->getXMLEngineParser();
         $parser->register();
         
         # fetch the file and verify the path
@@ -48,44 +45,52 @@ class GenerateCommand extends Command
         # bind build events output handler
         $event->addSubscriber(new BuilderConsoleOutput($event,$output));
         
-        # parse the schema file
-        $builder = $parser->parse(FileFactory::create($file->getPathname()), new ParseOptions()); 
-        
-        # fetch the composite
-        $composite = $builder->build();
-        
         $output->writeln('<info>Starting Generator</info>');
+        
+        
+        # is file php or xml
+        if($file->getExtension() == 'xml') {
+            # parse the schema file
+            $builder = $parser->parse(FileFactory::create($file->getPathname()), new ParseOptions()); 
+        
+            # fetch the composite
+            $composite = $builder->build();
+        } else {
+            # try load a php file
+            $composite = include($file->getPathname());
+        }
         
         # check if we use the debug or normal notifier
         if($input->getOption('verbose')) {
-            
             $event->addSubscriber(new DebugOutputter($output));
-                
         } else {
-                 # use the composite to calculate number of rows
+        
+            # use the composite to calculate number of rows
             $rows = 0;
-            
+                
             foreach($composite->getChildren() as $table) {
-                $rows +=  $table->getToGenerate();                      
+                if($table instanceof TableNode) {
+                  $rows +=  $table->getRowsToGenerate();
+                }
+                
             }
-            
+                
             # instance zend_progress bar
             $console_adapter = new ZendConsoleAdapter();
             $console_adapter->setElements(array(ZendConsoleAdapter::ELEMENT_PERCENT,
-                                 ZendConsoleAdapter::ELEMENT_BAR,
-                                 ZendConsoleAdapter::ELEMENT_TEXT,
-                                 ));
-            
+                                ZendConsoleAdapter::ELEMENT_BAR,
+                                ZendConsoleAdapter::ELEMENT_TEXT,
+                            ));
+                
             $progress_bar = new ProgressBar($console_adapter, 1, $rows,null);
-            
+               
             # instance the default notifier
             $event->addSubscriber(new ProgressBarOutputter($event,$progress_bar));
-            
+                
         }
         
         # start execution of the generate
         $composite->generate(1,array());
-        
     }
 
 

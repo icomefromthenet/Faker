@@ -1,241 +1,46 @@
 <?php
-namespace Faker\Tests\Engine\Original\Composite;
+namespace Faker\Tests\Engine\XML\Composite;
 
-use Faker\Components\Engine\Original\Composite\ForeignKey,
-    Faker\Components\Engine\Original\Composite\CompositeInterface,
-    Faker\Components\Engine\Common\Formatter\FormatEvents,
-    Faker\Components\Engine\Original\Formatter\GenerateEvent,
-    Faker\Components\Engine\Original\GeneratorCache,
-    Faker\Components\Engine\Original\CacheInterface,
-    Doctrine\DBAL\Types\Type as ColumnType,
-    Faker\Tests\Base\AbstractProject;
+use Faker\Components\Engine\XML\Composite\ForeignKeyNode;
+use Faker\Tests\Base\AbstractProject;
     
 class ForeignKeyTest extends AbstractProject
 {
     
-    public function testImplementsCompositeInterface()
+    public function testImplementsInterface()
     {
-        $id = 'table_1';
+        $id = 'fk_table_1';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $parent = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
         
-        $column = new ForeignKey($id,$parent,$event);
-        $column->setOption('name','foreign-key');
+        $node = new ForeignKeyNode($id,$event);
         
-        $this->assertInstanceOf('Faker\Components\Engine\Original\Composite\CompositeInterface',$column);
-        $this->assertInstanceOf('Faker\Components\Engine\Original\CacheInterface',$column);
-    
-    }
-    
-    public function testConfigurationParsed()
-    {
-        $id = 'table_1';
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $parent = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
-        
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=>'tb1', 'foreignColumn' => 'clmn1','name' => 'foreign-key'));
-
-        # assert use cache is default true
-        $this->assertTrue($foreign->getUseCache()); 
-        
-        # setup cache (not testing validation)
-        $cache = new GeneratorCache();
-        $foreign->setGeneratorCache($cache);
-        
-        $foreign->merge();
-        $foreign->validate();        
+        $this->assertInstanceOf('Faker\Components\Engine\Common\Composite\CompositeInterface',$node);
+        $this->assertInstanceOf('Faker\Components\Engine\Common\OptionInterface',$node);
+        $this->assertInstanceOf('Faker\Components\Engine\Common\Composite\VisitorInterface',$node);
+        $this->assertInstanceOf('Faker\Components\Engine\Common\Composite\SerializationInterface',$node);
     }
     
     
-    public function testToXml()
+    public function testTypeInterfaceProperties()
     {
-        $id = 'tbl1.clmn1';
-       
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $parent = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable' => 'tbl1', 'foreignColumn' => 'clmn1','name' => 'foreign-key'));
+        $id         = 'fk_table_1';
+        $event      = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $node       = new ForeignKeyNode($id,$event); 
         
-        $xml = $foreign->toXml();
-        $this->assertContains('<foreign-key name="tbl1.clmn1" foreignColumn="clmn1" foreignTable="tbl1">',$xml );
-        $this->assertContains('</foreign-key>',$xml);
-    
-    }
-    
-    
-    public function testProperties()
-    {
-        $id = 'tbl1.clmn1';
-       
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $parent = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
-    
-        $foreign = new ForeignKey($id,$parent,$event,array('name' => 'foreign-key'));
-     
-        $child_a = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
-        $child_b = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
-          
-        $foreign->addChild($child_a);        
-        $foreign->addChild($child_b);        
+        $utilities  = $this->getMock('Faker\Components\Engine\Common\Utilities');
+        $generator  = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $locale     = $this->getMock('Faker\Locale\LocaleInterface');
         
-        $this->assertEquals($foreign->getChildren(),array($child_a,$child_b));
-        $this->assertSame($foreign->getEventDispatcher(),$event);
-        $this->assertEquals($parent,$foreign->getParent());
-        $this->assertEquals($id,$foreign->getId());
-    }
-    
-    
-    public function testCacheInterface()
-    {
-        $id = 'table_1';
-       
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $parent = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd','name' => 'foreign-key'));
+        $node->setUtilities($utilities);
+        $node->setLocale($locale);
+        $node->setGenerator($generator);
         
-        
-        # test the default use cache true
-        $this->assertTrue($foreign->getUseCache());
-
-        # setup cache (not testing validation)
-        $cache = new GeneratorCache();
-        $foreign->setGeneratorCache($cache);
-        $this->assertSame($foreign->getGeneratorCache(),$cache);
-                
-        
-    } 
-    
-    /**
-      *  @expectedException \Faker\Components\Engine\Original\Exception
-      *  @expectedExceptionMessage Foreign-key requires a cache to be set
-      */
-    public function testValidateFailMissingCache()
-    {
-        $id = 'table_1';
-       
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $parent = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
-        
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd','name' => 'foreign-key'));
-
-        $this->assertTrue($foreign->getUseCache());
-        
-        $foreign->merge();
-        $foreign->validate();
+        $this->assertEquals($utilities,$node->getUtilities());
+        $this->assertEquals($locale,$node->getLocale());
+        $this->assertEquals($generator,$node->getGenerator());
         
     }
     
-    /**
-      *  @expectedException \Faker\Components\Engine\Original\Exception
-      *  @expectedExceptionMessage The path "config.foreignTable" cannot contain an empty value, but got ""
-      */
-    public function testValidateFailEmptyForeignTable()
-    {
-        $id = 'table_1';
-       
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $parent = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
-        
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> '', 'foreignColumn' => 'aaa','name' => 'foreign-key'));
-
-        $this->assertTrue($foreign->getUseCache());
-        
-        $foreign->merge();
-        $foreign->validate();
-        
-    }
-    
-    /**
-      *  @expectedException \Faker\Components\Engine\Original\Exception
-      *  @expectedExceptionMessage The path "config.foreignColumn" cannot contain an empty value, but got ""
-      */
-    public function testValidateFailEmptyForeignColumn()
-    {
-        $id = 'table_1';
-       
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $parent = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
-        
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'aa', 'foreignColumn' => '','name' => 'foreign-key'));
-
-        $this->assertTrue($foreign->getUseCache());
-        
-        $foreign->merge();
-        $foreign->validate();
-        
-    }
-    
-    
-    public function testValidatePassWithCache()
-    {
-         $id = 'table_1';
-        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
-       
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $parent = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd','name' => 'foreign-key'));
-        
-        # test the use cache property
-        $foreign->setUseCache(true);
-        
-        # setup cache (not testing validation)
-        $cache = new GeneratorCache();
-        $foreign->setGeneratorCache($cache);
-        
-        $foreign->merge();
-        $foreign->validate();        
-        
-    }
-    
-    
-    public function testCacheUsedInGenerate()
-    {
-        $id = 'table_1';
-        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
-       
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $parent = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd','name' => 'foreign-key'));
-        $foreign->setUseCache(true);
-        
-        # setup the cache        
-        $cache = new GeneratorCache();
-        $cache->add('valueavalueb');
-        $cache->add('valuecvalued');
-        
-        # set cache and validate        
-        $foreign->setGeneratorCache($cache);
-        $foreign->merge();
-        $foreign->validate(); 
-        
-        # generate (fetch from cache)
-        $valueA = $foreign->generate(1,array());
-        $valueB = $foreign->generate(2,array());
-        
-        # assert
-        $this->assertEquals('valueavalueb',$valueA);
-        $cache->next();
-        $this->assertEquals('valuecvalued',$valueB);
-        
-    }
-    
-     public function testGenerateReturnNullWhenCacheFalse()
-    {
-        $id = 'table_1';
-        $column_type = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
-       
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $parent = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
-        $foreign = new ForeignKey($id,$parent,$event,array('foreignTable'=> 'china', 'foreignColumn' => 'abcd','name' => 'foreign-key','useCache'=>false));
-        $foreign->setUseCache(false);
-                
-        # set cache and validate        
-        $foreign->merge();
-        $foreign->validate(); 
-        
-        # generate (fetch from cache)
-        $this->assertNull($foreign->generate(1,array()));
-        $this->assertNull($foreign->generate(2,array()));
-        
-    }
+   
     
 }

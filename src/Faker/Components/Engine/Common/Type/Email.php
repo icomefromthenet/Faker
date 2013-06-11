@@ -6,6 +6,7 @@ use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\Utilities;
 use Faker\Components\Engine\Common\TokenIterator;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -119,11 +120,8 @@ class Email extends Type
      * Generates the configuration tree builder.
      *
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeExtension(NodeDefinition $rootNode)
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('config');  
-    
         $rootNode
             ->children()
                 ->scalarNode('params')
@@ -163,7 +161,7 @@ class Email extends Type
                 ->end()
             ->end();
         
-        return $treeBuilder;
+        return $rootNode;
     }
     
 }

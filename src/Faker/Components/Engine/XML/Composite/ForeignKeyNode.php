@@ -110,13 +110,13 @@ class ForeignKeyNode extends BaseNode implements OptionInterface, SerializationI
             ->children()
                 ->scalarNode('name')
                     ->isRequired()
-                    ->info('The Name of the Type')
+                    ->info('The Name of the Foreign Key')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_string($v);
                         })
                         ->then(function($v){
-                            throw new InvalidConfigurationException('Type::Name must be a string');
+                            throw new InvalidConfigurationException('ForeignKey::Name must be a string');
                         })
                     ->end()
                 ->end()
@@ -129,7 +129,7 @@ class ForeignKeyNode extends BaseNode implements OptionInterface, SerializationI
                             return !is_string($v);
                         })
                         ->then(function($v){
-                            throw new InvalidConfigurationException('Type::Locale not in valid list');
+                            throw new InvalidConfigurationException('ForeignKey::Locale not in valid list');
                         })
                     ->end()
                 ->end()

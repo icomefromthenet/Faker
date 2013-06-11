@@ -18,9 +18,8 @@ use Faker\Components\Engine\Common\Selector\AlternateSelector;
 use Faker\Components\Engine\Common\Selector\PickSelector;
 use Faker\Components\Engine\Common\Selector\RandomSelector;
 use Faker\Components\Engine\Common\Selector\SwapSelector;
-
-
-use Faker\Components\Engine\DB\Composite\SelectorNode as BaseNode;
+use Faker\Components\Engine\Common\Visitor\BasicVisitor;
+use Faker\Components\Engine\Common\Composite\SelectorNode as BaseNode;
 
 /**
   *  Node that implements SerializationInterface and VisitorInterface and OptionInterface

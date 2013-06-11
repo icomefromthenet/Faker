@@ -4,7 +4,7 @@ namespace Faker\Components\Engine\Common\Selector;
 use Faker\Components\Engine\Common\Type\Type;
 use Faker\Components\Engine\Common\PositionManager;
 use Faker\Components\Engine\EngineException;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
 /**
  * Random selection of an index with a given set size and step value
@@ -25,12 +25,9 @@ class RandomSelector extends Type
     //------------------------------------------------------------------
     
     
-    public function getConfigTreeBuilder()
+    public function getConfigTreeExtension(NodeDefinition $rootNode)
     {
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('config');
-        
         $rootNode->children()
             ->scalarNode('set')
                 ->isRequired()
@@ -47,7 +44,7 @@ class RandomSelector extends Type
             ->end()
         ->end();
         
-        return $treeBuilder;   
+        return $rootNode;   
     }
 }
 /* End of File */

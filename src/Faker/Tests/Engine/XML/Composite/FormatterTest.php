@@ -6,7 +6,7 @@ use Faker\Components\Engine\Common\Formatter\FormatterInterface;
 use Doctrine\DBAL\Types\Type;
 use Faker\Tests\Base\AbstractProject;
     
-class ColumnTest extends AbstractProject
+class FormatterTest extends AbstractProject
 {
     
     public function testImplementsInterface()
@@ -36,6 +36,27 @@ class ColumnTest extends AbstractProject
         
         $formatterNode = new FormatterNode($id,$event,$formatter);
         $formatterNode->setOption('locale','en');
+        
+    }
+    
+    public function testTypeInterfaceProperties()
+    {
+        $id         = 'fk_table_1';
+        $event      = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+         $formatter = $this->getMock('Faker\Components\Engine\Common\Formatter\FormatterInterface');
+        $node       = new FormatterNode($id,$event,$formatter); 
+        
+        $utilities  = $this->getMock('Faker\Components\Engine\Common\Utilities');
+        $generator  = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $locale     = $this->getMock('Faker\Locale\LocaleInterface');
+        
+        $node->setUtilities($utilities);
+        $node->setLocale($locale);
+        $node->setGenerator($generator);
+        
+        $this->assertEquals($utilities,$node->getUtilities());
+        $this->assertEquals($locale,$node->getLocale());
+        $this->assertEquals($generator,$node->getGenerator());
         
     }
 }

@@ -4,6 +4,7 @@ namespace Faker\Components\Engine\Common\Type;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\Utilities;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
 /**
  * Const values for all php number primitives
@@ -69,11 +70,8 @@ class ConstantNumber extends Type
      * Generates the configuration tree builder.
      *
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeExtension(NodeDefinition $rootNode)
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('config');
-        
         $rootNode
             ->children()
                 ->scalarNode('value')
@@ -106,7 +104,7 @@ class ConstantNumber extends Type
                 ->end()
             ->end();
         
-        return $treeBuilder;
+        return $rootNode;
     }
     
 }

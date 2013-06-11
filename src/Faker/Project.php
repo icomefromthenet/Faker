@@ -334,6 +334,11 @@ class Project extends Pimple
      }
      
      
+     public function getXMLEngineParser()
+     {
+          return $this['engine_xml_parser'];
+     }
+     
      /**
       *  Return an engine compiler
       *

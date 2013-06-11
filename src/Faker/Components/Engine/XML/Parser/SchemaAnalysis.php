@@ -1,11 +1,15 @@
 <?php
-namespace Faker\Components\Engine\Original;
+namespace Faker\Components\Engine\XML\Parser;
 
 use Doctrine\DBAL\Connection;
+use Faker\Components\Engine\XML\Builder\NodeBuilder;
 
-use Faker\Components\Engine\Original\Builder;
-use Faker\Components\Engine\Original\Formatter\FormatterFactory;
-
+/**
+  *  Will translate a Doctrine DBAL Schema Representation into a Faker XML schema File
+  *
+  *  @author Lewis Dyer <getintouch@icomefromthenet.com>
+  *  @since 1.0.4
+  */
 class SchemaAnalysis
 {
     
@@ -14,13 +18,12 @@ class SchemaAnalysis
       *  type composite ready to convert to xml
       *
       *  @param Doctrine\DBAL\Connection
-      *  @param Faker\Components\Engine\Original\Builder $builder
+      *  @param Faker\Components\Engine\XML\Builder\NodeBuilder $builder
       */
-    public function analyse(Connection $db,Builder $builder)
+    public function analyse(Connection $db,NodeBuilder $builder)
     {
         
         $sm = $db->getSchemaManager();
-    
         
         # add schema element                
         $builder->addSchema($db->getDatabase(),array());

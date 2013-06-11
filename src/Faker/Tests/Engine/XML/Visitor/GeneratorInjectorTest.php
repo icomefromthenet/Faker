@@ -6,6 +6,8 @@ use Faker\Components\Engine\XML\Composite\ColumnNode;
 use Faker\Components\Engine\XML\Composite\SelectorNode;
 use Faker\Components\Engine\XML\Composite\TableNode;
 use Faker\Components\Engine\XML\Composite\TypeNode;
+use Faker\Components\Engine\XML\Composite\ForeignKeyNode;
+use Faker\Components\Engine\XML\Composite\FormatterNode;
 use Faker\Components\Engine\XML\Visitor\GeneratorInjectorVisitor;
 use Faker\Tests\Base\AbstractProject;
 
@@ -13,7 +15,7 @@ class GeneratorInjectorTest extends AbstractProject
 {
 
    protected function getComposite()
-    {
+   {
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $schema    = new SchemaNode('schema',$event);
         $formatter = $this->getMockBuilder('Faker\Tests\Engine\Common\Formatter\Mock\MockFormatter')->disableOriginalConstructor()->getMock();
@@ -61,7 +63,6 @@ class GeneratorInjectorTest extends AbstractProject
     public function testCascadeDefaultGeneratorSet()
     {
         $project = $this->getProject();
-        $builder = $project->getFakerManager()->getCompositeBuilder();
 
         $default_generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
         $factory_mock      = $this->getMock('PHPStats\Generator\GeneratorFactory');
@@ -73,188 +74,24 @@ class GeneratorInjectorTest extends AbstractProject
                 
         $tables  = $schema->getChildren();
         
-        $this->assertEquals($default_generator,$table->getGenerator());
+        # assert schema set with default generator
+        $this->assertEquals($default_generator,$schema->getGenerator());
         
         
         foreach($tables as $table) {
-            if($table instanceOf ) {
+            if($table instanceOf TableNode ) {
                 $this->assertEquals($default_generator,$table->getGenerator());
             }
         }
         
-        $columns = $tables[0]->getChildren();
-        $types   = $columns[0]->getChildren();
+        $columns = $tables[1]->getChildren();
         
-        $type    = $types[0];
-        
-        
-        $this->assertEquals($default_generator,$type->getGenerator());
+        # test columns been set with a default generator        
+        $this->assertEquals($default_generator,$columns[0]->getGenerator());
+        $this->assertEquals($default_generator,$columns[1]->getGenerator());
        
         
     }
 
-
-
-    public function testCascadeSchemaSetting()
-    {
-        $project = $this->getProject();
-        $builder = $project->getFakerManager()->getCompositeBuilder();
-
-        $default_generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $new_generator     = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $factory_mock      = $this->getMock('PHPStats\Generator\GeneratorFactory');
-        
-        $factory_mock->expects($this->once())
-                     ->method('create')
-                     ->with($this->equalTo('mersenne'))
-                     ->will($this->returnValue($new_generator));
-        
-        $builder->addSchema('schema1',array('randomGenerator' => 'mersenne','generatorSeed' => 100,'name' => 'schema1'))
-                    ->addWriter('mysql','sql')
-                    ->addTable('table1',array('generate' => 100,'name' => 'table1'))
-                        ->addColumn('columnA',array('type' => 'string','name' => 'columnA'))
-                            ->addType('alphanumeric',array('name' => 'alphanumeric'))
-                                ->setTypeOption('format','aaaa')
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end();
-        
-        $schema = $builder->getSchema();
-       
-        $visitor = new GeneratorInjectorVisitor($factory_mock,$default_generator);
-        $schema->acceptVisitor($visitor);
-       
-        $tables  = $schema->getChildren();
-        $columns = $tables[0]->getChildren();
-        $types   = $columns[0]->getChildren();
-        $type    = $types[0];
-        
-        $this->assertEquals($new_generator,$type->getGenerator());
-        
-    }
-    
-    
-    public function testTableOverridesSchema()
-    {
-        $project = $this->getProject();
-        $builder = $project->getFakerManager()->getCompositeBuilder();
-
-        $default_generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $new_generator     = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $factory_mock      = $this->getMock('PHPStats\Generator\GeneratorFactory');
-        
-        $factory_mock->expects($this->once())
-                     ->method('create')
-                     ->with($this->equalTo('mersenne'))
-                     ->will($this->returnValue($new_generator));
-        
-        $builder->addSchema('schema1',array('name' => 'schema1'))
-                    ->addWriter('mysql','sql')
-                    ->addTable('table1',array('generate' => 100,'randomGenerator' => 'mersenne','generatorSeed' => 100,'name' => 'table1'))
-                        ->addColumn('columnA',array('type' => 'string','name' => 'columnA'))
-                            ->addType('alphanumeric',array('name' => 'alphanumeric'))
-                                ->setTypeOption('format','aaaa')
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end();
-        
-        $schema = $builder->getSchema();
-       
-        $visitor = new GeneratorInjectorVisitor($factory_mock,$default_generator);
-        $schema->acceptVisitor($visitor);
-       
-        $tables  = $schema->getChildren();
-        $columns = $tables[0]->getChildren();
-        $types   = $columns[0]->getChildren();
-        $type    = $types[0];
-        
-        $this->assertEquals($new_generator,$type->getGenerator());
-        
-        
-    }
-    
-    public function testColumnOverrides()
-    {
-        $project = $this->getProject();
-        $builder = $project->getFakerManager()->getCompositeBuilder();
-
-        $default_generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $new_generator     = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $factory_mock      = $this->getMock('PHPStats\Generator\GeneratorFactory');
-        
-        $factory_mock->expects($this->once())
-                     ->method('create')
-                     ->with($this->equalTo('mersenne'))
-                     ->will($this->returnValue($new_generator));
-        
-        $builder->addSchema('schema1',array('name' => 'schema1'))
-                    ->addWriter('mysql','sql')
-                    ->addTable('table1',array('generate' => 100,'name' => 'table1'))
-                        ->addColumn('columnA',array('type' => 'string','randomGenerator' => 'mersenne','generatorSeed' => 100,'name' => 'columnA'))
-                            ->addType('alphanumeric',array('name' => 'alphanumeric'))
-                                ->setTypeOption('format','aaaa')
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end();
-        
-        $schema = $builder->getSchema();
-       
-        $visitor = new GeneratorInjectorVisitor($factory_mock,$default_generator);
-        $schema->acceptVisitor($visitor);
-       
-        $tables  = $schema->getChildren();
-        $columns = $tables[0]->getChildren();
-        $types   = $columns[0]->getChildren();
-        $type    = $types[0];
-        
-        $this->assertEquals($new_generator,$type->getGenerator());
-        
-        
-        
-    }
-    
-    public function testTypeOverrides()
-    {
-        $project = $this->getProject();
-        $builder = $project->getFakerManager()->getCompositeBuilder();
-
-        $default_generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $new_generator     = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $factory_mock      = $this->getMock('PHPStats\Generator\GeneratorFactory');
-        
-        $factory_mock->expects($this->once())
-                     ->method('create')
-                     ->with($this->equalTo('mersenne'))
-                     ->will($this->returnValue($new_generator));
-        
-        $builder->addSchema('schema1',array('name' => 'schema1'))
-                    ->addWriter('mysql','sql')
-                    ->addTable('table1',array('generate' => 100,'name' => 'table1'))
-                        ->addColumn('columnA',array('type' => 'string','name' => 'columnA'))
-                            ->addType('alphanumeric',array('randomGenerator' => 'mersenne','generatorSeed' => 100,'name' => 'alphanumeric'))
-                                ->setTypeOption('format','aaaa')
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end();
-        
-        $schema = $builder->getSchema();
-       
-        $visitor = new GeneratorInjectorVisitor($factory_mock,$default_generator);
-        $schema->acceptVisitor($visitor);
-       
-        $tables  = $schema->getChildren();
-        $columns = $tables[0]->getChildren();
-        $types   = $columns[0]->getChildren();
-        $type    = $types[0];
-        
-        $this->assertEquals($new_generator,$type->getGenerator());
-        
-        
-    }
-    
 }
 /* End of File */

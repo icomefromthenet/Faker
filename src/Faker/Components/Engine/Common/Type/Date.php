@@ -5,6 +5,7 @@ use DateTime;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\Utilities;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
 /**
  * Date type to make date values
@@ -70,12 +71,8 @@ class Date extends Type
      * Generates the configuration tree builder.
      *
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeExtension(NodeDefinition $rootNode)
     {
-
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('config');
-        
         $rootNode
             ->children()
                 ->scalarNode('start')
@@ -126,7 +123,7 @@ class Date extends Type
                 ->end()
             ->end();
             
-        return $treeBuilder;
+        return $rootNode;
     }
 
 }

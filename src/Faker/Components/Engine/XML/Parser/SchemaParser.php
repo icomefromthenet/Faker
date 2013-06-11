@@ -1,17 +1,24 @@
 <?php
-namespace Faker\Components\Engine\Original;
+namespace Faker\Components\Engine\XML\Parser;
 
 use Faker\Parser\Parser\XML as BaseXMLParser;
 use Faker\Parser\FileInterface;
 use Faker\Parser\ParseOptions;
-use Faker\Components\Engine\Original\Exception as FakerException;
 use Faker\Parser\Exception as ParserException;
+use Faker\Components\Engine\XML\Builder\NodeBuilder;
+use Faker\Components\Engine\EngineException;
 
+/**
+  *  Parser an faker xml schema file into a GeneratorComposite
+  *
+  *  @author Lewis Dyer <getintouch@icomefromthenet.com>
+  *  @since 1.0.4
+  */
 class SchemaParser extends BaseXMLParser
 {
     
     /**
-      *  @var Faker\Components\Engine\Original\Builder 
+      *  @var Faker\Components\Engine\XML\Builder\NodeBuilder
       */
     protected $builder;
     
@@ -19,7 +26,7 @@ class SchemaParser extends BaseXMLParser
     # Class Constructor
     
     
-    public function __construct(Builder $builder)
+    public function __construct(NodeBuilder $builder)
     {
         $this->builder = $builder;
     }
@@ -45,11 +52,11 @@ class SchemaParser extends BaseXMLParser
             case 'writer' :
                
                 if(isset($attribs['format']) === false) {
-                    throw new FakerException('Writter Tag Missing Format');
+                    throw new EngineException('Writter Tag Missing Format');
                 }
                
                 if(isset($attribs['platform']) === false) {
-                    throw new FakerException('Writer Tag Missing Platform');
+                    throw new EngineException('Writer Tag Missing Platform');
                 }
                 
                 $platform = $attribs['platform'];
@@ -66,7 +73,7 @@ class SchemaParser extends BaseXMLParser
             case 'schema':    
                 
                 if(isset($attribs['name']) === false) {
-                    throw new FakerException('Schema Tag Missing Name');
+                    throw new EngineException('Schema Tag Missing Name');
                 }
                 
                 $this->builder->addSchema($attribs['name'],$attribs);
@@ -74,7 +81,7 @@ class SchemaParser extends BaseXMLParser
             case 'table':    
             
                 if(isset($attribs['name']) === false) {
-                    throw new FakerException('Table Tag Missing Name');
+                    throw new EngineException('Table Tag Missing Name');
                 }
                 
                 $this->builder->addTable($attribs['name'],$attribs);
@@ -84,7 +91,7 @@ class SchemaParser extends BaseXMLParser
             case 'column':    
            
                 if(isset($attribs['name']) === false) {
-                    throw new FakerException('Column Tag Missing Name');
+                    throw new EngineException('Column Tag Missing Name');
                 }
                 
                 $this->builder->addColumn($attribs['name'],$attribs);
@@ -93,7 +100,7 @@ class SchemaParser extends BaseXMLParser
             case 'datatype':    
                 
                 if(isset($attribs['name']) === false) {
-                    throw new FakerException('Datatype Tag Missing Name');
+                    throw new EngineException('Datatype Tag Missing Name');
                 }
                 
                 $this->builder->addType($attribs['name'],$attribs);
@@ -102,11 +109,11 @@ class SchemaParser extends BaseXMLParser
             case 'option':    
                 
                 if(isset($attribs['name']) === false) {
-                    throw new FakerException('Have Type Option Tag Missing Name Attribute');
+                    throw new EngineException('Have Type Option Tag Missing Name Attribute');
                 }
                 
                 if(isset($attribs['value']) === false) {
-                    throw new FakerException('Have Type Option Tag Missing Value Attribute');
+                    throw new EngineException('Have Type Option Tag Missing Value Attribute');
                 }
                 
                 
@@ -116,7 +123,7 @@ class SchemaParser extends BaseXMLParser
             case 'foreign-key' :
                 
                 if(isset($attribs['name']) === false) {
-                    throw new FakerException('Foreign-key must have a name unique name try foreignTable.foriegnColumn');
+                    throw new EngineException('Foreign-key must have a name unique name try foreignTable.foriegnColumn');
                 }
                 
                 $this->builder->addForeignKey($attribs['name'],$attribs);
@@ -129,7 +136,7 @@ class SchemaParser extends BaseXMLParser
             case 'swap':    
                 $this->builder->addSelector($name,$attribs);
             break;
-            default: throw new FakerException(sprintf('Tag name %s unknown',$name));
+            default: throw new EngineException(sprintf('Tag name %s unknown',$name));
         }
        
              
@@ -190,7 +197,7 @@ class SchemaParser extends BaseXMLParser
         try {
            parent::parse($file,$options);
         } catch(ParserException $e) {
-            throw new FakerException($e->getMessage());
+            throw new EngineException($e->getMessage());
         }
         
         return $this->builder;

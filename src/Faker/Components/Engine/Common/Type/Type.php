@@ -9,7 +9,7 @@ use Faker\Components\Engine\Common\GeneratorCache;
 use Faker\Components\Engine\Common\Composite\SerializationInterface;
 
 use PHPStats\Generator\GeneratorInterface;
-
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
@@ -24,7 +24,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @since 1.0.4
  *
  */
-class Type implements TypeInterface, OptionInterface, SerializationInterface
+abstract class Type implements TypeInterface, OptionInterface, SerializationInterface
 {
     
      /**
@@ -162,6 +162,15 @@ class Type implements TypeInterface, OptionInterface, SerializationInterface
          return isset($this->options[$name]);
     }
     
+    /**
+     *  Enhance the config node with extra options
+     *
+     *  @access public
+     *  @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
+     *
+    */
+    abstract public function getConfigTreeExtension(NodeDefinition $rootNode);
+    
     
     /**
      * Generates the configuration tree builder.
@@ -171,7 +180,52 @@ class Type implements TypeInterface, OptionInterface, SerializationInterface
     public function getConfigTreeBuilder()
     {
 	$treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('config');
+        $rootNode    = $treeBuilder->root('config');
+	
+	# get child custom config options
+	$this->getConfigTreeExtension($rootNode);
+	
+	$rootNode
+            ->children()
+                ->scalarNode('locale')
+                    ->treatNullLike('en')
+                    ->defaultValue('en')
+                    ->info('The Default Locale for this schema')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new InvalidConfigurationException('Type::Locale not in valid list');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('randomGenerator')
+                    ->info('Type of random number generator to use')
+                    ->validate()
+                        ->ifTrue(function($v) {
+                            return empty($v) or !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new InvalidConfigurationException('Type::randomGenerator must not be empty or string');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('generatorSeed')
+                    ->info('Seed value to use in the generator')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return ! is_integer($v);
+                        })
+                        ->then(function($v){
+                            throw new InvalidConfigurationException('Type::generatorSeed must be an integer');
+                        })
+                    ->end()
+                ->end()
+            ->end()
+        ->end();
+	
+	
         
         return $treeBuilder;  
     }
@@ -181,7 +235,8 @@ class Type implements TypeInterface, OptionInterface, SerializationInterface
     
     public function toXml()
     {
-       $str =  '<datatype name="'.$this->getId().'">' . PHP_EOL;
+       # hack for the name fixed to alphanumeric
+       $str =  '<datatype name="alphanumeric">' . PHP_EOL;
        
        foreach($this->options as $name => $option) {
 	    if($name !== 'locale' && $name !== 'name' ) {

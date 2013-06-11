@@ -4,6 +4,7 @@ namespace Faker\Components\Engine\Common\Type;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\Utilities;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
 /**
  * AutoIncrement type
@@ -46,11 +47,8 @@ class AutoIncrement extends Type
      * Generates the configuration tree builder.
      *
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeExtension(NodeDefinition $rootNode)
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('config');
-        
         $rootNode
             ->children()
                 ->scalarNode('increment')
@@ -75,7 +73,7 @@ class AutoIncrement extends Type
                 ->end()
             ->end();
             
-        return $treeBuilder;    
+        return $rootNode;    
     }
     
     //  -------------------------------------------------------------------------
