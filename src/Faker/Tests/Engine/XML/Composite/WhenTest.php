@@ -68,5 +68,25 @@ class WhenTest extends AbstractProject
         $whenNode->validate();
     }
     
+    public function testTypeInterfaceProperties()
+    {
+        $id         = 'fk_table_1';
+        $event      = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $node       = new WhenNode($id,$event); 
+        
+        $utilities  = $this->getMock('Faker\Components\Engine\Common\Utilities');
+        $generator  = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $locale     = $this->getMock('Faker\Locale\LocaleInterface');
+        
+        $node->setUtilities($utilities);
+        $node->setLocale($locale);
+        $node->setGenerator($generator);
+        
+        $this->assertEquals($utilities,$node->getUtilities());
+        $this->assertEquals($locale,$node->getLocale());
+        $this->assertEquals($generator,$node->getGenerator());
+        
+    }
+    
 }
 /* End of File */

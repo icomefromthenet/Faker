@@ -1,14 +1,13 @@
 <?php
-namespace Faker\Tests\Engine\Original\Schema;
+namespace Faker\Tests\Engine\XML\Schema;
 
-use Faker\Components\Engine\Original\SchemaAnalysis,
-    Faker\Components\Engine\Original\SchemaParser,
-    Faker\Parser\VFile,
-    Faker\Tests\Base\AbstractProjectWithDb;
+use Faker\Components\Engine\XML\Parser\SchemaAnalysis;
+use Faker\Components\Engine\XML\Parser\SchemaParser;
+use Faker\Parser\VFile;
+use Faker\Tests\Base\AbstractProjectWithDb;
 
 class ParserTest extends AbstractProjectWithDb
 {
-
 
     public function __construct()
     {
@@ -19,15 +18,10 @@ class ParserTest extends AbstractProjectWithDb
     }
 
 
-    public function testImplementsInterface()
+    public function testImplementsParserInterface()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
-                        ->disableOriginalConstructor()
-                        ->getMock();
-        
-        $parser = new SchemaParser($builder);
+        $parser = $this->getProject()->getXMLEngineParser();
         $this->assertInstanceOf('Faker\Parser\ParserInterface',$parser);
-        
     }
 
     //  -------------------------------------------------------------------------
@@ -35,7 +29,7 @@ class ParserTest extends AbstractProjectWithDb
     
     public function testOpeningTagSchema()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -58,12 +52,12 @@ class ParserTest extends AbstractProjectWithDb
     
   
     /**
-      *  @expectedException Faker\Components\Engine\Original\Exception
+      *  @expectedException Faker\Components\Engine\EngineException
       *  @expectedExceptionMessage Schema Tag Missing Name
       */
     public function testOpeningTagSchemaMissingNameAttrib()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -83,7 +77,7 @@ class ParserTest extends AbstractProjectWithDb
     
     public function testOpeningTagTable()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -106,12 +100,12 @@ class ParserTest extends AbstractProjectWithDb
     
   
     /**
-      *  @expectedException Faker\Components\Engine\Original\Exception
+      *  @expectedException Faker\Components\Engine\EngineException
       *  @expectedExceptionMessage Table Tag Missing Name
       */
     public function testOpeningTagTableMissingNameAttrib()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -131,7 +125,7 @@ class ParserTest extends AbstractProjectWithDb
     
     public function testOpeningTagColumn()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -154,12 +148,12 @@ class ParserTest extends AbstractProjectWithDb
     
   
     /**
-      *  @expectedException Faker\Components\Engine\Original\Exception
+      *  @expectedException Faker\Components\Engine\EngineException
       *  @expectedExceptionMessage Column Tag Missing Name
       */
     public function testOpeningTagColumnMissingNameAttrib()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -179,7 +173,7 @@ class ParserTest extends AbstractProjectWithDb
         
     public function testOpeningTagType()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -202,12 +196,12 @@ class ParserTest extends AbstractProjectWithDb
     
   
     /**
-      *  @expectedException Faker\Components\Engine\Original\Exception
+      *  @expectedException Faker\Components\Engine\EngineException
       *  @expectedExceptionMessage Datatype Tag Missing Name
       */
     public function testOpeningTagTypeMissingNameAttrib()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -228,7 +222,7 @@ class ParserTest extends AbstractProjectWithDb
     
     public function testOpeningTagTypeOption()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -251,12 +245,12 @@ class ParserTest extends AbstractProjectWithDb
     
   
     /**
-      *  @expectedException Faker\Components\Engine\Original\Exception
+      *  @expectedException Faker\Components\Engine\EngineException
       *  @expectedExceptionMessage Have Type Option Tag Missing Name Attribute
       */
     public function testOpeningTagTypeOptionMissingNameAttrib()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -273,12 +267,12 @@ class ParserTest extends AbstractProjectWithDb
     
   
     /**
-      *  @expectedException Faker\Components\Engine\Original\Exception
+      *  @expectedException Faker\Components\Engine\EngineException
       *  @expectedExceptionMessage Have Type Option Tag Missing Value Attribute
       */
     public function testOpeningTagTypeOptionMissingValueAttrib()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -300,7 +294,7 @@ class ParserTest extends AbstractProjectWithDb
     
     public function testOpeningTagWriter()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -323,12 +317,12 @@ class ParserTest extends AbstractProjectWithDb
     
   
     /**
-      *  @expectedException Faker\Components\Engine\Original\Exception
+      *  @expectedException Faker\Components\Engine\EngineException
       *  @expectedExceptionMessage Writter Tag Missing Format
       */
     public function testOpeningTagWriterMissingFormatAttrib()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -345,12 +339,12 @@ class ParserTest extends AbstractProjectWithDb
     
   
     /**
-      *  @expectedException Faker\Components\Engine\Original\Exception
+      *  @expectedException Faker\Components\Engine\EngineException
       *  @expectedExceptionMessage Writer Tag Missing Platform
       */
     public function testOpeningTagWriterMissingPlatformAttrib()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -372,7 +366,7 @@ class ParserTest extends AbstractProjectWithDb
     
     public function testOpeningTagSelectors()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         
@@ -437,12 +431,12 @@ class ParserTest extends AbstractProjectWithDb
     # Test Parser Exceptions
     
     /**
-      *  @expectedException Faker\Components\Engine\Original\Exception
+      *  @expectedException Faker\Components\Engine\EngineException
       *  @expectedExceptionMessage Tag name badtag unknown
       */
     public function testOpeningTagThrowsExceptionAtInvalidTag()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         $parse_options = $this->getMockBuilder('Faker\Parser\ParseOptions')->getMock();
@@ -458,12 +452,12 @@ class ParserTest extends AbstractProjectWithDb
     
    
     /**
-      *  @expectedException Faker\Components\Engine\Original\Exception
+      *  @expectedException Faker\Components\Engine\EngineException
       *  @expectedExceptionMessage XML error 57:"XML declaration not finished" at line 1 column 15 byte 20
       */
     public function testParserExceptionCaughtForInvalidXMLFile()
     {
-        $builder = $this->getMockBuilder('Faker\Components\Engine\Original\Builder')
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
                         ->disableOriginalConstructor()
                         ->getMock();
         $parse_options = $this->getMockBuilder('Faker\Parser\ParseOptions')->getMock();
@@ -478,32 +472,6 @@ class ParserTest extends AbstractProjectWithDb
         
     }
     
-    //  -------------------------------------------------------------------------
-    # Tests Schema Parser on Analyser Ouput
-    
-    public function testParserUsingAnalyserOutput()
-    {
-        $project = $this->getProject();
-        
-        $database = $this->getDoctrineConnection();
-        $builder = $project['faker_manager']->getCompositeBuilder();
-        $analysis = new SchemaAnalysis();
-        $composite = $analysis->analyse($database,$builder);
-         
-        $xml = new VFile($composite->toXml());        
-
-        # clear the builder for another run
-        $builder->clear();
-        
-        $parse_options = $this->getMockBuilder('Faker\Parser\ParseOptions')->getMock();
-        $parser = new SchemaParser($builder);
-        $parser->register();
-        $parser->parse($xml,$parse_options);
-        
-        
-        $parsed_composite = $builder->build();
-        $this->assertContains('</schema>',$parsed_composite->toXml());
-    }
     
 }
 /* End of File */

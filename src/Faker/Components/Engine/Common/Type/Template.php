@@ -4,7 +4,8 @@ namespace Faker\Components\Engine\Common\Type;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\Utilities;
 use Faker\Components\Templating\Loader as TemplateLoader;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;  
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
 /**
  * Use twig templates to return values
@@ -69,11 +70,8 @@ class Template extends Type
      * Generates the configuration tree builder.
      *
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeExtension(NodeDefinition $rootNode)
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('config');
-        
         $rootNode
             ->children()
                 ->scalarNode('file')
@@ -90,7 +88,7 @@ class Template extends Type
                 ->end()
             ->end();
             
-        return $treeBuilder;
+        return $rootNode;
     }
     
     

@@ -1,6 +1,7 @@
 <?php
 namespace Faker\Components\Engine\XML\Builder;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Connection;
 use PHPStats\Generator\GeneratorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -14,6 +15,7 @@ use Faker\Components\Engine\Common\OptionInterface;
 use Faker\Components\Engine\Common\Utilities;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Compiler\CompilerInterface;
+use Faker\Components\Engine\Common\Builder\NodeInterface;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\XML\Composite\SchemaNode;
 use Faker\Components\Engine\XML\Composite\TableNode;
@@ -23,10 +25,10 @@ use Faker\Components\Engine\XML\Composite\TypeNode;
 use Faker\Components\Engine\XML\Composite\WhenNode;
 use Faker\Components\Engine\XML\Composite\SelectorNode;
 use Faker\Components\Engine\XML\Composite\FormatterNode;
-use Faker\Components\Engine\Common\Builder\SelectorAlternateBuilder;
-use Faker\Components\Engine\Common\Builder\SelectorRandomBuilder;
-use Faker\Components\Engine\Common\Builder\SelectorSwapBuilder;
-use Faker\Components\Engine\Common\Builder\SelectorWeightBuilder;
+use Faker\Components\Engine\XML\Builder\SelectorAlternateBuilder;
+use Faker\Components\Engine\XML\Builder\SelectorRandomBuilder;
+use Faker\Components\Engine\XML\Builder\SelectorSwapBuilder;
+use Faker\Components\Engine\XML\Builder\SelectorWeightBuilder;
 use Faker\Components\Engine\Common\Selector\SwapSelector;
 use Faker\Components\Engine\Common\PositionManager;
 
@@ -38,7 +40,7 @@ use Faker\Components\Engine\Common\TypeRepository;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class NodeBuilder
+class NodeBuilder implements NodeInterface
 {
     /*
      * @var Faker\Components\Engine\Common\Composite\CompositeInterface
@@ -234,9 +236,7 @@ class NodeBuilder
     
     public function addColumn($name, array $options = array())
     {
-        
         # schema and table exist
-        
         if(!$this->head instanceof TableNode) {
            throw new EngineException('Can not add new column without first setting a table and schema'); 
         }
@@ -292,7 +292,7 @@ class NodeBuilder
         
         # schema and table exist
         
-        if(!$this->head instanceof Column) {
+        if(!$this->head instanceof ColumnNode) {
            throw new EngineException('Can not add a Foreign-Key without first setting a column'); 
         }
     
@@ -304,10 +304,8 @@ class NodeBuilder
             $options['name'] = $name;
         }
         
-        $id = spl_object_hash($this->head);
-        
         # create new column
-        $foreignKey = new ForeignKeyNode($id,$this->eventDispatcher);
+        $foreignKey = new ForeignKeyNode($name,$this->eventDispatcher);
         
         # set the options
         foreach($options as $optionKey => $optionValue) {
@@ -345,7 +343,7 @@ class NodeBuilder
         }
         
         if(isset($options['name']) === false) {
-            $options['name'] = $name;
+            unset($options['name']);
         }
     
         # instance the type builder
@@ -367,9 +365,11 @@ class NodeBuilder
             }
             
             # build the node and add and add to head
-            $type = $builder->getNode();
-            $this->head->addChild($node);
-            $this->head = $node;
+            $type = $builder->getNode()->getType();
+            $typeNode = new TypeNode($name,$this->eventDispatcher,$type);
+            
+            $this->head->addChild($typeNode);
+            $this->head = $typeNode;
         }
         else {
             throw new EngineException("Type not exist at $name");
@@ -397,7 +397,7 @@ class NodeBuilder
     
     //  -------------------------------------------------------------------------
     
-    public function addSelector($name, array $options)
+    public function addSelector($name, array $options = array())
     {
         # check if head is a column or a selector
         if(!($this->head instanceof ColumnNode OR $this->head instanceof SelectorNode)) {
@@ -410,7 +410,7 @@ class NodeBuilder
         }
         
         if(isset($options['name']) === false) {
-            $options['name'] = $name;
+            unset($options['name']);
         }
     
         $parent_id = $this->head->getId();
@@ -432,7 +432,7 @@ class NodeBuilder
                 $currentSelector = $currentSelectorBuilder->getNode();
                 
             break;
-            case 'pick' :     $currentSelectorBuilder = new SelectorAlternateBuilder($parent_id . '.pick',
+            case 'pick' :     $currentSelectorBuilder = new SelectorWeightBuilder($parent_id . '.pick',
                                                                            $this->eventDispatcher,
                                                                            $this->typeFactory,
                                                                            $this->util,
@@ -448,7 +448,7 @@ class NodeBuilder
                 $currentSelector = $currentSelectorBuilder->getNode();
                 
             break;    
-            case 'random' :   $currentSelectorBuilder = new SelectorAlternateBuilder($parent_id . '.random',
+            case 'random' :   $currentSelectorBuilder = new SelectorRandomBuilder($parent_id . '.random',
                                                                            $this->eventDispatcher,
                                                                            $this->typeFactory,
                                                                            $this->util,
@@ -464,7 +464,7 @@ class NodeBuilder
                 $currentSelector = $currentSelectorBuilder->getNode();
                 
             break;
-            case 'swap' :     $currentSelectorBuilder = new SelectorAlternateBuilder($parent_id . '.swap',
+            case 'swap' :     $currentSelectorBuilder = new SelectorSwapBuilder($parent_id . '.swap',
                                                                            $this->eventDispatcher,
                                                                            $this->typeFactory,
                                                                            $this->util,
@@ -483,8 +483,12 @@ class NodeBuilder
             break;
             case 'when' :
                 
-                if(!$this->head instanceof SwapSelector) {
-                    throw new EngineException('When type must have a swap parent');
+                if(!$this->head instanceof SelectorNode) {
+                    throw new EngineException('When node must have a selector as a parent');
+                }
+                
+                if(!$this->head->getInternal() instanceof SwapSelector) {
+                    throw new EngineException('When node must have a swap node as parent');
                 }
                 
                 $currentSelector = new WhenNode($parent_id . '.when',$this->eventDispatcher);
@@ -495,7 +499,7 @@ class NodeBuilder
                 
             break;
             
-            default : throw new EngineException('Unknown Selector '.$name);    
+            default : throw new EngineException('Unknown Selector:: '.$name);    
         }
     
         
@@ -572,14 +576,11 @@ class NodeBuilder
         
         $this->eventDispatcher->dispatch(BuildEvents::onBuildingEnd,new BuildEvent($this,'Finished Build'));
         
-        # clear the schema
-        $this->schema = null;
-        
-        return $schema;
+        return $this->schema;
     }
     
     //  -------------------------------------------------------------------------
-    
+    # Node Interface
     /**
       *  Set the head to the parent
       *
@@ -606,6 +607,25 @@ class NodeBuilder
         
         return $this;
     }
+    
+    public function getNode()
+    {
+        
+    }
+    
+    
+    public function setParent(NodeInterface $parent)
+    {
+        
+    }
+    
+    public function getParent()
+    {
+        return null;
+    }
+    
+    //-------------------------------------------------------
+    # Properties
     
     /**
      *  Return the root (SchemaNode)

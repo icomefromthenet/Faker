@@ -523,6 +523,12 @@ class Bootstrap
          
       };
       
+      $project['engine_xml_parser'] = function(Project $project) {
+         $builder = $project['engine_xml_builder'];
+   
+         return new \Faker\Components\Engine\XML\Parser\SchemaParser($builder);
+      };
+      
       
       return $project;
    

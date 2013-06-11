@@ -65,7 +65,7 @@ class GeneratorInjectorVisitor extends BasicVisitor
             } 
             
             # assign schema the default generator or the custom just setup above
-            $composite->setGenerator($this->global_generator);
+            $composite->setGenerator($this->headGenerator);
         }
         else {
              # use the schema setting or keep the default global
@@ -74,11 +74,16 @@ class GeneratorInjectorVisitor extends BasicVisitor
                 if($composite->hasOption('generatorSeed') === true) {
                     $seed = $composite->getOption('generatorSeed');
                 }
+
                 # re-assign the global
+                $this->headGenerator = $this->factory->create($composite->getOption('randomGenerator'),$seed);
                 
-                $composite->setGenerator($this->global_generator);
-                
+            } else {
+                $this->headGenerator = $composite->getParent()->getGenerator();
             }
+            
+            # re-assign the global
+                $composite->setGenerator($this->headGenerator);
         
         }
     }
@@ -104,8 +109,7 @@ class GeneratorInjectorVisitor extends BasicVisitor
     
     public function reset()
     {
-        $this->table_generator = null;
-        $this->column_generator = null;
+        $this->headGenerator = null;
     }
     
     public function getResult()

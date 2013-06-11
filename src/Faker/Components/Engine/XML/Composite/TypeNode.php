@@ -83,7 +83,7 @@ class TypeNode extends BaseNode implements OptionInterface, SerializationInterfa
     
     public function setOption($name,$value)
     {
-        if(in_array($this->customOptions) === true) {
+        if(in_array($name,$this->customOptions) === true) {
             $this->options[$name]= $value;    
         }
         else {
@@ -93,7 +93,7 @@ class TypeNode extends BaseNode implements OptionInterface, SerializationInterfa
     
     public function getOption($name)
     {
-        if(in_array($this->customOptions) === true) {
+        if(in_array($name,$this->customOptions) === true) {
             $option = $this->options[$name];
         }
         else {
@@ -105,7 +105,7 @@ class TypeNode extends BaseNode implements OptionInterface, SerializationInterfa
     
     public function hasOption($name)
     {
-        if(in_array($this->customOptions) === true) {
+        if(in_array($name,$this->customOptions) === true) {
             $set = isset($this->options[$name]);
         }
         else {
@@ -119,31 +119,19 @@ class TypeNode extends BaseNode implements OptionInterface, SerializationInterfa
     {
         $treeBuilder = new TreeBuilder();
         $rootNode    = $treeBuilder->root('config');
-
+        
         $rootNode
             ->children()
-                ->scalarNode('name')
-                    ->isRequired()
-                    ->info('The Name of the Type')
-                    ->validate()
-                        ->ifTrue(function($v){
-                            return !is_string($v);
-                        })
-                        ->then(function($v){
-                            throw new InvalidConfigurationException('Type::Name must be a string');
-                        })
-                    ->end()
-                ->end()
                 ->scalarNode('locale')
                     ->treatNullLike('en')
                     ->defaultValue('en')
-                    ->info('The Default Locale for this type')
+                    ->info('The Default Locale for this schema')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_string($v);
                         })
                         ->then(function($v){
-                            throw new InvalidConfigurationException('Type::Locale not in valid list');
+                            throw new InvalidConfigurationException('TypeNode::Locale not in valid list');
                         })
                     ->end()
                 ->end()
@@ -181,7 +169,7 @@ class TypeNode extends BaseNode implements OptionInterface, SerializationInterfa
     
     public function toXml()
     {
-       return $this->getInternal()->toXml();
+       return $this->getType()->toXml();
     }
     
     

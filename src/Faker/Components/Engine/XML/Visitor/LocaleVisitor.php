@@ -5,6 +5,7 @@ use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Locale\LocaleFactory;
 use Faker\Components\Engine\Common\Type\TypeInterface;
 use Faker\Components\Engine\Common\Visitor\BasicVisitor;
+use Faker\Components\Engine\Common\Composite\CompositeException;
 
 /**
   *  This visitor will Inject locale objects into the composite.
@@ -41,20 +42,24 @@ class LocaleVisitor extends BasicVisitor
       */
     public function visitLocaleInjector(CompositeInterface $node)
     {
-        if($composite instanceof TypeInterface) {
+        if($node instanceof TypeInterface) {
             
             # whats the locale
-            $locale = $composite->getOption('locale');
+            $locale = $node->getOption('locale');
             
-            # fetch flywight from factory
-            $locale = $this->factory->create($locale);
+            if(empty($locale)) {
+                throw new CompositeException($node,'Locale is empty');
+            } else {
+                # fetch flywight from factory
+                $locale = $this->factory->create($locale);    
+            }
             
             # assign to the composite
-            $composite->setLocale($locale);
+            $node->setLocale($locale);
         }
         
         
-        return $composite;
+        return $node;
     }
     
     
@@ -79,8 +84,7 @@ class LocaleVisitor extends BasicVisitor
     
     public function reset()
     {
-        $this->table_generator = null;
-        $this->column_generator = null;
+        $this->factory = null;
     }
     
     public function getResult()
