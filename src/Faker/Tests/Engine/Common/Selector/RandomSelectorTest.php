@@ -59,7 +59,7 @@ class RandomSelectorTest extends AbstractProject
     
     /**
       *  @expectedException Faker\Components\Engine\EngineException
-      *  @expectedExceptionMessage RandomSelector::Set integer is required and must be > 0
+      *  @expectedExceptionMessage RandomSelector::Set size is required and must be and integer > 0
       */
     public function testConfigErrorNotIntegerSetSize()
     {
@@ -87,7 +87,7 @@ class RandomSelectorTest extends AbstractProject
     
     /**
       *  @expectedException Faker\Components\Engine\EngineException
-      *  @expectedExceptionMessage RandomSelector::Set integer is required and must be > 0
+      *  @expectedExceptionMessage RandomSelector::Set size is required and must be and integer > 0
       */
     public function testConfigErrorSetSizeOutRange()
     {

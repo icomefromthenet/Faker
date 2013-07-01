@@ -38,7 +38,7 @@ class RandomSelector extends Type
                         return !is_integer($v) || ((integer) $v < 1);
                     })
                     ->then(function($v){
-                        throw new EngineException('RandomSelector::Set integer is required and must be > 0');
+                        throw new EngineException('RandomSelector::Set size is required and must be and integer > 0');
                     })
                 ->end()
             ->end()

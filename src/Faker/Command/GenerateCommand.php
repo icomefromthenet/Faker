@@ -90,7 +90,8 @@ class GenerateCommand extends Command
         }
         
         # start execution of the generate
-        $composite->generate(1,array());
+        $result = array();
+        $composite->generate(1,$result);
     }
 
 

@@ -31,7 +31,7 @@ class DebugOutputter implements ConsoleOutputInterface
     //  -------------------------------------------------------------------------
     
     
-    public function __construct(ConsoleOutputInterface $output)
+    public function __construct(OutputInterface $output)
     {
         $this->output = $output;    
     }

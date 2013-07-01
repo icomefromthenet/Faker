@@ -47,7 +47,12 @@ class AbstractProject extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        $this->destoryProject($this->getProject());
+        $project = $this->getProject();
+        
+        # rest default event dispatcher
+        $project['event_dispatcher'] = new \Symfony\Component\EventDispatcher\EventDispatcher();
+        
+        $this->destoryProject($project);
     }
 
     //  ----------------------------------------------------------------------------

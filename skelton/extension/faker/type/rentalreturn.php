@@ -8,7 +8,7 @@ use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 
-class Demo extends Type
+class RentalReturn extends Type
 {
 
     //  -------------------------------------------------------------------------
@@ -20,7 +20,9 @@ class Demo extends Type
      */
     public function generate($rows,&$values = array())
     {
-        return '';
+        $return_date = clone $values['rental_date'];
+        
+        return $return_date->modify('+'.ceil($this->getGenerator()->generate(0,7)).' days');
     }
     
     
@@ -39,7 +41,4 @@ class Demo extends Type
     
     
     //  -------------------------------------------------------------------------
-    
 }
-
-/* End of File */

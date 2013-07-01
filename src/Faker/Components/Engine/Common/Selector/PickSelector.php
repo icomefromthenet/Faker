@@ -17,6 +17,24 @@ use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 class PickSelector extends Type
 {
     
+    
+    public function validate()
+    {
+        if($this->hasOption('probability') === true) {
+            $probability = $this->getOption('probability');
+            
+            if($probability > 1) {
+                $probability = $probability / 100;
+            }
+            
+            $this->setOption('probability',$probability);
+        }
+        
+        return parent::validate();
+    }
+    
+    //------------------------------------------------------------------
+    
    
     public function generate($rows,&$values = array())
     {

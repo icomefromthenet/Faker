@@ -194,7 +194,7 @@ class ColumnNode extends BaseNode implements OptionInterface, SerializationInter
     {
         # execute visitors that apply to this node
         $visitor->visitDirectedGraphBuilder($this);
-        
+        $visitor->visitDBALGatherer($this);
         $visitor->visitGeneratorInjector($this);
         $visitor->visitLocaleInjector($this);
         
