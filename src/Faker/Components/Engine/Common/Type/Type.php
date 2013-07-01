@@ -166,7 +166,7 @@ abstract class Type implements TypeInterface, OptionInterface, SerializationInte
      *  Enhance the config node with extra options
      *
      *  @access public
-     *  @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
+     *  @return \Symfony\Component\Config\Definition\Builder\NodeDefinition The tree builder
      *
     */
     abstract public function getConfigTreeExtension(NodeDefinition $rootNode);

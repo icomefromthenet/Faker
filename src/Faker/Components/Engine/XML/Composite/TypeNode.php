@@ -57,7 +57,7 @@ class TypeNode extends BaseNode implements OptionInterface, SerializationInterfa
     {
         # validate the options passed into config
         try {
-             # validate the internal type
+            # validate the internal type
             $this->getType()->validate();
             
             $processor = new Processor();
@@ -122,6 +122,17 @@ class TypeNode extends BaseNode implements OptionInterface, SerializationInterfa
         
         $rootNode
             ->children()
+                ->scalarNode('name')
+                    ->info('The name of the type')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new InvalidConfigurationException('TypeNode::Name not included');
+                        })
+                    ->end()
+                ->end()
                 ->scalarNode('locale')
                     ->treatNullLike('en')
                     ->defaultValue('en')

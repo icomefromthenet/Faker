@@ -8,7 +8,7 @@ use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 
-class Demo extends Type
+class Password extends Type
 {
 
     //  -------------------------------------------------------------------------
@@ -20,7 +20,8 @@ class Demo extends Type
      */
     public function generate($rows,&$values = array())
     {
-        return '';
+        $format = $this->getOption('format');
+        return md5($this->getUtilities()->generateRandomAlphanumeric($format,$this->getGenerator(),$this->getLocale()));
     }
     
     
@@ -34,12 +35,16 @@ class Demo extends Type
      */
     public function getConfigTreeExtension(NodeDefinition $rootNode)
     {
-        return $rootNode;
+        return $rootNode
+            ->children()
+                ->scalarNode('format')
+                    ->info('Text format to generate')
+                    ->example('xxxxx ccccCC')
+                ->end()
+            ->end();
+            
     }
     
     
     //  -------------------------------------------------------------------------
-    
 }
-
-/* End of File */

@@ -109,6 +109,41 @@ class WhenNode extends GenericNode implements OptionInterface, SerializationInte
                         })
                     ->end()
                 ->end()
+                ->scalarNode('locale')
+                    ->treatNullLike('en')
+                    ->defaultValue('en')
+                    ->info('The Default Locale for this schema')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new InvalidConfigurationException('TypeNode::Locale not in valid list');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('randomGenerator')
+                    ->info('Type of random number generator to use')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return empty($v) or !is_string($v);
+                        })
+                        ->then(function($v){
+                            throw new InvalidConfigurationException('randomGenerator must not be empty or string');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('generatorSeed')
+                    ->info('Seed value to use in the generator')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return ! is_integer($v);
+                        })
+                        ->then(function($v){
+                            throw new InvalidConfigurationException('generatorSeed must be an integer');
+                        })
+                    ->end()
+                ->end()
             ->end()
         ->end();
             

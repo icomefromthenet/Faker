@@ -53,28 +53,12 @@ class ForeignKeyNode extends BaseNode implements OptionInterface, SerializationI
     
     public function validate()
     {
-        # validate the internal type
-        $this->getType()->validate();
-        
-        
         $children = $this->getChildren();
         
-        # validate the options passed into config
-        try {
-            $processor = new Processor();
-            $options = $processor->processConfiguration($this, array('config' => $this->options));
-            
-            # reset the options as they be modified by the config processor
-            foreach($options as $name => $value) {
-                $this->setOption($name,$value);
-            }
-            
-        }catch(InvalidConfigurationException $e) {
-            throw new CompositeException($this,$e->getMessage(),0,$e);
-        }
+        # run the parent validation function
+        parent::validate();
         
         # validate the child nodes in composite
-        
         foreach($children as $child) {
             $child->validate();
         }
@@ -108,6 +92,20 @@ class ForeignKeyNode extends BaseNode implements OptionInterface, SerializationI
 
         $rootNode
             ->children()
+              ->scalarNode('foreignTable')
+                    ->isRequired()
+                    ->info('The exact name of the foreign table')
+                    ->cannotBeEmpty()
+                ->end()
+                ->scalarNode('foreignColumn')
+                    ->isRequired()
+                    ->info('Name of the Foreign Column')
+                    ->cannotBeEmpty()
+                ->end()
+                ->booleanNode('silent')
+                    ->defaultFalse()
+                    ->info('Use option to supress value generation but keep Foreign Key Reference Checks and Toplogical Reorder')  
+                ->end()
                 ->scalarNode('name')
                     ->isRequired()
                     ->info('The Name of the Foreign Key')

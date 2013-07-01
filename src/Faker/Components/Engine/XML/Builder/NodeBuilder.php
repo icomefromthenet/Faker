@@ -30,7 +30,10 @@ use Faker\Components\Engine\XML\Builder\SelectorRandomBuilder;
 use Faker\Components\Engine\XML\Builder\SelectorSwapBuilder;
 use Faker\Components\Engine\XML\Builder\SelectorWeightBuilder;
 use Faker\Components\Engine\Common\Selector\SwapSelector;
+use Faker\Components\Engine\Common\Selector\RandomSelector;
+use Faker\Components\Engine\Common\Selector\AlternateSelector;
 use Faker\Components\Engine\Common\PositionManager;
+use Faker\Components\Engine\Common\Builder\AbstractDefinition;
 
 use Faker\Components\Engine\Common\TypeRepository;
 
@@ -213,7 +216,7 @@ class NodeBuilder implements NodeInterface
         
         
         # create the new table
-        $id = spl_object_hash($this->head).'.'.$name;
+        $id = $name;
         $table = new TableNode($id,$this->eventDispatcher);
         
         
@@ -260,7 +263,7 @@ class NodeBuilder implements NodeInterface
                     ),$options);
     
         # create new column
-        $id = spl_object_hash($this->head).'.'.$name;
+        $id = $name;
         $column = new ColumnNode($id,$this->eventDispatcher);
         
         # bind the doctine column type
@@ -331,9 +334,15 @@ class NodeBuilder implements NodeInterface
            throw new EngineException('Can not add new Selector without first setting a table and schema or column'); 
         }
     
+        $locale = $this->getSchema()->getOption('locale');
+    
+        if($this->head->hasOption('locale')) {
+            $locale =  $this->head->getOption('locale');    
+        } 
+    
     
         $options = array_merge(array(
-                    'locale' => $this->head->getOption('locale')
+                    'locale' => $locale
                     ),$options);
     
         # validate name for empty string
@@ -348,25 +357,38 @@ class NodeBuilder implements NodeInterface
     
         # instance the type builder
         if($builderName = $this->typeFactory->find($name)) {
+            
             $builder = new $builderName();
             
-            $builder->eventDispatcher($this->eventDispatcher);
-            $builder->database($this->db);
-            $builder->utilities($this->util);
-            $builder->templateLoader($this->templateLoader);
-            $builder->locale($this->defaultLocale);
-            $builder->generator($this->defaultGenerator);
-            
-            
-            # set custom options on the builder they will
-            # be transfered into the type upon building
-            foreach($options as $optname => $optvalue) {
-                $builder->attribute($optname,$optvalue);
+            # instanced a builder or the type directly
+            if($builder instanceof AbstractDefinition ) {
+                $builder->eventDispatcher($this->eventDispatcher);
+                $builder->database($this->db);
+                $builder->utilities($this->util);
+                $builder->templateLoader($this->templateLoader);
+                $builder->locale($this->defaultLocale);
+                $builder->generator($this->defaultGenerator);
+                
+                # build the node and add and add to head
+                $type = $builder->getNode()->getType();
+               
+            }
+            else {
+                $builder->setUtilities($this->util);
+                $builder->setGenerator($this->defaultGenerator);
+                $builder->setLocale($this->defaultLocale);
+                $builder->setEventDispatcher($this->eventDispatcher);
+                $type = $builder;
             }
             
-            # build the node and add and add to head
-            $type = $builder->getNode()->getType();
-            $typeNode = new TypeNode($name,$this->eventDispatcher,$type);
+            $typeNode = new TypeNode($name,$this->eventDispatcher,$type);    
+            
+            
+            # set custom options again they will overrite but thats ok
+            # special options like name, generatorSeed etc
+            foreach($options as $optname => $optvalue) {
+                $typeNode->setOption($optname,$optvalue);
+            }
             
             $this->head->addChild($typeNode);
             $this->head = $typeNode;
@@ -460,7 +482,7 @@ class NodeBuilder implements NodeInterface
                 foreach($options as $optionKey => $optionValue) {
                     $currentSelectorBuilder->attribute($optionKey,$optionValue);    
                 }
-                                                                        
+                
                 $currentSelector = $currentSelectorBuilder->getNode();
                 
             break;
@@ -496,6 +518,7 @@ class NodeBuilder implements NodeInterface
                 foreach($options as $optionKey => $optionValue) {
                     $currentSelector->setOption($optionKey,$optionValue);    
                 }
+                
                 
             break;
             
@@ -594,9 +617,21 @@ class NodeBuilder implements NodeInterface
             $internal = $this->head->getInternal();
             
             if($internal instanceof SwapSelector) {
-                foreach($this->head->getChildren() as $whenNode) {
-                    $this->head->registerSwap(new PositionManager($whenNode->getOption('at')));
+                foreach($this->head->getChildren() as $selectorNode) {
+                    if($selectorNode instanceof WhenNode) {
+                        $internal->registerSwap(new PositionManager($selectorNode->getOption('at')));    
+                    }
                 }
+            }
+            
+            if($internal instanceof RandomSelector){
+                $setSize = count($this->head->getChildren());
+                $internal->setOption('set',$setSize);
+            }
+            
+            if($internal instanceof AlternateSelector) {
+                $setSize = count($this->head->getChildren());
+                $internal->setOption('set',$setSize);
             }
         }
         

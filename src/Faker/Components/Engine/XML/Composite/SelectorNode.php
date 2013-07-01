@@ -20,6 +20,7 @@ use Faker\Components\Engine\Common\Selector\RandomSelector;
 use Faker\Components\Engine\Common\Selector\SwapSelector;
 use Faker\Components\Engine\Common\Visitor\BasicVisitor;
 use Faker\Components\Engine\Common\Composite\SelectorNode as BaseNode;
+use Faker\Components\Engine\Common\Composite\CompositeException;
 
 /**
   *  Node that implements SerializationInterface and VisitorInterface and OptionInterface
@@ -94,7 +95,7 @@ class SelectorNode extends BaseNode implements OptionInterface, SerializationInt
     
     public function setOption($name,$value)
     {
-        if(in_array($this->customOptions) === true) {
+        if(in_array($name,$this->customOptions) === true) {
             $this->options[$name]= $value;    
         }
         else {
@@ -104,7 +105,7 @@ class SelectorNode extends BaseNode implements OptionInterface, SerializationInt
     
     public function getOption($name)
     {
-        if(in_array($this->customOptions) === true) {
+        if(in_array($name,$this->customOptions) === true) {
             $option = $this->options[$name];
         }
         else {
@@ -116,7 +117,7 @@ class SelectorNode extends BaseNode implements OptionInterface, SerializationInt
     
     public function hasOption($name)
     {
-        if(in_array($this->customOptions) === true) {
+        if(in_array($name,$this->customOptions) === true) {
             $set = isset($this->options[$name]);
         }
         else {
@@ -133,18 +134,6 @@ class SelectorNode extends BaseNode implements OptionInterface, SerializationInt
 
         $rootNode
             ->children()
-                ->scalarNode('name')
-                    ->isRequired()
-                    ->info('The name of the node')
-                    ->validate()
-                        ->ifTrue(function($v){
-                            return !is_string($v);
-                        })
-                        ->then(function($v){
-                            throw new InvalidConfigurationException('Type::Name must be a string');
-                        })
-                    ->end()
-                ->end()
                 ->scalarNode('locale')
                     ->treatNullLike('en')
                     ->defaultValue('en')
@@ -154,7 +143,7 @@ class SelectorNode extends BaseNode implements OptionInterface, SerializationInt
                             return !is_string($v);
                         })
                         ->then(function($v){
-                            throw new InvalidConfigurationException('Type::Locale not in valid list');
+                            throw new InvalidConfigurationException('Locale not in valid list');
                         })
                     ->end()
                 ->end()

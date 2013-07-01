@@ -153,6 +153,15 @@ class Project extends Pimple
           $sources_path = $folder->getBase() . DIRECTORY_SEPARATOR . 'sources';
           if (mkdir($sources_path,$mode) === TRUE) {
                $output->writeln('<info>Created Sources Folder</info>');
+               
+                 //copy files into it
+                $files = $skelton->iterator('sources');
+
+                foreach($files as $file){
+                    if($this->copy($file,$sources_path) === TRUE) {
+                          $output->writeln('++ Copied '.basename($file));
+                    }
+                }
 
           }
             
