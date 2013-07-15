@@ -91,7 +91,7 @@ class SrandRandom implements GeneratorInterface
       */
     public function generate($min = 0,$max = null)
     {
-        srand($this->seed);
+        
         return rand($min,$max);
     }
     
@@ -104,6 +104,9 @@ class SrandRandom implements GeneratorInterface
     public function seed($seed = null)
     {
         $this->seed = $seed;
+        srand($this->seed);
+        
+        return $this;
     }
     
 }
