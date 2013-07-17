@@ -47,7 +47,7 @@ else {
 
 
 $boot = new Bootstrap();
-$project = $boot->boot('1.0.3',$composer);
+$project = $boot->boot('1.0.4',$composer);
 
 
 //---------------------------------------------------------------------

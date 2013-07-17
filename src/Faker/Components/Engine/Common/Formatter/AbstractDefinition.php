@@ -179,7 +179,7 @@ abstract class AbstractDefinition implements NodeInterface
       *  single file formatters like the PHPUnit formatter.
       *
       *  @access public
-      *  @param boolean $yes defaults to true to force a split
+      *  @param boolean $yes defaults to false to force a split
       *  @return AbstractDefinition
       */
     public function splitOnNewTable($yes = true)

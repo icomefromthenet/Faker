@@ -215,19 +215,17 @@ class Phpunit extends BaseFormatter implements FormatterInterface
 
     //  -------------------------------------------------------------------------
     
-    /**
-      *  Overrides the base class merge to configure the writer
-      *  after the definitions are merged.
-      */
-    public function merge()
+    public function validate()
     {
-        parent::merge();
+        # run merge and validate of the config options
+        parent::validate();
         
         # change the format on the writer to remove the seq number
         # since we are using a single file format
         $writer = $this->getWriter();
         $stream = $writer->getStream();
         
+        # need set big max or file will split
         $stream->getLimit()->changeLimit(null);
         $stream->getSequence()->setFormat($this->getOption(self::CONFIG_OPTION_OUT_FILE_FORMAT));
         

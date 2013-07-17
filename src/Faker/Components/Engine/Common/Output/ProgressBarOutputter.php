@@ -136,7 +136,7 @@ class ProgressBarOutputter implements ConsoleOutputInterface
       */
     public function onRowEnd(GenerateEvent $event)
     {
-        $this->bar->next(1,'Table '. $event->getNode()->getOption('name'));
+        $this->bar->next(1,'Table '. $event->getNode()->getId());
     }
     
     

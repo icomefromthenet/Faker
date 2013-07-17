@@ -22,6 +22,15 @@ class Manager
       */
     protected $io;
    
+    /**
+      *  @return Faker\Components\Writer\Io 
+      */
+    public function getIO()
+    {
+        return $this->io;
+    }
+   
+   
     //  -------------------------------------------------------------------------
     # Class Constructor
 
