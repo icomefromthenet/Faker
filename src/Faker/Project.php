@@ -322,6 +322,18 @@ class Project extends Pimple
       *  Return an engine compiler
       *
       *  @access public
+      *  @return Faker\Components\Engine\XML\Parser\SchemaAnalysis
+      *
+     */
+     public function getSchemaAnalyser()
+     {
+          return  $this['engine_xml_schema_analyser'];
+     }
+     
+     /**
+      *  Return an engine compiler
+      *
+      *  @access public
       *  @return Faker\Components\Engine\Common\Compiler\CompilerInterface
       *
      */
@@ -394,6 +406,12 @@ class Project extends Pimple
           return $this['default_locale'];
      }
    
+     /**
+       *  Fetch the Default Locale
+       *
+       *  @access public
+       *  @return PHPStats\Generator\GeneratorInterface
+       */
      public function getDefaultRandom()
      {
           return $this['random_generator'];          
@@ -455,6 +473,17 @@ class Project extends Pimple
     {
         $create = $this->raw('formatter_factory');
         return $create($this,$event);
+    }
+    
+     /**
+      *  Fetch the Source IO
+      *  
+      *  @access public
+      *  @return \Faker\Io\Io
+      */
+    public function getSourceIO()
+    {
+        return $this['source_io'];
     }
    
    

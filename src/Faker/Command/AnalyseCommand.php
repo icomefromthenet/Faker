@@ -17,9 +17,6 @@ class AnalyseCommand extends Command
            # get the di container 
            $project  = $this->getApplication()->getProject();
            
-           # load the faker component manager
-           $faker_manager  = $project['faker_manager'];
-           
            # verify if a output file name been passed
            if(($out_file_name = $input->getArgument('out') ) === null) {
               $out_file_name = 'schema.xml';
@@ -27,15 +24,14 @@ class AnalyseCommand extends Command
               $out_file_name = rtrim($out_file_name,'.xml').'.xml';
            }
            
-           
            # load the schema analyser
-           $schema_analyser = $faker_manager->getSchemaAnalyser();
+           $schema_analyser = $project->getSchemaAnalyser();
            
            #run the analyser
-           $schema = $schema_analyser->analyse($project['database'],$faker_manager->getCompositeBuilder());
+           $schema = $schema_analyser->analyse($project->getDatabase(),$project->getXMLEngineBuilder());
     
            # write the scheam file to the project folder (sources)
-           $sources_io = $project['source_io'];
+           $sources_io = $project->getSourceIO();
            
            $formatted_xml = $schema_analyser->format($schema->toXml());
            

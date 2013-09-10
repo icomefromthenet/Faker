@@ -474,7 +474,10 @@ class Bootstrap
          
          return $compiler;
       };
-          
+      
+      $project['engine_xml_schema_analyser'] = $project->share(function($project){
+           return new \Faker\Components\Engine\XML\Parser\SchemaAnalysis();
+      });    
       
       $project['engine_xml_compiler'] = function(Project $project) {
      
