@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputArgument,
     Faker\Io\FileExistException,
     Faker\Components\Config\Entity;
 
+
 class ConfigureCommand extends Command
 {
 
