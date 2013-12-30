@@ -10,6 +10,8 @@ use Faker\Components\Engine\Common\ResultPrinterInterface;
 use Faker\Components\Engine\Common\Output\DebugOutputter;
 use Faker\Components\Engine\Common\Output\ProgressBarOutputter;
 use Faker\Components\Engine\Common\Output\BuilderConsoleOutput;
+use Faker\Components\Engine\Common\Composite\GeneratorInterface;
+use Faker\Components\Engine\DB\Composite\SchemaNode;
 use Faker\Parser\FileFactory;
 use Faker\Parser\ParseOptions;
 use Faker\Command\Base\FakerCommand;
@@ -63,7 +65,7 @@ class GenerateCommand extends Command
         # check if we use the debug or normal notifier
         if($input->getOption('verbose')) {
             $event->addSubscriber(new DebugOutputter($output));
-        } else {
+        } elseif ($composite instanceof SchemaNode) {
         
             # use the composite to calculate number of rows
             $rows = 0;
@@ -91,7 +93,10 @@ class GenerateCommand extends Command
         
         # start execution of the generate
         $result = array();
-        $composite->generate(1,$result);
+        
+        if($composite instanceof GeneratorInterface) {
+            $composite->generate(1,$result);
+        }
     }
 
 
