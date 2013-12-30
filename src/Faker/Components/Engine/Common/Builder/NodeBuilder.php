@@ -349,6 +349,28 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
         $node->setParent($this);
         return $node;
     }
+    
+     /**
+     *  Execute The closure over an array.
+     *
+     *  Helper so dont have to break chaning to apply
+     *  same operation to array of values.
+     *
+     *  @access public
+     *  @return NodeBuilder
+     *  @param array $array of values
+     *  @param Closure the function to execute
+     *
+    */
+    public function each(array $array,\Closure $func)
+    {
+        foreach($array as $v) {
+            $func($v,$this);
+        }
+        
+        return $this;
+    }
+   
    
 }
 /* End of File */
