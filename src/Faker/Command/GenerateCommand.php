@@ -51,7 +51,7 @@ class GenerateCommand extends Command
         
         
         # is file php or xml
-        if($file->getExtension() == 'xml') {
+        if(pathinfo($file->getFilename(), PATHINFO_EXTENSION) == 'xml') {
             # parse the schema file
             $builder = $parser->parse(FileFactory::create($file->getPathname()), new ParseOptions()); 
         
