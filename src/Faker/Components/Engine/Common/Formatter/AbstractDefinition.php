@@ -14,7 +14,7 @@ use Faker\Components\Engine\EngineException;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-abstract class AbstractDefinition implements NodeInterface
+class AbstractDefinition implements NodeInterface
 {
     
     /**
@@ -69,7 +69,10 @@ abstract class AbstractDefinition implements NodeInterface
       *  @access public
       *  @return Faker\Components\Engine\Common\Composite\CompositeInterface the new node
       */
-    abstract public function getNode();
+    public function getNode()
+    {
+        
+    }
     
     
     //------------------------------------------------------------------

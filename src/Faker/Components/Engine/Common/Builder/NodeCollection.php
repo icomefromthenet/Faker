@@ -20,7 +20,7 @@ use Doctrine\DBAL\Connection;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-abstract class NodeCollection implements ParentNodeInterface
+class NodeCollection implements ParentNodeInterface
 {
     
     protected $children;
@@ -94,7 +94,10 @@ abstract class NodeCollection implements ParentNodeInterface
       *  @access public
       *  @return Faker\Components\Engine\Common\Composite\CompositeInterface the new node
       */
-    abstract public function getNode();
+    public function getNode()
+    {
+        
+    }
     
     
     
@@ -125,7 +128,10 @@ abstract class NodeCollection implements ParentNodeInterface
     *
     * @return \Faker\Components\Engine\Common\Builder\NodeInterface The builder of the parent node
     */
-    abstract public function end();
+    public function end()
+    {
+        
+    }
     
 }
 /* End of File */

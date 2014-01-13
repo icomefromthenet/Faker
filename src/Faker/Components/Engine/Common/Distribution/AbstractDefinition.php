@@ -19,7 +19,7 @@ use PHPStats\Generator\GeneratorInterface;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-abstract class AbstractDefinition implements TypeDefinitionInterface , NodeInterface
+class AbstractDefinition implements TypeDefinitionInterface , NodeInterface
 {
     
     protected $attributes = array();
@@ -46,7 +46,10 @@ abstract class AbstractDefinition implements TypeDefinitionInterface , NodeInter
       *  @access public
       *  @return Faker\Components\Engine\Common\Composite\CompositeInterface the new node
       */
-    abstract public function getNode();
+    public function getNode()
+    {
+        
+    }
     
     
     //------------------------------------------------------------------
