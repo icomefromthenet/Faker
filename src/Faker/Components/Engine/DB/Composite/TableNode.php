@@ -89,7 +89,6 @@ class TableNode extends BaseTableNode implements GeneratorInterface, VisitorInte
                 new GenerateEvent($this,$values,$id)
         );
    
-        $last = array();
         do {
                 
                 # reset values for next row run.
