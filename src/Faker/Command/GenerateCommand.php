@@ -95,7 +95,10 @@ class GenerateCommand extends Command
         $result = array();
         
         if($composite instanceof GeneratorInterface) {
-            $composite->generate(1,$result);
+            $composite->generate(1,$result,array());
+        }
+        else {
+            throw new \RuntimeException('No Composite with GeneratorInterface found');
         }
     }
 
