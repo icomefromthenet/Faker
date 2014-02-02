@@ -30,7 +30,7 @@ class SchemaNode extends BaseSchemaNode implements GeneratorInterface, VisitorIn
     //------------------------------------------------------------------
     # GeneratorInterface
     
-    public function generate($rows,&$values = array())
+    public function generate($rows,&$values = array(),$last = array())
     {
         $id       = $this->getId(); 
         $event    = $this->getEventDispatcher();
@@ -44,7 +44,7 @@ class SchemaNode extends BaseSchemaNode implements GeneratorInterface, VisitorIn
         
         foreach($children as $child) {
             if($child instanceof GeneratorInterface) {
-                $child->generate($rows,$values);    
+                $child->generate($rows,$values,array());    
             }
         }
         

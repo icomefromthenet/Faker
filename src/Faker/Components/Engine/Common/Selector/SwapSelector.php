@@ -27,7 +27,7 @@ class SwapSelector extends Type
     protected $swaps = array();
     
    
-    public function generate($rows,&$values = array())
+    public function generate($rows,&$values = array(),$last = array())
     {
         $index = $this->current->position();
         

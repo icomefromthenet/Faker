@@ -68,7 +68,7 @@ class ForeignKeyNode extends BaseForeignKeyNode implements GeneratorInterface, V
 
     
     
-    public function generate($rows,&$values = array())
+    public function generate($rows,&$values = array(),$last = array())
     {
         if((boolean)$this->getUseCache() === false) {
             return null;

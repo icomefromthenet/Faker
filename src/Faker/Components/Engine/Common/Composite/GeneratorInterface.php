@@ -16,9 +16,10 @@ interface GeneratorInterface
       *  Generate a value
       *
       *  @param integer $rows the current row number
-      *  @param mixed $array list of values generated in context
+      *  @param mixed $values list of values generated in context
+      *  @param mixed $last the values of last rows generated.
       */
-    public function generate($rows,&$values = array());
+    public function generate($rows,&$values = array(),$last = array());
     
     
     /**

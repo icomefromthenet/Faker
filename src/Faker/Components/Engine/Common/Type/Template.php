@@ -38,7 +38,7 @@ class Template extends Type
     //------------------------------------------------------------------
     
     
-    public function generate($rows, &$values = array())
+    public function generate($rows, &$values = array(),$last = array())
     {
         
         if($this->template === null) {

@@ -32,7 +32,7 @@ class ColumnNode extends BaseColumnNode implements GeneratorInterface, VisitorIn
      //------------------------------------------------------------------
     # GeneratorInterface
     
-    public function generate($rows,&$values = array())
+    public function generate($rows,&$values = array(),$last = array())
     {
         $id       = $this->getId();
         $event    = $this->getEventDispatcher();
@@ -53,7 +53,7 @@ class ColumnNode extends BaseColumnNode implements GeneratorInterface, VisitorIn
         foreach($children as $type) {
                          
             # if we have many types we concatinate
-            $value[] = $type->generate($rows,$values);
+            $value[] = $type->generate($rows,$values,$last);
         
             # dispatch the generate event
             $event->dispatch(

@@ -34,7 +34,7 @@ class AlphaNumeric extends Type
      * 
      * @return string 
      */
-    public function generate($rows,&$values = array())
+    public function generate($rows,&$values = array(),$last = array())
     {
         $format     = $this->getOption(self::FORMAT);
         $repeat_min = $this->getOption(self::REPEAT_MIN);

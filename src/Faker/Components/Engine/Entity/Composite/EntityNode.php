@@ -35,14 +35,14 @@ class EntityNode implements CompositeInterface, GeneratorInterface
     # GeneratorInterface
     
 
-    public function generate($rows,&$values = array())
+    public function generate($rows,&$values = array(),$last = array())
     {
         $entity  = new GenericEntity();
         
         $this->getEventDispatcher()->dispatch(FormatEvents::onRowStart,new GenerateEvent($this,$entity,null));
         
         foreach($this->getChildren() as $child) {
-            $child->generate($rows,$entity);
+            $child->generate($rows,$entity,$last);
         }
         
         $this->getEventDispatcher()->dispatch(FormatEvents::onRowEnd,new GenerateEvent($this,$entity,null));

@@ -75,7 +75,7 @@ class TableNode extends BaseTableNode implements GeneratorInterface, VisitorInte
      //------------------------------------------------------------------
     # GeneratorInterface
     
-    public function generate($rows,&$values = array())
+    public function generate($rows,&$values = array(),$last = array())
     {
         $id         = $this->getId();
         $children   = $this->getChildren();
@@ -89,7 +89,7 @@ class TableNode extends BaseTableNode implements GeneratorInterface, VisitorInte
                 new GenerateEvent($this,$values,$id)
         );
    
-   
+        $last = array();
         do {
                 
                 # reset values for next row run.
@@ -107,10 +107,12 @@ class TableNode extends BaseTableNode implements GeneratorInterface, VisitorInte
        
                 foreach($children as $type) {
                     if($type instanceof GeneratorInterface) {
-                        $type->generate($rows,$values);                
+                        $type->generate($rows,$values,$last);                
                     }
                     
                 }
+                
+                $last = $values;
                 
                 # dispatch the row stop event
                 
