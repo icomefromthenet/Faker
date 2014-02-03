@@ -142,7 +142,7 @@ class SelectorNode implements CompositeInterface, GeneratorInterface, VisitorInt
     # GeneratorInterface
    
     
-    public function generate($rows,&$values = array(),$last = array());
+    public function generate($rows,&$values = array(),$last = array())
     {
         $index = $this->selector->generate($rows,$values,$last);
     
