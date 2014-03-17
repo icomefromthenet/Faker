@@ -9,7 +9,7 @@ Installing is easy you can use composer.
 ```json
 {
  "require" : {
-    "icomefromthenet/migration": "dev-master"
+    "icomefromthenet/faker": "dev-master"
  }
 
 }
