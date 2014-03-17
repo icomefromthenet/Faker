@@ -121,7 +121,7 @@ class FormatterNode extends BaseNode implements OptionInterface, SerializationIn
       *  @param integer $rows the current row number
       *  @param mixed $array list of values generated in context
       */
-    public function generate($rows,&$values = array())
+    public function generate($rows,&$values = array(),$last = array())
     {
         return null;
     }

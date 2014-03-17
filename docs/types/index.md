@@ -49,7 +49,7 @@ I have provided an example below that can be used as a base for **datatypes**.
          * 
          * @return string 
          */
-        public function generate($row,$values = array())
+        public function generate($row,$values = array(),$last = array())
         {
             #fetch an option.    
             $format = $this->getOption('format');
