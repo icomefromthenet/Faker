@@ -35,7 +35,7 @@ The easist way to install to use composer
 ```json
 {
   "require-dev" : {
-    "icomefromthenet/migration": "dev-master"
+    "icomefromthenet/faker": "dev-master"
   }
 }
 ```
