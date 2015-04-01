@@ -69,7 +69,7 @@ use Doctrine\DBAL\Types\Type;
 |
 | Example:
 |
-| TypeFactory::registerExtension('vector','Faker\\Extension\\Faker\\Type\\Vector');
+| TypeRepository::registerExtension('vector','Faker\\Extension\\Faker\\Type\\Vector');
 */
 
  //TypeRepository::registerExtension('vector','Faker\\Extension\\Faker\\Type\\Vector');
