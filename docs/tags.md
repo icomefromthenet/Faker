@@ -144,10 +144,10 @@ This format gives very precise control on the distribtion of values. If you want
 
 ```xml
 <swap>
- <when switch="100">
+ <when at="100">
   <datatype />
  </when>
- <when switch="5">
+ <when at="5">
     <datatype />
  </when>
 </swap>
@@ -157,7 +157,7 @@ Supported Attributes:
 
 | Attribute        | Type     | Optional   | Description |
 |:-----------------|---------:|:----------:|:-----------:|
-| switch           | (integer)|  false     | The number of generator passes to make before moving to next tag |
+| at           | (integer)|  false     | The number of generator passes to make before moving to next tag |
 
 
 Note two selector tags ```<swap />``` and ```<when />```
