@@ -241,7 +241,7 @@ class Phpunit extends BaseFormatter implements FormatterInterface
       */
     public function getConfigExtension(ArrayNodeDefinition $rootNode)
     {
-	return $rootNode;
+	    return $rootNode;
     }
     
     //  ----------------------------------------------------------------------------

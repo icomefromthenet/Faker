@@ -14,7 +14,7 @@ use PHPStats\Generator\GeneratorInterface;
 
 
 /**
-  *  Abstract Definition For Type / Selector Definitions
+  *  Abstract Definition objects that used by definition implementations
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4

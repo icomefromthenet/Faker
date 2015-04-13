@@ -9,3 +9,4 @@ composer.lock
 *.komodoproject
 examples/dump/*.sql
 examples/dump/*.xml
+.c9

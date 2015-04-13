@@ -160,9 +160,6 @@ class EntityGenerator implements ParentNodeInterface
     public function fake($number)
     {
        
-       
-       
-       
        if(is_int($number) === false) {
             throw new EngineException('Number to generate must be an integer > 0');
        }

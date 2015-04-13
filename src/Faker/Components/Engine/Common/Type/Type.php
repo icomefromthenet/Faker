@@ -60,42 +60,42 @@ abstract class Type implements TypeInterface, OptionInterface, SerializationInte
     
     public function getUtilities()
     {
-	return $this->utilities;
+    	return $this->utilities;
     }
     
     public function setUtilities(Utilities $util)
     {
-	$this->utilities = $util;
+	    $this->utilities = $util;
     }
     
     public function getGenerator()
     {
-	return $this->generator;
+	    return $this->generator;
     }
     
     public function setGenerator(GeneratorInterface $generator)
     {
-	$this->generator = $generator;
+    	$this->generator = $generator;
     }
     
     public function setLocale(LocaleInterface $locale)
     {
-	$this->locale = $locale;
+    	$this->locale = $locale;
     }
     
     public function getLocale()
     {
-	return $this->locale;
+    	return $this->locale;
     }
 
     public function getEventDispatcher()
     {
-	return $this->eventDispatcher;
+    	return $this->eventDispatcher;
     }
     
     public function setEventDispatcher(EventDispatcherInterface $event)
     {
-	$this->eventDispatcher = $event;
+    	$this->eventDispatcher = $event;
     }
     
     //------------------------------------------------------------------
@@ -108,33 +108,33 @@ abstract class Type implements TypeInterface, OptionInterface, SerializationInte
     
     public function setResultCache(GeneratorCache $cache)
     {
-	$this->resultCache = $cache;
+	    $this->resultCache = $cache;
     }
     
     public function getResultCache()
     {
-	return $this->resultCache;
+    	return $this->resultCache;
     }
     
     
     public function validate()
     {
-	try {
-            
-            $processor = new Processor();
-            $options = $processor->processConfiguration($this, array('config' => $this->options));
-	    
-	    # options may have been filtered reset their values
-	    foreach($options as $name => $value) {
-		$this->setOption($name,$value);
-	    }
-	
-        }catch(InvalidConfigurationException $e) {
-            
-            throw new EngineException($e->getMessage());
-        }
-	
-	return true;
+    	try {
+                
+                $processor = new Processor();
+                $options = $processor->processConfiguration($this, array('config' => $this->options));
+    	    
+        	    # options may have been filtered reset their values
+        	    foreach($options as $name => $value) {
+        	    	$this->setOption($name,$value);
+        	    }
+    	
+            }catch(InvalidConfigurationException $e) {
+                
+                throw new EngineException($e->getMessage());
+            }
+    	
+    	return true;
     }
     
     //------------------------------------------------------------------
@@ -142,12 +142,12 @@ abstract class Type implements TypeInterface, OptionInterface, SerializationInte
     
     public function setOption($name,$option)
     {
-	$this->options[$name] = $option;
+	    $this->options[$name] = $option;
     }
     
     public function getOption($name)
     {
-	return $this->options[$name];
+    	return $this->options[$name];
     }
     
     /**
@@ -159,7 +159,7 @@ abstract class Type implements TypeInterface, OptionInterface, SerializationInte
       */
     public function hasOption($name)
     {
-         return isset($this->options[$name]);
+        return isset($this->options[$name]);
     }
     
     /**
@@ -179,13 +179,13 @@ abstract class Type implements TypeInterface, OptionInterface, SerializationInte
      */
     public function getConfigTreeBuilder()
     {
-	$treeBuilder = new TreeBuilder();
+	    $treeBuilder = new TreeBuilder();
         $rootNode    = $treeBuilder->root('config');
 	
-	# get child custom config options
-	$this->getConfigTreeExtension($rootNode);
+	    # get child custom config options
+	    $this->getConfigTreeExtension($rootNode);
 	
-	$rootNode
+	    $rootNode
             ->children()
                 ->scalarNode('locale')
                     ->treatNullLike('en')
@@ -248,8 +248,7 @@ abstract class Type implements TypeInterface, OptionInterface, SerializationInte
     }
     
     
-    //-------------------------------------------------------
-    # SerializationInterface
+    
     
 }
 /* End of File */

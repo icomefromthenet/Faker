@@ -8,8 +8,9 @@ class AbstractProjectWithDb extends AbstractProject
     
     public function buildDb()
     {
-        exec('mysql -u root -pvagrant < '.__DIR__ .'/sakila-schema.sql');  
-        exec('mysql -u root -pvagrant < '.__DIR__ .'/sakila-data.sql');  
+        $this->getDoctrineConnection()->exec(file_get_contents(__DIR__ .'/sakila-schema.sql'));
+        $this->getDoctrineConnection()->exec(file_get_contents(__DIR__ .'/sakila-data.sql'));
+        
     }
     
     //  -------------------------------------------------------------------------
@@ -18,24 +19,26 @@ class AbstractProjectWithDb extends AbstractProject
     
     static $doctrine_connection;
     
+    
     /**
-      *  Gets a db connection to the test database
-      *
-      *  @access public
-      *  @return \Doctrine\DBAL\Connection
-      */
+    * Gets a db connection to the test database
+    *
+    * @access public
+    * @return \Doctrine\DBAL\Connection
+    */
     public function getDoctrineConnection()
     {
         if(self::$doctrine_connection === null) {
         
             $config = new \Doctrine\DBAL\Configuration();
             
+            
             $connectionParams = array(
-                'dbname' => 'sakila',
-                'user' => 'root',
-                'password' => 'vagrant',
-                'host' => 'localhost',
-                'driver' => 'pdo_mysql',
+                'dbname'   => $_ENV['DB_DBNAME'],
+                'user'     => $_ENV['DB_USER'],
+                'password' => $_ENV['DB_PASSWD'],
+                'host'     => $_ENV['DB_HOST'],
+                'driver'   => 'pdo_mysql',
             );
         
            self::$doctrine_connection = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);

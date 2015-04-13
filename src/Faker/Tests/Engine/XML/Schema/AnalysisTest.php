@@ -33,7 +33,7 @@ class AnalysisTest extends AbstractProjectWithDb
         
         # last child is a formatter
         $schemaChildren = $composite->getChildren();
-        $this->assertInstanceOf('Faker\Components\Engine\XML\Composite\FormatterNode',$schemaChildren[16]);
+        $this->assertInstanceOf('Faker\Components\Engine\XML\Composite\FormatterNode',$schemaChildren[10]);
         
         # that have more than 2 nodes 1 formatter an x > 1 table
         $this->assertGreaterThan(2,count($schemaChildren));
