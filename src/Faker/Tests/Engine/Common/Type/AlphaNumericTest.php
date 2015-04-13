@@ -56,6 +56,40 @@ class AlphaNumericTest extends AbstractProject
         $this->assertEquals('dgHJ',$type->generate(1,$values));
     }
     
+      public function testGenerateNoRepeatValues()
+    {
+        $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
+                          ->disableOriginalConstructor()
+                          ->getMock(); 
+        
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+            
+        $locale    = $this->getMock('\Faker\Locale\LocaleInterface'); 
+                          
+        $utilities->expects($this->exactly(4))
+                   ->method('generateRandomAlphanumeric')
+                   ->with($this->equalTo('ccCC'))
+                   ->will($this->returnValue('dgHJ'));
+        
+        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        
+            
+        $type = new AlphaNumeric();
+        $type->setGenerator($generator);
+        $type->setLocale($locale);
+        $type->setUtilities($utilities);
+        $type->setOption('format','ccCC');
+
+        $this->assertTrue($type->validate());
+        
+        $values = array();
+        $this->assertEquals('dgHJ',$type->generate(1,$values));
+        $this->assertEquals('dgHJ',$type->generate(1,$values));
+        $this->assertEquals('dgHJ',$type->generate(1,$values));
+        $this->assertEquals('dgHJ',$type->generate(1,$values));
+        
+    }
+    
     
     public function testGenerateWithEqualRepeat()
     {

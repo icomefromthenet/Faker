@@ -30,7 +30,7 @@ class GenerateCommand extends Command
         #event manager
         $event = $project['event_dispatcher'];
        
-        # fetch the schem parser        
+        # fetch the schema parser        
         $parser = $project->getXMLEngineParser();
         $parser->register();
         

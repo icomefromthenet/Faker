@@ -42,7 +42,6 @@ class AlphaNumeric extends Type
         $value      = null;
         
         
-        
         if($repeat_min === 1 && $repeat_max === 1) {
             # condition no-repeat 
             $value = $this->getUtilities()->generateRandomAlphanumeric($format,$this->getGenerator(),$this->getLocale());

@@ -3,6 +3,7 @@ namespace Faker\Tests\Engine\XML\Composite;
 
 use Faker\Components\Engine\XML\Composite\WhenNode;
 use Faker\Tests\Base\AbstractProject;
+use Faker\Components\Engine\Common\Composite\GenericNode;
 
 class WhenTest extends AbstractProject
 {
@@ -67,6 +68,33 @@ class WhenTest extends AbstractProject
         $whenNode->setOption('at',100); 
         $whenNode->validate();
     }
+    
+    public function testValidatesChildren()
+    {
+        $id = 'whenNode';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+
+        $whenNode = new WhenNode($id,$event);
+        
+        # create mock type node        
+        $type = new GenericNode($id,$event);
+        
+        $genericNode = $this->getMockBuilder('Faker\Components\Engine\Common\Composite\GenericNode')
+                         ->setMethods(array('validate'))
+                         ->disableOriginalConstructor()
+                         ->getMock();
+        
+        $genericNode->expects($this->once())
+                    ->method('validate');
+                    
+        $whenNode->addChild($genericNode);
+        
+        $whenNode->setOption('at',100); 
+        $whenNode->validate();
+        
+        
+    }
+    
     
     public function testTypeInterfaceProperties()
     {

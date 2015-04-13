@@ -64,6 +64,8 @@ class WhenNode extends GenericNode implements OptionInterface, SerializationInte
                 $this->setOption($name,$value);
             }
             
+            parent::validate();
+            
         } catch(InvalidConfigurationException $e) {
             throw new CompositeException($this,$e->getMessage(),0,$e);
         } 
