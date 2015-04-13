@@ -100,14 +100,25 @@ class WhenNode extends GenericNode implements OptionInterface, SerializationInte
         $rootNode
             ->children()
                 ->scalarNode('at')
+                    ->info('The row number to swap on')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return true;
+                        })
+                        ->then(function($v){
+                            throw new InvalidConfigurationException('When::at is depreciated please use \'When:until\' attribute');
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('until')
                     ->isRequired()
-                    ->info('The row number to swap at')
+                    ->info('The row number to swap on')
                     ->validate()
                         ->ifTrue(function($v){
                             return !is_int($v);
                         })
                         ->then(function($v){
-                            throw new InvalidConfigurationException('When::at must be a integer');
+                            throw new InvalidConfigurationException('When::until must be a integer');
                         })
                     ->end()
                 ->end()

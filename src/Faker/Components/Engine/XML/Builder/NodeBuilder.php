@@ -619,7 +619,7 @@ class NodeBuilder implements NodeInterface
             if($internal instanceof SwapSelector) {
                 foreach($this->head->getChildren() as $selectorNode) {
                     if($selectorNode instanceof WhenNode) {
-                        $internal->registerSwap(new PositionManager($selectorNode->getOption('at')));    
+                        $internal->registerSwap(new PositionManager($selectorNode->getOption('until')));    
                     }
                 }
             }

@@ -39,7 +39,7 @@ class SelectorSwapBuilder extends BaseBuilder implements TypeDefinitionInterface
         $type->setLocale($this->locale);
              
         foreach($this->attributes as $attribute => $value) {
-            $type->setOption($attribute,$value);
+                $type->setOption($attribute,$value);    
         }
         
         $node = new SelectorNode('selectorNode',$this->eventDispatcher,$type); 

@@ -34,9 +34,9 @@ class WhenTest extends AbstractProject
     
     /**
       *  @expectedException Faker\Components\Engine\Common\Composite\CompositeException
-      *  @expectedExceptionMessage The child node "at" at path "config" must be configured
+      *  @expectedExceptionMessage The child node "until" at path "config" must be configured
       */
-    public function testAtNotSet()
+    public function testUntilNotSet()
     {
         $id    = 'whenNode';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
@@ -45,17 +45,32 @@ class WhenTest extends AbstractProject
         $whenNode->validate();
     }
     
+    /**
+      *  @expectedException Faker\Components\Engine\Common\Composite\CompositeException
+      *  @expectedExceptionMessage When::at is depreciated please use 'When:until' attribute
+      */
+    public function testAtDepreciationError()
+    {
+        $id    = 'whenNode';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        
+        $whenNode = new WhenNode($id,$event);
+         $whenNode->setOption('until','100');
+         $whenNode->setOption('at','100'); 
+        $whenNode->validate();
+    }
+    
      /**
       *  @expectedException Faker\Components\Engine\Common\Composite\CompositeException
-      *  @expectedExceptionMessage When::at must be a integer
+      *  @expectedExceptionMessage When::until must be a integer
       */
-    public function testAtNotSetWithInteger()
+    public function testUntilNotSetWithInteger()
     {
         $id = 'whenNode';
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         
         $whenNode = new WhenNode($id,$event);
-        $whenNode->setOption('at','100'); 
+        $whenNode->setOption('until','100'); 
         $whenNode->validate();
     }
     
@@ -65,7 +80,7 @@ class WhenTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         
         $whenNode = new WhenNode($id,$event);
-        $whenNode->setOption('at',100); 
+        $whenNode->setOption('until',100); 
         $whenNode->validate();
     }
     
@@ -89,7 +104,7 @@ class WhenTest extends AbstractProject
                     
         $whenNode->addChild($genericNode);
         
-        $whenNode->setOption('at',100); 
+        $whenNode->setOption('until',100); 
         $whenNode->validate();
         
         

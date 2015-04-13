@@ -140,14 +140,14 @@ Will pick a child, at random. It supports more than two children. There are no g
 ```
 
 ##Swap-When
-This format gives very precise control on the distribtion of values. If you wanted 5 of x then 10 of y this selector should be used. The counter will start at the first child and only skip to next child after x (switch) passes of the generator. Once the sequence has been exhausted it is restarted.
+This format gives very precise control on the distribtion of values. If you wanted 5 of x then 10 of y this selector should be used. The counter will start at the first child and only skip to next child after x passes of the generator. Once the sequence has been exhausted it is restarted.
 
 ```xml
 <swap>
- <when at="100">
+ <when until="100">
   <datatype />
  </when>
- <when at="5">
+ <when until="5">
     <datatype />
  </when>
 </swap>
@@ -157,7 +157,7 @@ Supported Attributes:
 
 | Attribute        | Type     | Optional   | Description |
 |:-----------------|---------:|:----------:|:-----------:|
-| at           | (integer)|  false     | The number of generator passes to make before moving to next tag |
+| until            | (integer)|  false     | The number of generator passes to make before moving to next tag |
 
 
 Note two selector tags ```<swap />``` and ```<when />```

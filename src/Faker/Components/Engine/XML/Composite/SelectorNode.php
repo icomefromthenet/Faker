@@ -37,12 +37,12 @@ class SelectorNode extends BaseNode implements OptionInterface, SerializationInt
     protected $options;
     
     /**
-     *  @var Faker\Locale\LocaleInterface
+    *  @var Faker\Locale\LocaleInterface
     */
     protected $locale;
     
     /**
-     *  @var PHPStats\Generator\GeneratorInterface
+    *  @var PHPStats\Generator\GeneratorInterface
     */
     protected $generator;
     
