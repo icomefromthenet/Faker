@@ -54,7 +54,8 @@ class GenericNode implements CompositeInterface, GeneratorInterface, VisitorInte
         $this->id       = $id;
         $this->children = array();
         $this->parent   = null;
-        $this->event    = $event;
+        
+        $this->setEventDispatcher($event);
         
     }
     
@@ -100,7 +101,7 @@ class GenericNode implements CompositeInterface, GeneratorInterface, VisitorInte
     
     public function setEventDispatcher(EventDispatcherInterface $event)
     {
-	$this->event = $event;
+	    $this->event = $event;
     }
     
      
@@ -157,7 +158,7 @@ class GenericNode implements CompositeInterface, GeneratorInterface, VisitorInte
     }
    
     
-     //------------------------------------------------------------------
+    //------------------------------------------------------------------
     # VisitorInterface
     
      public function acceptVisitor(BasicVisitor $visitor)

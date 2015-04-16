@@ -320,7 +320,16 @@ class NodeBuilder implements NodeInterface
         $this->head = $foreignKey;
         
         return $this;
-    }    
+    }
+    
+    //  -------------------------------------------------------------------------
+    
+    public function addDatasource($name,$options = array(0))
+    {
+        
+        
+        
+    }
     
     //  -------------------------------------------------------------------------
     
