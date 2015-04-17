@@ -11,13 +11,14 @@ use Faker\Components\Engine\Common\Datasource\DatasourceInterface;
 use Faker\Components\Engine\Common\Visitor\BasicVisitor;
 
 /**
-  *  Node to contain datasources, that as this node is a wrapper over a datasource it does not 
+  *  Node to contain datasources, that as this node is a wrapper over a datasource
   *
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class DatasourceNode extends GenericNode implements CompositeInterface, GeneratorInterface, VisitorInterface, DatasourcesInterface
+class DatasourceNode extends GenericNode implements CompositeInterface, GeneratorInterface, VisitorInterface, HasDatasourceInterface
 {
+
     
     /**
      * @var array[Faker\Components\Engine\Common\Datasource\DatasourceInterface]
@@ -30,7 +31,7 @@ class DatasourceNode extends GenericNode implements CompositeInterface, Generato
     public function __construct($id, EventDispatcherInterface $event, DatasourceInterface $datasource)
     {
         parent::__construct($id,$event);
-        $this->datasources    = array($datasource);
+        $this->datasources    = $datasource;
         
     }
     
@@ -39,12 +40,12 @@ class DatasourceNode extends GenericNode implements CompositeInterface, Generato
     
     
     /**
-      *  Return all assigned datasources.
+      *  Return  assigned datasources.
       *
-      *  @return array[Faker\Components\Engine\Common\Datasource\DatasourceInterface] 
+      *  @return Faker\Components\Engine\Common\Datasource\DatasourceInterface 
       *  @access public
       */
-    public function getDatasources()
+    public function getDatasource()
     {
         return $this->datasources;
     }
@@ -55,9 +56,9 @@ class DatasourceNode extends GenericNode implements CompositeInterface, Generato
       *  @param Faker\Components\Engine\Common\Datasource\DatasourceInterface a source to add
       *  @access public
       */
-    public function addDatasource(DatasourceInterface $source)
+    public function setDatasource(DatasourceInterface $source)
     {
-        $this->datasources[] = $source;
+        $this->datasources= $source;
     }
    
    
@@ -68,7 +69,7 @@ class DatasourceNode extends GenericNode implements CompositeInterface, Generato
     
     public function generate($rows, &$values = array(),$last = array())
     {
-        return $result;
+        return $values;
     }
     
     

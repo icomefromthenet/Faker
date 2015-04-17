@@ -226,5 +226,29 @@ class TableNodeTest extends AbstractProject
     }
     
     
+    public function testDatasourceIntFlushCalled()
+    {
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $tableNode = new TableNode($id,$event);
+     
+        $dSource = $this->getMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
+        
+        $dSource->expects($this->once())
+                ->method('fetchOne');
+                
+        $dSource->expects($this->once())
+                ->method('flushSource');
+        
+        $node = new \Faker\Components\Engine\Common\Composite\DatasourceNode('source1',$event,$dSource);
+        
+        $tableNode->addChild($node);
+        $tableNode->setRowsToGenerate(1);        
+        $values = array();
+        $tableNode->generate(1,$values);        
+    }
+    
+    
+    
 }
 /* End of File */

@@ -136,7 +136,7 @@ class TypeNode implements CompositeInterface, GeneratorInterface, VisitorInterfa
     
     public function setEventDispatcher(EventDispatcherInterface $event)
     {
-	$this->event = $event;
+	    $this->event = $event;
     }
     
     public function validate()

@@ -29,6 +29,7 @@ class SchemaNode implements CompositeInterface
       */
     protected $id;
     
+    
     /**
       *  Class Constructor
       *
@@ -72,6 +73,7 @@ class SchemaNode implements CompositeInterface
         foreach($this->children as $child) {
             $child->validate();
         }
+        
         
         return true;
     }

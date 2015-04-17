@@ -1,7 +1,7 @@
 <?php 
 namespace Faker\Components\Engine\Common\Datasource;
 
-use Faker\Engine\Common\OptionInterface;
+use Faker\Components\Engine\Common\OptionInterface;
 
 /**
  * A datasource.

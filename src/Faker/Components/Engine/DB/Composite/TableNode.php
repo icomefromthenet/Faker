@@ -11,6 +11,7 @@ use Faker\Components\Engine\Common\Composite\TableNode as BaseTableNode;
 use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Faker\Components\Engine\Common\Formatter\GenerateEvent;
 use Faker\Components\Engine\Common\Visitor\BasicVisitor;
+use Faker\Components\Engine\Common\Composite\HasDatasourceInterface;
 
 
 /**
@@ -103,15 +104,28 @@ class TableNode extends BaseTableNode implements GeneratorInterface, VisitorInte
                 );
 
                 # send the generate event to the columns
+                # execute fetch data for each source
        
-                foreach($children as $type) {
-                    if($type instanceof GeneratorInterface) {
-                        $type->generate($rows,$values,$last);                
+                foreach($children as $node) {
+                    if($node instanceof HasDatasourceInterface) {
+                        $node->getDatasource()->fetchOne();
                     }
-                    
+                }
+            
+                foreach($children as $node) {
+                    if($node instanceof GeneratorInterface) {
+                        $node->generate($rows,$values,$last);                
+                    }
                 }
                 
                 $last = $values;
+                
+                
+                foreach($children as $node) {
+                    if($node instanceof HasDatasourceInterface) {
+                        $node->getDatasource()->flushSource();
+                    }
+                }
                 
                 # dispatch the row stop event
                 

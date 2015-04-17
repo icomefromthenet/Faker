@@ -13,16 +13,15 @@ class DatasourceNodeTest extends AbstractProject
         
         $event  = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         
-        $datasourceInternal = $this->getMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
+        $datasourceInternalA = $this->getMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
+        $datasourceInternalB = $this->getMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
         $nodeId     = 'mynode';
         
-        $node = new DatasourceNode($nodeId,$event,$datasourceInternal);   
+        $node = new DatasourceNode($nodeId,$event,$datasourceInternalA);   
+        $this->assertEquals($datasourceInternalA,$node->getDatasource());
         
-        $aSources = $node->getDatasources();
-        
-        $this->assertInternalType('array',$aSources);
-        $this->assertEquals($datasourceInternal,$aSources[0]);
-        
+        $node->setDatasource($datasourceInternalB);
+        $this->assertEquals($datasourceInternalB,$node->getDatasource());
        
     }
     

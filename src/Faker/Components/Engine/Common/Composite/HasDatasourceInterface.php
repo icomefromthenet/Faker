@@ -9,15 +9,15 @@ use Faker\Components\Engine\Common\Datasource\DatasourceInterface;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-interface DatasourcesInterface
+interface HasDatasourceInterface
 {
     /**
       *  Return all assigned datasources.
       *
-      *  @return array[Faker\Components\Engine\Common\Datasource\DatasourceInterface] 
+      *  @return Faker\Components\Engine\Common\Datasource\DatasourceInterface 
       *  @access public
       */
-    public function getDatasources();
+    public function getDatasource();
     
     
     /**
@@ -26,7 +26,7 @@ interface DatasourcesInterface
       *  @param Faker\Components\Engine\Common\Datasource\DatasourceInterface a source to add
       *  @access public
       */
-    public function addDatasource(DatasourceInterface $source);
+    public function setDatasource(DatasourceInterface $source);
     
 }
 /* End of File */

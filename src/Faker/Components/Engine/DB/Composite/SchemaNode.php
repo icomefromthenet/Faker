@@ -11,7 +11,7 @@ use Faker\Components\Engine\Common\Composite\SchemaNode as BaseSchemaNode;
 use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Faker\Components\Engine\Common\Formatter\GenerateEvent;
 use Faker\Components\Engine\Common\Visitor\BasicVisitor;
-
+use Faker\Components\Engine\Common\Composite\HasDatasourceInterface;
 
 /**
   *  Schema Node implements GeneratorInterface, VisitorInterface on top of the schema node
@@ -43,9 +43,17 @@ class SchemaNode extends BaseSchemaNode implements GeneratorInterface, VisitorIn
         );
         
         foreach($children as $child) {
+            
+            # generate data for each table
             if($child instanceof GeneratorInterface) {
                 $child->generate($rows,$values,array());    
             }
+            
+            # call cleanup on each datasource
+            if($child instanceof HasDatasourceInterface) {
+                $child->getDatasource()->cleanupSource();
+            }
+            
         }
         
        $event->dispatch(

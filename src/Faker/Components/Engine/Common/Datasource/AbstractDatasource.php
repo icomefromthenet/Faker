@@ -13,7 +13,7 @@ use Faker\Locale\LocaleInterface;
 use Faker\Components\Templating\Loader;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\EngineException;
-use Faker\Engine\Common\OptionInterface;
+use Faker\Components\Engine\Common\OptionInterface;
 use Doctrine\DBAL\Connection;
 use PHPStats\Generator\GeneratorInterface;
 
@@ -26,7 +26,7 @@ use PHPStats\Generator\GeneratorInterface;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.5
   */
-class AbstractDatasource implements DatasourceInterface, OptionInterface
+abstract class AbstractDatasource implements DatasourceInterface
 {
     
     /**
@@ -42,7 +42,7 @@ class AbstractDatasource implements DatasourceInterface, OptionInterface
     /**
       *  @var Faker\Locale\LocaleInterface 
       */
-    protected $locale;
+    protected $myLocale;
     
     /**
       *  @var Faker\Components\Engine\Common\Utilities
@@ -79,7 +79,7 @@ class AbstractDatasource implements DatasourceInterface, OptionInterface
       */
     public function setUtilities(Utilities $util)
     {
-        $this->utilities;
+        $this->utilities = $util;
         
         return $this;
     }
@@ -117,7 +117,7 @@ class AbstractDatasource implements DatasourceInterface, OptionInterface
       */
     public function setLocale(LocaleInterface $locale)
     {
-        $this->locale = $locale;
+        $this->myLocale = $locale;
         
         return $this;
     }
@@ -130,7 +130,7 @@ class AbstractDatasource implements DatasourceInterface, OptionInterface
       */
     public function getLocale()
     {
-        return $this->locale;
+        return $this->myLocale;
     }
     
     
@@ -226,20 +226,6 @@ class AbstractDatasource implements DatasourceInterface, OptionInterface
         return isset($this->options[$name]);
     }
     
-    
-    //-------------------------------------------------------------------------
-    # Custom Validation Methods
-   
-    /**
-     *  Enhance the config node with extra options
-     *
-     *  @access public
-     *  @return \Symfony\Component\Config\Definition\Builder\NodeDefinition The tree builder
-     *
-    */
-    abstract public function getConfigTreeExtension(NodeDefinition $rootNode);
-    
-    
     /**
      * Generates the configuration tree builder.
      *
@@ -256,6 +242,19 @@ class AbstractDatasource implements DatasourceInterface, OptionInterface
         
         return $treeBuilder;  
     }
+    
+    //-------------------------------------------------------------------------
+    # Custom Validation Methods
+   
+    /**
+     *  Enhance the config node with extra options
+     *
+     *  @access public
+     *  @return \Symfony\Component\Config\Definition\Builder\NodeDefinition The tree builder
+     *
+    */
+    abstract public function getConfigTreeExtension(NodeDefinition $rootNode);
+    
     
     /**
      * Valdiate if this type is ready to execution

@@ -126,5 +126,26 @@ class SchemaNodeTest extends AbstractProject
     }
     
     
+    public function testDatasourceCleanupCalled()
+    {
+        $id = 'schema_1';
+        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $schemaNode = new SchemaNode($id,$event);
+     
+        $dSource = $this->getMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
+        
+        $dSource->expects($this->exactly(1))
+                ->method('cleanupSource');
+                
+        
+        $node = new \Faker\Components\Engine\Common\Composite\DatasourceNode('source1',$event,$dSource);
+        
+        $schemaNode->addChild($node);
+          
+        $values = array();
+        $schemaNode->generate(1,$values);        
+    }
+    
+    
 }
 /* End of File */
