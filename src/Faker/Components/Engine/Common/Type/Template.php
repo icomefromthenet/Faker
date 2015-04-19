@@ -14,7 +14,7 @@ use Symfony\Component\Config\Definition\Builder\NodeDefinition;
  * @since 1.0.4
  *
  */  
-class Template extends Type
+class Template extends Type implements BindDataInterface
 {
 
     
@@ -24,6 +24,14 @@ class Template extends Type
       *  @var \Faker\Components\Templating\Loader 
       */
     protected $templateLoader;
+    
+    /**
+     * Data for sources to push to template
+     * 
+     * @var array of data to send to template
+     */ 
+    protected $dataFromSources;
+    
     
     /**
       *  Class Constructor
@@ -59,8 +67,12 @@ class Template extends Type
             }
         }
             
-        return $this->template->render($values);
+        $result =  $this->template->render(array('values'=>$values,'sources'=> $this->dataFromSources));
     
+        # clear bound data
+        $this->bindData(array());
+    
+        return $result;
     }
 
     
@@ -117,7 +129,17 @@ class Template extends Type
     }
     
     //  -------------------------------------------------------------------------
-
+    # BindDataInterface
+    
+    /**
+     * Binds data for next run
+     * 
+     * @param array[mixed]
+     */ 
+    public function bindData(array $data)
+    {
+        $this->dataFromSources = $data;
+    }
 }
 
 /* End of class */

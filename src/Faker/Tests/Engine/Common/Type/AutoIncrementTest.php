@@ -56,7 +56,7 @@ class AutoIncrementTest extends AbstractProject
     
     /**
       *  @expectedException \Faker\Components\Engine\EngineException
-      *  @expectedExceptionMessage Unrecognized options "aaaa" under "config"
+      *  @expectedExceptionMessage Unrecognized option "aaaa" under "config"
       */
     public function testConfigBadValue()
     {

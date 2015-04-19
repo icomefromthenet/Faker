@@ -11,6 +11,7 @@ use Faker\Components\Engine\Common\Type\TypeInterface;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Visitor\BasicVisitor;
 use Faker\Components\Engine\Common\GeneratorCache;
+use Faker\Components\Engine\Common\Composite\HasDatasourceInterface;
 
 /**
   *  Node to contain datatypes
@@ -93,15 +94,22 @@ class TypeNode implements CompositeInterface, GeneratorInterface, VisitorInterfa
     
     /**
       *   Fetches the children of this type composite
+      * 
+      *   Normally expect node like datasources to be returned
       *
       *   @access public
-      *   @return Faker\Components\Engine\Common\Composite\CompositeInterface[] 
+      *   @return array[Faker\Components\Engine\Common\Composite\CompositeInterface]
       */
     public function getChildren()
     {
-        return array();
+        return $this->children;
     }
     
+    /**
+     * Clear this nodes children 
+     * 
+     * @return void
+     */ 
     public function clearChildren()
     {
         $this->children = null;
@@ -110,12 +118,15 @@ class TypeNode implements CompositeInterface, GeneratorInterface, VisitorInterfa
     
     /**
       *  Add's a child to this type composite
+      * 
+      *  Expect nodes like Datasource to be only children of a type. 
+      *  Type implementations are passed in during construction.
       *
       *  @param Faker\Components\Engine\Common\Composite\CompositeInterface $child
       */
     public function addChild(CompositeInterface $child)
     {
-        throw new EngineException('TypeNode can not have children');
+        $this->children[] = $child;
     }
     
     /**
@@ -151,6 +162,23 @@ class TypeNode implements CompositeInterface, GeneratorInterface, VisitorInterfa
     
     public function generate($rows,&$values = array(),$last = array())
     {
+        $linkedSourcesData = array();
+        
+        # build data from any sources added during the building process
+        foreach($this->getChildren() as $child) {
+            
+            if($child instanceof HasDatasourceInterface) {
+                 $s = $child->getDatasource();
+                $linkedSourcesData[] = $s->fetchOne();
+            }
+        }
+        
+        # send that data to the type if its has implemented the required
+        # interface
+        if($this->type instanceof BindDataInterface) {
+            $this->type->bindData($linkedSourcesData);
+        }
+        
         return $this->type->generate($rows,$values,$last);
     }
     
@@ -168,8 +196,8 @@ class TypeNode implements CompositeInterface, GeneratorInterface, VisitorInterfa
     //------------------------------------------------------------------
     # VisitorInterface
     
-     public function acceptVisitor(BasicVisitor $visitor)
-     {
+    public function acceptVisitor(BasicVisitor $visitor)
+    {
         $children = $this->getChildren();
         
         foreach($children as $child) {
@@ -179,7 +207,7 @@ class TypeNode implements CompositeInterface, GeneratorInterface, VisitorInterfa
         }
         
         return $visitor;
-     }
+    }
     
     //------------------------------------------------------------------
     # Custom

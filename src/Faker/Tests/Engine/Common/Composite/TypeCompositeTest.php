@@ -2,6 +2,7 @@
 namespace Faker\Tests\Engine\Common\Composite;
 
 use Faker\Components\Engine\Common\Composite\TypeNode;
+use Faker\Components\Engine\Common\Composite\DatasourceNode;
 use Faker\Tests\Base\AbstractProject;
 
 class TypeCompositeTest extends AbstractProject
@@ -61,10 +62,7 @@ class TypeCompositeTest extends AbstractProject
         
     }
     
-    /**
-      *  @expectedException \Faker\Components\Engine\EngineException
-      *  @expectedExceptionMessage TypeNode can not have children
-      */
+    
     public function testCompositeProperties()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
@@ -97,6 +95,10 @@ class TypeCompositeTest extends AbstractProject
         $this->assertEquals(array(),$type->getChildren());
         
         $type->addChild($parentB);
+        
+        $typeChildren = $type->getChildren();
+        
+        $this->assertEquals($parentB,$typeChildren[0]);
         
     }
     
@@ -157,6 +159,35 @@ class TypeCompositeTest extends AbstractProject
         $values = array('row1' => 6);
         $this->assertEquals('a generated string',$type->generate(5,$values));
         
+    }
+    
+    
+    public function testFetchDataFromSources()
+    {
+        
+        $dNode        = $this->getMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
+        
+        $event        = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dataNodeID   = 'DatasourceNodeA';   
+        
+        $datasourceNode =    new DatasourceNode($dataNodeID,$event, $dNode);
+             
+        $dNode->expects($this->once())
+              ->method('fetchOne'); 
+              
+              
+        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
+        $internal->expects($this->once())
+               ->method('generate');
+               
+         $id        = 'testnode';
+
+        $type = new TypeNode($id,$event,$internal);
+        
+        $type->addChild($datasourceNode);
+        
+        $values = array();
+        $type->generate(1,$values);
     }
     
 }
