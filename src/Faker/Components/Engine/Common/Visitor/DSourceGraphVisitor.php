@@ -9,20 +9,22 @@ use Faker\Components\Engine\Common\Composite\PathBuilder;
 use Faker\Components\Engine\Common\Composite\SchemaNode;
 use Faker\Components\Engine\Common\Composite\TableNode;
 use Faker\Components\Engine\Common\Composite\ColumnNode;
-use Faker\Components\Engine\Common\Composite\ForeignKeyNode;
+use Faker\Components\Engine\Common\Composite\TypeNode;
 use Faker\Components\Engine\Common\Composite\CompositeFinder;
 use Faker\Components\Engine\Common\Composite\FormatterNode;
+use Faker\Components\Engine\Common\Composite\DatasourceNode;
+use Faker\Components\Engine\Common\Type\FromSource;
 
 
 /*
- * class DirectedGraphVisitor
  *
- * Will gather all Table relationships
+ * Will gather all datasources
+ * 
  *
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
- * @since 1.0.3
+ * @since 1.0.5
  */
-class DirectedGraphVisitor extends BasicVisitor
+class DSourceGatherVisitor extends BasicVisitor
 {
     
     /**
@@ -66,13 +68,13 @@ class DirectedGraphVisitor extends BasicVisitor
         return null;
     }
     
-    public function visitDatasourceGatherer(CompositeInterface $node)
+    public function visitDirectedGraphBuilder(CompositeInterface $composite)
     {
         return null;
     }
     
     
-    public function visitDirectedGraphBuilder(CompositeInterface $composite)
+    public function visitDatasourceGatherer(CompositeInterface $node)
     {
         $builder     = $this->pathBuilder;
         $parentNode  = $composite->getParent();
@@ -80,21 +82,20 @@ class DirectedGraphVisitor extends BasicVisitor
         if($composite instanceof SchemaNode) {
             $this->graph->setRoot($composite);    
         
-        } elseif($composite instanceof TableNode) {
-            # if we have a table connect to schema
-            $this->graph->connect($builder->buildPath($composite),$composite,$builder->buildPath($parentNode),$parentNode);
-            
-        } elseif($composite instanceof ColumnNode) {
-            # if instance of column connect to table
-            $this->graph->connect($builder->buildPath($composite),$composite,$builder->buildPath($parentNode),$parentNode);            
-                
-        }
-        elseif ($composite instanceof FormatterNode) {
-            # if instance of formatterNode connect to schema
-            $this->graph->connect($builder->buildPath($composite),$composite,$builder->buildPath($parentNode),$parentNode);            
-        }
-        elseif($composite instanceof ForeignKeyNode) {
-            # if have a fk connect two columns and tables as well as the FKNode to FKColumn 
+        } elseif ($composite instanceof DatasourceNode) {
+            # have a datasource related to schema it contained in.
+            $finder      = new CompositeFinder();
+            $parentSchema = $finder
+                            ->set($composite)
+                            ->parentSchema()
+                            ->get();
+                            
+            $this->graph->connect($builder->buildPath($composite),$composite,$builder->buildPath($parentSchema),$parentSchema);
+       
+        } elseif($composite instanceof TypeNode && $composite->getType() instanceof FromSource) {
+           # if have Type node with internal FromSource.
+           # were not relating this 
+           
            $finder      = new CompositeFinder();
            $parentTable = $finder
                             ->set($composite)

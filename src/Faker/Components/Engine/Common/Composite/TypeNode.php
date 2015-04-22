@@ -168,7 +168,7 @@ class TypeNode implements CompositeInterface, GeneratorInterface, VisitorInterfa
         foreach($this->getChildren() as $child) {
             
             if($child instanceof HasDatasourceInterface) {
-                 $s = $child->getDatasource();
+                $s = $child->getDatasource();
                 $linkedSourcesData[] = $s->fetchOne();
             }
         }

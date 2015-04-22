@@ -78,6 +78,11 @@ class LocaleVisitor extends BasicVisitor
     {
         
     }
+    
+    public function visitDatasourceGatherer(CompositeInterface $node)
+    {
+        return null;
+    }
 
     //-------------------------------------------------------
     # Extras

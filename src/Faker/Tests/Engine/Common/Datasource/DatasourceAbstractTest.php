@@ -84,6 +84,23 @@ class DatasourceAbstractTest extends AbstractProject
         $mock->validate();
     }
     
+    /**
+     * @expectedException Faker\Components\Engine\EngineException
+     * @expectedExceptionMessage Datasource name param must not be empty
+     */ 
+    public function testValidateErrorWhenNameParamEmpty()
+    {
+        $mock = new MockDatasource();
+        $mock->setOption('name','');
+        $mock->validate();
+    }
+    
+    public function testValidateSuccess()
+    {
+        $mock = new MockDatasource();
+        $mock->setOption('name','unique_source_1');
+        $mock->validate();
+    }
     
 }
 /* End of File */

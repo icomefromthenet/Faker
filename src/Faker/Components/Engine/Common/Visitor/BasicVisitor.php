@@ -49,6 +49,15 @@ abstract class BasicVisitor
       */
     abstract public function visitDirectedGraphBuilder(CompositeInterface $node);
     
+    /**
+      *  Will gather all datasources into a single collection and check for
+      *  naming conflicts
+      *
+      *  @access public
+      *  @param CompositeInterface $node
+      */
+    abstract public function visitDatasourceGatherer(CompositeInterface $node);
+    
     
     /**
       *  Reset a visitor for another run

@@ -11,6 +11,7 @@ use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\EngineException;
 use Doctrine\DBAL\Connection;
 use PHPStats\Generator\GeneratorInterface;
+use Faker\Components\Engine\Common\Composite\DatasourceNode;
 
 
 /**
@@ -88,7 +89,34 @@ class AbstractDefinition implements TypeDefinitionInterface , NodeInterface
     */
     public function end()
     {
-        return $this->getNode();
+        $source =  $this->getNode();
+        
+        # set common properties
+        $source->setUtilities($this->utilities);
+        $source->setGenerator($this->generator);
+        $source->setDatabase($this->database);
+        $source->setEventDispatcher($this->eventDispatcher);
+        $source->setLocale($this->locale);
+        
+        # set assigned options
+        foreach($this->attributes as $n=> $v) {
+            $source->setOption($n,$v);
+        }
+        
+        $name = 'Datasource';
+        
+        if(true === isset($this->attribute['name'])) {
+            $name = $this->attribute['name'];
+        }
+        
+        # Wrap the datasource in a composite node
+        $node = new DatasourceNode($name,$this->eventDispatcher,$source);
+        
+        # append node to the parent builder.
+        $this->parent->append($node);
+        
+        # return the parent to continue chain.
+        return $this->parent;
     }
     
     //------------------------------------------------------------------

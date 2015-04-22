@@ -236,6 +236,19 @@ abstract class AbstractDatasource implements DatasourceInterface
 	    $treeBuilder = new TreeBuilder();
         $rootNode    = $treeBuilder->root('config');
 	
+	    $rootNode->children()
+                ->scalarNode('name')
+                    ->info('A unique name for this datasource')
+                    ->validate()
+                        ->ifTrue(function($v){
+                            return empty($v);
+                        })
+                        ->then(function($v){
+                            throw new InvalidConfigurationException('Datasource name param must not be empty');
+                        })
+                    ->end()
+                ->end();
+	
 	    # get child custom config options
 	    $this->getConfigTreeExtension($rootNode);
 	

@@ -104,6 +104,11 @@ class GeneratorInjectorVisitor extends BasicVisitor
         return null;
     }
     
+    public function visitDatasourceGatherer(CompositeInterface $node)
+    {
+        return null;
+    }
+    
     //-------------------------------------------------------
     # Extras
     

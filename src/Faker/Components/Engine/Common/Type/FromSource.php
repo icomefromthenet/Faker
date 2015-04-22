@@ -8,34 +8,23 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
 /**
- * Use twig templates to return values
+ * Fetches data from a source using a twig templates to render values,
+ * this allow for any extra transformations that might be instance specific
  *
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
- * @since 1.0.4
- *
+ * @since 1.0.5
  */  
-class Template extends Type 
+class FromSource extends Template implements BindDataInterface
 {
-
-    protected $template;
-    
-    /**
-      *  @var \Faker\Components\Templating\Loader 
-      */
-    protected $templateLoader;
-    
    
-    
-    
     /**
-      *  Class Constructor
-      *
-      *  @param \Faker\Components\Templating\Loader $loader
-      */
-    public function __construct(TemplateLoader $loader)
-    {
-        $this->templateLoader = $loader;
-    }
+     * Data for sources to push to template
+     * 
+     * @var array of data to send to template
+     */ 
+    protected $dataFromSources;
+    
+    
     
     //------------------------------------------------------------------
     
@@ -61,7 +50,10 @@ class Template extends Type
             }
         }
             
-        $result =  $this->template->render($values);
+        $result =  $this->template->render(array('values'=>$values,'sources'=> $this->dataFromSources));
+    
+        # clear bound data
+        $this->bindData(array());
     
         return $result;
     }
@@ -75,19 +67,14 @@ class Template extends Type
      */
     public function getConfigTreeExtension(NodeDefinition $rootNode)
     {
+        parent::getConfigTreeExtension($rootNode);
+        
         $rootNode
             ->children()
-                ->scalarNode('file')
-                    ->defaultValue(false)
-                    ->treatNullLike(false)
-                    ->info('File name of the template')
-                    ->example('file under the tempplate dir')
-                ->end()
-                ->scalarNode('template')
-                    ->defaultValue(false)
-                    ->treatNullLike(false)
-                    ->info('A template string to use')
-                    ->example('{{ var1 }} + {{ var2 }}')
+                ->scalarNode('source')
+                 ->info('Name of the source to bind')
+                 ->cannotBeEmpty()
+                 ->isRequired()
                 ->end()
             ->end();
             
@@ -99,26 +86,30 @@ class Template extends Type
     
     public function validate()
     {
-        parent::validate();
+        $valid = false;
         
-        $template    = $this->getOption('file');
-        $temp_string = $this->getOption('template');
-        
-        if($template === false && $temp_string === false) {
-            throw new EngineException('Template Type:: must set either a file or a template string');
+        if(parent::validate()) {
+            // datasources are bound to PARENTS during a compile step, the parents 
+            // will bind a per call to self::generate 
+            $valid = true;
         }
         
         
-        if($template !== false) {
-            $loader      = $this->templateLoader;
-            if($loader->getIo()->exists($template) === false) {
-                throw new EngineException('Template Type::File Does not Exists at '. $template);
-            }  
-        }
-        
-        return true;
+        return $valid;
     }
-
+    
+    //  -------------------------------------------------------------------------
+    # BindDataInterface
+    
+    /**
+     * Binds data for next run
+     * 
+     * @param array[mixed]
+     */ 
+    public function bindData(array $data)
+    {
+        $this->dataFromSources = $data;
+    }
 }
 
 /* End of class */

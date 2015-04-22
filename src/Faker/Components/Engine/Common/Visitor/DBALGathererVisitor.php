@@ -53,6 +53,11 @@ class DBALGathererVisitor extends BasicVisitor
         return null;    
     }
     
+    public function visitDatasourceGatherer(CompositeInterface $node)
+    {
+        return null;
+    }
+    
     public function visitDBALGatherer(CompositeInterface $node)
     {
         if($node instanceof DBALTypeInterface) {
