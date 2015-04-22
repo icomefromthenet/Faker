@@ -33,10 +33,10 @@ class PHPSourceDefinition extends AbstractDefinition
     public function getNode()
     {
         if($this->dataIterator === null && !empty($this->dataClosure)) {
-            $this->dataIterator = $this->dataClosure();
+            $this->dataIterator = $this->dataClosure->__invoke();
         }
         
-        $source = new PHPDataSource();
+        $source = new PHPDatasource();
         
         $source->setIterator($this->dataIterator);
        
@@ -51,8 +51,12 @@ class PHPSourceDefinition extends AbstractDefinition
     }
    
     
-    
     public function setDataFromClosure(\Closure $closure)
+    {
+        $this->dataClosure = $closure;
+    }
+    
+    public function setDataClosure(\Closure $closure)
     {
         $this->dataClosure = $closure;
     }

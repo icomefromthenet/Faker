@@ -57,6 +57,15 @@ class PHPDatasource extends AbstractDatasource
         return $rootNode;
     }
     
+    public function validate()
+    {
+        parent::validate();
+        
+        if(true == empty($this->dataIterator)) {
+            throw new EngineException('PHPDatasource must have some data assigned');
+        }
+    }
+    
     //--------------------------------------------------------------------------
     # DatasourceInterface 
     

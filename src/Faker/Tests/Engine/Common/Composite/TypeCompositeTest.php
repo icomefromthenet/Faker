@@ -180,7 +180,7 @@ class TypeCompositeTest extends AbstractProject
         $internal->expects($this->once())
                ->method('generate');
                
-         $id        = 'testnode';
+        $id        = 'testnode';
 
         $type = new TypeNode($id,$event,$internal);
         

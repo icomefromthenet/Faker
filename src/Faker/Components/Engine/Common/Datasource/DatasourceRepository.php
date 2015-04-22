@@ -18,9 +18,9 @@ class DatasourceRepository implements ExtensionInterface
       *  @var 'name' => 'class'
       */
     static $types = array(
-            'filesource'    => '\\Faker\\Components\\Engine\\Common\\Datasource\\FileDatasourceDefinition',
-            
-        
+          //  'filesource'    => '\\Faker\\Components\\Engine\\Common\\Datasource\\FileDatasourceDefinition',
+            'phpsource'     => '\\Faker\\Components\\Engine\\Common\\Datasource\\PHPSourceDefinition',
+        //    'sqlsource'    => '\\Faker\\Components\\Engine\\Common\\Datasource\\SQLSourceDefinition',
     );
 
     /**
