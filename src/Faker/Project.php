@@ -486,6 +486,16 @@ class Project extends Pimple
         return $this['source_io'];
     }
    
+    /**
+     * Fetch the datasource repositry
+     * 
+     * @access public
+     * @return \Faker\Components\Engine\Common\Datasource\DatasourceRepository
+     */ 
+    public function getDatasourceRepository()
+    {
+        return $this['engine_common_datasource_repo'];
+    }
    
     //  -------------------------------------------------------------------------
     # Symfony Console

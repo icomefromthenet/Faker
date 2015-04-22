@@ -442,6 +442,8 @@ class Bootstrap
          return new \Faker\Locale\LocaleFactory($project['simplestring_factory']);
       });
       
+      
+      
       //---------------------------------------------------------------
       // Engine Common
       //
@@ -451,6 +453,9 @@ class Bootstrap
            return new \Faker\Components\Engine\Common\Utilities(); 
       });
       
+      $project['engine_common_datasource_repo'] = $project->share(function($project){
+           return new \Faker\Components\Engine\Common\Datasource\DatasourceRepository();
+      });
       
       
       $project['engine_common_typerepo'] = $project->share(function($project){
@@ -510,6 +515,7 @@ class Bootstrap
          $templateLoader   = $project['template_manager']->getLoader();
          $defaultLocale    = $project['default_locale'];
          $defaultGenerator = $project['random_generator'];
+         $datasourceRepo   = $project['engine_common_datasource_repo'];
          
          $builder = new \Faker\Components\Engine\XML\Builder\NodeBuilder($eventDispatcher,
                                                                          $typeRepository,
@@ -520,7 +526,8 @@ class Bootstrap
                                                                          $formatterFactory,
                                                                          $templateLoader,
                                                                          $defaultGenerator,
-                                                                         $defaultLocale
+                                                                         $defaultLocale,
+                                                                         $datasourceRepo
                                                                         );
          return $builder;
          

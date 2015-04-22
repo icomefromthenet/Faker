@@ -34,6 +34,7 @@ use Faker\Components\Engine\Common\Selector\RandomSelector;
 use Faker\Components\Engine\Common\Selector\AlternateSelector;
 use Faker\Components\Engine\Common\PositionManager;
 use Faker\Components\Engine\Common\Builder\AbstractDefinition;
+use Faker\Components\Engine\Common\Datasource\DatasourceRepository;
 
 use Faker\Components\Engine\Common\TypeRepository;
 
@@ -100,6 +101,11 @@ class NodeBuilder implements NodeInterface
      */
     protected $defaultLocale;
     
+    /**
+     * @var Faker\Components\Engine\Common\Datasource\DatasourceRepository
+     */ 
+    protected $datasourceRepo;
+    
     //  -------------------------------------------------------------------------
     
     
@@ -112,8 +118,8 @@ class NodeBuilder implements NodeInterface
                                 FormatterFactory $formatterFactory,
                                 TemplateLoader $templateLoader,
                                 GeneratorInterface $defaultGenerator,
-                                LocaleInterface $defaultLocale
-                                
+                                LocaleInterface $defaultLocale,
+                                DatasourceRepository $datasourceRepo
                                 )
     {
         $this->eventDispatcher  = $event;
@@ -126,6 +132,7 @@ class NodeBuilder implements NodeInterface
         $this->templateLoader   = $templateLoader;
         $this->defaultGenerator = $defaultGenerator;
         $this->defaultLocale    = $defaultLocale;
+        $this->datasourceRepo   = $datasourceRepo;
     }
     
     
@@ -326,8 +333,75 @@ class NodeBuilder implements NodeInterface
     
     public function addDatasource($name,$options = array(0))
     {
+        if(!$this->head instanceof SchemaNode) {
+            throw new EngineException('Must add a scheam first before adding a datasource');
+        }
+        
+        if($this->head->hasOption('locale')) {
+            $locale =  $this->head->getOption('locale');    
+        } 
+    
+    
+        $options = array_merge(array(
+                    'locale' => $locale
+                    ),$options);
+                    
+        
+        if(empty($name)) {
+            throw new EngineException('Datasource must have a name');
+        }            
+        
+        //$DatasourceNode
+        
+        /*
+         # instance the type builder
+        if($builderName = $this->typeFactory->find($name)) {
+            
+            $builder = new $builderName();
+            
+            # instanced a builder or the type directly
+            if($builder instanceof AbstractDefinition ) {
+                $builder->eventDispatcher($this->eventDispatcher);
+                $builder->database($this->db);
+                $builder->utilities($this->util);
+                $builder->templateLoader($this->templateLoader);
+                $builder->locale($this->defaultLocale);
+                $builder->generator($this->defaultGenerator);
+                
+                # build the node and add and add to head
+                $type = $builder->getNode()->getType();
+               
+            }
+            else {
+                $builder->setUtilities($this->util);
+                $builder->setGenerator($this->defaultGenerator);
+                $builder->setLocale($this->defaultLocale);
+                $builder->setEventDispatcher($this->eventDispatcher);
+                $type = $builder;
+            }
+            
+            $typeNode = new TypeNode($name,$this->eventDispatcher,$type);    
+            
+            
+            # set custom options again they will overrite but thats ok
+            # special options like name, generatorSeed etc
+            foreach($options as $optname => $optvalue) {
+                $typeNode->setOption($optname,$optvalue);
+            }
+            
+            $this->head->addChild($typeNode);
+            $this->head = $typeNode;
+        }
+        else {
+            throw new EngineException("Type not exist at $name");
+        } */
         
         
+        
+        $this->schema->addChild($DatasourceNode);
+        
+        
+        return $this;
         
     }
     

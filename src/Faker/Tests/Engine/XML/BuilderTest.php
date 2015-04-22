@@ -470,5 +470,21 @@ class BuilderTest extends AbstractProject
         
     }
     
+    
+    
+    public function testAddDatasourceToSchema()
+    {
+        
+        
+        
+    }
+    
+    
+    public function testErrorAddDatasourceNotSchema()
+    {
+        
+        
+    }
+    
 }
 /* End of File */

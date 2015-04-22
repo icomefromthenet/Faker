@@ -22,7 +22,10 @@ use Faker\Components\Engine\Common\Builder\NodeInterface;
 use Faker\Components\Engine\Common\Formatter\FormatterBuilder;
 use Faker\Components\Engine\Common\Formatter\FormatterFactory;
 use Faker\Components\Engine\Common\Compiler\CompilerInterface;
+use Faker\Components\Engine\Common\Datasource\DatasourceRepository;
 use Faker\Components\Engine\DB\Composite\SchemaNode;
+
+
 /**
   *  Build a SchemaNode 
   *
@@ -71,6 +74,11 @@ class SchemaBuilder implements ParentNodeInterface
     */
     protected $visitor;
     
+    /**
+     * @var Faker\Components\Engine\Common\Datasource\DatasourceRepository
+     */ 
+    protected $datasourceRepo;
+    
      /**
       *  Class Constructor 
       */
@@ -84,7 +92,8 @@ class SchemaBuilder implements ParentNodeInterface
                                 Loader $loader,
                                 PlatformFactory $platformFactory,
                                 FormatterFactory $formatterFactory,
-                                CompilerInterface $compiler
+                                CompilerInterface $compiler,
+                                DatasourceRepository $datasourceRepo
                                 )
     {
         $this->name             = $name;
@@ -99,6 +108,7 @@ class SchemaBuilder implements ParentNodeInterface
         $this->platformFactory  = $platformFactory;
         $this->formatterFactory = $formatterFactory;
         $this->compiler         = $compiler;
+        $this->datasourceRepo   = $datasourceRepo;
     }
     
     
@@ -138,6 +148,25 @@ class SchemaBuilder implements ParentNodeInterface
         
         return $builder;
     }
+    
+    /**
+     * Add a new Datasource via the definition
+     * 
+     * @return Faker\Components\Engine\DB\Builder\DatasourceBuilder
+     */ 
+    public function addDatasource()
+    {
+        return new DatasourceBuilder('Datasources'
+                                     ,$this->event
+                                     ,$this->typeRepo
+                                     ,$this->utilities
+                                     ,$this->generator
+                                     ,$this->locale
+                                     ,$this->connection
+                                     ,$this->templateLoader
+                                     ,$this->datasourceRepo);
+    }
+    
     
     //------------------------------------------------------------------
     # ParentNodeInterface
@@ -230,6 +259,7 @@ class SchemaBuilder implements ParentNodeInterface
         $platformFactory    = $container->getDBALPlatformFactory();
         $formatterFactory   = $container->getFormatterFactory($event);
         $compiler           = $container->getEngineCompiler();
+        $datasourceRepo     = $container->getDatasourceRepository();
         
         if($locale === null) {
             $locale = $container->getLocaleFactory()->create('en');
@@ -244,7 +274,7 @@ class SchemaBuilder implements ParentNodeInterface
         }
         
     
-        return new self($name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory,$compiler);
+        return new self($name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory,$compiler,$datasourceRepo);
     }
     
 }

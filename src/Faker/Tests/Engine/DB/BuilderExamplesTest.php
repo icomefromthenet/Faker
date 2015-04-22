@@ -160,5 +160,68 @@ class BuilderExamplesTest extends AbstractProject
     }
     
     
+    public function testDatasourceBuilderRetrunedFromSchemaBuilder()
+    {
+        
+        $container       = $this->getProject(); 
+        $name            = 'test_db'; 
+        $event           = $container->getEventDispatcher();
+        
+        # schema node returns DatasourceBuilder
+        $dataSourceBuilder = SchemaBuilder::create($container,$name)
+                            ->addDatasource();
+                            
+                                
+        $this->assertInstanceOf('Faker\Components\Engine\Common\Builder\NodeCollection',$dataSourceBuilder);
+        $this->assertInstanceOf('Faker\Components\Engine\DB\Builder\DatasourceBuilder',$dataSourceBuilder);
+        
+        
+    }
+    
+    /**
+      *  @expectedException Faker\Components\Engine\EngineException
+      *  @expectedExceptionMessage bad not found in datasource definition repository unable to create definition
+      */
+    public function testCustomDatasourceNotfoundInRepo()
+    {
+        
+        $container       = $this->getProject(); 
+        $name            = 'test_db'; 
+        $event           = $container->getEventDispatcher();
+        
+        # schema node returns DatasourceBuilder
+        $dataSourceBuilder = SchemaBuilder::create($container,$name)
+                            ->addDatasource();
+                            
+                                
+        $dataSourceBuilder->customDatasource('bad');
+        
+        
+    }
+    
+    
+    public function testPHPDataSourceDefinitionReturnedFromDatasourceBuilder()
+    {
+        $container       = $this->getProject(); 
+        $name            = 'test_db'; 
+        $event           = $container->getEventDispatcher();
+        
+        # schema node returns DatasourceBuilder
+        $dataSourceBuilder = SchemaBuilder::create($container,$name)
+                            ->addDatasource();
+        
+        # test phpsource
+        $phpSourceDefinition  = $dataSourceBuilder->createPHPSource();
+        $this->assertInstanceOf('Faker\Components\Engine\Common\Datasource\PHPSourceDefinition',$phpSourceDefinition);
+        
+        #test filsource
+        
+        
+        #test sqlsource
+        
+    }
+    
+    
+    
 }
 /* End of Class */
