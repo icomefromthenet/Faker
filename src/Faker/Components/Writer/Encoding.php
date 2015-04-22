@@ -107,7 +107,7 @@ class Encoding
       */
     public function validateEncoding()
     {
-        if (@!mb_convert_encoding('an asscii string', $this->out, $this->in)) {
+        if (@!mb_convert_encoding('an ascii string', $this->out, $this->in)) {
            return false;
         }
         

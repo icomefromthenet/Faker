@@ -199,6 +199,26 @@ class BuilderExamplesTest extends AbstractProject
         
     }
     
+    public function testBeforeAfterEventHealpers()
+    {
+        $container       = $this->getProject(); 
+        $name            = 'test_db'; 
+        $event           = $container->getEventDispatcher();
+        $that            = $this;
+        $schema = SchemaBuilder::create($container,$name);
+    
+        
+        $schema->onGenerateStart(function() use ($that){
+            $that->assertTrue(true);
+        });
+        
+        $schema->onGenerateEnd(function() use ($that){
+            $that->assertTrue(true);
+        });
+        
+        $event->dispatch(FormatEvents::onSchemaStart);
+        $event->dispatch(FormatEvents::onSchemaEnd);
+    }
     
     public function testPHPDataSourceDefinitionReturnedFromDatasourceBuilder()
     {

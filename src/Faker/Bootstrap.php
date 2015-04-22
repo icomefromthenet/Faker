@@ -232,7 +232,7 @@ class Bootstrap
          }
          
          $connection        = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, new \Doctrine\DBAL\Configuration());
-         $project['console']->getHelperSet()-> set(new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($connection), 'db');
+         $project['console']->getHelperSet()->set(new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($connection), 'db');
          
          return $connection;
          

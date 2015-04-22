@@ -15,11 +15,11 @@ use Faker\Components\Engine\Common\BuildEvents;
 use Faker\Components\Engine\Common\BuildEvent;
 use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
 use Faker\Components\Engine\Common\Utilities;
-use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Faker\Components\Engine\Common\TypeRepository;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Builder\NodeInterface;
 use Faker\Components\Engine\Common\Formatter\FormatterBuilder;
+use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Faker\Components\Engine\Common\Formatter\FormatterFactory;
 use Faker\Components\Engine\Common\Compiler\CompilerInterface;
 use Faker\Components\Engine\Common\Datasource\DatasourceRepository;
@@ -167,6 +167,33 @@ class SchemaBuilder implements ParentNodeInterface
                                      ,$this->datasourceRepo);
     }
     
+    
+    //------------------------------------------------------------------
+    # Event helpers
+    
+    /**
+     * Attach an event handler to execute before generating starts
+     * 
+     * @param Closure   $fn
+     */ 
+    public function onGenerateStart(\Closure $fn)
+    {
+        $this->event->addListener(FormatEvents::onSchemaStart,$fn);
+        
+        return $this;
+    }
+    
+    /**
+     * Attach event handler to execute after the schema has stopped generating
+     * 
+     * @param Closuer   $fn
+     */ 
+    public function onGenerateEnd(\Closure $fn)
+    {
+        $this->event->addListener(FormatEvents::onSchemaEnd,$fn);
+        
+        return $this;
+    }
     
     //------------------------------------------------------------------
     # ParentNodeInterface
