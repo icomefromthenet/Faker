@@ -65,7 +65,7 @@ class DatasourceNode extends GenericNode implements CompositeInterface, Generato
     
     public function generate($rows, &$values = array(),$last = array())
     {
-        return $result;
+        return $values;
     }
     
     
@@ -93,6 +93,22 @@ class DatasourceNode extends GenericNode implements CompositeInterface, Generato
         throw new EngineException('This node does not allow children');
     }
     
+    
+   /**
+     * Generates the configuration tree builder.
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
+     */
+    public function getConfigTreeBuilder()
+    {
+	    $treeBuilder = new TreeBuilder();
+        $rootNode    = $treeBuilder->root('config');
+	
+	    # get child custom config options
+	    $this->getConfigTreeExtension($rootNode);
+	
+        return $treeBuilder;  
+    }
     
 }
 /* End of File */

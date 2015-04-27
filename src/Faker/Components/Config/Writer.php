@@ -31,7 +31,7 @@ class Writer
     public function write(EntityInterface $entity,$alias,$overrite = FALSE)
     {
 
-        $data = var_export(array(
+        $dataStr = var_export(array(array(
             'type'            => $entity->getType(),
             'schema'          => $entity->getSchema(),
             'user'            => $entity->getUser(),
@@ -42,14 +42,14 @@ class Writer
             'path'            => $entity->getPath(),
             'memory'          => $entity->getMemory(),
             'charset'         => $entity->getCharset(),
-        ),true);
+        )),true);
     
         #write to file
         $file = '<?php' . PHP_EOL;
         $file .= PHP_EOL;
         $file .=  '/* Database Config file */' .PHP_EOL;
         $file .= PHP_EOL;
-        $file .= 'return ' . $data .';'.PHP_EOL;
+        $file .= 'return ' . $dataStr .';'.PHP_EOL;
         $file .= PHP_EOL;
         $file .= PHP_EOL;
         $file .= '/* End of Config File */' .PHP_EOL;

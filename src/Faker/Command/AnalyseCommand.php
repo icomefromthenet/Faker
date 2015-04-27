@@ -17,6 +17,11 @@ class AnalyseCommand extends Command
            # get the di container 
            $project  = $this->getApplication()->getProject();
            
+           # throw an exception if name is invalid
+           $databasePool = $project->getDatabase()->getFakerConnectionPool();
+           $database     = $databasePool->getExtraConnection($input->getArgument('connname'));
+           
+           
            # verify if a output file name been passed
            if(($out_file_name = $input->getArgument('out') ) === null) {
               $out_file_name = 'schema.xml';
@@ -28,7 +33,7 @@ class AnalyseCommand extends Command
            $schema_analyser = $project->getSchemaAnalyser();
            
            #run the analyser
-           $schema = $schema_analyser->analyse($project->getDatabase(),$project->getXMLEngineBuilder());
+           $schema = $schema_analyser->analyse($database,$project->getXMLEngineBuilder());
     
            # write the scheam file to the project folder (sources)
            $sources_io = $project->getSourceIO();
@@ -71,15 +76,19 @@ you can specify the name of the output file as show below.
 
 Example:
 
-<comment>Will create schema called myschema.xml</comment>
->> faker:analyse myschema
+<comment>Will create schema called myschema.xml using connection with name connA</comment>
+>> faker:analyse connA myschema
 
-<comment>Will default schema to schema.xml</comment>
->> faker:analyse 
+<comment>Will default schema to schema.xml with connection of connB</comment>
+>> faker:analyse connB
 
 EOF
     );
-        
+        $this->addArgument('connname',
+                             InputArgument::REQUIRED,
+                            'The name of the connection to use'
+                            );
+          
         $this->addArgument('out',
                              InputArgument::OPTIONAL,
                             'file name of the faker schema to generate'

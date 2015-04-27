@@ -473,5 +473,35 @@ class ParserTest extends AbstractProjectWithDb
     }
     
     
+    //  -------------------------------------------------------------------------
+    # Test Datasources
+    
+    public function testAddDatasourceTag()
+    {
+        $builder = $this->getMockBuilder('Faker\Components\Engine\XML\Builder\NodeBuilder')
+                        ->disableOriginalConstructor()
+                        ->setMethods(array('addSchema','addDatasource','end'))
+                        ->getMock();
+        
+        $builder->expects($this->once())
+                ->method('addDatasource')
+                ->with(
+                    $this->equalTo('phpsource'),array('name'=> 'phpsource','id'=>'myphpsource')
+                );
+        
+        
+        $builder->expects($this->exactly(2))
+                ->method('end');
+        
+        $parse_options = $this->getMockBuilder('Faker\Parser\ParseOptions')->getMock();
+        
+        $parser = new SchemaParser($builder);
+        $parser->register();
+        
+        $file = new VFile('<?xml version="1.0"?><schema name="schema_1"><datasource name="phpsource" id="myphpsource"></datasource></schema>');
+        $parser->parse($file,$parse_options);
+        
+    }
+    
 }
 /* End of File */

@@ -213,7 +213,7 @@ class Project extends Pimple
     {
         return $this['database'];
     }
-   
+    
    
     /**
       * Fetch a faker database

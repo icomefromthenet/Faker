@@ -25,6 +25,7 @@ use Faker\Components\Engine\XML\Composite\TypeNode;
 use Faker\Components\Engine\XML\Composite\WhenNode;
 use Faker\Components\Engine\XML\Composite\SelectorNode;
 use Faker\Components\Engine\XML\Composite\FormatterNode;
+use Faker\Components\Engine\Common\Composite\DatasourceNode;
 use Faker\Components\Engine\XML\Builder\SelectorAlternateBuilder;
 use Faker\Components\Engine\XML\Builder\SelectorRandomBuilder;
 use Faker\Components\Engine\XML\Builder\SelectorSwapBuilder;
@@ -34,6 +35,7 @@ use Faker\Components\Engine\Common\Selector\RandomSelector;
 use Faker\Components\Engine\Common\Selector\AlternateSelector;
 use Faker\Components\Engine\Common\PositionManager;
 use Faker\Components\Engine\Common\Builder\AbstractDefinition;
+use Faker\Components\Engine\Common\Datasource\AbstractDefinition as AbstractDatasourceDefinition;
 use Faker\Components\Engine\Common\Datasource\DatasourceRepository;
 
 use Faker\Components\Engine\Common\TypeRepository;
@@ -341,26 +343,27 @@ class NodeBuilder implements NodeInterface
             $locale =  $this->head->getOption('locale');    
         } 
     
-    
         $options = array_merge(array(
-                    'locale' => $locale
-                    ),$options);
+            'locale' => $locale
+        ),$options);
                     
         
-        if(empty($name)) {
-            throw new EngineException('Datasource must have a name');
-        }            
+        if(empty($name) 
+           || (false === isset($options['id']) 
+                 && true === empty($options['id']))
+        ) {
+            throw new EngineException('Datasource must have a name and an id');
+        }  
         
-        //$DatasourceNode
+        if(isset($options['name']) === false) {
+            $options['name'] = $name;
+        }
         
-        /*
-         # instance the type builder
-        if($builderName = $this->typeFactory->find($name)) {
+        if($builderName = $this->datasourceRepo->find($name)) {
             
-            $builder = new $builderName();
-            
+            $builder = $datasource = new $builderName();
             # instanced a builder or the type directly
-            if($builder instanceof AbstractDefinition ) {
+            if($builder instanceof AbstractDatasourceDefinition ) {
                 $builder->eventDispatcher($this->eventDispatcher);
                 $builder->database($this->db);
                 $builder->utilities($this->util);
@@ -368,41 +371,46 @@ class NodeBuilder implements NodeInterface
                 $builder->locale($this->defaultLocale);
                 $builder->generator($this->defaultGenerator);
                 
+                # set custom options again they will overrite but thats ok
+                # special options like name, generatorSeed etc
+                foreach($options as $optname => $optvalue) {
+                    $builder->attribute($optname,$optvalue);
+                }
+                
                 # build the node and add and add to head
-                $type = $builder->getNode()->getType();
-               
-            }
-            else {
-                $builder->setUtilities($this->util);
-                $builder->setGenerator($this->defaultGenerator);
-                $builder->setLocale($this->defaultLocale);
-                $builder->setEventDispatcher($this->eventDispatcher);
-                $type = $builder;
-            }
-            
-            $typeNode = new TypeNode($name,$this->eventDispatcher,$type);    
-            
-            
-            # set custom options again they will overrite but thats ok
-            # special options like name, generatorSeed etc
-            foreach($options as $optname => $optvalue) {
-                $typeNode->setOption($optname,$optvalue);
+                $datasource = $builder->getNode();
+                
+            } else {
+                
+                # set custom options again they will overrite but thats ok
+                # special options like name, generatorSeed etc
+                foreach($options as $optname => $optvalue) {
+                    $datasource->setOption($optname,$optvalue);
+                }
+                
             }
             
-            $this->head->addChild($typeNode);
-            $this->head = $typeNode;
+            # included datasource builders do not inject common properties do it here
+            $datasource->setEventDispatcher($this->eventDispatcher);
+            $datasource->setDatabase($this->db);
+            $datasource->setUtilities($this->util);
+            $datasource->setLocale($this->defaultLocale);
+            $datasource->setGenerator($this->defaultGenerator);
+            
+            $sourceNode = new DatasourceNode($options['id'],$this->eventDispatcher,$datasource);    
+            
+            
+            # source nodes should always be children of schema, as they could be
+            # used by many tables
+            $this->schema->addChild($sourceNode);
+            $this->head = $sourceNode;
         }
         else {
-            throw new EngineException("Type not exist at $name");
-        } */
-        
-        
-        
-        $this->schema->addChild($DatasourceNode);
+            throw new EngineException("Datasource not exist at $name");
+        } 
         
         
         return $this;
-        
     }
     
     //  -------------------------------------------------------------------------

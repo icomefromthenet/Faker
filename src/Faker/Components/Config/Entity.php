@@ -153,5 +153,16 @@ class Entity implements EntityInterface
     
     //------------------------------------------------------------------
     
+    protected $connName;
+    
+    public function setConnectionName($name)
+    {
+        $this->connName = $name;
+    }
+    
+    public function getConnectionName()
+    {
+        return $this->connName;
+    }
 }
 /* End of File */

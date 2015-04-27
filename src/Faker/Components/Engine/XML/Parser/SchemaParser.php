@@ -77,6 +77,7 @@ class SchemaParser extends BaseXMLParser
                 }
                 
                 $this->builder->addSchema($attribs['name'],$attribs);
+      
             break;
             case 'table':    
             
@@ -129,12 +130,15 @@ class SchemaParser extends BaseXMLParser
                 $this->builder->addForeignKey($attribs['name'],$attribs);
                 
             break;    
-            case 'alternate';
-            case 'pick';
-            case 'random';
+            case 'alternate':
+            case 'pick':
+            case 'random':
             case 'when':
             case 'swap':    
                 $this->builder->addSelector($name,$attribs);
+            break;
+            case 'datasource' :
+                $this->builder->addDatasource($attribs['name'],$attribs);
             break;
             default: throw new EngineException(sprintf('Tag name %s unknown',$name));
         }
@@ -162,6 +166,7 @@ class SchemaParser extends BaseXMLParser
             case 'when':
             case 'swap':
             case 'foreign-key':
+            case 'datasource':    
                 $this->builder->end();
             break;
         }

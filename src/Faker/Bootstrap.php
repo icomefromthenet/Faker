@@ -156,16 +156,16 @@ class Bootstrap
       {
          
          $config_manager = $project->getConfigManager();
+         $pool           = $project['database_pool'];
       
           if($config_manager === null) {
               throw new \RuntimeException('Config Manager not loaded, must be loaded before booting the database');
           }
-      
-          $entity = new \Faker\Components\Config\Entity();
           
           # is the dsn set
           # e.g mysql://root:vagrant@localhost:3306/sakila?migration_table=migrations_data
           if(isset($project['dsn_command']) === true) {
+            $entity = new \Faker\Components\Config\Entity();
             $dsn_parser      = new \Faker\Components\Config\DSNParser();
       
             # attempt to parse dsn for detials
@@ -174,11 +174,14 @@ class Bootstrap
       
             # parse the dsn config data using the DSN driver.
             $project['config_dsn_factory']->create($parsed['phptype'])->merge($entity,$parsed);
-               
+            
+            # assign this dsn as the default connection
+            $pool->addExtraConnection('__DEFAULT__',$entity);   
+            
                
           } else {
       
-             # if config name not set that we use the default
+             # if config name not set that we use then default
              $config_name = $project->getConfigName();
           
               # check if we can load the config given
@@ -187,12 +190,16 @@ class Bootstrap
               }
       
               # load the config file
-              $config_manager->getLoader()->load($config_name,$entity);
+              $entityStack = $config_manager->getLoader()->load($config_name);
+              
+              # push the connection into the pool   
+              foreach($entityStack as $config) {
+                 $pool->addExtraConnection($entity->getConnectionName(),$entity);
+              }
+            
           }
           
-          # store the global config for later access
-          return $entity;
-      
+          return $pool;
       });
       
       //---------------------------------------------------------------
@@ -200,42 +207,28 @@ class Bootstrap
       //
       //--------------------------------------------------------------
       
+      
+      $project['connection_pool'] = $project->share(function($project){
+            
+            $platform = $project['platform_factory'];
+            $pool = new \Faker\Components\Config\ConnectionPool($platform);
+            
+            return $pool;
+      });
+      
       $project['database'] = $project->share(function($project)
       {
-      
-         $entity   = $project['config_file'];
-         $platform = $project['platform_factory'];
+         # bootstrap the database configs via the connections pool
+         $project['config_file'];
          
-         $connectionParams = array(
-              'dbname'      => $entity->getSchema(),
-              'user'        => $entity->getUser(),
-              'password'    => $entity->getPassword(),
-              'host'        => $entity->getHost(),
-              'driver'      => $entity->getType(),
-              'platform'    => $platform->createFromDriver($entity->getType()),
-         );
+         # hand back the internal database as its always going to exists
+         # database user need to select the necessary connection later
+         $connection = $project['connection_pool']->fetchInternalConnection();
          
-         if($entity->getUnixSocket() != false) {
-            $connectionParams['unix_socket'] = $entity->getUnixSocket();
-         }
-         
-         if($entity->getCharset() != false) {
-            $connectionParams['charset']     = $entity->getCharset();
-         }
-         
-         if($entity->getPath() != false) {
-             $connectionParams['path']       = $entity->getPath();
-         }
-         
-         if($entity->getMemory() != false) {
-            $connectionParams['memory']     = $entity->getMemory();
-         }
-         
-         $connection        = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, new \Doctrine\DBAL\Configuration());
+         # assign the default connection to the doctrine helper   
          $project['console']->getHelperSet()->set(new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($connection), 'db');
          
          return $connection;
-         
       });
       
       $project['platform_factory'] = $project->share(function($project)
@@ -269,14 +262,21 @@ class Bootstrap
          }
               
          $connectionParams = array(
+            'wrapperClass' => 'Faker\Components\Config\DoctrineConnWrapper',
             'path' => $path,
             'user' => 'faker',
             'password' => '',
             'driver' => 'pdo_sqlite',
             'platform'    => $platform->createFromDriver('pdo_sqlite'),
          );
+         
+         $fakerDatabase = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, new \Doctrine\DBAL\Configuration());
+         
+         # assign this database to the pool
+         $pool = $project['connection_pool'];
+         $pool->setInternalConnection($fakerDatabase);
       
-         return \Doctrine\DBAL\DriverManager::getConnection($connectionParams, new \Doctrine\DBAL\Configuration());
+         return $fakerDatabase;
          
       });
       

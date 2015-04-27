@@ -21,10 +21,8 @@ class PHPDatasourceTest extends AbstractProject
         
         $mock = new PHPDatasource();
         $mock->setIterator($iterator);
-        $mock->setOption('name','unique_source_1');
        
         $mock->validate();
-        
        
         # no error thrown as we have an iterator
         $mock->initSource();    
@@ -53,9 +51,7 @@ class PHPDatasourceTest extends AbstractProject
     public function testDatasourceValidateFailsEmptyData()
     {
         $mock = new PHPDatasource();
-        $mock->setOption('name','unique_source_1');
         $mock->validate();
-        
     }
     
     

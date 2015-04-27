@@ -25,6 +25,7 @@ class EntityTest extends AbstractProject
         $entity->setType('pdo_mysql');
         $entity->setUnixSocket('path/to/socker/socket.sock');
         $entity->setUser('root');
+        $entity->setConnectionName('mystage');
 
         # test properties
         $this->assertEquals($entity->getCharset(),'latin1');
@@ -37,7 +38,7 @@ class EntityTest extends AbstractProject
         $this->assertEquals($entity->getType(),'pdo_mysql');
         $this->assertEquals($entity->getUnixSocket(),'path/to/socker/socket.sock');
         $this->assertEquals($entity->getUser(),'root');
-        
+        $this->assertEquals($entity->getConnectionName(),'mystage');
         
         
         

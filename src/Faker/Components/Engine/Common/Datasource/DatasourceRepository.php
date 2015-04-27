@@ -17,7 +17,9 @@ class DatasourceRepository implements ExtensionInterface
     /**
       *  @var 'name' => 'class'
       */
-    static $types = array(
+    static $types = array();
+    
+    static $defaultTypes = array(
           //  'filesource'    => '\\Faker\\Components\\Engine\\Common\\Datasource\\FileDatasourceDefinition',
             'phpsource'     => '\\Faker\\Components\\Engine\\Common\\Datasource\\PHPSourceDefinition',
         //    'sqlsource'    => '\\Faker\\Components\\Engine\\Common\\Datasource\\SQLSourceDefinition',
@@ -36,6 +38,8 @@ class DatasourceRepository implements ExtensionInterface
         
         if(isset(self::$types[$name])) {
             $result = self::$types[$name];
+        } elseif(isset(self::$defaultTypes[$name])) {
+              $result = self::$defaultTypes[$name];
         }
         
         return $result;

@@ -101,5 +101,14 @@ interface EntityInterface
     
     public function setCharset($set);
    
+    /**
+     * Sets the pool id of this connection
+     * 
+     * @return string the poolname
+     */ 
+    public function getConnectionName();
+    
+    public function setConnectionName($name);
+    
 }
 /* End of File */

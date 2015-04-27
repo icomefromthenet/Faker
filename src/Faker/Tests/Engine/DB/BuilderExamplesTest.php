@@ -134,6 +134,7 @@ class BuilderExamplesTest extends AbstractProject
                                             ->startAtValue(1)
                                         ->end()
                                     ->end()
+                                    
                                 ->end()
                             ->end()
                              ->addTable('table2')

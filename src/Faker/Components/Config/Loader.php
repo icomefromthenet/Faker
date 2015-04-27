@@ -28,6 +28,42 @@ class Loader
       */
     protected $config;
 
+    /**
+     * Map a config values into the config entity
+     * 
+     * @param EntityInterface $eny          an instance of the entity to populate
+     * @param array           $config_ary   a single connections config values
+     */ 
+    protected function populateEntity(EntityInterface $ent,array $config_ary)
+    {
+        
+            $ent->setType($config_ary['type']);
+            $ent->setCharset($config_ary['charset']);
+            $ent->setHost($config_ary['host']);
+            $ent->setMemory($config_ary['memory']);
+            $ent->setPassword($config_ary['password']);
+            $ent->setPath($config_ary['path']);
+            $ent->setPort($config_ary['port']);
+            $ent->setSchema($config_ary['schema']);
+            $ent->setUnixSocket($config_ary['socket']);
+            $ent->setUser($config_ary['user']);
+            
+            if(isset($config_ary['connName'])) {
+                $ent->setConnectionName($config_ary['connName']);
+            }
+            
+            if(isset($config_ary['poolName'])) {
+                $ent->setConnectionName($config_ary['poolName']);
+            }
+            
+            if(isset($config_ary['connectionName'])) {
+                $ent->setConnectionName($config_ary['connectionName']);
+            }
+            
+            return $ent;
+    }
+
+
     /*
      * __construct()
      *
@@ -48,8 +84,9 @@ class Loader
      * @param string $name the file name
      * @return Entity a config entity
      */
-    public function load($name = '', EntityInterface $ent)
+    public function load($name = '')
     {
+       $returnStack = array();
        
         if (empty($name)) {
             $name = self::DEFAULTNAME . self::EXTENSION;
@@ -57,23 +94,18 @@ class Loader
     
         $config_ary = $this->getIo()->load($name,null);
     
-        //send it to be validated and normalized using out configTree;
+        //support single or multiple connections
         if ($config_ary === NULL) {
             return NULL;
+        } elseif(isset($config_ary[0]) && is_array($config_ary[0])) {
+            foreach($config_ary as $c) {
+                $returnStack[] = $this->populateEntity(new Entity(),$c);
+            }
         } else {
-            $ent->setType($config_ary['type']);
-            $ent->setCharset($config_ary['charset']);
-            $ent->setHost($config_ary['host']);
-            $ent->setMemory($config_ary['memory']);
-            $ent->setPassword($config_ary['password']);
-            $ent->setPath($config_ary['path']);
-            $ent->setPort($config_ary['port']);
-            $ent->setSchema($config_ary['schema']);
-            $ent->setUnixSocket($config_ary['socket']);
-            $ent->setUser($config_ary['user']);
+            $returnStack[] = $this->populateEntity(new Entity(),$config_ary);
         }
        
-        return $ent;
+        return $returnStack;
         
     }
 

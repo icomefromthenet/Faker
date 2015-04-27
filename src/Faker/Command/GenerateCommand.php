@@ -6,7 +6,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Output\OutputInterface;
 use Faker\Command\Base\Command;
-use Faker\Components\Engine\Common\ResultPrinterInterface;
 use Faker\Components\Engine\Common\Output\DebugOutputter;
 use Faker\Components\Engine\Common\Output\ProgressBarOutputter;
 use Faker\Components\Engine\Common\Output\BuilderConsoleOutput;

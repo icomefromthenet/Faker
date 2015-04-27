@@ -45,6 +45,7 @@ class TypeRepository implements ExtensionInterface
             'country'         => '\\Faker\\Components\\Engine\\Common\\Builder\\CountryTypeDefinition',
             'template'        => '\\Faker\\Components\\Engine\\Common\\Builder\\TemplateTypeDefinition',
             'regex'           => '\\Faker\\Components\\Engine\\Common\\Builder\\RegexTypeDefinition',
+            'fromsource'      => '\\Faker\\Components\\Engine\\Common\\Builder\\FromSourceTypeDefinition'
         
     );
 
