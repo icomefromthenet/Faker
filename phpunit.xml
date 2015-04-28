@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true" 
          stopOnFailure="false" 
-         bootstrap="vendor/autoload.php">
+         bootstrap="vendor/autoload.php"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         >
 <php>
-    <env name="DB_DSN" value="mysql:dbname=c9;host=172.17.32.132" />
+    <env name="DB_DSN" value="mysql:dbname=c9;host=172.17.4.88" />
     <env name="DB_USER" value="icomefromthenet" />
     <env name="DB_PASSWD" value="" />
-    <env name="DB_HOST" value="172.17.32.132" />
+    <env name="DB_HOST" value="172.17.4.88" />
     <env name="DB_DBNAME" value="c9" />
 </php> 
   

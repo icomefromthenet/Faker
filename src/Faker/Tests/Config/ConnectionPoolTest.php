@@ -12,7 +12,9 @@ class ConnectionPoolTest extends AbstractProject
     public function testAddDefaultConnection()
     {
         $project = $this->getProject();
-        $pool = $project['connection_pool'];
+        $platform = $project['platform_factory'];
+        $pool = new \Faker\Components\Config\ConnectionPool($platform);
+        
         
         $mockConn = $this->getMockBuilder('Faker\\Components\\Config\\DoctrineConnWrapper')
              ->disableOriginalConstructor()
@@ -30,7 +32,9 @@ class ConnectionPoolTest extends AbstractProject
     public function testErrorDefaultConnectionExists()
     {
         $project = $this->getProject();
-        $pool = $project['connection_pool'];
+        $platform = $project['platform_factory'];
+        $pool = new \Faker\Components\Config\ConnectionPool($platform);
+        
         
         $mockConn = $this->getMockBuilder('Faker\\Components\\Config\\DoctrineConnWrapper')
              ->disableOriginalConstructor()
@@ -43,9 +47,10 @@ class ConnectionPoolTest extends AbstractProject
     
     public function testAddExtraConnection()
     {
-        $connectionName = 'MyTestConnection';
         $project = $this->getProject();
-        $pool = $project['connection_pool'];
+        $platform = $project['platform_factory'];
+        $pool = new \Faker\Components\Config\ConnectionPool($platform);
+        $connectionName = 'MyTestConnection';
         
         $entity = new Entity();
         
