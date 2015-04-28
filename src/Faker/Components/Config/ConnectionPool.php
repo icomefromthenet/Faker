@@ -83,6 +83,10 @@ class ConnectionPool
         if($entity->getMemory() != false) {
             $connectionParams['memory']     = $entity->getMemory();
         }
+        
+        if($entity->getPort() != false) {
+            $connectionParams['port']     = $entity->getPort();
+        }
          
         $connection        = DriverManager::getConnection($connectionParams, new Configuration());
        
@@ -100,6 +104,10 @@ class ConnectionPool
     */ 
    public function setInternalConnection(Connection $connect)
    {
+       if(isset($this->otherConnections['__INTERNAL__'])) {
+            throw new InvalidConfigException('database at __INTERNAL__ already exists');
+       }
+       
        $this->otherConnections['__INTERNAL__'] =  $connect;
    }
    
@@ -112,7 +120,7 @@ class ConnectionPool
     */ 
    public function fetchInternalConnection()
    {
-       if(isset($this->otherConnections['__INTERNAL__'])) {
+       if(false === isset($this->otherConnections['__INTERNAL__'])) {
             throw new InvalidConfigException('database at __INTERNAL__ does not exists yet');
        }
        
@@ -130,7 +138,7 @@ class ConnectionPool
     */ 
    public function getExtraConnection($name)
    {
-       if(isset($this->otherConnections[$name])) {
+       if(false === isset($this->otherConnections[$name])) {
             throw new InvalidConfigException("database at '".$name."' does not exists yet");
        }
        
