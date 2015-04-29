@@ -9,6 +9,9 @@ use Faker\Components\Engine\Common\Composite\SchemaNode;
 use Faker\Components\Engine\Common\Composite\TableNode;
 use Faker\Components\Engine\Common\Composite\ColumnNode;
 use Faker\Components\Engine\Common\Composite\ForeignKeyNode;
+use Faker\Components\Engine\Common\Composite\TypeNode;
+use Faker\Tests\Engine\Common\Datasource\Mock\MockDatasource;
+use Faker\Components\Engine\Common\Composite\DatasourceNode;
 
 /**
   *  Test the node implementes CompositeInterface correctly
@@ -37,6 +40,8 @@ class CompositeFinderTest extends AbstractProject
         $columnC2  = new ColumnNode('columnC2',$event);
         $fkc1      = new ForeignKeyNode('fkc1',$event);
         
+        
+        # link columns to tables
         $columnC2->addChild($fkc1);
         $tableC->addChild($columnC1);
         $tableC->addChild($columnC2);
@@ -50,6 +55,25 @@ class CompositeFinderTest extends AbstractProject
         $schema->addChild($tableA);
         $schema->addChild($tableB);
         $schema->addChild($tableC);
+        
+        # create a type
+        $mockType =  $this->getMockBuilder('Faker\\Components\\Engine\\Common\\Type\\Type')
+                      ->disableOriginalConstructor()
+                      ->getMock();
+        
+        $typeNode = new TypeNode('TypeNodeA',$event,$mockType);
+        
+        $columnA2->addChild($typeNode);
+        
+        # create a datasource
+        $mockDatasourceA = new MockDatasource();
+        $dataSourceNodeA = new DatasourceNode('DatasourceNodeA',$event,$mockDatasourceA);
+        
+        $mockDatasourceB = new MockDatasource();
+        $dataSourceNodeB = new DatasourceNode('DatasourceNodeB',$event,$mockDatasourceB);
+        
+        $schema->addChild($dataSourceNodeA);
+        $schema->addChild($dataSourceNodeB);
         
         return $schema;
     }
@@ -107,6 +131,33 @@ class CompositeFinderTest extends AbstractProject
         $this->assertEquals(null,$finder->column('ss')->get());
         
     }
+  
+    public function testFindType()
+    {
+        $schema = $this->getMockComposite();
+        $tables = $schema->getChildren();
+        $finder = new CompositeFinder();
+        
+        $finder->set($tables[0]);
+        
+        $node = $finder->column('columnA2')->type('TypeNodeA')->get();
+        
+        $this->assertInstanceOf('Faker\\Components\\Engine\\Common\\Composite\\TypeNode',$node);
+        $this->assertEquals('TypeNodeA',$node->getId());
+        
+    }
+    
+     public function testFindDatasource()
+    {
+        $schema = $this->getMockComposite();
+        $finder = new CompositeFinder();
+        
+        $node = $finder->set($schema)->datasource('DatasourceNodeB')->get();
+        
+        $this->assertInstanceOf('Faker\\Components\\Engine\\Common\\Composite\\DatasourceNode',$node);
+        $this->assertEquals('DatasourceNodeB',$node->getId());
+        
+    }
     
     
     public function testPathBuilder()
@@ -128,7 +179,7 @@ class CompositeFinderTest extends AbstractProject
         
     }
     
-    
+
     
 }
 /* End of File */

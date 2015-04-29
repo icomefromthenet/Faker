@@ -221,5 +221,73 @@ class CompositeFinder
        return $this;
     }
     
+    /**
+      *   Fetches a datasource node from schema head
+      *
+      *   @return CompositeFinder
+      *   @access public
+      *   @throws EngineException
+      */
+    public function datasource($name)
+    {
+       # iterate up to schema
+       if(!$this->head instanceof SchemaNode) {
+            $this->parentSchema();
+       }
+        
+       # find the datasource
+       foreach($this->head->getChildren() as $child) {
+         if($child instanceof DatasourceNode && $child->getId()=== $name) {
+            $this->head = $child;
+            break;
+         }
+       }    
+       
+       # if head is not a column we can't have matched
+       if(!$this->head instanceof DatasourceNode) {
+           $this->head = null;
+       }
+       
+       return $this;
+    }
+    
+      /**
+      *   Fetches a type from a column will use recursion to decend into selector children
+      *
+      *   @return CompositeFinder
+      *   @access public
+      *   @throws EngineException
+      */
+    public function type($name)
+    {
+       # head a schema can't find a column so cant find datasource, need under a table
+       if(!$this->head instanceof ColumnNode && !$this->head instanceof SelectorNode ) {
+           $this->head = null;
+            return $this;
+       }
+        
+           
+        foreach($this->head->getChildren() as $child) {
+           # recusion of selectors
+           if($child instanceof SelectorNode) {
+               $this->head = $child;
+               $this->findType($name);
+           }
+           
+           if($child instanceof TypeNode && $child->getId() === $name) {
+               $this->head = $child;
+               break;
+           } 
+        }
+         
+        
+       # if head is not a type we have no match
+       if(!$this->head instanceof TypeNode) {
+           $this->head = null;
+       }  
+        
+        return $this;    
+    }
+    
 }
 /* End of File */

@@ -200,6 +200,8 @@ class TypeNode implements CompositeInterface, GeneratorInterface, VisitorInterfa
     {
         $children = $this->getChildren();
         
+        $visitor->visitDatasourceInjector($this);
+        
         foreach($children as $child) {
             if($child instanceof VisitorInterface) {
                 $child->acceptVisitor($visitor);                    

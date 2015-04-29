@@ -66,7 +66,7 @@ class DirectedGraphVisitor extends BasicVisitor
         return null;
     }
     
-    public function visitDatasourceGatherer(CompositeInterface $node)
+    public function visitDatasourceInjector(CompositeInterface $node)
     {
         return null;
     }

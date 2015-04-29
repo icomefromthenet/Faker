@@ -56,7 +56,7 @@ abstract class BasicVisitor
       *  @access public
       *  @param CompositeInterface $node
       */
-    abstract public function visitDatasourceGatherer(CompositeInterface $node);
+    abstract public function visitDatasourceInjector(CompositeInterface $node);
     
     
     /**

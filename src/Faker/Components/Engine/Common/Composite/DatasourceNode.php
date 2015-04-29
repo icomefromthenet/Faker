@@ -29,7 +29,6 @@ class DatasourceNode extends GenericNode implements CompositeInterface, Generato
     public function __construct($id, EventDispatcherInterface $event, DatasourceInterface $datasource)
     {
         parent::__construct($id,$event);
-        $this->datasource    = array();
         $this->datasource   = $datasource;
     }
     
