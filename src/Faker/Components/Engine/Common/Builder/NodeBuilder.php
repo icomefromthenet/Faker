@@ -280,6 +280,17 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
         return $this->find('closure');
     }
     
+    /**
+      *  Return a FromDatasource type for configuration.
+      *
+      *  @access public
+      *  @return \Faker\Components\Engine\Common\Builder\FromSourceTypeDefinition
+      */
+    public function fieldFromSource()
+    {
+        return $this->find('fromsource');
+    }
+    
      /**
       *  Return a alternate selector builder that alternatve of values
       *

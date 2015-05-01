@@ -98,16 +98,14 @@ class AbstractDefinition implements TypeDefinitionInterface , NodeInterface
         $source->setEventDispatcher($this->eventDispatcher);
         $source->setLocale($this->locale);
         
+        
         # set assigned options
         foreach($this->attributes as $n=> $v) {
             $source->setOption($n,$v);
         }
         
-        $name = 'Datasource';
         
-        if(true === isset($this->attribute['name'])) {
-            $name = $this->attribute['name'];
-        }
+        $name = 'Datasource';
         
         # Wrap the datasource in a composite node
         $node = new DatasourceNode($name,$this->eventDispatcher,$source);
@@ -180,6 +178,32 @@ class AbstractDefinition implements TypeDefinitionInterface , NodeInterface
         $this->attributes[$key] = $value;
 
         return $this;
+    }
+    
+    //# -----------------------------------------------------------------------
+    
+    /**
+    * Set the datasource id param which identify this source among others
+    * and should be unique.
+    *
+    * @return AbstractDefinition
+    * @param string $name the id to use
+    */
+    public function setDatasourceName($name)
+    {
+        return $this->attribute('id',$name);
+    }
+    
+    /**
+    * Set the datasource id param which identify this source among others
+    * and should be unique. (Alias to self::setName)
+    *
+    * @return AbstractDefinition
+    * @param string $id the id to use
+    */
+    public function setId($id)
+    {
+        return $this->attribute('id',$id);
     }
     
 }

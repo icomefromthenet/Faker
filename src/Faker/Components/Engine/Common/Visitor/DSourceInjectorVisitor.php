@@ -2,7 +2,6 @@
 namespace Faker\Components\Engine\Common\Visitor;
 
 use Faker\Components\Engine\EngineException;
-use Faker\Components\Engine\Common\Compiler\Graph\DirectedGraph;
 use Faker\Components\Engine\Common\Composite\CompositeException;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Composite\PathBuilder;
@@ -27,12 +26,6 @@ use Faker\Components\Engine\Common\Type\BindDataInterface;
  */
 class DSourceInjectorVisitor extends BasicVisitor
 {
-    
-    /**
-      *  @var DirectedGraph
-      */
-    protected $graph = null;
-    
     /**
      * @var PathBuilder
     */
@@ -49,9 +42,8 @@ class DSourceInjectorVisitor extends BasicVisitor
       *  @return void
       *  @access public 
       */
-    public function __construct(DirectedGraph $graph, PathBuilder $pathBuilder)
+    public function __construct(PathBuilder $pathBuilder)
     {
-        $this->graph       = $graph;
         $this->pathBuilder = $pathBuilder;
     }
     
@@ -85,8 +77,10 @@ class DSourceInjectorVisitor extends BasicVisitor
         if($this->sources === null) {
            
            $this->sources = array();
+           $finder        = new CompositeFinder();
+           $root          = $finder->set($composite)->parentSchema()->get();
            
-           foreach($this->graph->getRoot()->getChildren() as $child) {
+           foreach($root->getChildren() as $child) {
                if($child instanceof DatasourceNode) {
                    $sourceObj = $child->getDatasource();
                    $sname =  $sourceObj->getOption('id');
@@ -99,7 +93,7 @@ class DSourceInjectorVisitor extends BasicVisitor
                }
                
            }
-          
+           
         }
         
         $builder     = $this->pathBuilder;

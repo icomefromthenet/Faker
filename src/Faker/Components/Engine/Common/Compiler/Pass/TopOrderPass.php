@@ -7,6 +7,7 @@ use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Compiler\Graph\GraphNode;
 use Faker\Components\Engine\Common\Compiler\CompilerPassInterface;
 use Faker\Components\Engine\Common\Compiler\CompilerInterface;
+use Faker\Components\Engine\Common\Composite\DatasourceNode;
 
 /*
  *  Topological Reorder for DirectGraph.
@@ -39,7 +40,7 @@ class TopOrderPass implements CompilerPassInterface
     
     /**
       *  Change the order of the tables to use Topological Order
-      *
+      * 
       *  @access public
       *  @param CompositeInterface $compiler
       *  @param CompilerInterface  $cmp
@@ -47,18 +48,22 @@ class TopOrderPass implements CompilerPassInterface
       */
     public function process(CompositeInterface $composite, CompilerInterface $cmp)
     {
+        
         $graph = $cmp->getGraph();
         
         # Find table nodes with no out-edges.
         foreach($graph->getNodes() as $node) {
-            if($node->getValue() instanceof TableNode || $node->getValue() instanceof FormatterNode) {
+            if($node->getValue() instanceof TableNode 
+                || $node->getValue() instanceof FormatterNode
+                || $node->getValue() instanceof DatasourceNode) {
                 
                 $tmp_nodes = $node->getOutEdges();
                 $table_node_count = 0;
                 
                 # count how many outer edges are just tables
                 foreach($tmp_nodes as $tmpnode) {
-                    if($tmpnode->getDestNode()->getValue() instanceof TableNode || $tmpnode->getDestNode()->getValue() instanceof FormatterNode) {
+                    if($tmpnode->getDestNode()->getValue() instanceof TableNode 
+                       || $tmpnode->getDestNode()->getValue() instanceof FormatterNode) {
                         $table_node_count += 1;
                     }
                 }
@@ -71,6 +76,7 @@ class TopOrderPass implements CompilerPassInterface
                 $tmp_nodes = null;
             }
         }
+         
         
         # Call breath first search on each table node with no outer-edges
         # As we have a directed acyclic graph there is guarantee of minimum 1 node without outer-edges.
@@ -87,7 +93,10 @@ class TopOrderPass implements CompilerPassInterface
     
     public function visitNode(GraphNode $node)
     {
-        if(($node->getValue() instanceof TableNode || $node->getValue() instanceof FormatterNode)  && $node->getVisited() === false) {
+        if(($node->getValue() instanceof TableNode 
+            || $node->getValue() instanceof FormatterNode 
+            || $node->getValue() instanceof DatasourceNode)  && $node->getVisited() === false) {
+            
             $node->setVisited(true);
             
             # follow the nodes inEdges to find its ansestors.
@@ -95,7 +104,9 @@ class TopOrderPass implements CompilerPassInterface
                 $sourceNode = $childnode->getSourceNode();
                 $sourceNodeValue = $sourceNode ->getValue();
                 
-                if($sourceNodeValue instanceof TableNode || $sourceNodeValue instanceof FormatterNode ) {
+                if($sourceNodeValue instanceof TableNode 
+                   || $sourceNodeValue instanceof FormatterNode 
+                   || $sourceNodeValue  instanceof DatasourceNode) {
                     $this->visitNode($sourceNode);    
                 }
                 
@@ -115,6 +126,7 @@ class TopOrderPass implements CompilerPassInterface
       */    
     public function sortComposite(CompositeInterface $composite,array $order)
     {
+       
         $composite->clearChildren();
         
         foreach ($order as $node) {

@@ -156,7 +156,7 @@ class SchemaBuilder implements ParentNodeInterface
      */ 
     public function addDatasource()
     {
-        return new DatasourceBuilder('Datasources'
+        $builder = new DatasourceBuilder('Datasources'
                                      ,$this->event
                                      ,$this->typeRepo
                                      ,$this->utilities
@@ -165,6 +165,11 @@ class SchemaBuilder implements ParentNodeInterface
                                      ,$this->connection
                                      ,$this->templateLoader
                                      ,$this->datasourceRepo);
+                        
+        $builder->setParent($this);
+        
+        return $builder;                             
+                                     
     }
     
     
@@ -236,25 +241,30 @@ class SchemaBuilder implements ParentNodeInterface
       */
     public function end()
     {
+       
         $node      = $this->getNode();
         $children  = $this->children();
         $compiiler = $this->compiler;
-        
+       
         foreach($children as $child) {
+            
             $node->addChild($child);
         }
+        
         
         # run validation routines        
         $this->event->dispatch(BuildEvents::onValidationStart,new BuildEvent($this,'Started validation of entity '.$this->name));
         $node->validate();
         $this->event->dispatch(BuildEvents::onValidationEnd,new BuildEvent($this,'Finished validation of entity '.$this->name));
-        
+    
         # run compiler  
         $this->event->dispatch(BuildEvents::onCompileStart,new BuildEvent($this,'Started compile of entity '.$this->name));
         $this->compiler->compile($node);
         $this->event->dispatch(BuildEvents::onCompileEnd,new BuildEvent($this,'Finished compile of entity '.$this->name));    
         
         $this->event->dispatch(BuildEvents::onBuildingEnd,new BuildEvent($this,'Finished build of entity '.$this->name));
+    
+    
     
         return $node;
     }

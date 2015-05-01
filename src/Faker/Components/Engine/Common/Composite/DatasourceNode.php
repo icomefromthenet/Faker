@@ -75,6 +75,8 @@ class DatasourceNode extends GenericNode implements CompositeInterface, Generato
     {
         $children = $this->getChildren();
         
+        $visitor->visitDirectedGraphBuilder($this);
+        
         foreach($children as $child) {
             if($child instanceof VisitorInterface) {
                 $child->acceptVisitor($visitor);                    

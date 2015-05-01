@@ -63,8 +63,8 @@ class DatasourceBuilder extends NodeCollection
         $parent   = $this->getParent();
         $children = $this->children();
         
-        foreach($children as $formatter) {
-            $parent->append($formatter);
+        foreach($children as $source) {
+            $parent->append($source);
         }
         
         return $parent;

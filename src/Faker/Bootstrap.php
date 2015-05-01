@@ -469,13 +469,17 @@ class Bootstrap
          $visitor         = new \Faker\Components\Engine\Common\Visitor\DirectedGraphVisitor($directedGraph,$pathBuilder);
          $compiler        = new \Faker\Components\Engine\Common\Compiler\Compiler($visitor);
          
+         $datasourceVisitor = new \Faker\Components\Engine\Common\Visitor\DSourceInjectorVisitor($pathBuilder);
+         
          $topOrderPass    = new \Faker\Components\Engine\Common\Compiler\Pass\TopOrderPass();
          $circularRefPass = new \Faker\Components\Engine\Common\Compiler\Pass\CircularRefPass();
          $cacheInjectPass = new \Faker\Components\Engine\Common\Compiler\Pass\CacheInjectorPass();
+         $datasourcePass  = new \Faker\Components\Engine\Common\Compiler\Pass\DatasourcePass($datasourceVisitor);
          
          $compiler->addPass($circularRefPass);
          $compiler->addPass($topOrderPass);
          $compiler->addPass($cacheInjectPass);
+         $compiler->addPass($datasourcePass);
          
          return $compiler;
       };

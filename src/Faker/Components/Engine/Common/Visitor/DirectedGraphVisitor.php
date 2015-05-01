@@ -12,6 +12,7 @@ use Faker\Components\Engine\Common\Composite\ColumnNode;
 use Faker\Components\Engine\Common\Composite\ForeignKeyNode;
 use Faker\Components\Engine\Common\Composite\CompositeFinder;
 use Faker\Components\Engine\Common\Composite\FormatterNode;
+use Faker\Components\Engine\Common\Composite\DatasourceNode;
 
 
 /*
@@ -81,7 +82,7 @@ class DirectedGraphVisitor extends BasicVisitor
             $this->graph->setRoot($composite);    
         
         } elseif($composite instanceof TableNode) {
-            # if we have a table connect to schema
+            # if we have a table connect to schema 
             $this->graph->connect($builder->buildPath($composite),$composite,$builder->buildPath($parentNode),$parentNode);
             
         } elseif($composite instanceof ColumnNode) {
@@ -89,8 +90,8 @@ class DirectedGraphVisitor extends BasicVisitor
             $this->graph->connect($builder->buildPath($composite),$composite,$builder->buildPath($parentNode),$parentNode);            
                 
         }
-        elseif ($composite instanceof FormatterNode) {
-            # if instance of formatterNode connect to schema
+        elseif ($composite instanceof FormatterNode || $composite instanceof DatasourceNode) {
+            # if instance of formatterNode connect to schema or connect datasource to the schema
             $this->graph->connect($builder->buildPath($composite),$composite,$builder->buildPath($parentNode),$parentNode);            
         }
         elseif($composite instanceof ForeignKeyNode) {

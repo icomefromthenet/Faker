@@ -67,6 +67,7 @@ class NodeBuilderTest extends AbstractProject
         $this->assertInstanceOf('\\Faker\\Components\\Engine\\Common\\Builder\\CountryTypeDefinition',$builder->fieldCountry());
         $this->assertInstanceOf('\\Faker\\Components\\Engine\\Common\\Builder\\TemplateTypeDefinition',$builder->fieldTemplate());
         $this->assertInstanceOf('\\Faker\\Components\\Engine\\Common\\Builder\\RegexTypeDefinition',$builder->fieldRegex());
+        $this->assertInstanceOf('\\Faker\\Components\\Engine\\Common\\Builder\\FromSourceTypeDefinition',$builder->fieldFromSource());
         
     }
     

@@ -69,6 +69,8 @@ class DatasourceAbstractTest extends AbstractProject
     {
          $mock = new MockDatasource();
          
+         $mock->setOption('id','MySoruceA');
+         
          $this->assertTrue($mock->validate());
         
     }
@@ -80,6 +82,7 @@ class DatasourceAbstractTest extends AbstractProject
     public function testValidateWhenErrors()
     {
         $mock = new MockDatasource();
+        $mock->setOption('id','MySoruceA');
         $mock->setOption('badOption','bad');
         $mock->validate();
     }

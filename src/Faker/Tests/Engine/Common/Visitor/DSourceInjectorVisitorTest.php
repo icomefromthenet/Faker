@@ -20,7 +20,7 @@ use Faker\Components\Engine\Common\Composite\CompositeFinder;
 
 
 
-class DirectedGraphVisitorTest extends AbstractProject
+class DSourceInjectorVisitorTest extends AbstractProject
 {
 
     protected function getComposite()
@@ -112,12 +112,9 @@ class DirectedGraphVisitorTest extends AbstractProject
     {
         $composite = $this->getComposite();
         $path      = new PathBuilder();
-        $graph     = new DirectedGraph();
         $finder    = new CompositeFinder();
         
-        $graph->setRoot($composite);
-        
-        $visitor = new DSourceInjectorVisitor($graph,$path);
+        $visitor = new DSourceInjectorVisitor($path);
         
         # start the visitor
         $composite->acceptVisitor($visitor);
@@ -139,7 +136,6 @@ class DirectedGraphVisitorTest extends AbstractProject
                          ->table('tableA')->column('columnA2')->type('SourceTypeB')->get();
         
         $typeChildren = $type->getChildren();
-        var_dump(count($typeChildren));
         
         $this->assertInstanceOf('Faker\\Components\\Engine\\Common\\Composite\\DatasourceNode',$typeChildren[0]);
         $this->assertEquals('SourceNodeB',$typeChildren[0]->getId());

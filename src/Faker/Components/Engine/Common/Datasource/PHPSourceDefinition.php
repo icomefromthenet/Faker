@@ -48,17 +48,23 @@ class PHPSourceDefinition extends AbstractDefinition
     public function setDataIterator(\Iterator $it)
     {
         $this->dataIterator = $it;
+        
+        return $this;
     }
    
     
     public function setDataFromClosure(\Closure $closure)
     {
         $this->dataClosure = $closure;
+        
+        return $this;
     }
     
     public function setDataClosure(\Closure $closure)
     {
         $this->dataClosure = $closure;
+        
+        return $this;
     }
 }
 /* End of File */

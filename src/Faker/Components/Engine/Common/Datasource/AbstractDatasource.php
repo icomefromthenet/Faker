@@ -238,14 +238,9 @@ abstract class AbstractDatasource implements DatasourceInterface
 	
 	    $rootNode->children()
                 ->scalarNode('id')
+                    ->isRequired()
+                    ->cannotBeEmpty()
                     ->info('A unique name for this datasource')
-                    ->validate()
-                        ->ifTrue(function($v){
-                            return empty($v);
-                        })
-                        ->then(function($v){
-                            throw new InvalidConfigurationException('Datasource name param must not be empty');
-                        })
                     ->end()
                 ->end();
 	
