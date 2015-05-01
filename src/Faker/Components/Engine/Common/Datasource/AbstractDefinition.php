@@ -40,7 +40,6 @@ class AbstractDefinition implements TypeDefinitionInterface , NodeInterface
     protected $templateLoader;
     
     
-    
     /**
       *  Fetch the node managed by this definition
       *
@@ -105,7 +104,7 @@ class AbstractDefinition implements TypeDefinitionInterface , NodeInterface
         }
         
         
-        $name = 'Datasource';
+        $name = 'DatasourceNode';
         
         # Wrap the datasource in a composite node
         $node = new DatasourceNode($name,$this->eventDispatcher,$source);

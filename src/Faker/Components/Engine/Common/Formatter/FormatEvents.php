@@ -127,6 +127,28 @@ final class FormatEvents
      */
     const onColumnEnd = 'formatter.column.end';
     
+    
+    /**
+    * Return the events contained in this class 
+    * 
+    * @return array[string] array of event names
+    * @access public
+    */
+    public static function getEvents()
+    {
+        return array(
+            self::onSchemaStart
+            ,self::onSchemaEnd
+            ,self::onTableStart
+            ,self::onTableEnd
+            ,self::onRowStart
+            ,self::onRowEnd
+            ,self::onColumnStart
+            ,self::onColumnGenerate
+            ,self::onColumnEnd
+        );
+        
+    }
 }
 
 

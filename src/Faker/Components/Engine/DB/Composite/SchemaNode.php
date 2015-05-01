@@ -8,10 +8,12 @@ use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Composite\GeneratorInterface;
 use Faker\Components\Engine\Common\Composite\VisitorInterface;
 use Faker\Components\Engine\Common\Composite\SchemaNode as BaseSchemaNode;
-use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Faker\Components\Engine\Common\Formatter\GenerateEvent;
 use Faker\Components\Engine\Common\Visitor\BasicVisitor;
 use Faker\Components\Engine\Common\Composite\HasDatasourceInterface;
+use Faker\Components\Engine\Common\BuildEvents;
+use Faker\Components\Engine\Common\Formatter\FormatEvents;
+
 
 /**
   *  Schema Node implements GeneratorInterface, VisitorInterface on top of the schema node
@@ -59,7 +61,8 @@ class SchemaNode extends BaseSchemaNode implements GeneratorInterface, VisitorIn
        $event->dispatch(
                FormatEvents::onSchemaEnd,
                new GenerateEvent($this,array(),$id)
-          );
+        );
+        
                 
         return $values;
     }

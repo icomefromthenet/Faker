@@ -79,7 +79,7 @@ class SchemaBuilder implements ParentNodeInterface
      */ 
     protected $datasourceRepo;
     
-     /**
+    /**
       *  Class Constructor 
       */
     public function __construct($name,
@@ -269,9 +269,40 @@ class SchemaBuilder implements ParentNodeInterface
         return $node;
     }
     
+    
+    
     //------------------------------------------------------------------
     # Static Constructor
     
+    /**
+     * Clear Build and Format events 
+     * 
+     * @return void
+     * @access public
+     */ 
+    public static function clearEventsListeners(EventDispatcherInterface $eventDispatcher)
+    {
+        $buildListeners  = array();
+        $formatListeners = array();
+        
+        # Clear Build Event Listeners
+        foreach(BuildEvents::getEvents() as $event) {
+            if($eventDispatcher->hasListeners($event)) {
+                foreach($eventDispatcher->getListeners($event) as $listener) {
+                    $eventDispatcher->removeListener($event,$listener);
+                }
+            }
+        }
+        
+        # Clear Format Events
+        foreach(FormatEvents::getEvents() as $event) {
+            if($eventDispatcher->hasListeners($event)) {
+                foreach($eventDispatcher->getListeners($event) as $listener) {
+                    $eventDispatcher->removeListener($event,$listener);
+                }
+            }
+        }
+    }
     
     /**
       *  Static Constructor
@@ -310,8 +341,14 @@ class SchemaBuilder implements ParentNodeInterface
             $gen = $container->getDefaultRandom();
         }
         
+        
+        self::clearEventsListeners($event);
     
-        return new self($name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory,$compiler,$datasourceRepo);
+        $builder =  new self($name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory,$compiler,$datasourceRepo);
+        
+        
+        
+        return $builder;
     }
     
 }

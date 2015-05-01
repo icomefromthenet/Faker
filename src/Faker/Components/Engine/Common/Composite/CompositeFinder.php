@@ -237,10 +237,10 @@ class CompositeFinder
         
        # find the datasource
        foreach($this->head->getChildren() as $child) {
-         if($child instanceof DatasourceNode && $child->getId()=== $name) {
-            $this->head = $child;
-            break;
-         }
+            if($child instanceof DatasourceNode && $child->getId()=== $name) {
+                $this->head = $child;
+                break;
+            }
        }    
        
        # if head is not a column we can't have matched

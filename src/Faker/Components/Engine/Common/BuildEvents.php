@@ -51,6 +51,24 @@ final class BuildEvents
       */    
     const onCompileEnd     = 'builder.compiler.end';
    
+   /**
+    * Return the events contained in this class 
+    * 
+    * @return array[string] array of event names
+    * @access public
+    */
+    public static function getEvents()
+    {
+        return array(
+           self::onBuildingStart
+           ,self::onBuildingEnd
+           ,self::onValidationStart
+           ,self::onValidationEnd
+           ,self::onCompileStart
+           ,self::onCompileEnd
+        );
+        
+    }
     
 }
 /* End of File */
