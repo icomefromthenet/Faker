@@ -358,7 +358,7 @@ class Bootstrap
       
       $project['event_dispatcher'] = $project->share(function($project)
       {
-         return new \Symfony\Component\EventDispatcher\EventDispatcher();
+         return new Faker\ChannelEventDispatcher(new \Symfony\Component\EventDispatcher\EventDispatcher());
       });
       
       

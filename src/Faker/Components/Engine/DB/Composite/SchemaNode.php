@@ -29,6 +29,38 @@ class SchemaNode extends BaseSchemaNode implements GeneratorInterface, VisitorIn
       */
     protected $resultCache;
     
+     
+    /**
+     * Clear Build and Format events 
+     * 
+     * @return void
+     * @access public
+     */ 
+    protected function clearEventsListeners(EventDispatcherInterface $eventDispatcher)
+    {
+        $buildListeners  = array();
+        $formatListeners = array();
+        
+        # Clear Build Event Listeners
+        foreach(BuildEvents::getEvents() as $event) {
+            if($eventDispatcher->hasListeners($event)) {
+                foreach($eventDispatcher->getListeners($event) as $listener) {
+                    $eventDispatcher->removeListener($event,$listener);
+                }
+            }
+        }
+        
+        # Clear Format Events
+        foreach(FormatEvents::getEvents() as $event) {
+            if($eventDispatcher->hasListeners($event)) {
+                foreach($eventDispatcher->getListeners($event) as $listener) {
+                    $eventDispatcher->removeListener($event,$listener);
+                }
+            }
+        }
+    }
+    
+    
     //------------------------------------------------------------------
     # GeneratorInterface
     
@@ -63,6 +95,8 @@ class SchemaNode extends BaseSchemaNode implements GeneratorInterface, VisitorIn
                new GenerateEvent($this,array(),$id)
         );
         
+        # cleanup any attached events, this needed if we have multiple schemas.
+        $this->clearEventsListeners($event);
                 
         return $values;
     }
