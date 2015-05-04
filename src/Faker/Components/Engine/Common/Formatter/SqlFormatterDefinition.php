@@ -65,5 +65,18 @@ class SqlFormatterDefinition extends AbstractDefinition
         return $this;
     }
     
+    /**
+     * Write the stream to the given database
+     * 
+     * @access public
+     * @return SqlFormatterDefinition
+     * @param string    $connName   The connection name assgined to the pool
+     */ 
+    public function writeToDatabase($connName)
+    {
+        $this->attribute(Sql::CONFIG_WRITE_TO_DATABASE,$connName);
+        return $this;
+    }
+    
 }
 /* End of File */

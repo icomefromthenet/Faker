@@ -43,6 +43,7 @@ class SchemaBuilder implements ParentNodeInterface
     protected $generator;
     protected $typeRepo;
     protected $templateLoader;
+    protected $channelName;
     
     /**
       *  @var Symfony\Component\EventDispatcher\EventDispatcherInterface 
@@ -93,7 +94,8 @@ class SchemaBuilder implements ParentNodeInterface
                                 PlatformFactory $platformFactory,
                                 FormatterFactory $formatterFactory,
                                 CompilerInterface $compiler,
-                                DatasourceRepository $datasourceRepo
+                                DatasourceRepository $datasourceRepo,
+                                $channelName = null
                                 )
     {
         $this->name             = $name;
@@ -109,6 +111,7 @@ class SchemaBuilder implements ParentNodeInterface
         $this->formatterFactory = $formatterFactory;
         $this->compiler         = $compiler;
         $this->datasourceRepo   = $datasourceRepo;
+        $this->channelName      = $channelName;
     }
     
     
@@ -227,7 +230,7 @@ class SchemaBuilder implements ParentNodeInterface
     public function getNode()
     {
         if($this->rootNode === null) {
-            $this->rootNode   = new SchemaNode($this->name,$this->event);
+            $this->rootNode   = new SchemaNode($this->name,$this->event,$this->channelName);
         }
         
         return $this->rootNode;
@@ -251,6 +254,12 @@ class SchemaBuilder implements ParentNodeInterface
             $node->addChild($child);
         }
         
+        # ensure the correct channel is being used before start emitting events
+        $this->event->switchChannel($this->channelName);
+        
+        
+        $this->event->dispatch(BuildEvents::onBuildingStart,new BuildEvent($this,'Started build of entity '.$this->name));
+    
         
         # run validation routines        
         $this->event->dispatch(BuildEvents::onValidationStart,new BuildEvent($this,'Started validation of entity '.$this->name));
@@ -262,6 +271,8 @@ class SchemaBuilder implements ParentNodeInterface
         $this->compiler->compile($node);
         $this->event->dispatch(BuildEvents::onCompileEnd,new BuildEvent($this,'Finished compile of entity '.$this->name));    
         
+        
+        
         $this->event->dispatch(BuildEvents::onBuildingEnd,new BuildEvent($this,'Finished build of entity '.$this->name));
     
     
@@ -269,51 +280,6 @@ class SchemaBuilder implements ParentNodeInterface
         return $node;
     }
     
-    
-    
-    //------------------------------------------------------------------
-    # Static Constructor
-   
-    
-    /**
-      *  Static Constructor
-      *
-      *  @param Faker\Project the DI container
-      *  @param string $name of the entity
-      *  @param Faker\Locale\LocaleInterface $locale to use
-      *  @param Faker\Components\Engine\Common\Utilities  $util
-      *  @param PHPStats\Generator\GeneratorInterface $util
-      */
-    public static function create(Project $container,
-                                  $name,
-                                  LocaleInterface $locale = null,
-                                  Utilities $util = null,
-                                  GeneratorInterface $gen = null
-                                  )
-    {
-        $repo               = $container->getEngineTypeRepository();
-        $event              = $container->getEventDispatcher();
-        $conn               = $container->getGeneratorDatabase();
-        $loader             = $container->getTemplatingManager()->getLoader();
-        $platformFactory    = $container->getDBALPlatformFactory();
-        $formatterFactory   = $container->getFormatterFactory($event);
-        $compiler           = $container->getEngineCompiler();
-        $datasourceRepo     = $container->getDatasourceRepository();
-        
-        if($locale === null) {
-            $locale = $container->getLocaleFactory()->create('en');
-        }
-        
-        if($util === null) {
-            $util = $container->getEngineUtilities();
-        }
-        
-        if($gen === null) {
-            $gen = $container->getDefaultRandom();
-        }
-        
-        return new self($name,$event,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory,$compiler,$datasourceRepo);
-    }
     
 }
 /* End of File */

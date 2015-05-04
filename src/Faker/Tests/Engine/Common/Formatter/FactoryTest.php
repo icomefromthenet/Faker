@@ -14,15 +14,15 @@ class FactoryTest extends AbstractProject
     
     public function testFactoryConstructor()
     {
-        $event    = $this->getMockBuilder('\Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $writer_manager   = $this->getMockBuilder('\Faker\Components\Writer\Manager')
+        $event    = $this->getMockBuilder('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface')->getMock();
+        $writer_manager   = $this->getMockBuilder('Faker\\Components\\Writer\\Manager')
                          ->disableOriginalConstructor()
                          ->getMock();
-        $visitor  = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
+        $visitor  = $this->getMockBuilder('Faker\\Components\\Engine\\Common\\Visitor\\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
         
         $factory = new FormatterFactory($event,$writer_manager,$visitor);
         
-        $this->assertInstanceOf('Faker\Components\Engine\Common\Formatter\FormatterFactory',$factory);
+        $this->assertInstanceOf('Faker\\Components\\Engine\\Common\\Formatter\\FormatterFactory',$factory);
         
     }
     

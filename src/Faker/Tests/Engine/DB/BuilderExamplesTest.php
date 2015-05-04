@@ -7,6 +7,7 @@ use Faker\Components\Engine\Common\Formatter\FormatEvents;
 use Faker\Components\Engine\Common\Formatter\GenerateEvent;
 use Faker\Tests\Base\AbstractProject;
 use Faker\Components\Engine\Common\Composite\CompositeFinder;
+use Faker\Components\Engine\Common\Composite\DatasourceNode;
 
 class BuilderExamplesTest extends AbstractProject
 {
@@ -16,7 +17,7 @@ class BuilderExamplesTest extends AbstractProject
       $container       = $this->getProject(); 
       $name            = 'test_db'; 
        
-      $this->assertInstanceOf('Faker\Components\Engine\DB\Builder\SchemaBuilder',SchemaBuilder::create($container,$name));
+      $this->assertInstanceOf('Faker\Components\Engine\DB\Builder\SchemaBuilder',$container->create($name));
     }
     
     public function testExample1()
@@ -27,7 +28,7 @@ class BuilderExamplesTest extends AbstractProject
         $util            = $container->getEngineUtilities();
         $gen             = $container->getDefaultRandom();
     
-        $builder = SchemaBuilder::create($container,$name,$locale,$util,$gen);
+        $builder = $container->create($name,$locale,$util,$gen);
         
         $generatorComposite = $builder
                         ->addWriter()
@@ -71,7 +72,7 @@ class BuilderExamplesTest extends AbstractProject
         $name            = 'test_db'; 
         $event           = $container->getEventDispatcher();
         
-        $schema = SchemaBuilder::create($container,$name)
+        $schema = $container->create($name)
                         ->describe()
                             ->addTable('table1')
                                 ->toGenerate(100)
@@ -115,7 +116,7 @@ class BuilderExamplesTest extends AbstractProject
         $name            = 'test_db'; 
         $event           = $container->getEventDispatcher();
         
-        $schema = SchemaBuilder::create($container,$name)
+        $schema = $container->create($name)
                         ->describe()
                             ->addTable('table1')
                                 ->toGenerate(100)
@@ -170,7 +171,7 @@ class BuilderExamplesTest extends AbstractProject
         $event           = $container->getEventDispatcher();
         
         # schema node returns DatasourceBuilder
-        $dataSourceBuilder = SchemaBuilder::create($container,$name)
+        $dataSourceBuilder = $container->create($name)
                             ->addDatasource();
                             
                                 
@@ -192,7 +193,7 @@ class BuilderExamplesTest extends AbstractProject
         $event           = $container->getEventDispatcher();
         
         # schema node returns DatasourceBuilder
-        $dataSourceBuilder = SchemaBuilder::create($container,$name)
+        $dataSourceBuilder = $container->create($name)
                             ->addDatasource();
                             
                                 
@@ -207,7 +208,7 @@ class BuilderExamplesTest extends AbstractProject
         $name            = 'test_db'; 
         $event           = $container->getEventDispatcher();
         $that            = $this;
-        $schema = SchemaBuilder::create($container,$name);
+        $schema = $container->create($name);
     
         
         $schema->onGenerateStart(function() use ($that){
@@ -229,7 +230,7 @@ class BuilderExamplesTest extends AbstractProject
         $event           = $container->getEventDispatcher();
         
         # schema node returns DatasourceBuilder
-        $dataSourceBuilder = SchemaBuilder::create($container,$name)
+        $dataSourceBuilder = $container->create($name)
                             ->addDatasource();
         
         # test phpsource
@@ -246,8 +247,9 @@ class BuilderExamplesTest extends AbstractProject
     {
         $container       = $this->getProject(); 
         $name            = 'SchemaA';
+        $finder          = new CompositeFinder();
         
-        $schema = SchemaBuilder::create($container,$name)
+        $schema = $container->create($name)
                         ->describe()
                             ->addTable('table1')
                                 ->toGenerate(100)
@@ -300,13 +302,100 @@ class BuilderExamplesTest extends AbstractProject
                     ->end();
         
         
-        /*
-        $this->assertInstanceOf('Faker\\Components\\Engine\\Common\\Composite\\DatasourceNode',);
         
-        $this->assertInstanceOf('Faker\\Components\\Engine\\Common\\Type\\FromSource',$finder->set($schema)->table('table1')->column('column2')->type('FromSource')->get());
-        */
+        
+        
+        $this->assertInstanceOf('Faker\\Components\\Engine\\Common\\Composite\\DatasourceNode',$schema->getChildren()[1]);
+        
+        # vefiy the fromSource TypeNode was created and contains a FromSource Type
+        $typeNode = $finder->set($schema)->table('table1')->column('column2')->type('FromSource')->get();
+        $fromSourceType = $typeNode ->getType();
+        $this->assertInstanceOf('Faker\\Components\\Engine\\Common\\Type\\FromSource',$fromSourceType);
+        
+        # verify the source was added
+        $this->assertEquals('mySourceA',$fromSourceType->getOption('source'));
+        
+        # verify the TypeNode that contains the FromSource Type has the datasource as a child
+        $this->assertInstanceOf('Faker\\Components\\Engine\\Common\\Composite\\DatasourceNode',$typeNode->getChildren()[0]);
+        
+        # veify the table has a datasource node as a child
+        $tableNode = $finder->set($schema)->table('table1')->get();
+        $foundChildDatasource = false;
+        foreach($tableNode->getChildren() as $child) {
+            if($child instanceof DatasourceNode) {
+                $foundChildDatasource = true;
+                break;
+            }
+        }
+        $this->assertTrue($foundChildDatasource,'Unable to find a datasource assigned to the table that contains a fromSource type');
     }
     
+    
+    
+    public function testHowManyRows()
+    {
+        
+        $container       = $this->getProject(); 
+        $name            = 'SchemaA';
+        
+        $container->clearBuilderCollection();
+        
+        $schema = $container->create($name)
+                        ->describe()
+                            ->addTable('table1')
+                                ->toGenerate(100)
+                                ->addColumn('column2')
+                                    ->dbalType('string')
+                                    ->addField('column2')
+                                        ->fieldFromSource()
+                                            ->useTemplateString('{valueA}')
+                                            ->useDatasource('mySourceA')
+                                        ->end()
+                                    ->end()
+                                ->end()
+                                ->addColumn('column1')
+                                    ->dbalType('string')
+                                    ->addField()
+                                        ->fieldAutoIncrement()
+                                            ->incrementByValue(1)
+                                            ->startAtValue(1)
+                                        ->end()
+                                    ->end()
+                                    
+                                ->end()
+                            ->end()
+                             ->addTable('table2')
+                                ->toGenerate(5)
+                                ->addColumn('id')
+                                    ->dbalType('string')
+                                    ->addForeignField()
+                                        ->foreignTable('table1')
+                                        ->foreignColumn('column1')
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->addDatasource()
+                            ->createPHPSource()
+                                ->setDatasourceName('mySourceA')
+                                ->setDataFromClosure(function(){
+                                    $data = new \ArrayIterator();
+                                    $data[] = array('valueA' =>1);
+                                    $data[] = array('valueA' =>2);
+                                    return $data;
+                                })
+                            ->end()
+                        ->end()
+                        ->addWriter()
+                            ->sqlWritter()
+                            ->end()
+                        ->end()
+                    ->end();
+        
+        
+        $this->assertEquals(105,$container->howManyRows());
+        
+    }
     
     
 }

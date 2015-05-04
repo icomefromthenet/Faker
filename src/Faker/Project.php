@@ -4,8 +4,18 @@ namespace Faker;
 use  Pimple;
 use  Symfony\Component\Console\Output\OutputInterface;
 use  Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use  Symfony\Component\EventDispatcher\EventDispatcher;
+use  PHPStats\Generator\GeneratorInterface;
 use  Symfony\Component\Finder\Finder;
 use  Faker\Exception as FakerException;
+use  Faker\Components\Engine\DB\Builder\SchemaBuilder;
+use  Faker\Components\Engine\Common\Formatter\FormatEvents;
+use  Faker\ChannelEventDispatcher;
+use  Faker\Locale\LocaleInterface;
+use  Faker\Components\Engine\Common\Utilities;
+use  Faker\Components\Engine\Common\Composite\TableNode;
+
+
 
 /**
   *  Di Container for A Project
@@ -17,6 +27,160 @@ use  Faker\Exception as FakerException;
 class Project extends Pimple
 {
 
+   /**
+    * @var arrar[SchemaBuilder]
+    */ 
+    protected $builderCollection = array();
+    
+    
+
+    //--------------------------------------------------------------------------
+    # Schema Builder
+    
+    /**
+     * Attach event to FormatEvents::onSchemaStart to the
+     * global event dispatcher will execue once for each schema and once for global
+     * 
+     * @access public 
+     * @return void
+     * @param Closure   $closure
+     */  
+    public function onGlobalGenerateStart($closure)
+    {
+        $this->getEventDispatcher()->addListener(FormatEvents::onSchemaStart,$closure);
+        
+    }
+    
+    /**
+     * Attach event to FormatEvents::onSchemaEnd to the
+     * global event dispatcher will execue once for each schema and once for global
+     * 
+     * @access public 
+     * @return void
+     * @param Closure   $closure
+     */ 
+    public function onGlobalGenerateEnd($closure)
+    {
+        $this->getEventDispatcher()->addListener(FormatEvents::onSchemaEnd,$closure);
+    }
+    
+    
+    /**
+      *  Static Constructor
+      *
+      *  @param Faker\Project the DI container
+      *  @param string $name of the entity
+      *  @param Faker\Locale\LocaleInterface $locale to use
+      *  @param Faker\Components\Engine\Common\Utilities  $util
+      *  @param PHPStats\Generator\GeneratorInterface $util
+      */
+    public function create($name,LocaleInterface $locale = null,Utilities $util = null,GeneratorInterface $gen = null)
+    {
+        
+        # set the event classes
+        $defaultEventDispatcher   = $this->getEventDispatcher();
+        $newChannelDispatcher     = new ChannelEventDispatcher($defaultEventDispatcher);
+        $newChannelDispatcher->addChannel($name,new EventDispatcher());
+        $newChannelDispatcher->switchChannel($name);
+        
+        # fetch other dep from continer
+        $repo               = $this->getEngineTypeRepository();
+        $conn               = $this->getGeneratorDatabase();
+        $loader             = $this->getTemplatingManager()->getLoader();
+        $platformFactory    = $this->getDBALPlatformFactory();
+        $formatterFactory   = $this->getFormatterFactory($newChannelDispatcher);
+        $compiler           = $this->getEngineCompiler();
+        $datasourceRepo     = $this->getDatasourceRepository();
+        
+        if($locale === null) {
+            $locale = $this->getLocaleFactory()->create('en');
+        }
+        
+        if($util === null) {
+            $util = $this->getEngineUtilities();
+        }
+        
+        if($gen === null) {
+            $gen = $this->getDefaultRandom();
+        }
+        
+        $builder =  new SchemaBuilder($name,$newChannelDispatcher,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory,$compiler,$datasourceRepo);
+        
+        $this->builderCollection[] = $builder;
+        
+        return $builder;
+    }
+    
+    
+    /**
+     * Start generation runs for all constructed schema objects
+     * 
+     * @return void
+     * @access public
+     */ 
+    public function generate()
+    {
+        foreach($this->builderCollection as $builder) {
+            $builder->getNode()->generate(0);
+        }
+        
+    }
+    
+    /**
+     * Find the total number of rows that will be generated
+     * 
+     * @return integer
+     * @access public
+     */ 
+    public function howManyRows()
+    {
+        $rows = 0;
+        
+        
+        foreach($this->builderCollection as $builder) {
+             $composite = $builder->getNode();
+             
+            foreach($composite->getChildren() as $table) {
+                if($table instanceof TableNode) {
+                    $rows +=  $table->getRowsToGenerate();
+                }
+            }
+        }
+        
+        return $rows;
+        
+    }
+    
+    /**
+     * Clear the builder collection, used in testing
+     * 
+     * @access public
+     * @return void
+     */ 
+    public function clearBuilderCollection()
+    {
+        $this->builderCollection = array();
+    }
+    
+    //--------------------------------------------------------------------------
+    # Node interface && ParentNodeInterface
+    
+    
+    /**
+    * Return the parent node and build the node
+    * defined by this builder and append it to the parent.
+    *
+    * @return NodeInterface The builder of the parent node
+    */
+    public function end()
+    {
+        
+    }
+    
+    //--------------------------------------------------------------------------
+    # DI Stuff
+    
+    
     /**
       *  function getPath
       *

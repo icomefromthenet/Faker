@@ -26,7 +26,7 @@ class Sql extends BaseFormatter implements FormatterInterface
     
     const CONFIG_OPTION_SINGLE_FILE_MODE = 'singleFileMode';
     
-   
+    const CONFIG_WRITE_TO_DATABASE = 'writeToDatabase';
     
     public function getName()
     {

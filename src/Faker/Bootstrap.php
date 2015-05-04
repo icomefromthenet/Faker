@@ -289,8 +289,7 @@ class Bootstrap
       {
           # create the io dependency
           $io = new \Faker\Components\Config\Io($project->getPath()->get());
-          $event = $project['event_dispatcher'];
-      
+          
           # instance the manager, no database needed here
           return new \Faker\Components\Config\Manager($io,$project);
       });
@@ -358,7 +357,8 @@ class Bootstrap
       
       $project['event_dispatcher'] = $project->share(function($project)
       {
-         return new Faker\ChannelEventDispatcher(new \Symfony\Component\EventDispatcher\EventDispatcher());
+         #global event dispatcher default passed into every ChannelEventDispatcher
+         return new \Symfony\Component\EventDispatcher\EventDispatcher();
       });
       
       
