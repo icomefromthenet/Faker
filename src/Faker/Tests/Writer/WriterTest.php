@@ -19,6 +19,10 @@ class WriterTest extends AbstractProject
         $stream= $this->getMockBuilder('Faker\Components\Writer\Stream')
                         ->disableOriginalConstructor()
                         ->getMock();
+                        
+        $streamB= $this->getMockBuilder('Faker\Components\Writer\Stream')
+                        ->disableOriginalConstructor()
+                        ->getMock();
         
         $cache = $this->getMockBuilder('Faker\Components\Writer\Cache')
                       ->disableOriginalConstructor()
@@ -32,6 +36,9 @@ class WriterTest extends AbstractProject
         $this->assertSame($stream,$writer->getStream());
         $this->assertSame($cache,$writer->getCache());
         $this->assertEquals($limit,$writer->getCacheLimit());
+        
+        $writer->setStream($streamB);
+        $this->assertSame($streamB,$writer->getStream());
     }
 
     

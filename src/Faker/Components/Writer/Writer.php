@@ -135,6 +135,18 @@ class Writer implements WriterInterface
     }
     
     /**
+     * Switch the assigned stream
+     * 
+     * @access public
+     * @return void
+     * @param Stream
+     */ 
+    public function setStream(Stream $stream)
+    {
+        $this->stream = $stream;
+    }
+    
+    /**
       *  Fetch the writers cache
       *
       *  @access public

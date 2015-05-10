@@ -59,6 +59,22 @@ class Stream implements WriterInterface
       */
     protected $encoder;
     
+    /**
+     * Get file handle (SplFileInfo -> SplFileObject)
+     * 
+     * @param string the fileName
+     * @access protected
+     * @return SplFileObject
+     */ 
+    protected function getFile($file_name) 
+    {
+        # write template (will overrite file)
+        $this->getIo()->write($file_name,'','',true);
+        
+        return $this->getIo()->load($file_name,'',true)->openFile('a');
+    }
+    
+    
 
     public function __construct(Template $header_template, Template $footer_template, Sequence $file_sequence, Limit $write_limit, Io $path,Encoding $encoder)
     {
@@ -87,11 +103,7 @@ class Stream implements WriterInterface
             # generate new template string
             $file_name = $this->getSequence()->get();
             
-            # write template (will overrite file)
-            $this->getIo()->write($file_name,'','',true);
-            
-            # get file handle (SplFileInfo -> SplFileObject)
-            $this->file_handle = $this->getIo()->load($file_name,'',true)->openFile('a');
+            $this->file_handle = $this->getFile($file_name);
             
             $this->writeHeader();
         }

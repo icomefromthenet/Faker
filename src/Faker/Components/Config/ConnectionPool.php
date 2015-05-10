@@ -138,11 +138,23 @@ class ConnectionPool
     */ 
    public function getExtraConnection($name)
    {
-       if(false === isset($this->otherConnections[$name])) {
+       if(false === $this->hasExtraConnection($name)) {
             throw new InvalidConfigException("database at '".$name."' does not exists yet");
        }
        
        return $this->otherConnections[$name];
+   }
+   
+   
+   /**
+    *  check if a connection exists at x
+    * 
+    *  @param string    $name   The connection name
+    *  @return boolean  true if connection exists
+    */ 
+   public function hasExtraConnection($name)
+   {
+       return isset($this->otherConnections[$name]);
    }
    
    

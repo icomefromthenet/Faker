@@ -52,33 +52,14 @@ class ComponentTest extends AbstractProject
         $platform = 'mysql';
         $formatter = 'sql';
         
-        $writer = $manager->getWriter($platform,$formatter);
-
-        $this->assertInstanceOf('Faker\Components\Writer\Writer',$writer);
+        $conn   = $this->getMockBuilder('Doctrine\\DBAL\\Connection')->disableOriginalConstructor()->getMock();
         
-        # test that stream was set
-        $this->assertInstanceOf('Faker\Components\Writer\Stream',$writer->getStream());
+        $databaseStream = $manager->getDatabaseStream($platform,$formatter,$conn);
         
-        # test that cache was set
-        $this->assertInstanceOf('Faker\Components\Writer\Cache',$writer->getCache());
-       
-         # test the loader has IO object
-        $this->assertInstanceOf('Faker\Components\Writer\Io',$writer->getStream()->getIo());
-
-        # test if a sequence object was supplied
-        $this->assertInstanceOf('Faker\Components\Writer\Sequence',$writer->getStream()->getSequence());
+        # test if database works
+        $this->assertInstanceOf('Faker\\Components\\Writer\\DatabaseStream',$databaseStream);
         
-        # test if a limit object was suppiled
-        $this->assertInstanceOf('Faker\Components\Writer\Limit',$writer->getStream()->getLimit());
-       
-        
-        # test if a header template was supplied
-        $this->assertInstanceOf('Faker\Components\Templating\Template',$writer->getStream()->getHeaderTemplate());
-       
-        # test if a footer template was supplied
-        $this->assertInstanceOf('Faker\Components\Templating\Template',$writer->getStream()->getFooterTemplate());
-        
-        
+        $this->assertSame($conn,$databaseStream->getDatabase());
     }
 
      

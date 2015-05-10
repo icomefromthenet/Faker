@@ -32,6 +32,8 @@ class PlatformFactory implements ExtensionInterface
     );
     
     
+    
+    
     public static function registerExtension($index,$namespace)
     {
         $index = strtolower($index);

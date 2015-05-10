@@ -174,6 +174,14 @@ class FactoryTest extends AbstractProject
     }
     
    
+    public function testBackRefCheck()
+    {
+        
+        $className = 'Faker\\Components\\Engine\\Common\\Formatter\\Sql';
+        
+        $this->assertEquals('sql',FormatterFactory::reverseLookup($className));
+        $this->assertFalse(FormatterFactory::reverseLookup('Sql'));
+    }
     
 }
 /* End of File */

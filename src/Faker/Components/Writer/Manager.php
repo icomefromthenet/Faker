@@ -118,6 +118,22 @@ class Manager
                         );
     }
     
+    public function getDatabaseStream($platform,$formatter,$conn)
+    {
+        $s = new DatabaseStream($this->getHeaderTemplate($platform,$formatter),
+                          $this->getFooterTemplate($platform,$formatter),
+                          $this->getSequence($platform, 'schema', 'table', 'sql'),
+                          $this->getLimit(),
+                          $this->io,
+                          $this->getEncoder('UTF-8','UTF-8')
+                        );
+        
+        $s->setDatabase($conn);
+              
+        return $s;
+    }
+    
+    
     public function getSequence($prefix, $body, $suffix, $extension,$format = '{prefix}_{body}_{suffix}_{seq}.{ext}')
     {
         return new Sequence($prefix, $body, $suffix, $extension,$format);    

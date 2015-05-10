@@ -9,6 +9,7 @@ use Faker\Components\Writer\Manager as WriterManager;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\Visitor\DBALGathererVisitor;
 
+
 /*
  * Factory for creating formatters 
  *
@@ -42,7 +43,43 @@ class FormatterFactory implements ExtensionInterface
       */
     protected $visitor;
     
+    /**
+     * Split the class into namespace and class name to do match
+     * 
+     * @return array('namespace' => '', 'classname' => '' )
+     * @param string a FQN of a class
+     */ 
+    protected static function parseClassname ($name)
+    {
+      return array(
+            'namespace' => array_slice(explode('\\', $name), 0, -1),
+            'classname' => join('', array_slice(explode('\\', $name), -1)),
+      );
+    }
     
+    /**
+     * Check if 2 parsed class names are a match.
+     * 
+     * @param array $parsedClassNameA The result of self::parseClassname
+     * @param array $parsedClassNameB The result of self::parseClassname
+     * @return boolean true if match
+     */ 
+    protected static function isMatch($parsedClassNameA,$parsedClassNameB)
+    {
+        $notMatch = false;
+        
+        foreach($parsedClassNameA['namespace'] as $index => $value) {
+            if(0 !== strcmp($parsedClassNameA['namespace'][$index],$value)) {
+                $notMatch = true;        
+                break;
+            }
+        }
+        
+        return false === $notMatch 
+                && count($parsedClassNameA['namespace']) === count($parsedClassNameB['namespace']) 
+                && strcmp($parsedClassNameA['classname'],$parsedClassNameB['classname']) === 0;
+    }
+        
     /**
       * Class Constructor
       *
@@ -106,6 +143,29 @@ class FormatterFactory implements ExtensionInterface
             self::registerExtension($key,$ns);
         }
     }
+    
+    /**
+     * Does a reverse lookup with actual class name
+     * 
+     * @return string id used to identify this formatter in factory
+     * @param string $formatterClass the class instance to reverse lookup
+     */ 
+    public static function reverseLookup($formatterClassName) {
+        $name = false;
+        
+        foreach(self::$formatters as $fkey =>$formatter) {
+            $parsedA  = self::parseClassname($formatter);
+            $parsedB  = self::parseClassname($formatterClassName);
+        
+            if(true === self::isMatch($parsedA,$parsedB)) {
+                $name = $fkey;
+                break;
+            }
+        }
+        
+        return $name;
+    }
+    
     
 }
 /* End of File */

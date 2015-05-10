@@ -32,6 +32,7 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
     
     const CONFIG_OPTION_OUT_ENCODING = 'outEncoding';
     
+    
     /**
       *  @var mixed[] the options array 
       */
@@ -191,10 +192,10 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
       */
     public function getConfigTreeBuilder()
     {
-       $treeBuilder = new TreeBuilder();
+        $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('config');
 	
-	$rootNode->children()
+	    $rootNode->children()
 	      ->booleanNode(self::CONFIG_OPTION_SPLIT_ON_TABLE)
                     ->treatNullLike(false)
                     ->defaultValue(false)
@@ -220,11 +221,11 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
                     ->defaultValue($this->getOuputFileFormat())
                     ->info('The output file format')
                 ->end()
-	->end();
+	        ->end();
 	
-	$this->getConfigExtension($rootNode);
+	    $this->getConfigExtension($rootNode);
 	
-	return $treeBuilder;
+    	return $treeBuilder;
     }
     
     
@@ -238,7 +239,7 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
     
     public function setEventDispatcher(EventDispatcherInterface $event)
     {
-	$this->event = $event;
+	    $this->event = $event;
     }
     
      
@@ -250,11 +251,11 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
             $options = $processor->processConfiguration($this, array('config' => $this->options));
             
             # merge validate options (may be defaults set, options filtered)
-	    foreach($options as $name => $value ) {
-		$this->setOption($name,$value);
-	    }
+    	    foreach($options as $name => $value ) {
+    	    	$this->setOption($name,$value);
+    	    }
             
-        }catch(InvalidConfigurationException $e) {
+        } catch(InvalidConfigurationException $e) {
             throw new EngineException($e->getMessage(),0,$e);
         }
         
