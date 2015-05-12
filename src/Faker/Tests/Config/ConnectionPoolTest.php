@@ -66,6 +66,8 @@ class ConnectionPoolTest extends AbstractProject
         $entity->setUser('root');
         $entity->setConnectionName($connectionName);
 
+        $entity->addPlatformOption('myopt','aaa');
+
         $pool->addExtraConnection($connectionName,$entity);
         $conn = $pool->getExtraConnection($connectionName);
         

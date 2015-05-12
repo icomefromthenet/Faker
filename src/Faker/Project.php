@@ -49,6 +49,7 @@ class Project extends Pimple
     {
         $this->getEventDispatcher()->addListener(FormatEvents::onSchemaStart,$closure);
         
+        return $this;
     }
     
     /**
@@ -62,6 +63,8 @@ class Project extends Pimple
     public function onGlobalGenerateEnd($closure)
     {
         $this->getEventDispatcher()->addListener(FormatEvents::onSchemaEnd,$closure);
+        
+        return $this;
     }
     
     
@@ -105,7 +108,7 @@ class Project extends Pimple
         }
         
         $builder =  new SchemaBuilder($name,$newChannelDispatcher,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory,$compiler,$datasourceRepo);
-        
+         
         $this->builderCollection[] = $builder;
         
         return $builder;
@@ -121,9 +124,11 @@ class Project extends Pimple
     public function generate()
     {
         foreach($this->builderCollection as $builder) {
-            $builder->getNode()->generate(0);
+            $result = array();
+            $builder->getNode()->generate(0,$result,array());
         }
         
+        return $this;    
     }
     
     /**
@@ -135,7 +140,6 @@ class Project extends Pimple
     public function howManyRows()
     {
         $rows = 0;
-        
         
         foreach($this->builderCollection as $builder) {
              $composite = $builder->getNode();
@@ -174,7 +178,7 @@ class Project extends Pimple
     */
     public function end()
     {
-        
+        return $this;
     }
     
     //--------------------------------------------------------------------------
@@ -378,6 +382,16 @@ class Project extends Pimple
         return $this['database'];
     }
     
+    /**
+     *  Return the database connection pool
+     * 
+     * @access public
+     * @return Faker\Components\Config\ConnectionPool
+     */ 
+    public function getConnectionPool()
+    {
+        return $this['connection_pool'];
+    }
    
     /**
       * Fetch a faker database
@@ -425,7 +439,7 @@ class Project extends Pimple
       *  @access public
       *  @return \Faker\Components\Engine\Original\Manager an instance of the Faker component manager
       */
-    public function getWritterManager()
+    public function getWriterManager()
     {
         return $this['writer_manager'];
     }    

@@ -124,9 +124,9 @@ class Sql extends BaseFormatter implements FormatterInterface
        $writer->write(PHP_EOL);
        $writer->write(PHP_EOL);
        
-       $writer->write('USE '.$parentNodeName.';');        
-       $writer->write(PHP_EOL);
-       $writer->write(PHP_EOL);
+       //$writer->write('USE '.$parentNodeName.';');        
+       //$writer->write(PHP_EOL);
+       //$writer->write(PHP_EOL);
 
     }
     
@@ -323,6 +323,10 @@ class Sql extends BaseFormatter implements FormatterInterface
                         ->treatNullLike(self::SINGLE_FILE_MODE)
                         ->defaultValue(self::SINGLE_FILE_MODE)
                         ->info('Generate into a sinlge file not splitting on new table or maxlines')
+                    ->end()
+                    ->scalarNode(self::CONFIG_WRITE_TO_DATABASE)
+                        ->defaultNull()
+                        ->info('Do Write the data directly to a database connection')
                     ->end()
                  ->end();
         

@@ -91,14 +91,10 @@ class DatabaseStreamTest extends AbstractProject
         
         $database   = $this->getMockBuilder('Doctrine\\DBAL\\Connection')
                             ->disableOriginalConstructor()
-                            ->setMethods(array('prepare'))
+                            ->setMethods(array('exec'))
                             ->getMock();
         
-        $mockSTH   = $this->getMockBuilder('Doctrine\\DBAL\\Statement')->setMethods(array('execute'))->disableOriginalConstructor()->getMock();
-        
-        $mockSTH->expects($this->once())->method('execute')->will($this->returnValue(true));
-                
-        $database->expects($this->once())->method('prepare')->will($this->returnValue($mockSTH));
+        $database->expects($this->once())->method('exec')->will($this->returnValue(true));
         
         $stream = new DatabaseStream($header_template,$footer_template,$sequence,$limit,$io,$encoding);
         $stream->setDatabase($database);
@@ -152,14 +148,10 @@ class DatabaseStreamTest extends AbstractProject
         
         $database   = $this->getMockBuilder('Doctrine\\DBAL\\Connection')
                             ->disableOriginalConstructor()
-                            ->setMethods(array('prepare'))
+                            ->setMethods(array('exec'))
                             ->getMock();
         
-        $mockSTH   = $this->getMockBuilder('Doctrine\\DBAL\\Statement')->setMethods(array('execute'))->disableOriginalConstructor()->getMock();
-        
-        $mockSTH->expects($this->once())->method('execute')->will($this->throwException(new DBALException('Test error message')));
-                
-        $database->expects($this->once())->method('prepare')->will($this->returnValue($mockSTH));
+        $database->expects($this->once())->method('exec')->will($this->throwException(new DBALException('Test error message')));
         
         $stream = new DatabaseStream($header_template,$footer_template,$sequence,$limit,$io,$encoding);
         $stream->setDatabase($database);

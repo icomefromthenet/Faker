@@ -221,7 +221,7 @@ abstract class BaseFormatter implements EventSubscriberInterface , OptionInterfa
                     ->defaultValue($this->getOuputFileFormat())
                     ->info('The output file format')
                 ->end()
-	        ->end();
+            ->end();
 	
 	    $this->getConfigExtension($rootNode);
 	

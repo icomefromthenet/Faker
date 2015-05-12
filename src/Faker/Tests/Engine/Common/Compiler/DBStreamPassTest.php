@@ -20,15 +20,6 @@ use Faker\Components\Config\Entity;
 class DBStreamPassTest extends AbstractProject
 {
     
-    protected function getCompositeA()
-    {
-    
-       
-        
-        return $schemaNode;
-    }
-
-
     public function testPassProperties()
     {
         $sqlPlatform = new MySqlPlatform(); 
@@ -67,10 +58,10 @@ class DBStreamPassTest extends AbstractProject
         $this->assertTrue($connectPool->hasExtraConnection('testConnect'));
         
         # create the new pass and assert properties
-        $pass = new DbStreamRepPass($connectPool,$this->getProject()->getWritterManager());
+        $pass = new DbStreamRepPass($connectPool,$this->getProject()->getWriterManager());
         
         $this->assertSame($connectPool,$pass->getConnectionPool());
-        $this->assertSame($this->getProject()->getWritterManager(),$pass->getWriterManager());
+        $this->assertSame($this->getProject()->getWriterManager(),$pass->getWriterManager());
         
         # test with valid schema
         
@@ -112,7 +103,7 @@ class DBStreamPassTest extends AbstractProject
         
         
         # create the new pass and assert properties
-        $pass = new DbStreamRepPass($connectPool,$this->getProject()->getWritterManager());
+        $pass = new DbStreamRepPass($connectPool,$this->getProject()->getWriterManager());
         
         
         # test with valid schema

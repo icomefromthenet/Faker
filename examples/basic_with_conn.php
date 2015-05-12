@@ -1,9 +1,10 @@
 <?php
 use Faker\Components\Engine\DB\Builder\SchemaBuilder;
+use Faker\Components\Config\Entity;
 
 //---------------------------------------------------------------
-// Define the Composite
-//
+// Define the Composite with a database connection
+// Where no using config file here, manually create the config entity
 //--------------------------------------------------------------
 
 $container  = $application;
@@ -12,12 +13,35 @@ $name            = 'test_db';
 $locale          = $container->getLocaleFactory()->create('en');
 $util            = $container->getEngineUtilities();
 $gen             = $container->getDefaultRandom();
-    
-$builder = SchemaBuilder::create($container,$name,$locale,$util,$gen);
+$connectPool     = $container->getConnectionPool();
+
+
+$entity = new Entity();
         
-$composite = $builder
+$entity->setType('pdo_sqlite');
+$entity->setMemory(true);
+$connectPool->addExtraConnection('testConnect',$entity);
+    
+$builder = $container
+            ->onGlobalGenerateStart(function()use($container){
+                $conn = $container->getConnectionPool()->getExtraConnection('testConnect');
+                
+                # ddl build schema
+                $sSql  = 'CREATE TABLE people_names(column1 NUMERIC);';
+                $sSql .= 'CREATE TABLE people_codes(column1 NUMERIC,column2 NUMERIC);';         
+                    
+                $conn->exec($sSql);    
+                
+            })
+            ->onGlobalGenerateEnd(function()use($container){
+                $conn = $container->getConnectionPool()->getExtraConnection('testConnect');
+                
+                # query values to test successful insert
+                var_dump($conn->fetchAll('SELECT * FROM people_names'));
+            })
+            ->create($name,$locale,$util,$gen)
             ->describe()
-                ->addTable('aa')
+                ->addTable('people_names')
                     ->toGenerate(100)
                     ->addColumn('column1')
                         ->dbalType('string')
@@ -28,7 +52,7 @@ $composite = $builder
                         ->end()
                     ->end()
                 ->end()
-                ->addTable('table1')
+                ->addTable('people_codes')
                     ->toGenerate(100)
                     ->addColumn('column2')
                         ->dbalType('string')
@@ -51,7 +75,8 @@ $composite = $builder
                 ->end()
                 ->addWriter()
                     ->sqlWritter()
-                        ->singleFileMode(true)
+                        ->writeToDatabase('testConnect')
+                        ->usePlatform('sqlite')
                     ->end()
                 ->end()
                 ->addWriter()
@@ -61,10 +86,11 @@ $composite = $builder
                     ->end()
                 ->end()
             ->end();
+        
                 
 //-------------------------------------------------------------------
-// Return null as we using entity generator not PHP Builder Composite
+// Return container to process all builders
 //
 //--------------------------------------------------------------------
 
-return $composite;
+return $container;

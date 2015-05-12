@@ -87,6 +87,8 @@ class ConnectionPool
         if($entity->getPort() != false) {
             $connectionParams['port']     = $entity->getPort();
         }
+        
+        $connectionParams = array_merge($connectionParams,$entity->getPlatformOptions());
          
         $connection        = DriverManager::getConnection($connectionParams, new Configuration());
        

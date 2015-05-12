@@ -164,5 +164,20 @@ class Entity implements EntityInterface
     {
         return $this->connName;
     }
+    
+   //------------------------------------------------------------------
+   protected $platformOptions = array(); 
+   
+   
+   public function addPlatformOption($name,$value)
+   {
+       $this->platformOptions[$name] = $value;
+   }
+   
+   public function getPlatformOptions()
+   {
+       return $this->platformOptions;
+   }
+    
 }
 /* End of File */

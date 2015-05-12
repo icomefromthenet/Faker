@@ -17,6 +17,7 @@ use Faker\Command\Base\FakerCommand;
 use Zend\ProgressBar\ProgressBar;
 use Zend\ProgressBar\Adapter\Console as ZendConsoleAdapter;
 use Faker\Components\Engine\Common\Composite\TableNode;
+use Faker\Project;
 
 class GenerateCommand extends Command
 {
@@ -63,7 +64,10 @@ class GenerateCommand extends Command
         
         # check if we use the debug or normal notifier
         if($input->getOption('verbose')) {
+            
             $event->addSubscriber(new DebugOutputter($output));
+        
+            
         } elseif ($composite instanceof SchemaNode) {
         
             # use the composite to calculate number of rows
@@ -88,19 +92,42 @@ class GenerateCommand extends Command
             # instance the default notifier
             $event->addSubscriber(new ProgressBarOutputter($event,$progress_bar));
                 
+        } elseif ($composite instanceof Project) {
+            
+           
+            $rows = $composite->howManyRows();
+            
+            # instance zend_progress bar
+            $console_adapter = new ZendConsoleAdapter();
+            $console_adapter->setElements(array(ZendConsoleAdapter::ELEMENT_PERCENT,
+                                ZendConsoleAdapter::ELEMENT_BAR,
+                                ZendConsoleAdapter::ELEMENT_TEXT,
+                            ));
+           $progress_bar = new ProgressBar($console_adapter, 1, $rows,null);
+           
+           
+            # instance the default notifier
+            $event->addSubscriber(new ProgressBarOutputter($event,$progress_bar));
+        }
+        else {
+            throw new RuntimeException('Unknown return from project file');
         }
         
         # start execution of the generate
-        $result = array();
-        
         if($composite instanceof GeneratorInterface) {
+            $result = array();
             $composite->generate(1,$result,array());
+            
+        } elseif($composite instanceof Project){
+            $composite->generate(); 
         }
         else {
             throw new \RuntimeException('No Composite with GeneratorInterface found');
         }
+        
+        
     }
-
+  
 
     protected function configure()
     {

@@ -57,9 +57,12 @@ class DatabaseStream extends Stream implements WriterInterface
             
             # write to database
             $conn =  $this->getDatabase();
-            $stmt = $conn->prepare(implode(' ',$this->cache));
+            $sSql = implode(' ',$this->cache);
+            $result = true;
             
-            $result = $stmt->execute();
+            if(!empty($sSql)) {
+                $result = $conn->exec($sSql);
+            }
             
             # clear cache values 
             unset($this->cache);

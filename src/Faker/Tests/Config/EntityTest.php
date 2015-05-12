@@ -26,6 +26,9 @@ class EntityTest extends AbstractProject
         $entity->setUnixSocket('path/to/socker/socket.sock');
         $entity->setUser('root');
         $entity->setConnectionName('mystage');
+        
+        $entity->addPlatformOption('service','myService');
+        $entity->addPlatformOption('mypath','myPath');
 
         # test properties
         $this->assertEquals($entity->getCharset(),'latin1');
@@ -40,7 +43,7 @@ class EntityTest extends AbstractProject
         $this->assertEquals($entity->getUser(),'root');
         $this->assertEquals($entity->getConnectionName(),'mystage');
         
-        
+        $this->assertSame(array('service'=>'myService','mypath'=>'myPath'),$entity->getPlatformOptions());
         
         
         

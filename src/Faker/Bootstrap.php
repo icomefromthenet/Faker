@@ -156,7 +156,7 @@ class Bootstrap
       {
          
          $config_manager = $project->getConfigManager();
-         $pool           = $project['database_pool'];
+         $pool           = $project->getConnectionPool();
       
           if($config_manager === null) {
               throw new \RuntimeException('Config Manager not loaded, must be loaded before booting the database');
@@ -475,11 +475,13 @@ class Bootstrap
          $circularRefPass = new \Faker\Components\Engine\Common\Compiler\Pass\CircularRefPass();
          $cacheInjectPass = new \Faker\Components\Engine\Common\Compiler\Pass\CacheInjectorPass();
          $datasourcePass  = new \Faker\Components\Engine\Common\Compiler\Pass\DatasourcePass($datasourceVisitor);
+         $dbStreamPass    = new \Faker\Components\Engine\Common\Compiler\Pass\DbStreamRepPass($project->getConnectionPool(),$project->getWriterManager());
          
          $compiler->addPass($circularRefPass);
          $compiler->addPass($topOrderPass);
          $compiler->addPass($cacheInjectPass);
          $compiler->addPass($datasourcePass);
+         $compiler->addPass($dbStreamPass);
          
          return $compiler;
       };

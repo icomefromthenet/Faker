@@ -35,7 +35,7 @@ class ComponentTest extends AbstractProject
     public function testNewEncoder()
     {
         $project = $this->getProject();
-        $manager = $project->getWritterManager();
+        $manager = $project->getWriterManager();
       
         $this->assertInstanceOf('Faker\Components\Writer\Encoding',$manager->getEncoder('utf-8','utf-8'));
       

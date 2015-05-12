@@ -60,6 +60,12 @@ class Loader
                 $ent->setConnectionName($config_ary['connectionName']);
             }
             
+            foreach($config_ary as $k => $v) {
+                if(false == in_array($k,array('type','charset','memory','password','path','port','schema','socket','user','connName','poolName','connectionName'))) {
+                    $ent->addPlatformOption($k,$v);
+                }
+            }
+            
             return $ent;
     }
 
