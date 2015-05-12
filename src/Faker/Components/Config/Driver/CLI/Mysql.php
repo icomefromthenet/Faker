@@ -51,6 +51,7 @@ class Mysql implements ConfigInterface
                 ->scalarNode('socket')->defaultValue(false)->end()
                 ->scalarNode('schema')->isRequired()->end()
                 ->scalarNode('charset')->defaultValue(false)->end()
+                ->scalarNode('connectionName')->isRequired()->end()
                 ->end();
 
             } catch(\Exception $e) {
@@ -79,6 +80,9 @@ class Mysql implements ConfigInterface
             $entity->setHost($config['host']);
             $entity->setUnixSocket($config['socket']);
             $entity->setCharset($config['charset']);
+            $entity->setConnectionName($config['connectionName']);
+    
+            
     
         } catch(\Exception $e) {
             throw new InvalidConfigException($e->getMessage());
@@ -112,8 +116,11 @@ class Mysql implements ConfigInterface
             $answers['port']   =  $dialog->ask($output,'<question>What is the Database port? [3306] : </question>',3306);
         }
         
-        #Database port
+        #Database charset
         $answers['charset']   =  $dialog->ask($output,'<question>Connect with different character set? [false] : </question>',false);
+        
+        #Get connection name
+        $answers['connectionName'] =  $dialog->ask($output,'<question>A unique name for this connection?: </question>',false);
         
         return $answers;
     }

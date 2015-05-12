@@ -50,6 +50,7 @@ class Oci implements ConfigInterface
                 ->scalarNode('port')->defaultValue(3306)->end()
                 ->scalarNode('schema')->isRequired()->end()
                 ->scalarNode('charset')->defaultValue(false)->end()
+                ->scalarNode('connectionName')->isRequired()->end()
                 ->end();
 
             } catch(\Exception $e) {
@@ -77,6 +78,7 @@ class Oci implements ConfigInterface
             $entity->setPort($config['port']);
             $entity->setHost($config['host']);
             $entity->setCharset($config['charset']);
+            $entity->setConnectionName($config['connectionName']);
     
         } catch(\Exception $e) {
             throw new InvalidConfigException($e->getMessage());
@@ -107,6 +109,9 @@ class Oci implements ConfigInterface
         
         #Database port
         $answers['charset'] =  $dialog->ask($output,'<question>Connect with different character set? [false] : </question>',false);
+        
+        #Get connection name
+        $answers['connectionName'] =  $dialog->ask($output,'<question>A unique name for this connection?: </question>',false);
         
         return $answers;
     }

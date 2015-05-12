@@ -28,7 +28,7 @@ Question will need to be answered.
     What is the Database user name? : root
     etc ....
 ```
-This will write a config file to config folder inside the project directory.
+This will write a config file to config folder inside the project directory, you can edit the connection file to add extra options. 
 
 ## Analyse.
 

@@ -194,7 +194,7 @@ class Bootstrap
               
               # push the connection into the pool   
               foreach($entityStack as $config) {
-                 $pool->addExtraConnection($entity->getConnectionName(),$entity);
+                 $pool->addExtraConnection($config->getConnectionName(),$config);
               }
             
           }

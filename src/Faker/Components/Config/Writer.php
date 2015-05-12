@@ -42,6 +42,7 @@ class Writer
             'path'            => $entity->getPath(),
             'memory'          => $entity->getMemory(),
             'charset'         => $entity->getCharset(),
+            'connectionName'  => $entity->getConnectionName()
         )),true);
     
         #write to file

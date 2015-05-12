@@ -32,6 +32,7 @@ class WriterTest extends AbstractProject
         $entity->setType('pdo_mysql');
         $entity->setUnixSocket('path/to/socker/socket.sock');
         $entity->setUser('root');
+        $entity->setConnectionName('connect1');
         
         $alias = 'default';
         
@@ -39,7 +40,7 @@ class WriterTest extends AbstractProject
 
         $io->expects($this->once())
             ->method('write')
-            ->with($this->equalTo($alias.'.php'),$this->equalTo(null),$this->isType('string'),$this->equalTo(false));
+            ->with($this->equalTo($alias.'.php'),$this->equalTo(''),$this->isType('string'),$this->equalTo(false));
         
         $writer = new Writer($io);
         $writer->write($entity,$alias,false);
@@ -61,6 +62,7 @@ class WriterTest extends AbstractProject
         $entity->setType('pdo_mysql');
         $entity->setUnixSocket('path/to/socker/socket.sock');
         $entity->setUser('root');
+        $entity->setConnectionName('connect1');
        
         $alias = 'default';
         

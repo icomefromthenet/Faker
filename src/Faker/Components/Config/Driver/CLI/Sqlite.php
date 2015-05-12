@@ -48,6 +48,7 @@ class Sqlite implements ConfigInterface
                 ->scalarNode('password')->defaultValue(false)->end()
                 ->scalarNode('path')->defaultValue(false)->end()
                 ->scalarNode('memory')->defaultValue(false)->end()
+                ->scalarNode('connectionName')->isRequired()->end()
                 ->end();
 
             } catch(\Exception $e) {
@@ -82,6 +83,8 @@ class Sqlite implements ConfigInterface
             }
             
             $entity->setType($config['type']);
+            
+            $entity->setConnectionName($config['connectionName']);
     
         } catch(\Exception $e) {
             throw new InvalidConfigException($e->getMessage());
@@ -109,6 +112,9 @@ class Sqlite implements ConfigInterface
             #Database path
             $answers['path'] =  $dialog->ask($output,'<question>What is the Database path relative to project root? : </question>',false);
         }
+        
+        #get connection name
+        $answers['connectionName'] =  $dialog->ask($output,'<question>A unique name for this connection?: </question>',false);
         
         return $answers;
         

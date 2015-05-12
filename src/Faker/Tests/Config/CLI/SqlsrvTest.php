@@ -19,6 +19,7 @@ class SqlsrvTest extends AbstractProject
             'host' => 'localhost',
             'port'     => 3306,
             'schema' => 'sakila',
+            'connectionName' => 'connect1'
         );
         
         
@@ -31,6 +32,7 @@ class SqlsrvTest extends AbstractProject
         $entity->expects($this->once())->method('setPort')->with($this->equalTo(3306));
         $entity->expects($this->once())->method('setHost')->with($this->equalTo('localhost'));
         $entity->expects($this->once())->method('setPassword')->with($this->equalTo('vagrant'));
+        $entity->expects($this->once())->method('setConnectionName')->with($this->equalTo('connect1'));
         
         $dsn = new Sqlsrv();
         $dsn->merge($entity,$parsed);
@@ -51,6 +53,7 @@ class SqlsrvTest extends AbstractProject
             'host' => 'localhost',
             'port'     => 3306,
             'schema' => 'sakila',
+            'connectionName' => 'connect1'
         );
         
         $entity = $this->getMockBuilder('\Faker\Components\Config\EntityInterface')->getMock();

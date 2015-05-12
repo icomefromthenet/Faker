@@ -19,6 +19,7 @@ class OciTest extends AbstractProject
             'host' => 'localhost',
             'port'     => 3306,
             'schema' => 'sakila',
+            'connectionName' => 'connect1'
         );
         
         
@@ -32,6 +33,7 @@ class OciTest extends AbstractProject
         $entity->expects($this->once())->method('setHost')->with($this->equalTo('localhost'));
         $entity->expects($this->once())->method('setPassword')->with($this->equalTo('vagrant'));
         $entity->expects($this->once())->method('setCharset')->with($this->equalTo(false));
+        $entity->expects($this->once())->method('setConnectionName')->with($this->equalTo('connect1'));
         
         $dsn = new Oci();
         $dsn->merge($entity,$parsed);
@@ -47,7 +49,8 @@ class OciTest extends AbstractProject
             'host' => 'localhost',
             'port'     => 3306,
             'schema' => 'sakila',
-            'charset' => 'latin1'
+            'charset' => 'latin1',
+            'connectionName' => 'connect1'
         );
         
         
@@ -61,6 +64,7 @@ class OciTest extends AbstractProject
         $entity->expects($this->once())->method('setHost')->with($this->equalTo('localhost'));
         $entity->expects($this->once())->method('setPassword')->with($this->equalTo('vagrant'));
         $entity->expects($this->once())->method('setCharset')->with($this->equalTo('latin1'));
+        $entity->expects($this->once())->method('setConnectionName')->with($this->equalTo('connect1'));
         
         $dsn = new Oci();
         $dsn->merge($entity,$parsed);

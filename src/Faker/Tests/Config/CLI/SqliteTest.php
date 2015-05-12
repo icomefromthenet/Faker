@@ -17,7 +17,8 @@ class SqliteTest extends AbstractProject
             'username' => 'root',
             'password' => 'vagrant',
             'path' => 'mydb.sqlite',
-            'memory' => false
+            'memory' => false,
+            'connectionName' => 'connect1'
         );
         
         
@@ -28,6 +29,7 @@ class SqliteTest extends AbstractProject
         $entity->expects($this->once())->method('setType')->with($this->equalTo('pdo_sqlite'));
         $entity->expects($this->once())->method('setPassword')->with($this->equalTo('vagrant'));
         $entity->expects($this->once())->method('setPath')->with($this->equalTo('mydb.sqlite'));
+        $entity->expects($this->once())->method('setConnectionName')->with($this->equalTo('connect1'));
         
         $dsn = new Sqlite();
         $dsn->merge($entity,$parsed);
@@ -40,7 +42,8 @@ class SqliteTest extends AbstractProject
             'type'  => 'pdo_sqlite',
             'username' => 'root',
             'password' => 'vagrant',
-            'memory'   => ':memory'
+            'memory'   => ':memory',
+            'connectionName' => 'connect1'
         );
         
         
@@ -51,6 +54,7 @@ class SqliteTest extends AbstractProject
         $entity->expects($this->once())->method('setType')->with($this->equalTo('pdo_sqlite'));
         $entity->expects($this->once())->method('setPassword')->with($this->equalTo('vagrant'));
         $entity->expects($this->once())->method('setMemory')->with($this->equalTo(':memory'));
+        $entity->expects($this->once())->method('setConnectionName')->with($this->equalTo('connect1'));
         
         $dsn = new Sqlite();
         $dsn->merge($entity,$parsed);
@@ -63,7 +67,8 @@ class SqliteTest extends AbstractProject
             'type'  => 'pdo_sqlite',
             'username' => false,
             'password' => false,
-            'memory'   => ':memory'
+            'memory'   => ':memory',
+            'connectionName' => 'connect1'
         );
         
         
@@ -74,6 +79,7 @@ class SqliteTest extends AbstractProject
         $entity->expects($this->once())->method('setType')->with($this->equalTo('pdo_sqlite'));
         $entity->expects($this->once())->method('setPassword')->with($this->equalTo(false));
         $entity->expects($this->once())->method('setMemory')->with($this->equalTo(':memory'));
+        $entity->expects($this->once())->method('setConnectionName')->with($this->equalTo('connect1'));
         
         $dsn = new Sqlite();
         $dsn->merge($entity,$parsed);
@@ -91,6 +97,7 @@ class SqliteTest extends AbstractProject
             'type'  => 'mysql',
             'username' => 'root',
             'password' => 'vagrant',
+            'connectionName' => 'connect1'
         );
         
         
@@ -110,6 +117,7 @@ class SqliteTest extends AbstractProject
             'type'  => 'pdo_sqlite',
             'username' => 'root',
             'password' => 'vagrant',
+            'connectionName' => 'connect1'
         );
         
         
