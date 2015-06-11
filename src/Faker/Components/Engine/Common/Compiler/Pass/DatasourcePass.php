@@ -5,6 +5,10 @@ use Faker\Components\Engine\Common\Compiler\CompilerPassInterface;
 use Faker\Components\Engine\Common\Compiler\CompilerInterface;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Visitor\DSourceInjectorVisitor;
+use Faker\Components\Config\ConnectionPool;
+use Faker\Components\Engine\EngineException;
+use Faker\Components\Engine\Common\Datasource\ExtraConnectionInterface;
+
 
     
 /*
@@ -22,9 +26,15 @@ class DatasourcePass implements CompilerPassInterface
      */ 
     protected $visitor;
     
-    public function __construct(DSourceInjectorVisitor $visitor)
+    /**
+     * @ Faker\Components\Config\ConnectionPool
+     */ 
+    protected $pool;
+    
+    public function __construct(DSourceInjectorVisitor $visitor, ConnectionPool $pool)
     {
         $this->visitor = $visitor;
+        $this->pool    = $pool;
     }
     
     
@@ -36,7 +46,38 @@ class DatasourcePass implements CompilerPassInterface
       */
     public function process(CompositeInterface $composite,CompilerInterface $cmp)
     {
+        
+        # inject datasources into composite
         $composite->acceptVisitor($this->getSourceVisitor());
+        
+        # inject connections into our datasources
+        $sourceList = $this->getSourceVisitor()->getResult();
+        
+        
+        
+        foreach($sourceList as $datasourceName => $datasourceCompositeNode) {
+            $dataSource = $datasourceCompositeNode->getDatasource();    
+            //eval(\Psy\sh());
+            
+            
+            //fetch the connection name from the internal source
+            if(true === $dataSource->hasOption('connectionName') 
+                    && $dataSource instanceof ExtraConnectionInterface) {
+                
+                $connectionName = $dataSource->getOption('connectionName'); 
+                
+                // find connection in pool
+                if (false === $this->pool->hasExtraConnection($connectionName)) {
+                    throw new EngineException(sprintf('Connection pool does not have connection %s',$connectionName));
+                }
+                
+                // assign connection to the datasource
+                $dataSource->setExtraConnection($this->pool->getExtraConnection($connectionName));
+                
+            }
+            
+        }
+        
     }
     
     /**

@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputArgument,
     Faker\Components\Config\Manager,
     Faker\Io\FileExistException,
     Faker\Components\Config\Entity;
-
+use Faker\Components\Config\Loader;
 
 class ConfigureCommand extends Command
 {
@@ -59,12 +59,21 @@ class ConfigureCommand extends Command
 
         try {
 
-            # get the CLI Config Driver
+            # Get the CLI Config Driver
             $driver = $project->getConfigManager()->getCLIFactory()->create($this->answers['type']);
             $entity = $driver->merge(new Entity(),$this->answers);
+            $connectionsRaw = array();
+            
+            # Read existing connections so when write new config file we don't loose them
+            if($manager->getLoader()->exists(Loader::DEFAULTNAME)) {
+                $connectionsRaw = $manager->getLoader()->load();
+            }
         
-            #Write config file to the project
-            $manager->getWriter()->write($entity,$project->getConfigName());
+            # add new connection to end of list
+            $connectionsRaw[] = $entity;
+        
+            # Write config file to the project
+            $manager->getWriter()->write($connectionsRaw,$project->getConfigName());
 
         }
         catch(FileExistException $e) {
@@ -74,7 +83,7 @@ class ConfigureCommand extends Command
 
             if($answer) {
                 #Write config file to the project
-                $manager->getWriter()->write($entity,$project->getConfigName(),true);
+                $manager->getWriter()->write($connectionsRaw,$project->getConfigName(),true);
 
             }
         }

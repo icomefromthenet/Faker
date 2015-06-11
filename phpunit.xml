@@ -6,10 +6,10 @@
          backupStaticAttributes="false"
          >
 <php>
-    <env name="DB_DSN" value="mysql:dbname=c9;host=172.17.4.88" />
+    <env name="DB_DSN" value="mysql:dbname=c9;host=172.17.130.172" />
     <env name="DB_USER" value="icomefromthenet" />
     <env name="DB_PASSWD" value="" />
-    <env name="DB_HOST" value="172.17.4.88" />
+    <env name="DB_HOST" value="172.17.130.172" />
     <env name="DB_DBNAME" value="c9" />
 </php> 
   

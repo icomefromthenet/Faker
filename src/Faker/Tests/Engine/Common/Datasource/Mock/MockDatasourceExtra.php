@@ -4,11 +4,12 @@ namespace Faker\Tests\Engine\Common\Datasource\Mock;
 use Faker\Components\Config\DoctrineConnWrapper;
 use Faker\Components\Engine\Common\Datasource\DatasourceInterface;
 use Faker\Components\Engine\Common\Datasource\AbstractDatasource;
+use Faker\Components\Engine\Common\Datasource\ExtraConnectionInterface;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 
-class MockDatasource extends AbstractDatasource implements DatasourceInterface
+class MockDatasourceExtra extends AbstractDatasource implements DatasourceInterface,ExtraConnectionInterface
 {
  
     public function initSource()
@@ -52,6 +53,19 @@ class MockDatasource extends AbstractDatasource implements DatasourceInterface
         return $rootNode;
     }
     
+    //--------------------------------------------------------------------------
+    # ExtraConnectionInterface
     
+    protected $extraConnection;
+    
+    public function setExtraConnection(DoctrineConnWrapper $conn)
+    {
+        $this->extraConnection  = $conn;
+    }
+    
+    public function getExtraConnection()
+    {
+        return $this->extraConnection;
+    }
 }
 /* End of Class */

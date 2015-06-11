@@ -1,10 +1,10 @@
 <?php
 namespace Faker\Tests\Config;
 
-use Faker\Io\Io,
-    Faker\Components\Config\Entity,
-    Faker\Components\Config\Writer,
-    Faker\Tests\Base\AbstractProject;
+use Faker\Io\Io;
+use Faker\Components\Config\Entity;
+use Faker\Components\Config\Writer;
+use Faker\Tests\Base\AbstractProject;
 
 class WriterTest extends AbstractProject
 {
@@ -43,7 +43,7 @@ class WriterTest extends AbstractProject
             ->with($this->equalTo($alias.'.php'),$this->equalTo(''),$this->isType('string'),$this->equalTo(false));
         
         $writer = new Writer($io);
-        $writer->write($entity,$alias,false);
+        $writer->write(array($entity),$alias,false);
 
     }
 
@@ -73,7 +73,7 @@ class WriterTest extends AbstractProject
             ->with($this->equalTo($alias.'.php'),$this->equalTo(null),$this->isType('string'),$this->equalTo(true));
         
         $writer = new Writer($io);
-        $writer->write($entity,$alias,true);
+        $writer->write(array($entity),$alias,true);
 
     }
     

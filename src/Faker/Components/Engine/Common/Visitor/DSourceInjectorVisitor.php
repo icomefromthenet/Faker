@@ -16,6 +16,7 @@ use Faker\Components\Engine\Common\Type\FromSource;
 use Faker\Components\Engine\Common\Type\BindDataInterface;
 
 
+
 /*
  *
  * Will gather all datasources
@@ -45,6 +46,7 @@ class DSourceInjectorVisitor extends BasicVisitor
     public function __construct(PathBuilder $pathBuilder)
     {
         $this->pathBuilder = $pathBuilder;
+        $this->sources     = array();
     }
     
     
@@ -74,8 +76,7 @@ class DSourceInjectorVisitor extends BasicVisitor
     
     public function visitDatasourceInjector(CompositeInterface $composite)
     {
-        if($this->sources === null) {
-           
+        if(true === empty($this->sources)) {
            $this->sources = array();
            $finder        = new CompositeFinder();
            $root          = $finder->set($composite)->parentSchema()->get();
@@ -131,28 +132,37 @@ class DSourceInjectorVisitor extends BasicVisitor
     //------------------------------------------------------------------
     
     /**
-      *  Will fetch the results map
+     * Return the datasources parsed during the execution of this visitor
+     * 
+     * @return array[DatasourceNode]
+     */ 
+    public function getDatasource()
+    {
+        return $this->sources; 
+    }
+    
+    
+     /**
+      *  Reset a visitor for another run
       *
       *  @access public
-      *  @return Faker\Components\Engine\Original\Compiler\Graph\DirectedGraph
+      *  @return void
       */
-    public function getResult()
+    public function reset()
     {
-        return $this->graph;
+        $this->sources = array();
     }
     
     /**
-     * Reset the Directed Graph
-     
-     * @access public
-     * @return void
-     *
-    */
-    public function reset()
+      *  Where visitors are used to gather a result this will
+      *  return it
+      *
+      *  @return mixed
+      */
+    public function getResult()
     {
-        $this->graph->clear();
+        return $this->getDatasource();
     }
-    
    
 }
 /* End of File */
