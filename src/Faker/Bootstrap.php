@@ -464,6 +464,8 @@ class Bootstrap
       
       $project['engine_common_compiler'] = function(Project $project) {
          
+         $pool = $project->getConnectionPool();
+        
          $pathBuilder     = new \Faker\Components\Engine\Common\Composite\PathBuilder();
          $directedGraph   = new \Faker\Components\Engine\Common\Compiler\Graph\DirectedGraph();
          $visitor         = new \Faker\Components\Engine\Common\Visitor\DirectedGraphVisitor($directedGraph,$pathBuilder);
@@ -474,7 +476,7 @@ class Bootstrap
          $topOrderPass    = new \Faker\Components\Engine\Common\Compiler\Pass\TopOrderPass();
          $circularRefPass = new \Faker\Components\Engine\Common\Compiler\Pass\CircularRefPass();
          $cacheInjectPass = new \Faker\Components\Engine\Common\Compiler\Pass\CacheInjectorPass();
-         $datasourcePass  = new \Faker\Components\Engine\Common\Compiler\Pass\DatasourcePass($datasourceVisitor);
+         $datasourcePass  = new \Faker\Components\Engine\Common\Compiler\Pass\DatasourcePass($datasourceVisitor,$pool);
          $dbStreamPass    = new \Faker\Components\Engine\Common\Compiler\Pass\DbStreamRepPass($project->getConnectionPool(),$project->getWriterManager());
          
          $compiler->addPass($circularRefPass);

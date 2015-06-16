@@ -39,7 +39,7 @@ $builder = $container
                 # query values to test successful insert
                 var_dump($conn->fetchAll('SELECT * FROM people_names'));
             })
-            ->create($name,$locale,$util,$gen)
+            ->addPass('FirstPass',$name,$locale,$util,$gen)
             ->describe()
                 ->addTable('people_names')
                     ->toGenerate(100)

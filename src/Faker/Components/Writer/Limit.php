@@ -135,6 +135,19 @@ class Limit
         $this->write_limit = $limit;
         $this->reset();
     }
+    
+    
+    //---------------------------------------------------------------
+    
+     /**
+      *  Returns the current at position
+      *
+      *  @return integer the current at
+      */
+    public function currentAt()
+    {
+        return $this->current_at; 
+    }
 
 }
 /* End of File */

@@ -49,9 +49,12 @@ class LimitTest extends AbstractProject
     {
         $file = new Limit(100);
 
-        $file->increment();
+        $this->assertEquals($file->currentAt(),0);
 
-        $this->assertTrue(true);
+        $file->increment();
+        
+        $this->assertEquals($file->currentAt(),1);
+
     }
     
     /**

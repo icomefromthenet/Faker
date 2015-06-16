@@ -67,6 +67,28 @@ class Project extends Pimple
         return $this;
     }
     
+    /**
+     * Add a Pass to this project
+     * 
+     *  @param string   $passName   A unique name for this pass 
+     *  @param Faker\Project the DI container
+     *  @param string $name of the entity
+     *  @param Faker\Locale\LocaleInterface $locale to use
+     *  @param Faker\Components\Engine\Common\Utilities  $util
+     *  @param PHPStats\Generator\GeneratorInterface $util
+     */ 
+    public function addPass($passName,$name,LocaleInterface $locale = null,Utilities $util = null,GeneratorInterface $gen = null) 
+    {
+        
+        if(false === empty($passName) && false === isset($this->builderCollection[$passName])) {
+            $this->builderCollection[] = $this->create($name,$local,$util,$gen);
+        } else {
+            throw new FakerException(sprintf('The %s is already set in this project or empty value been passed',$passName));
+        }
+        
+        return $this->builderCollection[$passName];
+        
+    }
     
     /**
       *  Static Constructor
@@ -108,8 +130,7 @@ class Project extends Pimple
         }
         
         $builder =  new SchemaBuilder($name,$newChannelDispatcher,$repo,$locale,$util,$gen,$conn,$loader,$platformFactory,$formatterFactory,$compiler,$datasourceRepo);
-         
-        $this->builderCollection[] = $builder;
+       
         
         return $builder;
     }
