@@ -2,13 +2,13 @@
 namespace Faker\Tests\Engine\Common\Datasource;
 
 use Faker\Tests\Base\AbstractProject;
-use Faker\Components\Engine\Common\Datasource\SQLDatasource;
+use Faker\Components\Engine\Common\Datasource\BulkSQLDatasource;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Config\ConnectionPool;
 use Faker\Components\Config\Entity;
 use Faker\PlatformFactory;
 
-class SQLDatasourceTest extends AbstractProject
+class BulkSQLDatasourceTest extends AbstractProject
 {
  
     protected function getMockConnection($uniqueConnectionNameA)
@@ -49,7 +49,7 @@ class SQLDatasourceTest extends AbstractProject
     public function testQueryParmRequired()
     {
         # create datasource and assign basic param
-        $mock = new SQLDatasource();
+        $mock = new BulkSQLDatasource();
         $mock->setOption('id','MySoruceA');
         $mock->setOption('connection','connectA');
         $mock->setOption('limit',1);
@@ -65,7 +65,7 @@ class SQLDatasourceTest extends AbstractProject
     public function testLimitCannotBeLessThenONE()
     {
         # create datasource and assign basic param
-        $mock = new SQLDatasource();
+        $mock = new BulkSQLDatasource();
         $mock->setOption('id','MySoruceA');
         
         $mock->setOption('query','SELECT * FROM tbltest');
@@ -85,7 +85,7 @@ class SQLDatasourceTest extends AbstractProject
     public function testOffsetCannotBeLessThanZero()
     {
         # create datasource and assign basic param
-        $mock = new SQLDatasource();
+        $mock = new BulkSQLDatasource();
         $mock->setOption('id','MySoruceA');
         
         $mock->setOption('query','SELECT * FROM tbltest');
@@ -106,7 +106,7 @@ class SQLDatasourceTest extends AbstractProject
     public function testConnectionNameCanBeNotEmpty()
     {
         # create datasource and assign basic param
-        $mock = new SQLDatasource();
+        $mock = new BulkSQLDatasource();
         $mock->setOption('id','MySoruceA');
         
         $mock->setOption('query','SELECT * FROM tbltest');
@@ -121,66 +121,14 @@ class SQLDatasourceTest extends AbstractProject
     }
     
     
-    public function testDatasourceSingleMode()
+    public function testDatasource()
     {
         # setup a database to reference    
         $uniqueConnectionNameA = 'connection.a';
         $dbConnect = $this->getMockConnection($uniqueConnectionNameA);
         
         # create datasource and assign basic param
-        $mock = new SQLDatasource();
-        $mock->setOption('id','MySoruceA');
-        $mock->setOption('connection',$uniqueConnectionNameA);
-        $mock->setOption('limit',1);
-        $mock->setOption('offset',0);
-        
-        # assign the query params
-        $mock->setOption('query','SELECT * FROM tbltest');
-        
-        $mock->setExtraConnection($dbConnect);
-        
-        # validate the source
-        $mock->validate();
-       
-        # no error thrown 
-        $mock->initSource();    
-      
-        $this->assertEquals($mock->fetchOne(),array('ID'=>1));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>2));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>3));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>4));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>5));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>6));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>7));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>8));
-        
-        $mock->flushSource();
-        $mock->initSource();    
-         
-        $this->assertEquals($mock->fetchOne(),array('ID'=>1));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>2));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>3));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>4));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>5));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>6));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>7));
-        $this->assertEquals($mock->fetchOne(),array('ID'=>8));
-      
-        
-        $mock->cleanupSource();
-        
-        
-        
-    }
-    
-    public function testDatasourceBulkMode()
-    {
-        # setup a database to reference    
-        $uniqueConnectionNameA = 'connection.a';
-        $dbConnect = $this->getMockConnection($uniqueConnectionNameA);
-        
-        # create datasource and assign basic param
-        $mock = new SQLDatasource();
+        $mock = new BulkSQLDatasource();
         $mock->setOption('id','MySoruceA');
         $mock->setOption('connection',$uniqueConnectionNameA);
         $mock->setOption('limit',5);
@@ -230,17 +178,7 @@ class SQLDatasourceTest extends AbstractProject
         
     }
     
-    /**
-    * @expectedException Faker\Components\Engine\EngineException
-    * @expectedExceptionMessage PHPDatasource must have some data assigned
-    */ 
-    /*public function testDatasourceValidateFailsEmptyData()
-    {
-        $mock = new PHPDatasource();
-        $mock->setOption('id','MySoruceA');
-        $mock->validate();
-    }*/
-    
+   
     
 }
 /* End of File */
