@@ -102,16 +102,6 @@ class DatasourceBuilder extends NodeCollection
         return $field;
     }
     
-    /**
-      *  Returns a file datasource definition 
-      *
-      *  @return Faker\Components\Engine\Common\Datasource\AbstractDefinition
-      *  @access public
-      */
-    public function createFileSource()
-    {
-        return $this->customDatasource('filesource');          
-    }
     
     /**
       *  Returns a sql datasource definition 
@@ -127,7 +117,7 @@ class DatasourceBuilder extends NodeCollection
     /**
       *  Returns a php datasource definition 
       *
-      *  @return Faker\Components\Engine\Common\Datasource\PHPDatasource
+      *  @return Faker\Components\Engine\Common\Datasource\PHPDatasourceDefinition
       *  @access public
       */
     public function createPHPSource()
@@ -135,5 +125,37 @@ class DatasourceBuilder extends NodeCollection
         return $this->customDatasource('phpsource');      
     }
   
+    /**
+      *  Returns a Simple SQL Datasource
+      *
+      *  @return Faker\Components\Engine\Common\Datasource\SimpleSQLDefinition
+      *  @access public
+      */
+    public function createSimpleSQLSource()
+    {
+         return $this->customDatasource('simplesql');      
+    }
+    
+    /**
+      *  Returns a Bulk SQL Datasource
+      *
+      *  @return Faker\Components\Engine\Common\Datasource\BulkSQLDefinition
+      *  @access public
+      */
+    public function createBulkSQLSource()
+    {
+         return $this->customDatasource('bulksql');      
+    }
+    
+    /**
+      *  Returns a Page SQL Datasource
+      *
+      *  @return Faker\Components\Engine\Common\Datasource\PageSQLDefinition
+      *  @access public
+      */
+    public function createPageSQLSource() 
+    {
+         return $this->customDatasource('pagesql');      
+    }
 }
 /* End of File */

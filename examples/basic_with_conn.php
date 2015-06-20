@@ -37,9 +37,9 @@ $builder = $container
                 $conn = $container->getConnectionPool()->getExtraConnection('testConnect');
                 
                 # query values to test successful insert
-                var_dump($conn->fetchAll('SELECT * FROM people_names'));
+                //var_dump($conn->fetchAll('SELECT * FROM people_names'));
             })
-            ->create($name,$locale,$util,$gen)
+            ->addPass('Pass1',$name,$locale,$util,$gen)
             ->describe()
                 ->addTable('people_names')
                     ->toGenerate(100)

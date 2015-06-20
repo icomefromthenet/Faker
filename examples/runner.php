@@ -9,6 +9,7 @@ use Faker\Components\Engine\Common\Composite\TableNode;
 use Faker\Components\Engine\Common\Output\ProgressBarOutputter;
 use Faker\Components\Engine\Common\Output\DebugOutputter;
 use Faker\Project;
+use Faker\Components\Engine\Entity\Builder\EntityGenerator;
 
 //---------------------------------------------------------------
 // Setup Global Error Levels
@@ -105,6 +106,8 @@ $console->register('faker:run')
             
         } elseif ($composite instanceof SchemaNode) {
         
+        } elseif ($composite instanceof EntityGenerator) {
+        
            
                 
         } elseif ($composite instanceof Project) {
@@ -132,12 +135,11 @@ $console->register('faker:run')
             $result = array();
             $composite->generate(1,$result,array());
             
-        } elseif($composite instanceof Project){
+        } elseif($composite instanceof Project) {
             $composite->generate(); 
         }
-        else {
-            throw new \RuntimeException('No Composite with GeneratorInterface found');
-        }
+        
+        # EntityGenerator will execute themselves in their example files
         
         $output->writeln(sprintf("%s <info>success</info>", 'faker:run'));
 });

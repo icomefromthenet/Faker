@@ -13,7 +13,7 @@ $locale          = $container->getLocaleFactory()->create('en');
 $util            = $container->getEngineUtilities();
 $gen             = $container->getDefaultRandom();
     
-$builder = $container->create($name,$locale,$util,$gen)
+$builder = $container->addPass('Pass1',$name,$locale,$util,$gen)
             ->describe()
                 ->addTable('aa')
                     ->toGenerate(100)

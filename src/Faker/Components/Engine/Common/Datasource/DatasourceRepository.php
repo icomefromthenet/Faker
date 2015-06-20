@@ -20,9 +20,10 @@ class DatasourceRepository implements ExtensionInterface
     static $types = array();
     
     static $defaultTypes = array(
-          //  'filesource'    => '\\Faker\\Components\\Engine\\Common\\Datasource\\FileDatasourceDefinition',
-            'phpsource'     => '\\Faker\\Components\\Engine\\Common\\Datasource\\PHPSourceDefinition',
-        //    'sqlsource'    => '\\Faker\\Components\\Engine\\Common\\Datasource\\SQLSourceDefinition',
+        'phpsource'     => '\\Faker\\Components\\Engine\\Common\\Datasource\\PHPSourceDefinition',
+        'simplesql'     => '\\Faker\\Components\\Engine\\Common\\Datasource\\SimpleSQLDefinition',
+        'bulksql'       => '\\Faker\\Components\\Engine\\Common\\Datasource\\BulkSQLDefinition',
+        'pagesql'       => '\\Faker\\Components\\Engine\\Common\\Datasource\\PageSQLDefinition',
     );
 
     /**

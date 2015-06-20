@@ -32,7 +32,7 @@ $entityIterator = $builder
                 ->map(function (GenericEntity $entity) {
                     return $entity;
                 })
-                ->fake(1);
+                ->fake(2);
                 
 //---------------------------------------------------------------
 // Output the Entity
@@ -41,7 +41,8 @@ $entityIterator = $builder
 
                 
 foreach($entityIterator as $result) {
-          echo $result->myfield . PHP_EOL; 
+        echo $result->myfield . PHP_EOL;
+        echo $result->otherfield . PHP_EOL; 
 }
 
 //-------------------------------------------------------------------

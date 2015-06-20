@@ -340,7 +340,7 @@ class BuilderExamplesTest extends AbstractProject
         
         $container->clearBuilderCollection();
         
-        $schema = $container->create($name)
+        $schema = $container->addPass('PASS1',$name)
                         ->describe()
                             ->addTable('table1')
                                 ->toGenerate(100)
@@ -397,6 +397,39 @@ class BuilderExamplesTest extends AbstractProject
         
     }
     
+    /**
+     * @expectedException Faker\Exception
+     * @expectedExceptionMessage The PASS1 passname is already set in this project
+     * 
+     */ 
+    public function testExceptionThrownOnDuplicatePassName()
+    {
+        
+        $container       = $this->getProject(); 
+        $name            = 'SchemaA';
+        
+        $container->clearBuilderCollection();
+        $container->addPass('PASS1',$name);
+        $container->addPass('PASS1','schema2');
+        
+    }
     
+    
+    /**
+     * @expectedException Faker\Exception
+     * @expectedExceptionMessage The passname can not be empty value
+     * 
+     */ 
+    public function testExceptionThrownOnEmptyPassName()
+    {
+        
+        $container       = $this->getProject(); 
+        $name            = 'SchemaA';
+        
+        $container->clearBuilderCollection();
+        $container->addPass('PASS1',$name);
+        $container->addPass('','schema2');
+        
+    }
 }
 /* End of Class */

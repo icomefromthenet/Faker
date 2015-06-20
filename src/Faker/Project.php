@@ -81,9 +81,16 @@ class Project extends Pimple
     {
         
         if(false === empty($passName) && false === isset($this->builderCollection[$passName])) {
-            $this->builderCollection[] = $this->create($name,$local,$util,$gen);
+            $this->builderCollection[$passName] = $this->create($name,$locale,$util,$gen);
         } else {
-            throw new FakerException(sprintf('The %s is already set in this project or empty value been passed',$passName));
+            
+            if(true === empty($passName)) {
+                throw new FakerException(sprintf('The passname can not be empty value'));
+            }
+            else {
+                throw new FakerException(sprintf('The %s passname is already set in this project',$passName));
+            }
+            
         }
         
         return $this->builderCollection[$passName];
@@ -161,11 +168,12 @@ class Project extends Pimple
     public function howManyRows()
     {
         $rows = 0;
-        
+         
         foreach($this->builderCollection as $builder) {
              $composite = $builder->getNode();
-             
+            
             foreach($composite->getChildren() as $table) {
+            
                 if($table instanceof TableNode) {
                     $rows +=  $table->getRowsToGenerate();
                 }
