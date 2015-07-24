@@ -61,6 +61,7 @@ class NodeCollection implements ParentNodeInterface
         $this->utilities       = $util;
         $this->locale          = $locale;
         $this->templateLoader  = $loader;
+        $this->children        = array();
     }
     
     

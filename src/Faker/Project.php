@@ -669,6 +669,16 @@ class Project extends Pimple
           return  $this['platform_factory'];
      }
      
+     /**
+      * Return the Random Generator Factory
+      * 
+      * @access public
+      * @return \PHPStats\Generator\GeneratorFactory
+      */
+     public function getRandomGeneratorFactory()
+     {
+         return $this['generator_factory'];
+     }
      
      /**
       *  Create a new Formatter Factory
