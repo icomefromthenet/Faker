@@ -70,12 +70,11 @@ class Project extends Pimple
     /**
      * Add a Pass to this project
      * 
-     *  @param string   $passName   A unique name for this pass 
-     *  @param Faker\Project the DI container
-     *  @param string $name of the entity
-     *  @param Faker\Locale\LocaleInterface $locale to use
+     *  @param string                                    $passName   A unique name for this pass
+     *  @param string                                    $name of the schema 
+     *  @param Faker\Locale\LocaleInterface              $locale to use
      *  @param Faker\Components\Engine\Common\Utilities  $util
-     *  @param PHPStats\Generator\GeneratorInterface $util
+     *  @param PHPStats\Generator\GeneratorInterface     $gen
      */ 
     public function addPass($passName,$name,LocaleInterface $locale = null,Utilities $util = null,GeneratorInterface $gen = null) 
     {

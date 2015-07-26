@@ -44,6 +44,7 @@ class SchemaBuilder implements ParentNodeInterface
     protected $typeRepo;
     protected $templateLoader;
     protected $channelName;
+    protected $oTableCollection;
     
     /**
       *  @var Symfony\Component\EventDispatcher\EventDispatcherInterface 
@@ -123,7 +124,10 @@ class SchemaBuilder implements ParentNodeInterface
       */
     public function describe()
     {
-        $tableCollection = new TableCollection($this->name,
+       
+       if(null === $this->oTableCollection) {
+       
+          $this->oTableCollection = new TableCollection($this->name,
                                                $this->event,
                                                $this->typeRepo,
                                                $this->utilities,
@@ -133,9 +137,10 @@ class SchemaBuilder implements ParentNodeInterface
                                                $this->templateLoader
                                             );
         
-        $tableCollection->setParent($this);
+          $this->oTableCollection->setParent($this);
+        }
         
-        return $tableCollection;
+        return $this->oTableCollection;
     }
     
     /**
@@ -182,9 +187,9 @@ class SchemaBuilder implements ParentNodeInterface
     /**
      * Attach an event handler to execute before generating starts
      * 
-     * @param Closure   $fn
+     * @param Callable   $fn
      */ 
-    public function onGenerateStart(\Closure $fn)
+    public function onGenerateStart($fn)
     {
         $this->event->addListener(FormatEvents::onSchemaStart,$fn);
         
@@ -194,9 +199,9 @@ class SchemaBuilder implements ParentNodeInterface
     /**
      * Attach event handler to execute after the schema has stopped generating
      * 
-     * @param Closuer   $fn
+     * @param Callable   $fn
      */ 
-    public function onGenerateEnd(\Closure $fn)
+    public function onGenerateEnd($fn)
     {
         $this->event->addListener(FormatEvents::onSchemaEnd,$fn);
         
