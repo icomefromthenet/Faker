@@ -61,7 +61,7 @@ class FromSource extends Template implements BindDataInterface
     
     //  -------------------------------------------------------------------------
 
-       /**
+    /**
      * Generates the configuration tree builder.
      *
      */
@@ -89,8 +89,7 @@ class FromSource extends Template implements BindDataInterface
         $valid = false;
         
         if(parent::validate()) {
-            // datasources are bound to PARENTS during a compile step, the parents 
-            // will bind a per call to self::generate 
+            // datasources are bound to PARENTS during a compile step
             $valid = true;
         }
         
