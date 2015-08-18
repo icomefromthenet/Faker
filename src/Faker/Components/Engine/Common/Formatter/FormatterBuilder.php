@@ -64,7 +64,7 @@ class FormatterBuilder extends NodeCollection
         return $parent;
     }
     
-    //------------------------------------------------------------------
+    //-----------------------------------------------------------------------
     # Builders
     
     /**
@@ -73,7 +73,7 @@ class FormatterBuilder extends NodeCollection
       *  @return CustomFormatterDefinition
       *  @access public
       */
-    public function customFormatter()
+    public function customWriter()
     {
         $formatter = new CustomFormatterDefinition($this->eventDispatcher,$this->formatterFactory,$this->platformFactory);
         $formatter->setParent($this);
@@ -87,7 +87,7 @@ class FormatterBuilder extends NodeCollection
       *   @access public
       *   @return PhpunitFormatterDefinition
       */
-    public function phpUnitWritter()
+    public function phpUnitWriter()
     {
         $formatter = new PhpunitFormatterDefinition($this->eventDispatcher,$this->formatterFactory,$this->platformFactory);
         
@@ -102,12 +102,50 @@ class FormatterBuilder extends NodeCollection
       * @access public
       * @return SqlFormatterDefinition
       */
-    public function sqlWritter()
+    public function sqlWriter()
     {
         $formatter = new SqlFormatterDefinition($this->eventDispatcher,$this->formatterFactory,$this->platformFactory);
         $formatter->setParent($this);
         
         return $formatter;
+    }
+    
+    
+    
+    //------------------------------------------------------------------
+    # Legacy 
+    
+    /**
+      *  Returns a Custom Formatter Definition
+      *
+      *  @return CustomFormatterDefinition
+      *  @access public
+      */
+    public function customFormatter()
+    {
+       return $this->customWriter();
+    }
+    
+    /**
+      *   Returns a Phpunit Formatter Definition
+      *
+      *   @access public
+      *   @return PhpunitFormatterDefinition
+      */
+    public function phpUnitWritter()
+    {
+       return $this->phpUnitWriter();
+    }
+    
+    /**
+      * Return a SQL Formatter Definition
+      *
+      * @access public
+      * @return SqlFormatterDefinition
+      */
+    public function sqlWritter()
+    {
+        return $this->sqlWriter();
     }
 
 }
