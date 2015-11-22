@@ -1,6 +1,7 @@
 <?php
 namespace Faker\Command;
 
+use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -110,7 +111,7 @@ class GenerateCommand extends Command
             $event->addSubscriber(new ProgressBarOutputter($event,$progress_bar));
         }
         else {
-            throw new RuntimeException('Unknown return from project file');
+            throw new \RuntimeException('Unknown return from project file');
         }
         
         # start execution of the generate
