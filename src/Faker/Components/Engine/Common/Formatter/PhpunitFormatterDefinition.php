@@ -35,6 +35,14 @@ class PhpunitFormatterDefinition extends AbstractDefinition
         # return a CompositeInterface Node
         return new FormatterNode('formatterNode'.rand(100,1000),$this->eventDispatcher,$formatter);
     }
+
+    /**
+     * @see self::end()
+     */ 
+    public function endPhpunitWriter()
+    {
+        return $this->end();
+    }
     
 }
 /* End of File */

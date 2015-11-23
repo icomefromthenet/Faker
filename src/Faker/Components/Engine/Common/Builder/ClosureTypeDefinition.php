@@ -17,6 +17,13 @@ class ClosureTypeDefinition extends AbstractDefinition
     
     protected $closure;
     
+    
+    public function endClosureField()
+    {
+        return $this->end();
+    }
+    
+    
     /**
     * Instantiate and configure the node according to this definition
     *

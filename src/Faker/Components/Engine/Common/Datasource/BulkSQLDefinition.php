@@ -98,6 +98,12 @@ class BulkSQLDefinition extends AbstractDefinition
         
         return $this;
     }
+    
+    
+    public function endBulkSQLSource()
+    {
+        return $this->end();
+    }
    
 }
 /* End of File */

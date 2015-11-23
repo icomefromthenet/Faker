@@ -15,6 +15,11 @@ use Faker\Components\Engine\Common\Type\Date;
 class DateTypeDefinition extends AbstractDefinition
 {
     
+    public function endDateField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

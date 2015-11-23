@@ -78,5 +78,14 @@ class SqlFormatterDefinition extends AbstractDefinition
         return $this;
     }
     
+    /**
+     * @see self::end()
+     */ 
+    public function endSqlWriter()
+    {
+        return $this->end();
+        
+    }
+    
 }
 /* End of File */

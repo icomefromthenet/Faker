@@ -100,6 +100,14 @@ class ColumnBuilder extends NodeCollection
         
     }
     
+    /**
+     * @see self::end
+     */ 
+    public function endColumn()
+    {
+        return $this->end();
+    }
+    
     
     /**
       *  Set the default locale on this table

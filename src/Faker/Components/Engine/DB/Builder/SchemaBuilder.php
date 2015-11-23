@@ -242,6 +242,17 @@ class SchemaBuilder implements ParentNodeInterface
     }
     
     /**
+    *  Builds a SchemaNode
+    *
+    *  @access public
+    *  @return Faker\Components\Engine\DB\Composite/SchemaNode
+    */
+    public function endSchema()
+    {
+        return $this->end();
+    }
+    
+    /**
       *  Builds a SchemaNode
       *
       *  @access public

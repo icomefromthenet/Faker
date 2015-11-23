@@ -14,6 +14,12 @@ use Faker\Components\Engine\Common\Type\ConstantNumber;
 class ConstantNumberTypeDefinition extends AbstractDefinition
 {
     
+    
+    public function endConstantNumberField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

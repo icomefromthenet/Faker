@@ -66,5 +66,10 @@ class PHPSourceDefinition extends AbstractDefinition
         
         return $this;
     }
+    
+    public function endPHPSource()
+    {
+        return $this->end();
+    }
 }
 /* End of File */

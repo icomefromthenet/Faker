@@ -51,5 +51,12 @@ class CustomFormatterDefinition extends AbstractDefinition
         return $this;
     }
     
+    /**
+     * @see self::end()
+     */ 
+    public function endCustomWriter()
+    {
+        return $this->end();
+    }
 }
 /* End of File */

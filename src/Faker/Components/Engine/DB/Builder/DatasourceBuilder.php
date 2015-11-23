@@ -70,6 +70,14 @@ class DatasourceBuilder extends NodeCollection
         return $parent;
     }
     
+    /**
+     * @see self::end
+     */ 
+    public function endDatasource()
+    {
+        return $this->end();
+    }
+    
     //------------------------------------------------------------------
     # Builders
     

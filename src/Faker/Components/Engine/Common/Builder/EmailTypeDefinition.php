@@ -14,6 +14,11 @@ use Faker\Components\Engine\Common\Type\Email;
 class EmailTypeDefinition extends AbstractDefinition
 {
     
+    public function endEmailField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

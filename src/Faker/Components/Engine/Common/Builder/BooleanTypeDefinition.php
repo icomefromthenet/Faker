@@ -14,6 +14,11 @@ use Faker\Components\Engine\Common\Type\BooleanType;
 class BooleanTypeDefinition extends AbstractDefinition
 {
     
+    public function endBooleanField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

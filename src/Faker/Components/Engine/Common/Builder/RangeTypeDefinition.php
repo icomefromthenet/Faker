@@ -14,6 +14,11 @@ use Faker\Components\Engine\Common\Type\Range;
 class RangeTypeDefinition extends AbstractDefinition
 {
     
+    public function endRangeField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

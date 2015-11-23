@@ -14,6 +14,13 @@ use Faker\Components\Engine\Common\Type\Names;
 class NamesTypeDefinition extends AbstractDefinition
 {
     
+    
+    public function endNamesField()
+    {
+        return $this->end();
+    }
+    
+    
     /**
     * Instantiate and configure the node according to this definition
     *

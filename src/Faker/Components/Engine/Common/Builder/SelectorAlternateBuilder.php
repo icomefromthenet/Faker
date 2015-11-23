@@ -130,7 +130,12 @@ class SelectorAlternateBuilder extends NodeCollection implements TypeDefinitionI
     }
     
     
-     /**
+    public function endAlternateSelector()
+    {
+        return $this->end();
+    }
+    
+    /**
     * Returns the parent node.
     *
     * @return ParentNodeInterface The builder of the parent node

@@ -14,7 +14,12 @@ use Faker\Components\Engine\Common\Type\AlphaNumeric;
 class AlphaNumericTypeDefinition extends AbstractDefinition
 {
     
-    public function getNode()
+   public function endAlphaNumericField()
+   {
+       return $this->end();
+   }
+   
+   public function getNode()
     {
         $type = new AlphaNumeric();
         $type->setGenerator($this->generator);

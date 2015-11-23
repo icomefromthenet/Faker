@@ -14,6 +14,11 @@ use Faker\Components\Engine\Common\Type\Text;
 class TextTypeDefinition extends AbstractDefinition
 {
     
+    public function endTextField()
+    {
+        return $this->end();
+    }
+      
     /**
     * Instantiate and configure the node according to this definition
     *

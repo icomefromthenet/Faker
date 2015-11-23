@@ -14,6 +14,11 @@ use Faker\Components\Engine\Common\Type\UniqueNumber;
 class UniqueNumberTypeDefinition extends AbstractDefinition
 {
     
+    public function endUniqueNumberField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

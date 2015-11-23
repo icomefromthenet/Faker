@@ -14,6 +14,11 @@ use Faker\Components\Engine\Common\Type\Cities;
 class CitiesTypeDefinition extends AbstractDefinition
 {
     
+    public function endCitiesField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

@@ -14,6 +14,11 @@ use Faker\Components\Engine\Common\Type\ConstantString;
 class ConstantStringTypeDefinition extends AbstractDefinition
 {
     
+    public function endConstantStringField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

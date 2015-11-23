@@ -14,6 +14,11 @@ use Faker\Components\Engine\Common\Type\Null;
 class NullTypeDefinition extends AbstractDefinition
 {
     
+    public function endNullField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

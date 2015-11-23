@@ -70,7 +70,14 @@ class TableCollection extends NodeCollection
         
     }
     
-    
+    /**
+     * @see self::end()
+     * 
+     */ 
+    public function endDescribe()
+    {
+        return $this->end();
+    }
     
 }
 /* End of File */

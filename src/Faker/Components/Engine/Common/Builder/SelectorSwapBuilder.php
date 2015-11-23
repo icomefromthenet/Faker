@@ -147,6 +147,12 @@ class SelectorSwapBuilder extends NodeCollection implements TypeDefinitionInterf
     }
     
     
+    
+    public function endSwapSelector()
+    {
+        return $this->end();
+    }
+    
     /**
       * Returns the parent node.
       *

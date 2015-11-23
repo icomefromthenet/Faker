@@ -14,6 +14,11 @@ use Faker\Components\Engine\Common\Type\UniqueString;
 class UniqueStringTypeDefinition extends AbstractDefinition
 {
     
+    public function endUniqueStringField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

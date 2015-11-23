@@ -26,6 +26,15 @@ class FieldBuilder extends NodeBuilder implements FieldListInterface, SelectorLi
         return parent::end();
     }
     
-    
+    /**
+    * Build a TypeNode. 
+    *
+    * @return \Faker\Components\Engine\DB\Builder\ColumnBuilder
+    * @access public
+    */
+    public function endField()
+    {
+        return $this->end();
+    }
 }
 /* End of File */

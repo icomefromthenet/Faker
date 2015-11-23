@@ -98,6 +98,11 @@ class PageSQLDefinition extends AbstractDefinition
         
         return $this;
     }
+    
+    public function endPageSQLSource()
+    {
+        return $this->end();
+    }
    
 }
 /* End of File */

@@ -73,5 +73,10 @@ class ForeignKeyBuilder extends AbstractDefinition
         return $this;
     }
     
+    
+    public function endForeignField()
+    {
+        return $this->end();
+    }
 }
 /* End of File */

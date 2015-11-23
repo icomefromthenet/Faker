@@ -14,6 +14,11 @@ use Faker\Components\Engine\Common\Type\Regex;
 class RegexTypeDefinition extends AbstractDefinition
 {
     
+    public function endRegexField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

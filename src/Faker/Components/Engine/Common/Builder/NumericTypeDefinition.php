@@ -14,6 +14,11 @@ use Faker\Components\Engine\Common\Type\Numeric;
 class NumericTypeDefinition extends AbstractDefinition
 {
     
+    public function endNumericField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

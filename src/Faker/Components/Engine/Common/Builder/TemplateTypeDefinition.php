@@ -14,6 +14,11 @@ use Faker\Components\Engine\Common\Type\Template;
 class TemplateTypeDefinition extends AbstractDefinition
 {
     
+    public function endTemplateField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

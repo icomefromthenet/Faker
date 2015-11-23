@@ -130,7 +130,12 @@ class SelectorRandomBuilder extends NodeCollection implements TypeDefinitionInte
     }
     
     
-     /**
+    public function endRandomSelector()
+    {
+        return $this->end();
+    }
+    
+    /**
     * Returns the parent node.
     *
     * @return ParentNodeInterface The builder of the parent node

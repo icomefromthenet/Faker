@@ -69,6 +69,13 @@ class SimpleSQLDefinition extends AbstractDefinition
         return $this;
     }
     
+    /**
+     * @see self::end()
+     */ 
+    public function endSimpleSQLSource()
+    {
+        return $this->end();
+    }
    
 }
 /* End of File */

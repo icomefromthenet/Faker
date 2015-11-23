@@ -62,6 +62,17 @@ class TableBuilder extends NodeCollection
         return $node;
     }
     
+    /**
+    * Build a TableNode and append all children columnNodes to it
+    * before passing TableNode to a parent NodeCollection
+    *
+    * @return \Faker\Components\Engine\DB\Builder\TableCollection
+    * @access public
+    */
+    public function endTable()
+    {
+        return $this->end();
+    }
     
     /**
     * Build a TableNode and append all children columnNodes to it

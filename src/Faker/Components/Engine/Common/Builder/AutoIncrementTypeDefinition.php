@@ -14,6 +14,12 @@ use Faker\Components\Engine\Common\Type\AutoIncrement;
 class AutoIncrementTypeDefinition extends AbstractDefinition
 {
     
+    public function endAutoIncrementField()
+    {
+        return $this->end();
+    }
+   
+   
     /**
     * Instantiate and configure the node according to this definition
     *

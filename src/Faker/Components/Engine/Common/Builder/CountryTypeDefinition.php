@@ -15,6 +15,11 @@ use Faker\Components\Engine\Common\Type\Country;
 class CountryTypeDefinition extends AbstractDefinition
 {
     
+    public function endCountryField()
+    {
+        return $this->end();
+    }
+    
     /**
     * Instantiate and configure the node according to this definition
     *

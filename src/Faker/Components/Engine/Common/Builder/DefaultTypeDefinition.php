@@ -14,6 +14,7 @@ use Faker\Components\Engine\Common\Type\AlphaNumeric;
 class DefaultTypeDefinition extends AbstractDefinition
 {
     
+    
     protected $className;
     
     /**
@@ -50,6 +51,14 @@ class DefaultTypeDefinition extends AbstractDefinition
     {
         $this->className = $class;
         return $this;
+    }
+    
+    /**
+     * @see self::end()
+     */ 
+    public function endDefaultField()
+    {
+        return $this->end();
     }
     
 }

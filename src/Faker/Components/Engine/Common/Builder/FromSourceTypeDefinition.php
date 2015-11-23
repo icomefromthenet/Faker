@@ -14,6 +14,12 @@ use Faker\Components\Engine\Common\Type\FromSource;
 class FromSourceTypeDefinition extends AbstractDefinition
 {
     
+    public function endFromSourceField()
+    {
+        return $this->end();
+    }
+    
+    
     /**
     * Instantiate and configure the node according to this definition
     *

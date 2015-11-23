@@ -64,6 +64,12 @@ class FormatterBuilder extends NodeCollection
         return $parent;
     }
     
+    
+    public function endWriter()
+    {
+        return $this->end();
+    }
+    
     //-----------------------------------------------------------------------
     # Builders
     
@@ -137,6 +143,9 @@ class FormatterBuilder extends NodeCollection
        return $this->phpUnitWriter();
     }
     
+     
+   
+    
     /**
       * Return a SQL Formatter Definition
       *
@@ -147,6 +156,7 @@ class FormatterBuilder extends NodeCollection
     {
         return $this->sqlWriter();
     }
-
+    
+   
 }
 /* End of File */
