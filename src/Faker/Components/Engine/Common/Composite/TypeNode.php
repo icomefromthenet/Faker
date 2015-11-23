@@ -12,6 +12,8 @@ use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Visitor\BasicVisitor;
 use Faker\Components\Engine\Common\GeneratorCache;
 use Faker\Components\Engine\Common\Composite\HasDatasourceInterface;
+use Faker\Components\Engine\Common\Type\BindDataInterface;
+
 
 /**
   *  Node to contain datatypes
