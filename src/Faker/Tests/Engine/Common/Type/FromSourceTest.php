@@ -180,7 +180,7 @@ class FromSourceTest extends AbstractProject
     
     public function testboundDataPassedToTemplate()
     {
-        $dataToBind = array('datatobind'=> 'value');
+        $dataToBind = array(array('datatobind'=> 'value'));
         $values     = array('values');
         
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
@@ -202,7 +202,7 @@ class FromSourceTest extends AbstractProject
         
         $templateInstance->expects($this->once())
                          ->method('render')
-                         ->with($this->equalTo(array('values'=>$values,'sources'=>$dataToBind))); 
+                         ->with($this->equalTo(array('values'=>$values,'sources'=>$dataToBind[0]))); 
         
         
         $template_loader->expects($this->once())

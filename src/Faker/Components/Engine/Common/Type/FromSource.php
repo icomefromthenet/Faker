@@ -50,7 +50,12 @@ class FromSource extends Template implements BindDataInterface
             }
         }
             
-        $result =  $this->template->render(array('values'=>$values,'sources'=> $this->dataFromSources));
+             
+    	if(true === isset($this->dataFromSources[0])) {
+    		$result =  $this->template->render(array('values'=>$values,'sources'=> $this->dataFromSources[0]));
+    	} else {
+            $result =  $this->template->render(array('values'=>$values,'sources'=> array()));
+    	} 
     
         # clear bound data
         $this->bindData(array());
