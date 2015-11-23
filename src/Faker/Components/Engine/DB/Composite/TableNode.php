@@ -121,9 +121,18 @@ class TableNode extends BaseTableNode implements GeneratorInterface, VisitorInte
                 $last = $values;
                 
                 
+               $aDone = array();
                 foreach($children as $node) {
-                    if($node instanceof HasDatasourceInterface) {
-                        $node->getDatasource()->flushSource();
+                    if($node instanceof HasDatasourceInterface && false === empty($node->getDatasource())) {
+                        
+                        $sHash = spl_object_hash($node->getDatasource());
+                       
+                        // make sure only called once per row
+                        if(false === in_array($sHash,$aDone)) {
+                            $node->getDatasource()->flushSource();
+                            $aDone[] = $sHash;    
+                        }
+                        
                     }
                 }
                 
