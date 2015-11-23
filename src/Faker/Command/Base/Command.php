@@ -73,6 +73,9 @@ class Command extends BaseCommand
             $project['dsn_command'] = $input->getOption('dsn');
         }
         
+        # Load the Database Config File
+        $project->getConfigFile();
+        
     }
     
 }
