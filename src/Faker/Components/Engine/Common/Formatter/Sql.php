@@ -5,6 +5,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
+use Faker\Platform\EscapePolyfillInterface;
 use Faker\Components\Writer\WriterInterface;
 use Faker\Components\Engine\EngineException;
 use Faker\Components\Engine\Common\Formatter\FormatEvents;
@@ -194,19 +195,38 @@ class Sql extends BaseFormatter implements FormatterInterface
               return $q.$value.$q;
         },array_keys($values));
         
+        if($platform instanceof EscapePolyfillInterface) {
+            
+            $column_values = array_map(function($value) use ($platform) {
+                
+                if(is_string($value)) {
+                    $value = "'" . $platform->quote($value) . "'";
+                }
+                
+                if(is_null($value) === true) {
+                    $value = 'NULL';
+                }
+                  
+                return $value;
+            }, array_values($values));
+            
+            
+        } else {
         
-        $column_values = array_map(function($value){
-            
-            if(is_string($value)) {
-                $value = "'" . str_replace("'","''",$value) . "'";
-            }
-            
-            if(is_null($value) === true) {
-                $value = 'NULL';
-            }
-              
-            return $value;
-        }, array_values($values));
+            $column_values = array_map(function($value){
+                
+                if(is_string($value)) {
+                    $value = "'" . str_replace("'","''",$value) . "'";
+                }
+                
+                if(is_null($value) === true) {
+                    $value = 'NULL';
+                }
+                  
+                return $value;
+            }, array_values($values));
+        
+        }
         
         if(count($column_keys) !== count($column_values)) {
             throw new EngineException('Keys do not have enough values');

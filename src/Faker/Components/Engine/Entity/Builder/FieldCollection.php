@@ -21,6 +21,13 @@ use Doctrine\DBAL\Connection;
   */
 class FieldCollection extends NodeCollection
 {
+    /**
+     * @see self::end()
+     */ 
+    public function endDescribe()
+    {
+        return $this->end();
+    }
     
     /**
       *  Add new Field to the entity.

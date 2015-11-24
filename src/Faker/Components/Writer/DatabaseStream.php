@@ -51,19 +51,26 @@ class DatabaseStream extends Stream implements WriterInterface
     {
         try {
         
-            # used in parent class
-            $this->writeFooter();
-            $this->file_handle = null;
-            
-            # write to database
-            $conn =  $this->getDatabase();
-            $sSql = implode(' ',$this->cache);
             $result = true;
             
-            if(!empty($sSql)) {
-                $result = $conn->exec($sSql);
-            }
+            # used in parent class
+            if(count($this->cache) > 0) {
             
+                $this->writeFooter();
+                $this->file_handle = null;
+                
+                # write to database
+                $conn =  $this->getDatabase();
+                $sSql = implode(' ',$this->cache);
+
+           
+                
+                if(!empty($sSql)) {
+                    $result = $conn->exec($sSql);
+                }
+            
+            }
+        
             # clear cache values 
             unset($this->cache);
             $this->cache = array();

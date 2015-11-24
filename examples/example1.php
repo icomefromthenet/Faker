@@ -21,14 +21,14 @@ $entityIterator = $builder
                         ->fieldAutoIncrement()
                             ->startAtValue(5)
                             ->incrementByValue(1)
-                        ->end()
-                    ->end()
+                        ->endAutoIncrementField()
+                    ->endField()
                     ->addField('otherfield')
                         ->fieldAlphaNumeric()
                             ->format('cccc')
-                        ->end()
-                    ->end()
-                ->end()
+                        ->endAlphaNumericField()
+                    ->endField()
+                ->endDescribe()
                 ->map(function (GenericEntity $entity) {
                     return $entity;
                 })
@@ -50,4 +50,4 @@ foreach($entityIterator as $result) {
 //
 //--------------------------------------------------------------------
 
-return null;
+return $builder;

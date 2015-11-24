@@ -22,10 +22,10 @@ class PlatformFactory implements ExtensionInterface
       */
     protected static $platform = array(
         'db2'           => 'Doctrine\\DBAL\\Platforms\\DB2Platform',
-        'mysql'         => 'Doctrine\\DBAL\\Platforms\\MySqlPlatform',
-        'oracle'        => 'Doctrine\\DBAL\\Platforms\\OraclePlatform',
+        'mysql'         => 'Faker\\Platform\\MySqlPlatform',
+        'oracle'        => 'Faker\\Platform\\OraclePlatform',
         'postgresql'    => 'Doctrine\\DBAL\\Platforms\\PostgreSqlPlatform',
-        'sqlite'        => 'Doctrine\\DBAL\\Platforms\\SqlitePlatform',
+        'sqlite'        => 'Faker\\Platform\\SqlitePlatform',
         'sqlserver2005' => 'Doctrine\\DBAL\\Platforms\\SQLServer2005Platform',
         'sqlserver2008' => 'Doctrine\\DBAL\\Platforms\\SQLServer2008Platform',
         'sqlserver'     => 'Doctrine\\DBAL\\Platforms\\SQLServerPlatform',

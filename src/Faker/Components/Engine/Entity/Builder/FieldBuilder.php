@@ -26,6 +26,13 @@ use Faker\Components\Engine\Common\Composite\CompositeInterface;
   */
 class FieldBuilder extends NodeBuilder implements SelectorListInterface, FieldListInterface
 {
+    /**
+     * @see self::end()
+     */ 
+    public function endField()
+    {
+        return $this->end();
+    }
     
     /**
       *  Create the field node that hold the child selectors and types.

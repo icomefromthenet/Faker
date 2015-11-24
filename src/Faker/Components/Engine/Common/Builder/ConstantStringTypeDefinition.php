@@ -14,7 +14,7 @@ use Faker\Components\Engine\Common\Type\ConstantString;
 class ConstantStringTypeDefinition extends AbstractDefinition
 {
     
-    public function endConstantStringField()
+    public function endConstantField()
     {
         return $this->end();
     }

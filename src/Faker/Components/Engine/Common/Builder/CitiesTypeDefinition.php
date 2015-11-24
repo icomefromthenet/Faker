@@ -14,7 +14,7 @@ use Faker\Components\Engine\Common\Type\Cities;
 class CitiesTypeDefinition extends AbstractDefinition
 {
     
-    public function endCitiesField()
+    public function endCityField()
     {
         return $this->end();
     }

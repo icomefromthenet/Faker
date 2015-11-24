@@ -15,7 +15,7 @@ class ConstantNumberTypeDefinition extends AbstractDefinition
 {
     
     
-    public function endConstantNumberField()
+    public function endConstantField()
     {
         return $this->end();
     }
