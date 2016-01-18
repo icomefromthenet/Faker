@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Faker\Command\Base\Command;
 use Faker\Components\Engine\Common\Output\DebugOutputter;
 use Faker\Components\Engine\Common\Output\ProgressBarOutputter;
+use Faker\Components\Engine\Entity\Event\ProgressBarOut;
 use Faker\Components\Engine\Common\Output\BuilderConsoleOutput;
 use Faker\Components\Engine\Common\Composite\GeneratorInterface;
 use Faker\Components\Engine\DB\Composite\SchemaNode;
@@ -18,6 +19,7 @@ use Faker\Command\Base\FakerCommand;
 use Zend\ProgressBar\ProgressBar;
 use Zend\ProgressBar\Adapter\Console as ZendConsoleAdapter;
 use Faker\Components\Engine\Common\Composite\TableNode;
+use Faker\Components\Engine\Entity\EntityIterator;
 use Faker\Project;
 
 class GenerateCommand extends Command
@@ -110,6 +112,21 @@ class GenerateCommand extends Command
             # instance the default notifier
             $event->addSubscriber(new ProgressBarOutputter($event,$progress_bar));
         }
+        elseif($composite instanceof EntityIterator) {
+            
+            
+            $rows = $composite->getAmount();
+            
+            $console_adapter = new ZendConsoleAdapter();
+            $console_adapter->setElements(array(ZendConsoleAdapter::ELEMENT_PERCENT,
+                                ZendConsoleAdapter::ELEMENT_BAR,
+                                ZendConsoleAdapter::ELEMENT_TEXT,
+                            ));
+           $progress_bar = new ProgressBar($console_adapter, 1, $rows,null);
+           
+           $event->addSubscriber(new ProgressBarOut($event,$progress_bar));
+           
+        }
         else {
             throw new \RuntimeException('Unknown return from project file');
         }
@@ -121,6 +138,10 @@ class GenerateCommand extends Command
             
         } elseif($composite instanceof Project){
             $composite->generate(); 
+        }
+        elseif($composite instanceof EntityIterator) {
+            # iterate the class will generate each entity
+            foreach($composite as $oEntity) {}
         }
         else {
             throw new \RuntimeException('No Composite with GeneratorInterface found');

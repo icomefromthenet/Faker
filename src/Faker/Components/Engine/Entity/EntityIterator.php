@@ -165,6 +165,7 @@ class EntityIterator implements \Iterator
     {
         return $this->generator;    
     }
-
+    
+    
 }
 /* End of File */

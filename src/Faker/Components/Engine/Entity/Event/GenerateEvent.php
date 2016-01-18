@@ -1,9 +1,9 @@
 <?php
 namespace Faker\Components\Engine\Entity\Event;
 
-use Symfony\Component\EventDispatcher\Event;
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Entity\GenericEntity;
+use Faker\Components\Engine\Common\Formatter\GenerateEvent as BaseGenerateEvent;
 
 /**
   *  Event class used in entity composite 
@@ -11,7 +11,7 @@ use Faker\Components\Engine\Entity\GenericEntity;
   *  @author Lewis Dyer <getintouch@icomefromthenet.com>
   *  @since 1.0.4
   */
-class GenerateEvent extends Event
+class GenerateEvent extends BaseGenerateEvent
 {
     
     protected $node;
