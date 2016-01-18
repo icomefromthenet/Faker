@@ -185,18 +185,17 @@ class Bootstrap
              $config_name = $project->getConfigName();
           
               # check if we can load the config given
-              if($config_manager->getLoader()->exists($config_name) === false) {
-                  throw new \RuntimeException(sprintf('Missing database config at %s ',$config_name));
+              if($config_manager->getLoader()->exists($config_name) === true) {
+                 # load the config file
+                 $entityStack = $config_manager->getLoader()->load($config_name);
+                 
+                 # push the connection into the pool   
+                 foreach($entityStack as $config) {
+                    $pool->addExtraConnection($config->getConnectionName(),$config);
+                 }
+                 
               }
       
-              # load the config file
-              $entityStack = $config_manager->getLoader()->load($config_name);
-              
-              # push the connection into the pool   
-              foreach($entityStack as $config) {
-                 $pool->addExtraConnection($config->getConnectionName(),$config);
-              }
-            
           }
           
           return $pool;
