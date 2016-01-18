@@ -73,8 +73,10 @@ class Command extends BaseCommand
             $project['dsn_command'] = $input->getOption('dsn');
         }
         
-        # Load the Database Config File
-        $project->getConfigFile();
+        if($this->getName() !== 'faker:init' && $this->getName() !== 'faker:configure') {
+            # Load the Database Config File
+            $project->getConfigFile();
+        }
         
     }
     
