@@ -33,6 +33,18 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
     {
         return new null;
     }
+   
+    /**
+    *  Send the child compositeNodes to parent builder
+    *
+    *  @return NodeInterface The parent builder 
+    *  @access public
+    */
+    public function endDescribe()
+    {
+        return $this->end();
+    }
+   
     
     
     /**
@@ -54,6 +66,7 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
         # return parent to continue chain.
         return $parent;
     }
+    
     
     /**
       *  Find the Type from the TypeDefinitionRepo and return an instanced definition
