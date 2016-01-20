@@ -34,8 +34,8 @@
         "symfony/http-kernel"           : "2.3.*",
         "twig/twig"                     : "~1.13",
         "pimple/pimple"                 : "1.0.*",
-        "doctrine/common"               : "2.3.*",
-        "doctrine/dbal"                 : "2.3.*",
+        "doctrine/common"               : "2.5.*",
+        "doctrine/dbal"                 : "2.5.*",
         "ext-dom": "*",
         "ext-spl": "*",
         "ext-pcre": "*"
