@@ -89,7 +89,7 @@ class RangeTest extends AbstractProject
     
     /**
       *  @expectedException \Faker\Components\Engine\EngineException
-      *  @expectedExceptionMessage Range::Round option should be a positive integer >= 0
+      *  @expectedExceptionMessage Range::Round option should be an integer
       */
     public function testConfigRoundNotInteger()
     {
@@ -114,32 +114,7 @@ class RangeTest extends AbstractProject
         
     }
     
-     /**
-      *  @expectedException \Faker\Components\Engine\EngineException
-      *  @expectedExceptionMessage Range::Round option should be a positive integer >= 0
-      */
-    public function testConfigRoundNotPositiveInteger()
-    {
-       $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
-                          ->disableOriginalConstructor()
-                          ->getMock(); 
-        
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-            
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
-            
-        $type = new Range();
-        $type->setGenerator($generator);
-        $type->setLocale($locale);
-        $type->setUtilities($utilities);
-        
-        $type->setOption('max', 5);
-        $type->setOption('min' ,1);
-        $type->setOption('round' ,-1);
-        
-        $type->validate();        
-        
-    }
+    
     
     //  -------------------------------------------------------------------------
    

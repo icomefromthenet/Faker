@@ -148,10 +148,10 @@ class Range extends Type
                     ->info('number of places to round too')
                      ->validate()
                         ->ifTrue(function($v){
-                            return !(is_integer($v) && $v > 0);
+                            return false === is_integer($v);
                         })
                         ->then(function($v){
-                            throw new EngineException('Range::Round option should be a positive integer >= 0');
+                            throw new EngineException('Range::Round option should be an integer');
                         })
                     ->end()
                 ->end()
