@@ -28,27 +28,27 @@ class BuilderExamplesTest extends AbstractProject
         $util            = $container->getEngineUtilities();
         $gen             = $container->getDefaultRandom();
     
-        $builder = $container->create($name,$locale,$util,$gen);
+        $builder = $container->createSchema($name,$locale,$util,$gen);
         
         $generatorComposite = $builder
                         ->addWriter()
-                            ->sqlWritter()
+                            ->sqlWriter()
                                 ->singleFileMode(true)
-                            ->end()
-                        ->end()
+                            ->endSqlWriter()
+                        ->endWriter()
                         ->addWriter()
-                            ->phpUnitWritter()
+                            ->phpUnitWriter()
                                 ->outputEncoding('utf8')
                                 ->outFileFormat('{prefix}_{body}_{suffix}.{ext}')
-                            ->end()
-                        ->end()
+                            ->endPhpUnitWriter()
+                        ->endWriter()
                         ->addWriter()
-                            ->customFormatter()
+                            ->customWriter()
                                 ->typeName('sql')
-                            ->end()
-                        ->end()
+                            ->endCustomWriter()
+                        ->endWriter()
                         
-                    ->end();
+                    ->endSchema();
         
         # builder has returned a generator composite and a schema node as root
         $this->assertInstanceOf('Faker\Components\Engine\Common\Composite\CompositeInterface',$generatorComposite);
@@ -69,10 +69,10 @@ class BuilderExamplesTest extends AbstractProject
     public function testExample2()
     {
         $container       = $this->getProject(); 
-        $name            = 'test_db'; 
+        $sSchemaName     = 'test_db'; 
         $event           = $container->getEventDispatcher();
         
-        $schema = $container->create($name)
+        $schema = $container->addPass('pass1',$sSchemaName)
                         ->describe()
                             ->addTable('table1')
                                 ->toGenerate(100)
@@ -81,25 +81,25 @@ class BuilderExamplesTest extends AbstractProject
                                     ->addField('column2')
                                         ->fieldAlphaNumeric()
                                             ->format('cccCCCCCCC')
-                                        ->end()
-                                    ->end()
-                                ->end()
+                                        ->endAlphaNumericField()
+                                    ->endField()
+                                ->endColumn()
                                 ->addColumn('column1')
                                     ->dbalType('string')
                                     ->addField()
                                         ->fieldAutoIncrement()
                                             ->incrementByValue(1)
                                             ->startAtValue(1)
-                                        ->end()
-                                    ->end()
-                                ->end()
-                            ->end()
-                        ->end()
+                                        ->endAutoIncrementField()
+                                    ->endField()
+                                ->endColumn()
+                            ->endTable()
+                        ->endDescribe()
                         ->addWriter()
                             ->sqlWritter()
-                            ->end()
-                        ->end()
-                    ->end();
+                            ->endSqlWriter()
+                        ->endWriter()
+                    ->endPass();
         
         $this->assertInstanceOf('Faker\Components\Engine\DB\Composite\SchemaNode',$schema);
         

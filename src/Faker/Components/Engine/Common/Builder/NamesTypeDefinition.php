@@ -20,6 +20,15 @@ class NamesTypeDefinition extends AbstractDefinition
         return $this->end();
     }
     
+    /**
+     * Called people field in NodeBuilder
+     *  
+     * @return NodeInterface
+     */ 
+    public function endPeopleField()
+    {
+        return $this->end();
+    }
     
     /**
     * Instantiate and configure the node according to this definition

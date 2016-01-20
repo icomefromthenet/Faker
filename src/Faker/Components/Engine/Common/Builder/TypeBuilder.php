@@ -25,6 +25,12 @@ use Faker\Components\Engine\Common\Composite\GenericNode;
 class TypeBuilder extends NodeBuilder implements SelectorListInterface, FieldListInterface
 {
     
+    
+    public function endSwapAt()
+    {
+        return $this->end();
+    }
+    
     /**
       *  Create the field node that hold the child selectors and types.
       *

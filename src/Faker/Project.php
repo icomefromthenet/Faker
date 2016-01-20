@@ -96,14 +96,30 @@ class Project extends Pimple
         
     }
     
-    /**
-      *  Static Constructor
+     /**
+      *  Alias to self::create 
       *
       *  @param Faker\Project the DI container
       *  @param string $name of the entity
       *  @param Faker\Locale\LocaleInterface $locale to use
       *  @param Faker\Components\Engine\Common\Utilities  $util
       *  @param PHPStats\Generator\GeneratorInterface $util
+      */
+    public function createSchema($name,LocaleInterface $locale = null,Utilities $util = null,GeneratorInterface $gen = null)
+    {
+        return $this->create($name,$locale,$util,$gen);
+    }
+    
+    /**
+      *  Create a new Schema To build
+      *
+      *  @param Faker\Project the DI container
+      *  @param string $name of the entity
+      *  @param Faker\Locale\LocaleInterface $locale to use
+      *  @param Faker\Components\Engine\Common\Utilities  $util
+      *  @param PHPStats\Generator\GeneratorInterface $util
+      *  
+      *  @depreciated
       */
     public function create($name,LocaleInterface $locale = null,Utilities $util = null,GeneratorInterface $gen = null)
     {

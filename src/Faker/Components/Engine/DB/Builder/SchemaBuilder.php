@@ -253,6 +253,17 @@ class SchemaBuilder implements ParentNodeInterface
     }
     
     /**
+    *  Alias to self::endSchema as often start building to Project::addPass() 
+    *
+    *  @access public
+    *  @return Faker\Components\Engine\DB\Composite/SchemaNode
+    */
+    public function endPass()
+    {
+        return $this->end();
+    }
+    
+    /**
       *  Builds a SchemaNode
       *
       *  @access public

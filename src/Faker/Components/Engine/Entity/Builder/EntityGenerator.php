@@ -2,6 +2,7 @@
 namespace Faker\Components\Engine\Entity\Builder;
 
 use Faker\Project;
+use Faker\ChannelEventDispatcher;
 use Faker\Locale\LocaleInterface;
 use Faker\Components\Templating\Loader;
 use Faker\Components\Engine\Common\Builder\ParentNodeInterface;
@@ -19,6 +20,7 @@ use Closure;
 use PHPStats\Generator\GeneratorInterface;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 
 /**
@@ -191,8 +193,12 @@ class EntityGenerator implements ParentNodeInterface
                                   GeneratorInterface $gen = null
                                  )
     {
+        $defaultEventDispatcher   = $container->getEventDispatcher();
+        $newChannelDispatcher     = new ChannelEventDispatcher($defaultEventDispatcher);
+        $newChannelDispatcher->addChannel($name,new EventDispatcher());
+        $newChannelDispatcher->switchChannel($name);
+        
         $repo   = $container->getEngineTypeRepository();
-        $event  = $container->getEventDispatcher();
         $conn   = $container->getGeneratorDatabase();
         $loader = $container->getTemplatingManager()->getLoader();
         
@@ -208,7 +214,7 @@ class EntityGenerator implements ParentNodeInterface
             $gen = $container->getDefaultRandom();
         }
     
-        return new self($name,$event,$repo,$locale,$util,$gen,$conn,$loader);
+        return new self($name,$newChannelDispatcher,$repo,$locale,$util,$gen,$conn,$loader);
     }
     
     //------------------------------------------------------------------

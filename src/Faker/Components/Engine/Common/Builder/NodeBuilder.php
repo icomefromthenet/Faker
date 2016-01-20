@@ -45,6 +45,17 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
         return $this->end();
     }
    
+    /**
+    *  Send the child compositeNodes to parent builder
+    *
+    *  @return NodeInterface The parent builder 
+    *  @access public
+    */
+    public function endCombination()
+    {
+        return $this->end();
+    }
+  
     
     
     /**
@@ -333,14 +344,29 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
     }
     
     /**
+      *  Depreciated Alias to self::selectorWeight
+      *
+      *  @access public
+      *  @return \Faker\Components\Engine\Entity\Builder\SelectorWeightBuilder
+      *  @depreciated
+      */
+    public function selectorWeightAlternate()
+    {
+        $node = new SelectorWeightBuilder('SelectorWeight',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        $node->setParent($this);
+        
+        return $node;
+    }
+    
+    /**
       *  Return a builder that allows alternation that preferences the left or right value.
       *
       *  @access public
       *  @return \Faker\Components\Engine\Entity\Builder\SelectorWeightBuilder
       */
-    public function selectorWeightAlternate()
+    public function selectorWeight()
     {
-        $node = new SelectorWeightBuilder('SelectorRandom',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        $node = new SelectorWeightBuilder('SelectorWeight',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         $node->setParent($this);
         
         return $node;
@@ -354,7 +380,7 @@ class NodeBuilder extends NodeCollection implements SelectorListInterface, Field
       */
     public function selectorSwap()
     {
-        $node = new SelectorSwapBuilder('SelectorRandom',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
+        $node = new SelectorSwapBuilder('SelectorSwap',$this->eventDispatcher,$this->repo,$this->utilities,$this->generator,$this->locale,$this->database,$this->templateLoader);
         $node->setParent($this);
         
         return $node;
