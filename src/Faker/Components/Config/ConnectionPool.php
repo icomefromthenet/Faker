@@ -92,6 +92,9 @@ class ConnectionPool
          
         $connection        = DriverManager::getConnection($connectionParams, new Configuration());
        
+        $connection->setFakerConnectionPool($this);
+        $connection->setFakerReadOnlyConnection($entity->getReadOnlyMode());
+       
         $this->otherConnections[$name] = $connection;
        
        return $connection;

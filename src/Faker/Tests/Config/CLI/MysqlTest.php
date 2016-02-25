@@ -21,7 +21,8 @@ class MysqlTest extends AbstractProject
             'host'            => 'localhost',
             'port'            => '3306',
             'charset'         => 'Latin1',
-            'connectionName'  => 'connect1'
+            'connectionName'  => 'connect1',
+            'readOnly'         => true
         );
         
         
@@ -37,6 +38,7 @@ class MysqlTest extends AbstractProject
         $entity->expects($this->once())->method('setUnixSocket')->with($this->equalTo(false));
         $entity->expects($this->once())->method('setCharset')->with($this->equalTo('Latin1'));
         $entity->expects($this->once())->method('setConnectionName')->with($this->equalTo('connect1'));
+        $entity->expects($this->once())->method('setReadOnlyMode')->with($this->equalTo(true));
         
         $dsn = new Mysql();
         $dsn->merge($entity,$parsed);

@@ -167,7 +167,8 @@ class LoaderTest extends AbstractProject
             'path'            => false,
             'memory'          => false,
             'charset'         => false,
-            'connName'        => 'myconnectNameA'
+            'connName'        => 'myconnectNameA',
+            'readOnly'        => true
         );
         $data[1] = array(
             'type'            => 'pdo_mysqlB',
@@ -180,7 +181,8 @@ class LoaderTest extends AbstractProject
             'path'            => false,
             'memory'          => false,
             'charset'         => false,
-            'connName'        => 'myconnectNameB'
+            'connName'        => 'myconnectNameB',
+            'readOnly'        => false
         );
        
         

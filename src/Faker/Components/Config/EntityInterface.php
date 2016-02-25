@@ -109,6 +109,16 @@ interface EntityInterface
     public function getConnectionName();
     
     public function setConnectionName($name);
+   
+   
+   /**
+    * Allows this connection to issue write commands
+    * 
+    * @return boolean true if read only
+    */ 
+   public function getReadOnlyMode();
+   
+   public function setReadOnlyMode($value);
     
 }
 /* End of File */

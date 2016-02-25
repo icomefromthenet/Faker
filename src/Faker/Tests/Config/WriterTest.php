@@ -33,6 +33,7 @@ class WriterTest extends AbstractProject
         $entity->setUnixSocket('path/to/socker/socket.sock');
         $entity->setUser('root');
         $entity->setConnectionName('connect1');
+        $entity->setReadOnlyMode(false);
         
         $alias = 'default';
         
@@ -63,6 +64,7 @@ class WriterTest extends AbstractProject
         $entity->setUnixSocket('path/to/socker/socket.sock');
         $entity->setUser('root');
         $entity->setConnectionName('connect1');
+        $entity->setReadOnlyMode(false);
        
         $alias = 'default';
         

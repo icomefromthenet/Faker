@@ -67,6 +67,10 @@ class DbStreamRepPass implements CompilerPassInterface
                     # fetch the extra connection and lookup the correct formatter short name from the factory
                     $conn               = $this->getConnectionPool()->getExtraConnection($connectionName);
                     $formatterShortName = FormatterFactory::reverseLookup(get_class($formatter));
+                    
+                    if(true === $conn->getFakerReadOnlyConnection()) {
+                        throw new EngineException("The $connectionName is set to read only unable to create Database Stream Writer");
+                    }
     
                     # instance new stream using the manager and switch over
                     $dbStream = $this->getWriterManager()

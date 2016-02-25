@@ -65,6 +65,7 @@ class ConnectionPoolTest extends AbstractProject
         $entity->setUnixSocket('path/to/socker/socket.sock');
         $entity->setUser('root');
         $entity->setConnectionName($connectionName);
+        $entity->setReadOnlyMode(true);
 
         $entity->addPlatformOption('myopt','aaa');
 
@@ -76,6 +77,8 @@ class ConnectionPoolTest extends AbstractProject
         $this->assertEquals('vagrant',$conn->getPassword());
         $this->assertEquals('3306',$conn->getPort());
         $this->assertEquals('root',$conn->getUsername());
+        $this->assertEquals(true,$conn->getFakerReadOnlyConnection());
+        $this->assertEquals($pool,$conn->getFakerConnectionPool());
         
     }
 }

@@ -26,6 +26,7 @@ class EntityTest extends AbstractProject
         $entity->setUnixSocket('path/to/socker/socket.sock');
         $entity->setUser('root');
         $entity->setConnectionName('mystage');
+        $entity->setReadOnlyMode(true);
         
         $entity->addPlatformOption('service','myService');
         $entity->addPlatformOption('mypath','myPath');
@@ -42,6 +43,7 @@ class EntityTest extends AbstractProject
         $this->assertEquals($entity->getUnixSocket(),'path/to/socker/socket.sock');
         $this->assertEquals($entity->getUser(),'root');
         $this->assertEquals($entity->getConnectionName(),'mystage');
+        $this->assertEquals($entity->getReadOnlyMode(),true);
         
         $this->assertSame(array('service'=>'myService','mypath'=>'myPath'),$entity->getPlatformOptions());
         

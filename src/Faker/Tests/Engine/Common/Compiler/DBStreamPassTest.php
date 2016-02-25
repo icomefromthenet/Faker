@@ -113,7 +113,59 @@ class DBStreamPassTest extends AbstractProject
         
     }
     
+    /**
+     * @expectedException Faker\Components\Engine\EngineException
+     * @expectedExceptionMessage The testConnect is set to read only unable to create Database Stream Writer
+     * 
+     */ 
+    public function testFailReadOnly()
+    {
+        $sqlPlatform = new MySqlPlatform(); 
+        
+        $event      = $this->getMockBuilder('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface')->getMock();
+        $mockWritter = $this->getMockBuilder('Faker\\Components\\Writer\\Writer')->disableOriginalConstructor()->getMock();
+        
+        # create the formatter
+        
+        $formatter = new Sql($event,$mockWritter,$sqlPlatform, new DBALGathererVisitor(),array());
+        
+        $formatter->setOption(sql::CONFIG_WRITE_TO_DATABASE,'testConnect');
+        
+        # create the composite
+        
+        $schemaNode      = new SchemaNode('schema',$event);
+        $formatterNode   = new FormatterNode('formatterNode',$event,$formatter);
+        
+        $schemaNode->addChild($formatterNode);
+        
+        
+        # add in memory sql connection
+        $platformFactory = new PlatformFactory();
+        $connectPool     = new ConnectionPool($platformFactory);
+        
+        $entity = new Entity();
+        
+        $entity->setType('pdo_sqlite');
+        $entity->setMemory(true);
+        $entity->setReadOnlyMode(true);
+        $connectPool->addExtraConnection('testConnect',$entity);
+        
+        
+        $this->assertTrue($connectPool->hasExtraConnection('testConnect'));
+        
+        # create the new pass and assert properties
+        $pass = new DbStreamRepPass($connectPool,$this->getProject()->getWriterManager());
+        
+        $this->assertSame($connectPool,$pass->getConnectionPool());
+        $this->assertSame($this->getProject()->getWriterManager(),$pass->getWriterManager());
+        
+        # test with valid schema
+        
+        $mockCompiler = $this->getMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
     
+        # execute pass (mock writer will assert correct stream is set)    
+        $pass->process($schemaNode,$mockCompiler);
+    }
     
 
 }

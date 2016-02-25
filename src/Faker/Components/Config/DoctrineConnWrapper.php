@@ -16,6 +16,7 @@ class DoctrineConnWrapper extends Connection
    
    protected $fakerConnectionPool;
    
+   protected $fakerReadOnlyConnection;
    
    /**
     * Fetch the connection pool
@@ -40,6 +41,29 @@ class DoctrineConnWrapper extends Connection
        $this->fakerConnectionPool = $pool;
    }
    
-
+   /**
+    * Gets the read only config value
+    * 
+    * @return boolean
+    * @access public
+    */ 
+   public function getFakerReadOnlyConnection()
+   {
+      return $this->fakerReadOnlyConnection;
+   }
+   
+   /**
+    * Sets the read only config value
+    * 
+    * @return boolean
+    * @access public
+    * @param  boolean $bReadOnly 
+    */ 
+   public function setFakerReadOnlyConnection($bReadOnly)
+   {
+      $this->fakerReadOnlyConnection = $bReadOnly;
+   }
+   
+   
 }
 /* End of Class */

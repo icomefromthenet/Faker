@@ -43,7 +43,8 @@ class SqliteTest extends AbstractProject
             'username' => 'root',
             'password' => 'vagrant',
             'memory'   => ':memory',
-            'connectionName' => 'connect1'
+            'connectionName' => 'connect1',
+            'readOnly' => true
         );
         
         
@@ -55,6 +56,7 @@ class SqliteTest extends AbstractProject
         $entity->expects($this->once())->method('setPassword')->with($this->equalTo('vagrant'));
         $entity->expects($this->once())->method('setMemory')->with($this->equalTo(':memory'));
         $entity->expects($this->once())->method('setConnectionName')->with($this->equalTo('connect1'));
+        $entity->expects($this->once())->method('setReadOnlyMode')->with($this->equalTo(true));
         
         $dsn = new Sqlite();
         $dsn->merge($entity,$parsed);
