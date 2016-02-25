@@ -53,6 +53,7 @@ class Mysql implements ConfigInterface
                 ->scalarNode('socket')->end()
                 ->scalarNode('database')->isRequired()->end()
                 ->scalarNode('charset')->defaultValue(false)->end()
+                ->scalarNode('readOnly')->defaultValue(false)->end()
                 ->end();
 
             } catch(\Exception $e) {
@@ -81,6 +82,7 @@ class Mysql implements ConfigInterface
             $entity->setPassword($config['password']);
             $entity->setUnixSocket($config['socket']);
             $entity->setCharset($config['charset']);
+            $entity->setReadOnlyMode($config['readOnly']);
     
         } catch(\Exception $e) {
             throw new InvalidConfigException($e->getMessage());

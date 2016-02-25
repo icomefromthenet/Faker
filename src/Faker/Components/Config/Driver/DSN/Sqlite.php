@@ -53,6 +53,7 @@ class Sqlite implements ConfigInterface
                 ->scalarNode('socket')->defaultValue(false)->end()
                 ->scalarNode('database')->isRequired()->end()
                 ->scalarNode('memory')->defaultValue(false)->end()
+                ->scalarNode('readOnly')->defaultValue(false)->end()
                 ->end();
 
             } catch(\Exception $e) {
@@ -78,6 +79,7 @@ class Sqlite implements ConfigInterface
             $entity->setPath($config['database']);
             $entity->setType($config['phptype']);
             $entity->setMemory($config['memory']);
+            $entity->setReadOnlyMode($config['readOnly']);
     
         } catch(\Exception $e) {
             throw new InvalidConfigException($e->getMessage());

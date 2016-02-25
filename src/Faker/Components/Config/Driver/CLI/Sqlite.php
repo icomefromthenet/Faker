@@ -49,6 +49,7 @@ class Sqlite implements ConfigInterface
                 ->scalarNode('path')->defaultValue(false)->end()
                 ->scalarNode('memory')->defaultValue(false)->end()
                 ->scalarNode('connectionName')->isRequired()->end()
+                ->scalarNode('readOnly')->defaultValue(false)->end()
                 ->end();
 
             } catch(\Exception $e) {
@@ -71,6 +72,7 @@ class Sqlite implements ConfigInterface
     
             $entity->setUser($config['username']);
             $entity->setPassword($config['password']);
+            $entity->setReadOnlyMode($config['readOnly']);
             
             if($config['path'] === false && $config['memory'] === false ) {
                 throw new InvalidConfigException('Neither path or memory are set one option must be chosen');

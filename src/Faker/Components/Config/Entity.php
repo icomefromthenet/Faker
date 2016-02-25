@@ -178,6 +178,20 @@ class Entity implements EntityInterface
    {
        return $this->platformOptions;
    }
+   
+   //------------------------------------------------------------------
+   protected $bReadOnlyMode = false; 
+   
+   
+   public function setReadOnlyMode($value)
+   {
+       $this->bReadOnlyMode = $value;
+   }
+   
+   public function getReadOnlyMode()
+   {
+       return $this->bReadOnlyMode;
+   }
     
 }
 /* End of File */

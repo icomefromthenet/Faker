@@ -50,6 +50,7 @@ class Sqlsrv implements ConfigInterface
                 ->scalarNode('port')->defaultValue(3306)->end()
                 ->scalarNode('schema')->isRequired()->end()
                 ->scalarNode('connectionName')->isRequired()->end()
+                ->scalarNode('readOnly')->defaultValue(false)->end()
                 ->end();
 
             } catch(\Exception $e) {
@@ -77,6 +78,7 @@ class Sqlsrv implements ConfigInterface
             $entity->setPort($config['port']);
             $entity->setHost($config['host']);
             $entity->setConnectionName($config['connectionName']);
+            $entity->setReadOnlyMode($config['readOnly']);
     
         } catch(\Exception $e) {
             throw new InvalidConfigException($e->getMessage());

@@ -52,6 +52,7 @@ class Pgsql implements ConfigInterface
                 ->scalarNode('port')->defaultValue(3306)->end()
                 ->scalarNode('socket')->end()
                 ->scalarNode('database')->isRequired()->end()
+                ->scalarNode('readOnly')->defaultValue(false)->end()
                 ->end();
 
             } catch(\Exception $e) {
@@ -78,6 +79,7 @@ class Pgsql implements ConfigInterface
             $entity->setPort($config['port']);
             $entity->setHost($config['hostspec']);
             $entity->setPassword($config['password']);
+            $entity->setReadOnlyMode($config['readOnly']);
     
         } catch(\Exception $e) {
             throw new InvalidConfigException($e->getMessage());

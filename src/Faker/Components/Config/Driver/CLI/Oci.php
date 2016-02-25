@@ -51,6 +51,7 @@ class Oci implements ConfigInterface
                 ->scalarNode('schema')->isRequired()->end()
                 ->scalarNode('charset')->defaultValue(false)->end()
                 ->scalarNode('connectionName')->isRequired()->end()
+                ->scalarNode('readOnly')->defaultValue(false)->end()
                 ->end();
 
             } catch(\Exception $e) {
@@ -79,6 +80,7 @@ class Oci implements ConfigInterface
             $entity->setHost($config['host']);
             $entity->setCharset($config['charset']);
             $entity->setConnectionName($config['connectionName']);
+            $entity->setReadOnlyMode($config['readOnly']);
     
         } catch(\Exception $e) {
             throw new InvalidConfigException($e->getMessage());

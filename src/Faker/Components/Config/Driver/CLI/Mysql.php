@@ -52,6 +52,7 @@ class Mysql implements ConfigInterface
                 ->scalarNode('schema')->isRequired()->end()
                 ->scalarNode('charset')->defaultValue(false)->end()
                 ->scalarNode('connectionName')->isRequired()->end()
+                ->scalarNode('readOnly')->defaultValue(false)->end()
                 ->end();
 
             } catch(\Exception $e) {
@@ -81,7 +82,7 @@ class Mysql implements ConfigInterface
             $entity->setUnixSocket($config['socket']);
             $entity->setCharset($config['charset']);
             $entity->setConnectionName($config['connectionName']);
-    
+            $entity->setReadOnlyMode($config['readOnly']);
             
     
         } catch(\Exception $e) {

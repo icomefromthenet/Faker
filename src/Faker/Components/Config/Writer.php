@@ -46,7 +46,8 @@ class Writer
                 'path'            => $entity->getPath(),
                 'memory'          => $entity->getMemory(),
                 'charset'         => $entity->getCharset(),
-                'connectionName'  => $entity->getConnectionName()
+                'connectionName'  => $entity->getConnectionName(),
+                'readOnly'        => $entity->getReadOnlyMode(),
             ),$entity->getPlatformOptions());
         }
         
