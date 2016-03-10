@@ -5,6 +5,7 @@ use Doctrine\DBAL\Platforms\OraclePlatform as DoctrineOraclePlatform;
 
 class OraclePlatform extends DoctrineOraclePlatform implements EscapePolyfillInterface
 {
+    
     /**
      * Without an active connection cant use PDO Quote so this is a pollyfill
      * that can be used by SQL Formatter (Writer)

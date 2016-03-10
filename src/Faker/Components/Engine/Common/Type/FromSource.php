@@ -52,7 +52,8 @@ class FromSource extends Template implements BindDataInterface
             
              
     	if(true === isset($this->dataFromSources[0])) {
-    		$result =  $this->template->render(array('values'=>$values,'sources'=> $this->dataFromSources[0]));
+    		
+			$result =  $this->template->render(array('values'=>$values,'sources'=> $this->dataFromSources[0]));
     	} else {
             $result =  $this->template->render(array('values'=>$values,'sources'=> array()));
     	} 

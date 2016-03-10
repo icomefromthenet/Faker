@@ -163,6 +163,8 @@ class BulkSQLDatasource extends AbstractDatasource implements ExtraConnectionInt
     {
         unset($this->aResult);
         
+        $this->aResult = null;
+        
         if($this->oResultLimit) {
             $this->oResultLimit->reset();
         }
@@ -179,7 +181,8 @@ class BulkSQLDatasource extends AbstractDatasource implements ExtraConnectionInt
         }
         
         if($this->aResult) {
-             unset($this->aResult);
+            unset($this->aResult);
+            $this->aResult = null;
         }
         
     }
