@@ -31,10 +31,18 @@ class DatasourcePass implements CompilerPassInterface
      */ 
     protected $pool;
     
+    /**
+     * @var a collection ids for inited datasources
+     */ 
+    protected $aInitCollection;
+    
+    
+    
     public function __construct(DSourceInjectorVisitor $visitor, ConnectionPool $pool)
     {
-        $this->visitor = $visitor;
-        $this->pool    = $pool;
+        $this->visitor         = $visitor;
+        $this->pool            = $pool;
+        $this->aInitCollection = array();
     }
     
     
@@ -56,8 +64,9 @@ class DatasourcePass implements CompilerPassInterface
         
         
         foreach($sourceList as $datasourceName => $datasourceCompositeNode) {
+            
+            
             $dataSource = $datasourceCompositeNode->getDatasource();    
-            //eval(\Psy\sh());
             
             
             //fetch the connection name from the internal source
@@ -74,6 +83,19 @@ class DatasourcePass implements CompilerPassInterface
                 // assign connection to the datasource
                 $dataSource->setExtraConnection($this->pool->getExtraConnection($connectionName));
                 
+               
+                
+            }
+            
+            
+            
+            $sHash = md5(\spl_object_hash($dataSource));
+            
+            if(false === \in_array($sHash,$this->aInitCollection)) {
+                $this->aInitCollection[] = $sHash;
+                
+                // int the source to build the query
+                $dataSource->initSource();
             }
             
         }

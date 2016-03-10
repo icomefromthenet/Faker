@@ -63,13 +63,21 @@ class DatasourcePassTest extends AbstractProject
         
         $mockDatasourceA       = $this->getMockBuilder('Faker\\Tests\\Engine\\Common\\Datasource\\Mock\\MockDatasourceExtra')
                                       ->disableOriginalConstructor()
-                                      ->setMethods(null)
+                                      ->setMethods(array('initSource'))
                                       ->getMock();
                                       
         $mockDatasourceB       = $this->getMockBuilder('Faker\\Tests\\Engine\\Common\\Datasource\\Mock\\MockDatasourceExtra')
                                       ->disableOriginalConstructor()
-                                      ->setMethods(null)
+                                      ->setMethods(array('initSource'))
                                       ->getMock();
+        
+        // check that init is called 
+        $mockDatasourceA->expects($this->once())
+                        ->method('initSource');
+                        
+        $mockDatasourceB->expects($this->once())
+                        ->method('initSource');
+                        
         
         # set the connection name options
         $mockDatasourceA->setOption('connectionName',$uniqueConnectionNameA);
@@ -102,6 +110,8 @@ class DatasourcePassTest extends AbstractProject
             'uniqueNameA' => $mockSourceCompoisteNodeA
             ,'uniqueNameB' => $mockSourceCompositeNodeB
         );
+        
+       
         
         $compiler        = $this->getMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
         
