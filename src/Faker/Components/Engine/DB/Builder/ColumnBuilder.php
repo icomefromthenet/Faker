@@ -68,6 +68,7 @@ class ColumnBuilder extends NodeCollection
         $event = $this->eventDispatcher;
         $node  = new ColumnNode($name,$event);
         
+        
         # bind properties
         $node->setDBALType($this->dbalType);
         
@@ -151,6 +152,7 @@ class ColumnBuilder extends NodeCollection
         }
         
         $this->dbalType = Type::getType($dbalTypeName);
+        
         
         return $this;
     }

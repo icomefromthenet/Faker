@@ -70,8 +70,15 @@ class DatasourcePass implements CompilerPassInterface
             
             
             //fetch the connection name from the internal source
-            if(true === $dataSource->hasOption('connectionName') 
-                    && $dataSource instanceof ExtraConnectionInterface) {
+            if($dataSource instanceof ExtraConnectionInterface) {
+               
+               if(false === $dataSource->hasOption('connectionName')) {
+                    throw new EngineException(sprintf('Datasource not have a connection name'));
+               }
+               
+               if(true === empty($dataSource->getOption('connectionName'))) {
+                    throw new EngineException(sprintf('Datasource connection name is empty'));
+               }
                 
                 $connectionName = $dataSource->getOption('connectionName'); 
                 

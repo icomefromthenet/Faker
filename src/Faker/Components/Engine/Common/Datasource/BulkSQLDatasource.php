@@ -117,7 +117,7 @@ class BulkSQLDatasource extends AbstractDatasource implements ExtraConnectionInt
         $offset = $this->getOption('offset');
         
         
-        # bind the limit using the plaform
+        # bind the limit using the platform
         $sFinalQuery = $oDb->getDatabasePlatform()->modifyLimitQuery($query,$limit,$offset);
         
         # prepare the sth for execution

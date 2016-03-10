@@ -62,7 +62,7 @@ class PageSQLDefinition extends AbstractDefinition
      */ 
     public function setConnectionName($sName)
     {
-        $this->attribute('connection',$sName);
+        $this->attribute('connectionName',$sName);
         
         return $this;
     }
