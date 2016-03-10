@@ -4,6 +4,7 @@ namespace Faker\Components\Engine\Seed;
 use Faker\Components\Engine\Entity\Builder\EntityGenerator;
 use Faker\Components\Engine\Entity\Builder\FieldCollection;
 use Faker\Components\Engine\Common\Builder\NodeBuilder;
+use Faker\Components\Engine\EngineException; 
 
 /**
  *  Used to store the configuration of an entity that uses the EntityGenerator

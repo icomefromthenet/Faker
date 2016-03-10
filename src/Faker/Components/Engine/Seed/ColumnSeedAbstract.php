@@ -4,7 +4,7 @@ namespace Faker\Components\Engine\Seed;
 use \ReflectionClass;
 use \ReflectionMethod;
 use Faker\Project;
-use Faker\Components\Engine\Exception as EngineException;
+use Faker\Components\Engine\EngineException; 
 use Faker\Components\Engine\DB\Builder\ColumnBuilder;
 use Faker\Components\Engine\DB\Builder\TableBuilder;
 use Faker\Components\Engine\DB\Builder\FieldBuilder;
