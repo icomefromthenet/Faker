@@ -248,7 +248,10 @@ abstract class Type implements TypeInterface, OptionInterface, SerializationInte
     }
     
     
-    
+    public function toPHP(array $aCode)
+    {
+        return null;    
+    }
     
 }
 /* End of File */

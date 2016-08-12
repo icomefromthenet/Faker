@@ -1,6 +1,8 @@
 <?php
 namespace Faker\Components\Engine\XML\Composite;
 
+use gossi\codegen\generator\CodeGenerator;
+use gossi\codegen\model\PhpClass;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -190,6 +192,32 @@ class TableNode extends BaseNode implements OptionInterface, SerializationInterf
         return $str;
     }
     
+    
+    public function toPHP(array $aCode)
+    {
+        $sTableName = ucfirst($this->getId());
+        
+        $sFileNameSpace = 'Faker\\Extension\\Seed\\'.$sTableName;
+        
+        
+        # Build the Base Class From the Abstract
+        $oClass = PhpClass::fromReflection(new \ReflectionClass('Faker\Components\Engine\Seed\TableSeedAbstract'));
+
+        
+        # Generate the code and store in result param
+
+        $oGenerator = new CodeGenerator();
+        $aCode[$sFileNameSpace] = $oGenerator->generate($oClass);
+     
+        # Call Generator on Children
+        
+        $children = $this->getChildren();
+        foreach($children as $child) {
+               $child->toPHP($aCode);     
+        }
+      
+        return $aCode;   
+    }
     
     //-------------------------------------------------------
     # VisitorInterface

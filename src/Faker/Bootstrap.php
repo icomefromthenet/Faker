@@ -209,8 +209,13 @@ class Bootstrap
       
       $project['connection_pool'] = $project->share(function($project){
             
-            $platform = $project['platform_factory'];
+            $platform       = $project['platform_factory'];
+            $oFakerDatabase = $project['faker_database'];
+            
             $pool = new \Faker\Components\Config\ConnectionPool($platform);
+            
+            # assign this database to the pool
+            $pool->setInternalConnection($oFakerDatabase);
             
             return $pool;
       });
@@ -218,7 +223,7 @@ class Bootstrap
       $project['database'] = $project->share(function($project)
       {
          # bootstrap the database configs via the connections pool
-         $project['config_file'];
+         $ConfigClosure = $project['config_file'];
          
          # hand back the internal database as its always going to exists
          # database user need to select the necessary connection later
@@ -270,10 +275,7 @@ class Bootstrap
          );
          
          $fakerDatabase = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, new \Doctrine\DBAL\Configuration());
-         
-         # assign this database to the pool
-         $pool = $project['connection_pool'];
-         $pool->setInternalConnection($fakerDatabase);
+        
       
          return $fakerDatabase;
          
@@ -442,6 +444,17 @@ class Bootstrap
       });
       
       
+      //---------------------------------------------------------------
+      // Code Generators
+      //
+      //---------------------------------------------------------------
+      $project['engine_seed_schema_analyser'] = $project->share(function($project){
+           return new \Faker\Components\Engine\Seed\Parser\SchemaAnalysis();
+      });    
+      
+       $project['engine_xml_schema_analyser'] = $project->share(function($project){
+           return new \Faker\Components\Engine\XML\Parser\SchemaAnalysis();
+      }); 
       
       //---------------------------------------------------------------
       // Engine Common
@@ -487,9 +500,7 @@ class Bootstrap
          return $compiler;
       };
       
-      $project['engine_xml_schema_analyser'] = $project->share(function($project){
-           return new \Faker\Components\Engine\XML\Parser\SchemaAnalysis();
-      });    
+     
       
       $project['engine_xml_compiler'] = function(Project $project) {
      

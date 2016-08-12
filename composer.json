@@ -22,7 +22,7 @@
         
     },
     "require": {
-        "icomefromthenet/reverse-regex" : ">=0.0.6.3",
+        "icomefromthenet/reverse-regex" : "dev-master",
         "monolog/monolog"               : "~1.5",
         "symfony/filesystem"            : "2.3.*",
         "symfony/class-loader"          : "2.3.*",
@@ -36,6 +36,9 @@
         "pimple/pimple"                 : "1.0.*",
         "doctrine/common"               : "2.5.*",
         "doctrine/dbal"                 : "2.5.*",
+        "gossi/php-code-generator"      : "dev-master",
+        "zendframework/zend-progressbar": "2.5.1",
+        "zendframework/zend-text"       : "2.5.1",  
         "ext-dom": "*",
         "ext-spl": "*",
         "ext-pcre": "*"
@@ -43,9 +46,15 @@
     "autoload": {
         "psr-0": {
             "Faker"    : "src",
-            "PHPStats" : "lib",
-            "Zend"     : "lib"
-            }
+            "PHPStats" : "lib"
+           
+        }
+        
     },
-    "bin" : ["bin/faker.php"]
+    "autoload-dev": {
+        "psr-4": {
+            "Faker\\Tests\\": "tests"
+        }
+    }
+    ,"bin" : ["bin/faker.php"]
 }

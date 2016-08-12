@@ -187,6 +187,11 @@ class ColumnNode extends BaseNode implements OptionInterface, SerializationInter
     }
     
     
+    public function toPHP(array $aCode)
+    {
+        return null;    
+    }
+    
     //-------------------------------------------------------
     # VisitorInterface
     

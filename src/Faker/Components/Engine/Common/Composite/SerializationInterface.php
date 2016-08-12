@@ -19,5 +19,15 @@ interface SerializationInterface
       */
     public function toXml();
     
+    /**
+     * Convert the composite to PHP Seeds Classes
+     * 
+     * This generate the text but must be written by to the FS by other process.
+     * 
+     * @param array of classes (as text) index by namesapce 
+     */ 
+    public function toPHP(array $aCode);
+    
+    
 }
 /* End of File */

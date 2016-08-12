@@ -172,6 +172,10 @@ class WhenNode extends GenericNode implements OptionInterface, SerializationInte
        return '';
     }
     
+    public function toPHP(array $aCode)
+    {
+        return null;    
+    }
     
     //-------------------------------------------------------
     # VisitorInterface

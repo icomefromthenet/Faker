@@ -53,7 +53,18 @@ abstract class TableSeedAbstract extends SeedAbstract
      */ 
     protected function getColumns()
     {
-        throw new EngineException('Table seed requires '.__METHOD__);
+        $oReflector = new ReflectionClass($this);
+        
+        $aMethodsFound = array();
+        foreach($oReflector->getMethods(ReflectionMethod::IS_PROTECTED) as $sMethod) {
+            if(0 === strpos($sMethod->name,'column',0)) {
+                
+                $aMethodsFound[] = $sMethod->name;
+            }
+            
+        }
+        
+        return $aMethodsFound;
     }
     
     //--------------------------------------------------------------------------

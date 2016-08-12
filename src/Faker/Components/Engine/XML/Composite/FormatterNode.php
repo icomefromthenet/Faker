@@ -112,6 +112,11 @@ class FormatterNode extends BaseNode implements OptionInterface, SerializationIn
         return '<writer platform="'.$this->getInternal()->getPlatform()->getName().'" format="'.$this->getInternal()->getName().'" />';
     }
     
+    public function toPHP(array $aCode)
+    {
+        return null;    
+    }
+    
     //-------------------------------------------------------
     # SerializationInterface
     

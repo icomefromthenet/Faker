@@ -18,19 +18,21 @@ class AnalyseCommand extends Command
            $project  = $this->getApplication()->getProject();
            
            # throw an exception if name is invalid
-           $databasePool = $project->getDatabase()->getFakerConnectionPool();
+           $databasePool = $project->getConnectionPool();
            $database     = $databasePool->getExtraConnection($input->getArgument('connname'));
            
            
-           # verify if a output file name been passed
+           # verify if a output file name been passed and   load the schema analyser
            if(($out_file_name = $input->getArgument('out') ) === null) {
               $out_file_name = 'schema.xml';
+              $schema_analyser = $project->getSeedSchemaAnalyser();
+               
            } else {
-              $out_file_name = rtrim($out_file_name,'.xml').'.xml';
+              $out_file_name = rtrim($out_file_name,'.php').'.php';
+               $schema_analyser = $project->getXMLSchemaAnalyser();
            }
            
-           # load the schema analyser
-           $schema_analyser = $project->getSchemaAnalyser();
+         
            
            #run the analyser
            $schema = $schema_analyser->analyse($database,$project->getXMLEngineBuilder());

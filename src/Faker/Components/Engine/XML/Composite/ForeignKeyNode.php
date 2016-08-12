@@ -181,7 +181,10 @@ class ForeignKeyNode extends BaseNode implements OptionInterface, SerializationI
         return $str;
     }
     
-    
+    public function toPHP(array $aCode)
+    {
+        return null;    
+    }
     
     //-------------------------------------------------------
     # TypeInterface

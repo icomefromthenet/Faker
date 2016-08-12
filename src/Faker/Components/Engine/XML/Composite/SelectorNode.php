@@ -184,6 +184,10 @@ class SelectorNode extends BaseNode implements OptionInterface, SerializationInt
        return '';
     }
     
+    public function toPHP(array $aCode)
+    {
+        return null;    
+    }
     
     //-------------------------------------------------------
     # VisitorInterface

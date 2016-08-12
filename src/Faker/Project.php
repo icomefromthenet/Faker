@@ -547,9 +547,21 @@ class Project extends Pimple
       *  @return Faker\Components\Engine\XML\Parser\SchemaAnalysis
       *
      */
-     public function getSchemaAnalyser()
+     public function getXMLSchemaAnalyser()
      {
           return  $this['engine_xml_schema_analyser'];
+     }
+     
+      /**
+      *  Return an engine compiler
+      *
+      *  @access public
+      *  @return Faker\Components\Engine\Seed\Parser\SchemaAnalysis
+      *
+     */
+     public function getSeedSchemaAnalyser()
+     {
+          return  $this['engine_seed_schema_analyser'];
      }
      
      /**

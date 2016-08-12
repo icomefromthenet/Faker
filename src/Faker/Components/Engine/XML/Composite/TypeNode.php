@@ -184,6 +184,11 @@ class TypeNode extends BaseNode implements OptionInterface, SerializationInterfa
     }
     
     
+    public function toPHP(array $aCode)
+    {
+        return null;    
+    }
+    
     //-------------------------------------------------------
     # VisitorInterface
     
