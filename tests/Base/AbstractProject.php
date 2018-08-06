@@ -10,9 +10,9 @@ use Faker\Project,
     Symfony\Component\Filesystem\Filesystem,
     Symfony\Component\Finder\Finder,
     Symfony\Component\EventDispatcher\EventDispatcher,
-    PHPUnit_Framework_TestCase;
+    PHPUnit\Framework\TestCase;
 
-class AbstractProject extends PHPUnit_Framework_TestCase
+class AbstractProject extends TestCase
 {
     
     protected $backupGlobalsBlacklist = array('project');
@@ -27,20 +27,22 @@ class AbstractProject extends PHPUnit_Framework_TestCase
     
     //  ----------------------------------------------------------------------------
     
-    /**
-      *  Class Constructor 
-      */
-    public function __construct()
+    /* 
+    public static function setUpBeforeClass()
     {
-        $this->preserveGlobalState = false;
-        $this->runTestInSeperateProcess = true;
         $this->getProject()->setPath($this->getMockedPath());
-        $this->destoryProject($this->getProject());
     }
 
+    public static function tearDownAfterClass()
+    {
+       $this->destoryProject($this->getProject());
+    }
+    */
+   
 
     public function setUp()
     {
+        $this->getProject()->setPath($this->getMockedPath());
         $this->createProject($this->getProject(),$this->getSkeltonIO());
     }
 
