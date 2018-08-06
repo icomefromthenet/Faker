@@ -27,22 +27,13 @@ class AbstractProject extends TestCase
     
     //  ----------------------------------------------------------------------------
     
-    /* 
-    public static function setUpBeforeClass()
-    {
-        $this->getProject()->setPath($this->getMockedPath());
-    }
-
-    public static function tearDownAfterClass()
-    {
-       $this->destoryProject($this->getProject());
-    }
-    */
-   
-
+    
+    
+    
     public function setUp()
     {
         $this->getProject()->setPath($this->getMockedPath());
+        $this->destoryProject($this->getProject());
         $this->createProject($this->getProject(),$this->getSkeltonIO());
     }
 

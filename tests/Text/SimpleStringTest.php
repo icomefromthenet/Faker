@@ -21,7 +21,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testStringFactoryProviderIncluded()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('__toString')
                 ->will($this->returnValue('another string'));
@@ -35,7 +35,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testAppend()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('append')
                 ->with($this->equalTo('another string'));
@@ -47,7 +47,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testPrepend()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('prepend')
                 ->with($this->equalTo('another string'));
@@ -60,7 +60,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testChop()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('chop');
         
@@ -72,7 +72,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testCut()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('cut')
                 ->with($this->equalTo('is'),$this->equalTo(false));
@@ -85,7 +85,7 @@ class SimpleStringTest extends AbstractProject
 
     public function testShorten()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('shorten')
                 ->with($this->equalTo(5));
@@ -98,7 +98,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testReverse()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('reverse');
                 
@@ -111,7 +111,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testScramble()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('scramble');
                 
@@ -124,7 +124,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testShuffle()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('shuffle');
                 
@@ -137,7 +137,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testSeo()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('seo')
                 ->with($this->equalTo('ll'));
@@ -150,7 +150,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testEmphasize()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('emphasize')
                 ->with($this->equalTo('string'),$this->equalTo('u'));
@@ -164,7 +164,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testCensor()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('censor')
                 ->with($this->equalTo('fuck'));
@@ -176,7 +176,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testLowerCase()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('toLowerCase');
                 
@@ -189,7 +189,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testUpperCase()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('toUpperCase');
                 
@@ -202,7 +202,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testSentenceCase()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('toSentenceCase');
                 
@@ -214,7 +214,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testToTitle()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('toTitleCase');
                 
@@ -227,7 +227,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testToUnderscores()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('toUnderscores');
                 
@@ -239,7 +239,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testToCamelCase()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('toCamelCase');
                 
@@ -251,7 +251,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testRemoveNonAlpha()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('removeNonAlpha');
                 
@@ -264,7 +264,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testRemoveNonAlphanumeric()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('removeNonAlphanumeric');
                 
@@ -277,7 +277,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testRemoveNonNumeric()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('removeNonNumeric');
                 
@@ -289,7 +289,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testRemoveDuplicates()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('removeDuplicates');
                 
@@ -302,7 +302,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testRemoveDelimiters()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('removeDelimiters');
                 
@@ -315,7 +315,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testTrim()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('trim');
                 
@@ -327,7 +327,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testRTrim()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('rtrim');
         
@@ -338,7 +338,7 @@ class SimpleStringTest extends AbstractProject
 
     public function testUcfirst()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('ucfirst');
         
@@ -349,7 +349,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testLcFrist()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('lcfirst');
         
@@ -360,7 +360,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testRepeat()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('repeat')
                 ->with($this->equalTo(3));
@@ -371,7 +371,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testCaseSensitive()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('caseSensitive');
         
@@ -382,7 +382,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testCaseInsensitive()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('caseInsensitive');
         
@@ -395,7 +395,7 @@ class SimpleStringTest extends AbstractProject
     public function testConvertEncoding()
     {
         
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('convertEncoding')
                 ->with($this->equalTo('UTF-16'));
@@ -407,7 +407,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testClear()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('clear');
         
@@ -417,7 +417,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testRegexReplace()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('regexReplace')
                 ->with($this->equalTo('[a-zA-Z]'),$this->equalTo('aaaaa'));
@@ -428,7 +428,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testLastPosition()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('lastPosition')
                 ->with($this->equalTo('needle'),$this->equalTo(0))
@@ -440,7 +440,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testFirstPosition()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('firstPosition')
                 ->with($this->equalTo('needle'),$this->equalTo(0))
@@ -453,7 +453,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testContains()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('contains')
                 ->with($this->equalTo('needle'),$this->equalTo(0))
@@ -465,7 +465,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testLength()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('length')
                 ->will($this->returnValue(1));
@@ -477,7 +477,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testWords()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('words')
                 ->will($this->returnSelf());
@@ -490,7 +490,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testIntersect()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('intersect')
                 ->with($this->equalTo('word1'))
@@ -505,7 +505,7 @@ class SimpleStringTest extends AbstractProject
     
     public function testSplit()
     {
-        $provider = $this->getMock('\Faker\Text\SimpleStringInterface');
+        $provider = $this->createMock('\Faker\Text\SimpleStringInterface');
         $provider->expects($this->once())
                 ->method('split')
                 ->with($this->equalTo('word1'))

@@ -29,10 +29,11 @@ class Loader
 
         if($this->twig_environment == null){
             $loader = new TwigLoader($this->getIo());
-            $this->twig_environment = new Twig_Environment($loader, array(
+            $this->twig_environment = new Twig_Environment($loader, [
                 'debug' => false,
-                'autoescape' => false
-                ));
+                'autoescape' => false,
+                'cache' => false
+            ]);
         }
 
         # load the template
@@ -51,14 +52,15 @@ class Loader
       */
     public function loadString($string, array $vars = array())
     {
-        $loader = new \Twig_Loader_String();
-        $env    = new Twig_Environment($loader, array(
-                'debug' => false,
-                'autoescape' => false
-                ));
+        $loader = new \Twig_Loader_Array([]);
+        $env    = new Twig_Environment($loader, [
+            'debug' => false,
+            'autoescape' => false,
+            'cache' => false
+         ]);
         
         # load the template
-        $template =  $env->loadTemplate($string);
+        $template =  $env->createTemplate($string);
         
         return new Template($template,$vars);
     }

@@ -60,7 +60,7 @@ class TemplateComponentTest extends AbstractProject
         $this->assertInstanceOf('Faker\Components\Templating\Io',$loader->getIo());
 
         # test template load for valid file
-        $template = $loader->getSource('sql/mysql/header_template.twig');
+        $template = $loader->getSourceContext('sql/mysql/header_template.twig');
 
         $this->assertNotEmpty($template);
     }
@@ -71,7 +71,7 @@ class TemplateComponentTest extends AbstractProject
     public function testFailMissingExtension()
     {
         $loader  = new TwigLoader(new TemplateIo($this->getProject()->getPath()->get()));
-        $loader->getSource('test_data');
+        $loader->getSourceContext('test_data');
     }
 
     /**
@@ -80,7 +80,7 @@ class TemplateComponentTest extends AbstractProject
     public function testFailMissingFile()
     {
         $loader  = new TwigLoader(new TemplateIo($this->getProject()->getPath()->get()));
-        $loader->getSource('crap_data.twig');
+        $loader->getSourceContext('crap_data.twig');
     }
 
     /**
