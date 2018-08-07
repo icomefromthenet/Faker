@@ -44,26 +44,7 @@ class TemplateComponentTest extends AbstractProject
         return $loader;
     }
 
-    public function testTwigLoader()
-    {
-        $loader  = new TwigLoader(new TemplateIo($this->getProject()->getPath()->get()));
-
-        $this->assertInstanceOf('\Faker\Components\Templating\TwigLoader',$loader);
-
-        # test isfresh returns true (always fresh)
-        $this->assertTrue($loader->isFresh('file',100));
-
-        # test if the cache key hands back the argument unchanged (no cache)
-        $this->assertSame('one',$loader->getCacheKey('one'));
-
-        # make sure io properties work
-        $this->assertInstanceOf('Faker\Components\Templating\Io',$loader->getIo());
-
-        # test template load for valid file
-        $template = $loader->getSourceContext('sql/mysql/header_template.twig');
-
-        $this->assertNotEmpty($template);
-    }
+   
 
     /**
       *  @expectedException \Faker\Io\FileNotExistException
@@ -83,16 +64,7 @@ class TemplateComponentTest extends AbstractProject
         $loader->getSourceContext('crap_data.twig');
     }
 
-    /**
-      *  @depends testManagerGetLoader
-      */
-    public function testTemplateLoader(Loader $loader)
-    {
-        $template = $loader->load('sql/mysql/header_template.twig');
-
-        $this->assertInstanceOf('\Faker\Components\Templating\Template',$template);
-
-    }
+   
     
     /**
       *  @depends testManagerGetLoader

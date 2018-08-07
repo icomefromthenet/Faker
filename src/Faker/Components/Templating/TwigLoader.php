@@ -44,15 +44,15 @@ class TwigLoader implements Twig_LoaderInterface
      */
     public function getSourceContext($name)
     {
-        $folders = explode('/',$name);
-        $name    = array_pop($folders);
-        $path    = $this->resolvePath($name,$folders);
+        $folders  = explode('/',$name);
+        $filename = array_pop($folders);
+        $path     = $this->resolvePath($filename,$folders);
         
         if(!$path) {
-            throw new FileNotExistException('Can not find file named: '. $name);
+            throw new FileNotExistException('Can not find file named: '. $filename);
         }
         
-        $source = $this->getIo()->contents($name,$path);    
+        $source = $this->getIo()->contents($filename,$path);    
         
         return new Twig_Source($source,$name,implode(DIRECTORY_SEPARATOR,$path));
 
