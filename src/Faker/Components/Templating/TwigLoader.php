@@ -15,12 +15,10 @@ class TwigLoader implements Twig_LoaderInterface
     protected function resolvePath($name, $folders = [])
     {
         $copy = $folders;
-        $path = $this->getIo()->path($folders);
-
+        
         # Base folder for schema/template
         if($this->getIo()->exists($name,$folders) === false) {
             
-            $path = null;
             
             # Not found search base dir for template
             foreach($folders as $folder)   {
@@ -31,7 +29,7 @@ class TwigLoader implements Twig_LoaderInterface
             }
         }
         
-        return $folders;
+        return $copy;
     }
     
     
@@ -46,15 +44,16 @@ class TwigLoader implements Twig_LoaderInterface
     {
         $folders  = explode('/',$name);
         $filename = array_pop($folders);
-        $path     = $this->resolvePath($filename,$folders);
+        
+        $path     = $this->exists($name);
         
         if(!$path) {
             throw new FileNotExistException('Can not find file named: '. $filename);
         }
         
-        $source = $this->getIo()->contents($filename,$path);    
+        $source = $this->getIo()->contents($filename,$folders);    
         
-        return new Twig_Source($source,$name,implode(DIRECTORY_SEPARATOR,$path));
+        return new Twig_Source($source,$name,implode(DIRECTORY_SEPARATOR,$folders));
 
     }
 
@@ -91,13 +90,7 @@ class TwigLoader implements Twig_LoaderInterface
         $folders = explode('/',$name);
         $name = array_pop($folders);
         
-        $path = $this->resolvePath($name, $folders);
-        
-        if(!$path) {
-            return false;
-        }
-        
-        return true;
+        return $this->getIo()->exists($name,$folders);
     }
 
 
