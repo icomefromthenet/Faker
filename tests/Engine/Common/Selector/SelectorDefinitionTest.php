@@ -20,8 +20,8 @@ class SelectorDefinitionTest extends AbstractProject
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock(); 
         $template  = $this->getMockBuilder('Faker\Components\Templating\Loader')->disableOriginalConstructor()->getMock();       
@@ -47,8 +47,8 @@ class SelectorDefinitionTest extends AbstractProject
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock(); 
         $template  = $this->getMockBuilder('Faker\Components\Templating\Loader')->disableOriginalConstructor()->getMock();       
@@ -80,8 +80,8 @@ class SelectorDefinitionTest extends AbstractProject
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock(); 
         $template  = $this->getMockBuilder('Faker\Components\Templating\Loader')->disableOriginalConstructor()->getMock();       
@@ -101,8 +101,8 @@ class SelectorDefinitionTest extends AbstractProject
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock(); 
         $template  = $this->getMockBuilder('Faker\Components\Templating\Loader')->disableOriginalConstructor()->getMock();       
@@ -123,8 +123,8 @@ class SelectorDefinitionTest extends AbstractProject
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock(); 
         $template  = $this->getMockBuilder('Faker\Components\Templating\Loader')->disableOriginalConstructor()->getMock();       
@@ -145,8 +145,8 @@ class SelectorDefinitionTest extends AbstractProject
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock(); 
         $template  = $this->getMockBuilder('Faker\Components\Templating\Loader')->disableOriginalConstructor()->getMock();       

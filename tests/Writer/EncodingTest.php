@@ -22,6 +22,8 @@ class EncodingTest extends AbstractProject
     public function testEncodingBadIn()
     {
         $encoder = new Encoding('aaa','UTF-8');
+        
+        $this->assertTrue(true);
     }
     
     

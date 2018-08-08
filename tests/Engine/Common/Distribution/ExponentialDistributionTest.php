@@ -9,10 +9,10 @@ class ExponentialDistributionTest extends AbstractProject
     
     public function testDistributionInterfaceProperties()
     {
-        $generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $basic     = $this->getMock('PHPStats\BasicStats');
+        $generator = $this->createMock('PHPStats\Generator\GeneratorInterface');
+        $basic     = $this->createMock('PHPStats\BasicStats');
         $lambda    = 0.5;
-        $internal = $this->getMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
+        $internal = $this->createMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
         
         $dist = new ExponentialDistribution($generator,$basic,$lambda);
         
@@ -32,10 +32,10 @@ class ExponentialDistributionTest extends AbstractProject
     
     public function testGeneratorInterfaceProperties()
     {
-        $generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $basic     = $this->getMock('PHPStats\BasicStats');
+        $generator = $this->createMock('PHPStats\Generator\GeneratorInterface');
+        $basic     = $this->createMock('PHPStats\BasicStats');
         $lambda    = 0.5;
-        $internal = $this->getMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
+        $internal = $this->createMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
         
         $generator->expects($this->at(0))
                   ->method('max')
@@ -73,10 +73,10 @@ class ExponentialDistributionTest extends AbstractProject
     public function testGenerate()
     {
         
-        $generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $basic     = $this->getMock('PHPStats\BasicStats');
+        $generator = $this->createMock('PHPStats\Generator\GeneratorInterface');
+        $basic     = $this->createMock('PHPStats\BasicStats');
         $lambda    = 0.5;
-        $internal = $this->getMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
+        $internal = $this->createMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
         
         $generator->expects($this->at(0))
                   ->method('min')

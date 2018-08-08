@@ -16,7 +16,7 @@ class UtilitiesTest extends AbstractProject
         
         $par = $util->generateRandomAlphanumeric('ccCCC',$random,$locale);
 
-        //$this->assertFalse();
+        $this->assertNotEmpty($par);
     }
     
     

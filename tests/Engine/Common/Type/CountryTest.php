@@ -14,9 +14,9 @@ class CountryTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');      
 
         $database  = $this->getProject()->getGeneratorDatabase();
             
@@ -37,9 +37,9 @@ class CountryTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');      
 
         $database  = $this->getProject()->getGeneratorDatabase();
             
@@ -71,9 +71,9 @@ class CountryTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');      
 
         $database  = $this->getProject()->getGeneratorDatabase();
         
@@ -103,9 +103,9 @@ class CountryTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');      
 
         $database  = $this->getProject()->getGeneratorDatabase();
         
@@ -136,9 +136,9 @@ class CountryTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');      
 
         $database  = $this->getProject()->getGeneratorDatabase();
         
@@ -166,9 +166,9 @@ class CountryTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');      
 
         $database  = $this->getProject()->getGeneratorDatabase();
         

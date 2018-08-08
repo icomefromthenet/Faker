@@ -13,9 +13,9 @@ class SelectorCompositeTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         
@@ -23,7 +23,7 @@ class SelectorCompositeTest extends AbstractProject
         
         $id        = 'testnode';
         
-        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
+        $internal  = $this->createMock('\Faker\Components\Engine\Common\Type\TypeInterface');
             
         $type = new SelectorNode($id,$event,$internal);
         $type->setParent($parent);
@@ -40,9 +40,9 @@ class SelectorCompositeTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         
@@ -50,7 +50,7 @@ class SelectorCompositeTest extends AbstractProject
         
         $id        = 'testnode';
         
-        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
+        $internal  = $this->createMock('\Faker\Components\Engine\Common\Type\TypeInterface');
         
         $type = new SelectorNode($id,$event,$internal);
         $type->setParent($parent);
@@ -66,9 +66,9 @@ class SelectorCompositeTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         
@@ -80,7 +80,7 @@ class SelectorCompositeTest extends AbstractProject
         
         $id        = 'testnode';
         
-        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
+        $internal  = $this->createMock('\Faker\Components\Engine\Common\Type\TypeInterface');
         
         $type = new SelectorNode($id,$event,$internal);
         $type->setParent($parent);
@@ -105,9 +105,9 @@ class SelectorCompositeTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         
@@ -124,7 +124,7 @@ class SelectorCompositeTest extends AbstractProject
         
         $id        = 'testnode';
         
-        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
+        $internal  = $this->createMock('\Faker\Components\Engine\Common\Type\TypeInterface');
         
         $internal->expects($this->once())
                ->method('validate'); 
@@ -147,13 +147,13 @@ class SelectorCompositeTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         
-        $event     = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $event     = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         
-        $parent    = $this->getMock('Faker\Components\Engine\Common\Composite\CompositeInterface');
+        $parent    = $this->createMock('Faker\Components\Engine\Common\Composite\CompositeInterface');
         
         $childA    = $this->getMockBuilder('Faker\Components\Engine\Common\Composite\GenericNode')->disableOriginalConstructor()->getMock();
         
@@ -166,7 +166,7 @@ class SelectorCompositeTest extends AbstractProject
         
         $id        = 'testnode';
         
-        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
+        $internal  = $this->createMock('\Faker\Components\Engine\Common\Type\TypeInterface');
         
         $internal->expects($this->once())
                ->method('generate')

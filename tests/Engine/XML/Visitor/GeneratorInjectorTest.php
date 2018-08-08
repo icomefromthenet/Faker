@@ -64,8 +64,8 @@ class GeneratorInjectorTest extends AbstractProject
     {
         $project = $this->getProject();
 
-        $default_generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $factory_mock      = $this->getMock('PHPStats\Generator\GeneratorFactory');
+        $default_generator = $this->createMock('PHPStats\Generator\GeneratorInterface');
+        $factory_mock      = $this->createMock('PHPStats\Generator\GeneratorFactory');
        
         $schema = $this->getComposite();
         

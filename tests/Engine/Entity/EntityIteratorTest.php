@@ -11,7 +11,7 @@ class EntityIteratorTest extends AbstractProject
     
     public function testSetAmount()
     {
-        $composite =  $this->getMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
+        $composite =  $this->createMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
         $amount    =  500;
         
         $iterator = new EntityIterator($amount,$composite);
@@ -29,7 +29,7 @@ class EntityIteratorTest extends AbstractProject
       */    
     public function testSetAmountNonIntegerError()
     {
-        $composite =  $this->getMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
+        $composite =  $this->createMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
         $amount    =  'aaa';
         
         $iterator = new EntityIterator($amount,$composite);
@@ -43,7 +43,7 @@ class EntityIteratorTest extends AbstractProject
       */    
     public function testSetAmountZeroOrNegativeError()
     {
-        $composite =  $this->getMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
+        $composite =  $this->createMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
         $amount    =  0;
         
         $iterator = new EntityIterator($amount,$composite);
@@ -53,7 +53,7 @@ class EntityIteratorTest extends AbstractProject
     
     public function testGeneratorCompositeProperty()
     {
-        $composite =  $this->getMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
+        $composite =  $this->createMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
         $amount    =  100;
         
         $iterator = new EntityIterator($amount,$composite);
@@ -65,7 +65,7 @@ class EntityIteratorTest extends AbstractProject
     
     public function testCacheSetters()
     {
-        $composite =  $this->getMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
+        $composite =  $this->createMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
         $amount    =  100;
         
         $iterator = new EntityIterator($amount,$composite);
@@ -73,13 +73,14 @@ class EntityIteratorTest extends AbstractProject
         $iterator->disableCache();
         $iterator->enableCache();
         
+        $this->assertTrue(true);
     }
     
     
     public function testImplementsIterator()
     {
         
-        $composite =  $this->getMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
+        $composite =  $this->createMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
         $amount    =  100;
         
         $iterator = new EntityIterator($amount,$composite);
@@ -90,7 +91,7 @@ class EntityIteratorTest extends AbstractProject
     
     public function testGenerateWithCacheNoMapper()
     {
-        $composite =  $this->getMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
+        $composite =  $this->createMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
         $amount    =  5;
         
         $iterator = new EntityIterator($amount,$composite,null,true);
@@ -114,7 +115,7 @@ class EntityIteratorTest extends AbstractProject
     
     public function testGenerateNoCacheNoMapper()
     {
-        $composite =  $this->getMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
+        $composite =  $this->createMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
         $amount    =  5;
         
         $iterator = new EntityIterator($amount,$composite,null,true);
@@ -140,7 +141,7 @@ class EntityIteratorTest extends AbstractProject
     
     public function testGenerateWithCacheWithMapper()
     {
-        $composite =  $this->getMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
+        $composite =  $this->createMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
         $amount    =  5;
         
         $iterator = new EntityIterator($amount,$composite,function(GenericEntity $entity){return 1;},false);
@@ -166,7 +167,7 @@ class EntityIteratorTest extends AbstractProject
     
      public function testGenerateNoCacheWithMapper()
     {
-        $composite =  $this->getMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
+        $composite =  $this->createMock('Faker\Components\Engine\Common\Composite\GeneratorInterface');
         $amount    =  5;
         
         $iterator = new EntityIterator($amount,$composite,function(GenericEntity $entity){return 1;},false);

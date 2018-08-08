@@ -28,7 +28,7 @@ class DatasourcePassTest extends AbstractProject
              ->setMethods(array('acceptVisitor'))
              ->getMock();
              
-        $compiler = $this->getMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
+        $compiler = $this->createMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
         
         $path      = new PathBuilder();
         $platformFactory = new PlatformFactory();
@@ -113,7 +113,7 @@ class DatasourcePassTest extends AbstractProject
         
        
         
-        $compiler        = $this->getMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
+        $compiler        = $this->createMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
         
         
         
@@ -202,7 +202,7 @@ class DatasourcePassTest extends AbstractProject
             'uniqueNameA' => $mockSourceCompoisteNodeA
         );
         
-        $compiler        = $this->getMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
+        $compiler        = $this->createMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
         
         
         $visitorMock     = $this->getMockBuilder('Faker\\Components\\Engine\\Common\\Visitor\\DSourceInjectorVisitor')
@@ -240,7 +240,7 @@ class DatasourcePassTest extends AbstractProject
              ->getMock();
              
         
-        $compiler        = $this->getMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
+        $compiler        = $this->createMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
         
         
         $visitorMock     = $this->getMockBuilder('Faker\\Components\\Engine\\Common\\Visitor\\DSourceInjectorVisitor')
@@ -296,7 +296,7 @@ class DatasourcePassTest extends AbstractProject
             'uniqueNameA' => $mockSourceCompoisteNodeA
         );
         
-        $compiler        = $this->getMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
+        $compiler        = $this->createMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
         
         
         $visitorMock     = $this->getMockBuilder('Faker\\Components\\Engine\\Common\\Visitor\\DSourceInjectorVisitor')

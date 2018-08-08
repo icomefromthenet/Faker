@@ -38,7 +38,7 @@ class CompositeExceptionTest extends AbstractProject
     
     public function testBuildPathSimple()
     {
-        $event = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $event = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         
         $root    = new MockRootNode('root',$event);
         $childA  = new MockNode('childA',$event);
@@ -52,7 +52,7 @@ class CompositeExceptionTest extends AbstractProject
     
     public function testBuildPathNested()
     {
-        $event = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $event = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         
         $root    = new MockRootNode('root',$event);
         $childA  = new MockNode('childA',$event);
@@ -67,7 +67,7 @@ class CompositeExceptionTest extends AbstractProject
     
     public function testBuildPathRootNoChildren()
     {
-        $event = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $event = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         
         $root    = new MockRootNode('root',$event);
         

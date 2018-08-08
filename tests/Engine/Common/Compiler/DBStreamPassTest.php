@@ -65,7 +65,7 @@ class DBStreamPassTest extends AbstractProject
         
         # test with valid schema
         
-        $mockCompiler = $this->getMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
+        $mockCompiler = $this->createMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
     
         # execute pass (mock writer will assert correct stream is set)    
         $pass->process($schemaNode,$mockCompiler);
@@ -107,7 +107,7 @@ class DBStreamPassTest extends AbstractProject
         
         
         # test with valid schema
-        $mockCompiler = $this->getMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
+        $mockCompiler = $this->createMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
         
         $pass->process($schemaNode,$mockCompiler);
         
@@ -161,7 +161,7 @@ class DBStreamPassTest extends AbstractProject
         
         # test with valid schema
         
-        $mockCompiler = $this->getMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
+        $mockCompiler = $this->createMock('Faker\\Components\\Engine\\Common\\Compiler\\CompilerInterface');
     
         # execute pass (mock writer will assert correct stream is set)    
         $pass->process($schemaNode,$mockCompiler);

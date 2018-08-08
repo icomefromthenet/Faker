@@ -17,14 +17,14 @@ class ColumnNodeTest extends AbstractProject
     public function testNewObject()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
         
         $id        = 'columnNode';
         
-        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
+        $internal  = $this->createMock('\Faker\Components\Engine\Common\Type\TypeInterface');
             
         $type = new ColumnNode($id,$event,$internal);
         $type->setResultCache($cache);

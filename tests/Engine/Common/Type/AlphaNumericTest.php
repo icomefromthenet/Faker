@@ -13,9 +13,9 @@ class AlphaNumericTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
             
         $type = new AlphaNumeric();
         $type->setGenerator($generator);
@@ -32,16 +32,16 @@ class AlphaNumericTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface'); 
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface'); 
                           
         $utilities->expects($this->once())
                    ->method('generateRandomAlphanumeric')
                    ->with($this->equalTo('ccCC'))
                    ->will($this->returnValue('dgHJ'));
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
         
             
         $type = new AlphaNumeric();
@@ -62,16 +62,16 @@ class AlphaNumericTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface'); 
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface'); 
                           
         $utilities->expects($this->exactly(4))
                    ->method('generateRandomAlphanumeric')
                    ->with($this->equalTo('ccCC'))
                    ->will($this->returnValue('dgHJ'));
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
         
             
         $type = new AlphaNumeric();
@@ -97,9 +97,9 @@ class AlphaNumericTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface'); 
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface'); 
                           
         $utilities->expects($this->once())
                    ->method('generateRandomAlphanumeric')
@@ -128,9 +128,9 @@ class AlphaNumericTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface'); 
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface'); 
                           
         $utilities->expects($this->any())
                    ->method('generateRandomAlphanumeric')
@@ -181,9 +181,9 @@ class AlphaNumericTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface'); 
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface'); 
                           
         $type = new AlphaNumeric();
         $type->setGenerator($generator);
@@ -206,9 +206,9 @@ class AlphaNumericTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface'); 
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface'); 
                           
         $type = new AlphaNumeric();
         $type->setGenerator($generator);
@@ -232,9 +232,9 @@ class AlphaNumericTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface'); 
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface'); 
                           
         $type = new AlphaNumeric();
         $type->setGenerator($generator);

@@ -220,6 +220,8 @@ class BuilderExamplesTest extends AbstractProject
         
         $event->dispatch(FormatEvents::onSchemaStart);
         $event->dispatch(FormatEvents::onSchemaEnd);
+        
+        $this->assertTrue(true);
     }
     
     public function testPHPDataSourceDefinitionReturnedFromDatasourceBuilder()

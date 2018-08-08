@@ -32,7 +32,7 @@ class CacheInjectorPassTest extends AbstractProject
         
         $graph          =  $visitor->getResult();
         
-        $compiler       = $this->getMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
+        $compiler       = $this->createMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
         $compiler->expects($this->once())
                  ->method('getGraph')
                  ->will($this->returnValue($graph));
@@ -55,7 +55,7 @@ class CacheInjectorPassTest extends AbstractProject
         $pass           = new CacheInjectorPass();
         $visitor        = new DirectedGraphVisitor(new DirectedGraph(),new PathBuilder());
         
-        $composite      = $this->getComposite();
+        $composite      = $this->getSilentComposite();
         $composite->acceptVisitor($visitor);
         
         $tables         = $composite->getChildren();
@@ -65,7 +65,7 @@ class CacheInjectorPassTest extends AbstractProject
         
         $graph          =  $visitor->getResult();
         
-        $compiler       = $this->getMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
+        $compiler       = $this->createMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
         $compiler->expects($this->once())
                  ->method('getGraph')
                  ->will($this->returnValue($graph));
@@ -74,11 +74,12 @@ class CacheInjectorPassTest extends AbstractProject
         
         
         # test that the cache been injected into the ColumnNode (producer)
-        $this->assertNull(null,$columnsTable1[0]->getResultCache());
+        $this->assertNull($columnsTable1[0]->getResultCache());
+        
         
         #test that the cache been injected into the ForeignKeyNode (consumer)
         $fk = $columnsTable3[1]->getChildren();
-        $this->assertNull(null,$fk[0]->getResultCache());
+        $this->assertNull($fk[0]->getResultCache());
         
     }
     

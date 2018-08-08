@@ -81,7 +81,7 @@ class WhenTest extends AbstractProject
         
         $whenNode = new WhenNode($id,$event);
         $whenNode->setOption('until',100); 
-        $whenNode->validate();
+        $this->assertTrue($whenNode->validate());
     }
     
     public function testValidatesChildren()
@@ -117,9 +117,9 @@ class WhenTest extends AbstractProject
         $event      = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $node       = new WhenNode($id,$event); 
         
-        $utilities  = $this->getMock('Faker\Components\Engine\Common\Utilities');
-        $generator  = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $locale     = $this->getMock('Faker\Locale\LocaleInterface');
+        $utilities  = $this->createMock('Faker\Components\Engine\Common\Utilities');
+        $generator  = $this->createMock('PHPStats\Generator\GeneratorInterface');
+        $locale     = $this->createMock('Faker\Locale\LocaleInterface');
         
         $node->setUtilities($utilities);
         $node->setLocale($locale);

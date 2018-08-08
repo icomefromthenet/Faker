@@ -13,7 +13,7 @@ use Symfony\Component\Config\Definition\Builder\NodeDefinition;
  * @since 1.0.4
  *
  */
-class Null extends Type
+class NullType extends Type
 {
 
     public function generate($rows, &$values = array(),$last = array())

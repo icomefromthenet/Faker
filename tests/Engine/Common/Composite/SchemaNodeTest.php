@@ -16,8 +16,8 @@ class SchemaNodeTest extends AbstractProject
     public function testNewObject()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         
         $id        = 'schemaNode';
@@ -32,8 +32,8 @@ class SchemaNodeTest extends AbstractProject
     public function testCompositeProperties()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $id        = 'schemaNode';
         
@@ -51,8 +51,8 @@ class SchemaNodeTest extends AbstractProject
     public function testValidateWithChildren()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $id        = 'schemaNode';
         $child   = $this->getMockBuilder('Faker\Components\Engine\Common\Composite\CompositeInterface')->getMock();
@@ -73,8 +73,8 @@ class SchemaNodeTest extends AbstractProject
     public function testValidationErrorNoChildren()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $id        = 'schemaNode';
         
@@ -91,8 +91,8 @@ class SchemaNodeTest extends AbstractProject
     public function testValidateFailsWithEmptyId()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $id        = null;
         

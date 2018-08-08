@@ -16,15 +16,15 @@ class SchemaNodeTest extends AbstractProject
     
     public function testNewObject()
     {
-        $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
-        $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $utilities = $this->createMock('Faker\Components\Engine\Common\Utilities'); 
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
+        $event     = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
         
         $id        = 'schemaNode';
         
-        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
+        $internal  = $this->createMock('\Faker\Components\Engine\Common\Type\TypeInterface');
             
         $type = new SchemaNode($id,$event,$internal);
         $type->setResultCache($cache);
@@ -132,7 +132,7 @@ class SchemaNodeTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $schemaNode = new SchemaNode($id,$event);
      
-        $dSource = $this->getMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
+        $dSource = $this->createMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
         
         $dSource->expects($this->exactly(1))
                 ->method('cleanupSource');

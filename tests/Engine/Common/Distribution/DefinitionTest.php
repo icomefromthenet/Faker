@@ -15,8 +15,8 @@ class DefinitionTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock();
                           
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                            ->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')
@@ -51,8 +51,8 @@ class DefinitionTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock();
                           
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                            ->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')
@@ -88,8 +88,8 @@ class DefinitionTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock();
                           
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
                            ->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')

@@ -32,7 +32,7 @@ class TopOrderRefPassTest extends AbstractProject
         # assert inital order what expected
         $this->assertEquals(array('tableC','tableB','tableA'),$firstOrder); 
         
-        $compiler   = $this->getMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
+        $compiler   = $this->createMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
         $compiler->expects($this->once())
                  ->method('getGraph')
                  ->will($this->returnValue($graph));

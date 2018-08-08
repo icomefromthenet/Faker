@@ -14,7 +14,7 @@ class ExtensionTest extends AbstractProject
         $id = 'when_1';
         $event  = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
-        $gen    = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $gen    = $this->createMock('PHPStats\Generator\GeneratorInterface');
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock(); 

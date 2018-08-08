@@ -13,9 +13,9 @@ class EmailTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');      
 
         $database  = $this->getProject()->getGeneratorDatabase();
             
@@ -36,9 +36,9 @@ class EmailTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');      
 
         $database  = $this->getProject()->getGeneratorDatabase();
             
@@ -67,9 +67,9 @@ class EmailTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');      
 
         $database  = $this->getProject()->getGeneratorDatabase();
             
@@ -91,9 +91,9 @@ class EmailTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');      
 
         $database  = $this->getProject()->getGeneratorDatabase();
         
@@ -104,7 +104,7 @@ class EmailTest extends AbstractProject
         
         $utilities->expects($this->exactly(2))
                    ->method('generateRandomAlphanumeric')
-                   ->with($this->isType('string'),$this->isInstanceOf($generator),$this->isInstanceOf($locale))
+                   ->with($this->isType('string'),$this->equalTo($generator),$this->equalTo($locale))
                    ->will($this->onConsecutiveCalls('ddDDD','1111'));
         
         $type = new Email($database);

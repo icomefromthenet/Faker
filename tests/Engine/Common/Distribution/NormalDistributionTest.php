@@ -9,9 +9,9 @@ class NormalDistributionTest extends AbstractProject
     
     public function testDistributionInterfaceProperties()
     {
-        $generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $basic     = $this->getMock('PHPStats\BasicStats');
-        $internal = $this->getMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
+        $generator = $this->createMock('PHPStats\Generator\GeneratorInterface');
+        $basic     = $this->createMock('PHPStats\BasicStats');
+        $internal = $this->createMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
         
         $dist = new NormalDistribution($generator,$basic);
         
@@ -28,9 +28,9 @@ class NormalDistributionTest extends AbstractProject
     
     public function testGeneratorInterfaceProperties()
     {
-        $generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $basic     = $this->getMock('PHPStats\BasicStats');
-        $internal = $this->getMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
+        $generator = $this->createMock('PHPStats\Generator\GeneratorInterface');
+        $basic     = $this->createMock('PHPStats\BasicStats');
+        $internal = $this->createMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
         
         $generator->expects($this->at(0))
                   ->method('max')
@@ -68,9 +68,9 @@ class NormalDistributionTest extends AbstractProject
     public function testGenerate()
     {
         
-        $generator = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $basic     = $this->getMock('PHPStats\BasicStats');
-        $internal = $this->getMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
+        $generator = $this->createMock('PHPStats\Generator\GeneratorInterface');
+        $basic     = $this->createMock('PHPStats\BasicStats');
+        $internal = $this->createMock('PHPStats\PDistribution\ProbabilityDistributionInterface');
         
         $generator->expects($this->at(0))
                   ->method('min')

@@ -12,10 +12,10 @@ class FormatterTest extends AbstractProject
     public function testImplementsInterface()
     {
         $id = 'table_1';
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $parent = $this->getMockBuilder('Faker\Components\Engine\Original\Composite\CompositeInterface')->getMock();
+        $event = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $parent = $this->createMock('Faker\Components\Engine\Common\Composite\CompositeInterface');
         
-        $formatter = $this->getMock('Faker\Components\Engine\Common\Formatter\FormatterInterface');
+        $formatter = $this->createMock('Faker\Components\Engine\Common\Formatter\FormatterInterface');
         
         $formatterNode = new FormatterNode($id,$event,$formatter);
         
@@ -29,9 +29,9 @@ class FormatterTest extends AbstractProject
     public function testOptionsProperties()
     {
         $id = 'schema_1';
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $event = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         
-        $formatter = $this->getMock('Faker\Components\Engine\Common\Formatter\FormatterInterface');
+        $formatter = $this->createMock('Faker\Components\Engine\Common\Formatter\FormatterInterface');
         $formatter->expects($this->once())->method('setOption')->with($this->equalTo('locale'),$this->equalTo('en'));
         
         $formatterNode = new FormatterNode($id,$event,$formatter);
@@ -42,13 +42,13 @@ class FormatterTest extends AbstractProject
     public function testTypeInterfaceProperties()
     {
         $id         = 'fk_table_1';
-        $event      = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-         $formatter = $this->getMock('Faker\Components\Engine\Common\Formatter\FormatterInterface');
+        $event      = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+         $formatter = $this->createMock('Faker\Components\Engine\Common\Formatter\FormatterInterface');
         $node       = new FormatterNode($id,$event,$formatter); 
         
-        $utilities  = $this->getMock('Faker\Components\Engine\Common\Utilities');
-        $generator  = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $locale     = $this->getMock('Faker\Locale\LocaleInterface');
+        $utilities  = $this->createMock('Faker\Components\Engine\Common\Utilities');
+        $generator  = $this->createMock('PHPStats\Generator\GeneratorInterface');
+        $locale     = $this->createMock('Faker\Locale\LocaleInterface');
         
         $node->setUtilities($utilities);
         $node->setLocale($locale);

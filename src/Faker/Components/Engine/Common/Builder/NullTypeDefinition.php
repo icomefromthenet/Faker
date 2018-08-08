@@ -3,7 +3,7 @@ namespace Faker\Components\Engine\Common\Builder;
 
 use Faker\Components\Engine\Common\Composite\CompositeInterface;
 use Faker\Components\Engine\Common\Composite\TypeNode;
-use Faker\Components\Engine\Common\Type\Null;
+use Faker\Components\Engine\Common\Type\NullType;
 
 /**
   *  Definition for the Null Datatype
@@ -28,7 +28,7 @@ class NullTypeDefinition extends AbstractDefinition
     */
     public function getNode()
     {
-        $type = new Null();
+        $type = new NullType();
         $type->setGenerator($this->generator);
         $type->setUtilities($this->utilities);
         $type->setLocale($this->locale);

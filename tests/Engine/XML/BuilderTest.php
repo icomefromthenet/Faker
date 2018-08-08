@@ -237,6 +237,8 @@ class BuilderTest extends AbstractProject
         
        $builder->setTypeOption('ab','cdef');
        
+       $this->assertTrue(true);
+       
     }
     
     /**
@@ -371,7 +373,7 @@ class BuilderTest extends AbstractProject
     {
         # override the event handler with mock
         $project = $this->getProject();
-        $event = $project['event_dispatcher'] = $this->getMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
+        $event = $project['event_dispatcher'] = $this->createMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
         
         
         # listen for validation events
@@ -409,7 +411,7 @@ class BuilderTest extends AbstractProject
     {
          # override the event handler with mock
         $project = $this->getProject();
-        $event = $project['event_dispatcher'] = $this->getMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
+        $event = $project['event_dispatcher'] = $this->createMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
         
         
         # listen for validation events
@@ -439,7 +441,7 @@ class BuilderTest extends AbstractProject
     {
         # override the event handler with mock
         $project = $this->getProject();
-        $event = $project['event_dispatcher'] = $this->getMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
+        $event = $project['event_dispatcher'] = $this->createMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
         
         
         # listen for validation events

@@ -18,15 +18,15 @@ class BasicDefinitionTest extends AbstractProject
     public function testNoErrorDuringPropertyAssignment()
     {
         $event  = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $gen    = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $gen    = $this->createMock('PHPStats\Generator\GeneratorInterface');
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock();     
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');
         $template  = $this->getMockBuilder('Faker\Components\Templating\Loader')->disableOriginalConstructor()->getMock(); 
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
      
-        $parent = $this->getMock('Faker\Components\Engine\Common\Builder\NodeInterface');
+        $parent = $this->createMock('Faker\Components\Engine\Common\Builder\NodeInterface');
      
      
         $def = new AbstractDefinition();
@@ -50,15 +50,15 @@ class BasicDefinitionTest extends AbstractProject
     public function testGetNodeThrowsError()
     {
         $event  = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $gen    = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $gen    = $this->createMock('PHPStats\Generator\GeneratorInterface');
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock();     
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');
         $template  = $this->getMockBuilder('Faker\Components\Templating\Loader')->disableOriginalConstructor()->getMock(); 
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
      
-        $parent = $this->getMock('Faker\Components\Engine\Common\Builder\NodeInterface');
+        $parent = $this->createMock('Faker\Components\Engine\Common\Builder\NodeInterface');
      
      
         $def = new AbstractDefinition();
@@ -78,11 +78,11 @@ class BasicDefinitionTest extends AbstractProject
     public function testCommonConstructor()
     {
         $event  = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $gen    = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $gen    = $this->createMock('PHPStats\Generator\GeneratorInterface');
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock();     
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');
         $template  = $this->getMockBuilder('Faker\Components\Templating\Loader')->disableOriginalConstructor()->getMock(); 
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
      
@@ -93,7 +93,7 @@ class BasicDefinitionTest extends AbstractProject
                                            
      
         # assume that the parent builder will be a definition node that impelement ParentInterface so a schema,table,column
-        $parent = $this->getMock('\Faker\Components\Engine\Common\Builder\ParentNodeInterface');
+        $parent = $this->createMock('\Faker\Components\Engine\Common\Builder\ParentNodeInterface');
      
         $parent->expects($this->once())
                ->method('append')
@@ -124,11 +124,11 @@ class BasicDefinitionTest extends AbstractProject
     public function testIdAttribute()
     {
         $event  = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $gen    = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $gen    = $this->createMock('PHPStats\Generator\GeneratorInterface');
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock();     
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');
         $template  = $this->getMockBuilder('Faker\Components\Templating\Loader')->disableOriginalConstructor()->getMock(); 
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
      
@@ -139,7 +139,7 @@ class BasicDefinitionTest extends AbstractProject
                                            
      
         # assume that the parent builder will be a definition node that impelement ParentInterface so a schema,table,column
-        $parent = $this->getMock('\Faker\Components\Engine\Common\Builder\ParentNodeInterface');
+        $parent = $this->createMock('\Faker\Components\Engine\Common\Builder\ParentNodeInterface');
      
         $parent->expects($this->once())
                ->method('append')

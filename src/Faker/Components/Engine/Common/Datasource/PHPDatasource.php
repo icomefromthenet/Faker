@@ -82,7 +82,7 @@ class PHPDatasource extends AbstractDatasource
     {
         $dsource = $this->getIterator();
         
-        if(false instanceof \Iterator) {
+        if(!$dsource instanceof \Iterator) {
             throw new EngineException('The datasource must be an iterator');
         }
     }

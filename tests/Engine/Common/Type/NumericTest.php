@@ -14,9 +14,9 @@ class NumericTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');   
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
             
         $type = new Numeric();
         $type->setGenerator($generator);
@@ -35,9 +35,9 @@ class NumericTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');   
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
             
         $type = new Numeric();
         $type->setGenerator($generator);
@@ -45,7 +45,8 @@ class NumericTest extends AbstractProject
         $type->setUtilities($utilities);
         
         $type->setOption('format' ,'xxxx');
-        $type->validate();        
+        $this->assertTrue($type->validate());        
+        
     }
     
     //  -------------------------------------------------------------------------
@@ -60,9 +61,9 @@ class NumericTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');   
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
             
         $type = new Numeric();
         $type->setGenerator($generator);
@@ -83,9 +84,9 @@ class NumericTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');   
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
                           
         $utilities->expects($this->once())
                    ->method('generateRandomNum')
@@ -111,9 +112,9 @@ class NumericTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');   
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
 
                           
         $utilities->expects($this->once())

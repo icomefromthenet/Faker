@@ -15,9 +15,9 @@ class UniqueTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
         
         $type = new UniqueString();
         $type->setGenerator($generator);
@@ -42,9 +42,9 @@ class UniqueTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
         
         $type = new UniqueString();
         $type->setGenerator($generator);
@@ -75,13 +75,13 @@ class UniqueTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
                           
         $utilities->expects($this->once())
                    ->method('generateRandomAlphanumeric')
-                   ->with($this->equalTo('ccCC'),$this->isInstanceOf($generator),$this->isInstanceOf($locale))
+                   ->with($this->equalTo('ccCC'),$this->equalTo($generator),$this->equalTo($locale))
                    ->will($this->returnValue('dgHJ'));
        
         
@@ -106,13 +106,13 @@ class UniqueTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
                           
         $utilities->expects($this->once())
                    ->method('generateRandomNum')
-                   ->with($this->equalTo('XXxx'),$this->isInstanceOf($generator))
+                   ->with($this->equalTo('XXxx'),$this->equalTo($generator))
                    ->will($this->returnValue(1207));
         
         $type = new UniqueNumber();

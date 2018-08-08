@@ -17,8 +17,8 @@ class ForeignKeyNodeTest extends AbstractProject
     public function testNewObject()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
         
@@ -126,10 +126,10 @@ class ForeignKeyNodeTest extends AbstractProject
       */
     public function testValidationFailsNoForignTableSet()
     {
-        $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
-        $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $utilities = $this->createMock('Faker\Components\Engine\Common\Utilities'); 
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
+        $event     = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $id        = 'foreignKeyNode';
         $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
          
@@ -150,8 +150,8 @@ class ForeignKeyNodeTest extends AbstractProject
     public function testValidationFailsNoForignColumnSet()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $id        = 'foreignKeyNode';
         $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
@@ -169,8 +169,8 @@ class ForeignKeyNodeTest extends AbstractProject
     public function testValidationPass()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $id        = 'foreignKeyNode';
         $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();

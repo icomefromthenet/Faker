@@ -201,9 +201,9 @@ class TextTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-          $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+          $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-          $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+          $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
             
           $type = new Text();
           $type->setGenerator($generator);
@@ -222,9 +222,9 @@ class TextTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-          $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+          $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-          $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+          $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
             
           $type = new Text();
           $type->setGenerator($generator);
@@ -253,9 +253,9 @@ class TextTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-          $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+          $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-          $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+          $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
             
           $type = new Text();
           $type->setGenerator($generator);
@@ -280,9 +280,9 @@ class TextTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-          $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+          $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-          $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+          $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
             
           $type = new Text();
           $type->setGenerator($generator);
@@ -307,9 +307,9 @@ class TextTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-          $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+          $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-          $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+          $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
             
           $type = new Text();
           $type->setGenerator($generator);
@@ -339,9 +339,9 @@ class TextTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-          $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+          $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-          $locale    = $this->getMock('\Faker\Locale\LocaleInterface'); 
+          $locale    = $this->createMock('\Faker\Locale\LocaleInterface');  
      
           $generator->expects($this->any())
                   ->method('generate')
@@ -379,9 +379,9 @@ class TextTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-          $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+          $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-          $locale    = $this->getMock('\Faker\Locale\LocaleInterface'); 
+          $locale    = $this->createMock('\Faker\Locale\LocaleInterface');  
           
           $generator->expects($this->any())
                   ->method('generate')

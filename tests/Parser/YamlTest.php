@@ -78,6 +78,8 @@ EOF;
         
         $parser->parse($file,$options);
         
+         $this->assertTrue(true);
+        
     }
     
     public function testXMLParseVFile()

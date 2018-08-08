@@ -11,7 +11,7 @@ class ColumnTest extends AbstractProject
     public function testImplementsInterface()
     {
         $id = 'table_1';
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $event = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         
         $column = new ColumnNode($id,$event);
         
@@ -26,7 +26,7 @@ class ColumnTest extends AbstractProject
     public function testOptionsProperties()
     {
         $id = 'schema_1';
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $event = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $column = new ColumnNode($id,$event);
         
         $column->setOption('locale','en');
@@ -40,7 +40,7 @@ class ColumnTest extends AbstractProject
         $id = 'column_1';
         $generate = 100;
        
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $event = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $type  = $this->getMockBuilder('Doctrine\DBAL\Types\Type')->disableOriginalConstructor()->getMock();
         
         $type->expects($this->once())
@@ -208,12 +208,12 @@ class ColumnTest extends AbstractProject
     public function testTypeInterfaceProperties()
     {
         $id         = 'fk_table_1';
-        $event      = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $event      = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $node       = new ColumnNode($id,$event); 
         
-        $utilities  = $this->getMock('Faker\Components\Engine\Common\Utilities');
-        $generator  = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $locale     = $this->getMock('Faker\Locale\LocaleInterface');
+        $utilities  = $this->createMock('Faker\Components\Engine\Common\Utilities');
+        $generator  = $this->createMock('PHPStats\Generator\GeneratorInterface');
+        $locale     = $this->createMock('Faker\Locale\LocaleInterface');
         
         $node->setUtilities($utilities);
         $node->setLocale($locale);

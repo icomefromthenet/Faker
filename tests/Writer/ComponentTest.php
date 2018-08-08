@@ -82,6 +82,8 @@ class ComponentTest extends AbstractProject
         $writer->write('line');
         
         $writer->flush();
+        
+        $this->assertTrue(true);
             
       }
 }

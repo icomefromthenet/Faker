@@ -17,9 +17,9 @@ class ColumnNodeTest extends AbstractProject
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         
@@ -27,7 +27,7 @@ class ColumnNodeTest extends AbstractProject
         
         $id        = 'columnNode';
         
-        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
+        $internal  = $this->createMock('\Faker\Components\Engine\Common\Type\TypeInterface');
             
         $type = new ColumnNode($id,$event,$internal);
         $type->setParent($parent);
@@ -40,8 +40,8 @@ class ColumnNodeTest extends AbstractProject
     public function testCompositeProperties()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent    = $this->getMockBuilder('Faker\Components\Engine\Common\Composite\CompositeInterface')->getMock();
         $parentB   = $this->getMockBuilder('Faker\Components\Engine\Common\Composite\CompositeInterface')->getMock();
@@ -67,8 +67,8 @@ class ColumnNodeTest extends AbstractProject
     public function testValidateWithChildren()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent    = $this->getMockBuilder('Faker\Components\Engine\Common\Composite\CompositeInterface')->getMock();
         $id        = 'columnNode';
@@ -91,8 +91,8 @@ class ColumnNodeTest extends AbstractProject
     public function testValidationErrorNoChildren()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent    = $this->getMockBuilder('Faker\Components\Engine\Common\Composite\CompositeInterface')->getMock();
         $id        = 'columnNode';
@@ -111,8 +111,8 @@ class ColumnNodeTest extends AbstractProject
     public function testValidateFailsWithEmptyId()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent    = $this->getMockBuilder('Faker\Components\Engine\Common\Composite\CompositeInterface')->getMock();
         $id        = null;
@@ -128,8 +128,8 @@ class ColumnNodeTest extends AbstractProject
     public function testDBALInterfaceImplemented()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $parent    = $this->getMockBuilder('Faker\Components\Engine\Common\Composite\CompositeInterface')->getMock();
         $id        = 'columnNode';

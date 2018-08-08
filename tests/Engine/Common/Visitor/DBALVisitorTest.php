@@ -10,7 +10,7 @@ class DBALVisitorTest extends AbstractProject
 
     public function testImplementsBaiscVisitor()
     {
-        $valueMapper = $this->getMock('Faker\Components\Engine\Common\Formatter\ValueConverter');
+        $valueMapper = $this->createMock('Faker\Components\Engine\Common\Formatter\ValueConverter');
         $visitor     = new DBALGathererVisitor($valueMapper);
         
         $this->assertInstanceOf('Faker\Components\Engine\Common\Visitor\BasicVisitor',$visitor);
@@ -21,7 +21,7 @@ class DBALVisitorTest extends AbstractProject
     
     public function testProperties()
     {
-        $valueMapper = $this->getMock('Faker\Components\Engine\Common\Formatter\ValueConverter');
+        $valueMapper = $this->createMock('Faker\Components\Engine\Common\Formatter\ValueConverter');
         $visitor     = new DBALGathererVisitor($valueMapper);
         
         $this->assertEquals($valueMapper,$visitor->getResult());
@@ -31,7 +31,7 @@ class DBALVisitorTest extends AbstractProject
     public function testVisitorAccept()
     {
         $composite    = $this->getMockBuilder('Faker\Components\Engine\Common\Composite\ColumnNode')->disableOriginalConstructor()->getMock();
-        $valueMapper  = $this->getMock('Faker\Components\Engine\Common\Formatter\ValueConverter');
+        $valueMapper  = $this->createMock('Faker\Components\Engine\Common\Formatter\ValueConverter');
         $id           = 'column1';
         $doctrineType = $this->getMockBuilder('Doctrine\DBAL\Types\Type')
                          ->setMethods(array('getSQLDeclaration','getName','convertToDatabaseValue'))
@@ -59,8 +59,8 @@ class DBALVisitorTest extends AbstractProject
     
     public function testVisitorIgnoresNode()
     {
-        $composite    = $this->getMock('Faker\Components\Engine\Common\Composite\CompositeInterface');
-        $valueMapper  = $this->getMock('Faker\Components\Engine\Common\Formatter\ValueConverter');
+        $composite    = $this->createMock('Faker\Components\Engine\Common\Composite\CompositeInterface');
+        $valueMapper  = $this->createMock('Faker\Components\Engine\Common\Formatter\ValueConverter');
         
         $visitor     = new DBALGathererVisitor($valueMapper);          
         $visitor->visitDBALGatherer($composite);
@@ -72,10 +72,12 @@ class DBALVisitorTest extends AbstractProject
     
     public function testVisitorReset()
     {
-        $valueMapper  = $this->getMock('Faker\Components\Engine\Common\Formatter\ValueConverter');
+        $valueMapper  = $this->createMock('Faker\Components\Engine\Common\Formatter\ValueConverter');
         $visitor     = new DBALGathererVisitor($valueMapper);          
         
         $visitor->reset();
+        
+        $this->assertTrue(true);
     }
     
     

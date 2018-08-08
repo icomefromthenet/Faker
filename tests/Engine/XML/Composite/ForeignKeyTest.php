@@ -10,7 +10,7 @@ class ForeignKeyTest extends AbstractProject
     public function testImplementsInterface()
     {
         $id = 'fk_table_1';
-        $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $event = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         
         $node = new ForeignKeyNode($id,$event);
         
@@ -24,12 +24,12 @@ class ForeignKeyTest extends AbstractProject
     public function testTypeInterfaceProperties()
     {
         $id         = 'fk_table_1';
-        $event      = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $event      = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $node       = new ForeignKeyNode($id,$event); 
         
-        $utilities  = $this->getMock('Faker\Components\Engine\Common\Utilities');
-        $generator  = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $locale     = $this->getMock('Faker\Locale\LocaleInterface');
+        $utilities  = $this->createMock('Faker\Components\Engine\Common\Utilities');
+        $generator  = $this->createMock('PHPStats\Generator\GeneratorInterface');
+        $locale     = $this->createMock('Faker\Locale\LocaleInterface');
         
         $node->setUtilities($utilities);
         $node->setLocale($locale);
@@ -65,7 +65,7 @@ class ForeignKeyTest extends AbstractProject
     public function testValidatesFailsWhenForeignKeyTableNotSet()
     {
         $id         = 'fk_table_1';
-        $event      = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $event      = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $node       = new ForeignKeyNode($id,$event); 
         
         $node->setOption('name','fk1');
@@ -78,7 +78,7 @@ class ForeignKeyTest extends AbstractProject
     public function testValidationOk()
     {
         $id         = 'fk_table_1';
-        $event      = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $event      = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $node       = new ForeignKeyNode($id,$event); 
         
         $node->setOption('name','fk1');

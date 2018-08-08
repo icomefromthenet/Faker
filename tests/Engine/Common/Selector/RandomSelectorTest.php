@@ -15,9 +15,9 @@ class RandomSelectorTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');
         
         
         $type = new RandomSelector();
@@ -42,9 +42,9 @@ class RandomSelectorTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');
         
         
         $type = new RandomSelector();
@@ -68,9 +68,9 @@ class RandomSelectorTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');
         
         
         $type = new RandomSelector();
@@ -96,9 +96,9 @@ class RandomSelectorTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');
         
         
         $type = new RandomSelector();
@@ -120,12 +120,12 @@ class RandomSelectorTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');
     
        
         
             
-        $generatorA = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $generatorA = $this->createMock('PHPStats\Generator\GeneratorInterface');
         $generatorA->expects($this->at(0))
                   ->method('generate')
                   ->with($this->equalTo(1),$this->equalTo(1))

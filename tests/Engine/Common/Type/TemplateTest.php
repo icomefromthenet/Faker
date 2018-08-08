@@ -14,9 +14,9 @@ class TemplateTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
         
         $loader    = $this->getProject()->getTemplatingManager()->getLoader();
             
@@ -42,9 +42,9 @@ class TemplateTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
         
         $loader    = $this->getProject()->getTemplatingManager()->getLoader();
             
@@ -68,9 +68,9 @@ class TemplateTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
         
         $loader    = $this->getProject()->getTemplatingManager()->getLoader();
             
@@ -92,15 +92,15 @@ class TemplateTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
         
         $template_loader  = $this->getMockBuilder('Faker\Components\Templating\Loader')
                                  ->disableOriginalConstructor()
                                  ->getMock();
         
-        $io     = $this->getMock('Faker\Io\IoInterface');
+        $io     = $this->createMock('Faker\Io\IoInterface');
         
         $io->expects($this->once())
             ->method('exists')
@@ -126,9 +126,9 @@ class TemplateTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');  
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');   
         
         $loader    = $this->getProject()->getTemplatingManager()->getLoader();
     

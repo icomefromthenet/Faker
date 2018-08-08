@@ -1,7 +1,7 @@
 <?php
 namespace Faker\Tests\Engine\Common\Type;
 
-use Faker\Components\Engine\Common\Type\Null;
+use Faker\Components\Engine\Common\Type\NullType;
 use Faker\Tests\Base\AbstractProject;
 
 class NullTest extends AbstractProject
@@ -14,11 +14,11 @@ class NullTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');   
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
             
-        $type = new Null();
+        $type = new NullType();
         $type->setGenerator($generator);
         $type->setLocale($locale);
         $type->setUtilities($utilities);
@@ -35,11 +35,11 @@ class NullTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');   
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
             
-        $type = new Null();
+        $type = new NullType();
         $type->setGenerator($generator);
         $type->setLocale($locale);
         $type->setUtilities($utilities);
@@ -56,11 +56,11 @@ class NullTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock(); 
         
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
             
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');   
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
             
-        $type = new Null();
+        $type = new NullType();
         $type->setGenerator($generator);
         $type->setLocale($locale);
         $type->setUtilities($utilities);

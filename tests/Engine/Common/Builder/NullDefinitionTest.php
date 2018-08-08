@@ -1,7 +1,7 @@
 <?php
 namespace Faker\Tests\Engine\Common\Builder;
 
-use Faker\Components\Engine\Common\Type\Null;
+use Faker\Components\Engine\Common\Type\NullType;
 use Faker\Components\Engine\Common\Builder\NullTypeDefinition;
 use Faker\Tests\Base\AbstractProject;
 
@@ -13,8 +13,8 @@ class NullDefinitionTest extends AbstractProject
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
             
@@ -35,8 +35,8 @@ class NullDefinitionTest extends AbstractProject
          $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
         
@@ -52,7 +52,7 @@ class NullDefinitionTest extends AbstractProject
         $typeNode = $type->getNode();
         $interalType = $typeNode->getType();
         
-        $this->assertInstanceOf('Faker\Components\Engine\Common\Type\Null',$interalType);
+        $this->assertInstanceOf('Faker\Components\Engine\Common\Type\NullType',$interalType);
         $this->assertInstanceOf('\Faker\Components\Engine\Common\Composite\TypeNode',$typeNode);
         
     }
@@ -64,8 +64,8 @@ class NullDefinitionTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock();
                           
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
         

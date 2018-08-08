@@ -13,8 +13,8 @@ class DateDefinitionTest extends AbstractProject
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
             
@@ -35,8 +35,8 @@ class DateDefinitionTest extends AbstractProject
          $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
         
@@ -64,8 +64,8 @@ class DateDefinitionTest extends AbstractProject
                           ->disableOriginalConstructor()
                           ->getMock();
                           
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');    
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');    
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
         
@@ -80,11 +80,21 @@ class DateDefinitionTest extends AbstractProject
         $max    = new \DateTime();
         $modify = '+ 1 hour';
         
-        $typeNode = $type->startDate($start)->maxDate($max)->modifyTime($modify)->pickRandomBetweenMinMax()->getNode(); 
+        $typeNode = $type
+            ->startDate($start)
+                ->maxDate($max)
+                ->modifyTime($modify)
+                ->pickRandomBetweenMinMax()
+            ->getNode(); 
+        
         $interalType = $typeNode->getType();
         
-        $this->assertTrue($start == new \DateTime($interalType->getOption('start')));
-        $this->assertTrue($max == new \DateTime($interalType->getOption('max')));
+        $oStartOption = new \DateTime($interalType->getOption('start'));
+        $oMaxOption  = new \DateTime($interalType->getOption('max'));
+        
+        $this->assertEquals($start->format('d-m-Y'),$oStartOption->format('d-m-Y') );
+        $this->assertEquals($max->format('d-m-Y'),$oMaxOption->format('d-m-Y'));
+        
         $this->assertEquals(true,$interalType->getOption('random'));
         $this->assertEquals($modify,$interalType->getOption('modify'));
 

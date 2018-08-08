@@ -28,7 +28,7 @@ class CircularRefPassTest extends AbstractProject
         $composite = $this->getComposite();
         $graph = $this->buildDirectedGraph($composite);
 
-        $compiler = $this->getMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
+        $compiler = $this->createMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
         $compiler->expects($this->once())
                  ->method('getGraph')
                  ->will($this->returnValue($graph));
@@ -49,7 +49,7 @@ class CircularRefPassTest extends AbstractProject
         $composite = $this->getCompositeCircularRefOnSelf();
         $graph = $this->buildDirectedGraph($composite);
 
-        $compiler = $this->getMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
+        $compiler = $this->createMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
         $compiler->expects($this->once())
                  ->method('getGraph')
                  ->will($this->returnValue($graph));
@@ -64,7 +64,7 @@ class CircularRefPassTest extends AbstractProject
         $composite = $this->getCompositeNoCircularRef();
         $graph = $this->buildDirectedGraph($composite);
         
-        $compiler = $this->getMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
+        $compiler = $this->createMock('Faker\Components\Engine\Common\Compiler\CompilerInterface');
         $compiler->expects($this->once())
                  ->method('getGraph')
                  ->will($this->returnValue($graph));

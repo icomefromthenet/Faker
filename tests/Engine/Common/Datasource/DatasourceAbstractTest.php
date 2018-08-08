@@ -11,11 +11,11 @@ class DatasourceAbstractTest extends AbstractProject
     public function testBaiscProperties()
     {
         $event  = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $gen    = $this->getMock('PHPStats\Generator\GeneratorInterface');
+        $gen    = $this->createMock('PHPStats\Generator\GeneratorInterface');
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')
                           ->disableOriginalConstructor()
                           ->getMock();     
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');
         $database  = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
         
         $mock = new MockDatasource();

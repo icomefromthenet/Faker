@@ -17,15 +17,15 @@ class TableNodeTest extends AbstractProject
     public function testNewObject()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
         $toGenerate= 1;
         
         $id        = 'tableNode';
         
-        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
+        $internal  = $this->createMock('\Faker\Components\Engine\Common\Type\TypeInterface');
             
         $type = new TableNode($id,$event,$internal);
         $type->setResultCache($cache);
@@ -184,15 +184,15 @@ class TableNodeTest extends AbstractProject
     public function testValidationFailsRowsToGenerateBadType()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
         $toGenerate= '1';
         
         $id        = 'tableNode';
         
-        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
+        $internal  = $this->createMock('\Faker\Components\Engine\Common\Type\TypeInterface');
             
         $type = new TableNode($id,$event,$internal);
         $type->setResultCache($cache);
@@ -208,15 +208,15 @@ class TableNodeTest extends AbstractProject
     public function testValidationFailsRowsToGenerateBadRange()
     {
         $utilities = $this->getMockBuilder('Faker\Components\Engine\Common\Utilities')->getMock(); 
-        $generator = $this->getMock('\PHPStats\Generator\GeneratorInterface');
-        $locale    = $this->getMock('\Faker\Locale\LocaleInterface');     
+        $generator = $this->createMock('\PHPStats\Generator\GeneratorInterface');
+        $locale    = $this->createMock('\Faker\Locale\LocaleInterface');     
         $event     = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $cache     = $this->getMockBuilder('Faker\Components\Engine\Common\GeneratorCache')->disableOriginalConstructor()->getMock();
         $toGenerate= 0;
         
         $id        = 'tableNode';
         
-        $internal  = $this->getMock('\Faker\Components\Engine\Common\Type\TypeInterface');
+        $internal  = $this->createMock('\Faker\Components\Engine\Common\Type\TypeInterface');
             
         $type = new TableNode($id,$event,$internal);
         $type->setResultCache($cache);
@@ -232,7 +232,7 @@ class TableNodeTest extends AbstractProject
         $event = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $tableNode = new TableNode($id,$event);
      
-        $dSource = $this->getMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
+        $dSource = $this->createMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
         
         $dSource->expects($this->once())
                 ->method('fetchOne');

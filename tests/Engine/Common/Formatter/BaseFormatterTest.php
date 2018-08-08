@@ -11,7 +11,7 @@ class BaseFormatterTest extends AbstractProject
     public function testOptionInterface()
     {
         $event    = $this->getMockBuilder('\Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $writer   = $this->getMock('Faker\Components\Writer\WriterInterface');
+        $writer   = $this->createMock('Faker\Components\Writer\WriterInterface');
         $visitor  = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
         $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
                          ->getMockForAbstractClass();
@@ -34,7 +34,7 @@ class BaseFormatterTest extends AbstractProject
     public function testMissingOptionException()
     {
          $event    = $this->getMockBuilder('\Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $writer   = $this->getMock('Faker\Components\Writer\WriterInterface');
+        $writer   = $this->createMock('Faker\Components\Writer\WriterInterface');
         $visitor  = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
         $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
                          ->getMockForAbstractClass();
@@ -47,9 +47,9 @@ class BaseFormatterTest extends AbstractProject
     
     public function testProperties()
     {
-        $writer = $this->getMock('\Faker\Components\Writer\WriterInterface');
+        $writer = $this->createMock('\Faker\Components\Writer\WriterInterface');
         $visitor = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
-        $event = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $event = $this->createMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
                          ->getMockForAbstractClass();
         
@@ -61,9 +61,9 @@ class BaseFormatterTest extends AbstractProject
         $this->assertEquals($visitor,$base->getVisitor());
         
         
-        $writerB = $this->getMock('\Faker\Components\Writer\WriterInterface');
+        $writerB = $this->createMock('\Faker\Components\Writer\WriterInterface');
         $visitorB = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
-        $eventB = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $eventB = $this->createMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $platformB = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
                          ->getMockForAbstractClass();
         
@@ -82,9 +82,9 @@ class BaseFormatterTest extends AbstractProject
     
     public function testMergeMissingDefaults()
     {
-        $writer = $this->getMock('\Faker\Components\Writer\WriterInterface');
+        $writer = $this->createMock('\Faker\Components\Writer\WriterInterface');
         $visitor = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
-        $event = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $event = $this->createMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
                          ->getMockForAbstractClass();
         
@@ -98,9 +98,9 @@ class BaseFormatterTest extends AbstractProject
     
     public function testMergeMissingValues()
     {
-        $writer = $this->getMock('\Faker\Components\Writer\WriterInterface');
+        $writer = $this->createMock('\Faker\Components\Writer\WriterInterface');
         $visitor = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
-        $event = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $event = $this->createMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
                          ->getMockForAbstractClass();
         
@@ -117,9 +117,9 @@ class BaseFormatterTest extends AbstractProject
       */
     public function testMergeBadValues()
     {
-        $writer = $this->getMock('\Faker\Components\Writer\WriterInterface');
+        $writer = $this->createMock('\Faker\Components\Writer\WriterInterface');
         $visitor = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
-        $event = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $event = $this->createMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
                          ->getMockForAbstractClass();
         
@@ -133,9 +133,9 @@ class BaseFormatterTest extends AbstractProject
     
     public function testMergeGoodValues()
     {
-        $writer = $this->getMock('\Faker\Components\Writer\WriterInterface');
+        $writer = $this->createMock('\Faker\Components\Writer\WriterInterface');
         $visitor = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\DBALGathererVisitor')->disableOriginalConstructor()->getMock();
-        $event = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $event = $this->createMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $platform = $this->getMockBuilder('\Doctrine\DBAL\Platforms\AbstractPlatform')
                          ->getMockForAbstractClass();
         

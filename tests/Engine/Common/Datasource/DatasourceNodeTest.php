@@ -11,10 +11,10 @@ class DatasourceNodeTest extends AbstractProject
     public function testNodeDatasourcesInterface()
     {
         
-        $event  = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $event  = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         
-        $datasourceInternalA = $this->getMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
-        $datasourceInternalB = $this->getMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
+        $datasourceInternalA = $this->createMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
+        $datasourceInternalB = $this->createMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
         $nodeId     = 'mynode';
         
         $node = new DatasourceNode($nodeId,$event,$datasourceInternalA);   
@@ -28,9 +28,9 @@ class DatasourceNodeTest extends AbstractProject
     public function testParentProperties()
     {
         
-        $event  = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $datasourceInternal = $this->getMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
-        $parentNode         = $this->getMock('Faker\Components\Engine\Common\Composite\CompositeInterface');   
+        $event  = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $datasourceInternal = $this->createMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
+        $parentNode         = $this->createMock('Faker\Components\Engine\Common\Composite\CompositeInterface');   
         $nodeId     = 'mynode';
         
         $node = new DatasourceNode($nodeId,$event,$datasourceInternal);   
@@ -46,18 +46,19 @@ class DatasourceNodeTest extends AbstractProject
     
     public function testVisitorInterface()
     {
-        $visitor = $this->getMockBuilder('Faker\Components\Engine\Common\Visitor\BasicVisitor')
-                        ->getMock();
+        $visitor = $this->createMock('Faker\Components\Engine\Common\Visitor\BasicVisitor');
         
         # add new visitors here when created 
         
-        $event  = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $datasourceInternal = $this->getMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
+        $event  = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $datasourceInternal = $this->createMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
         $nodeId     = 'mynode';
         
         $node = new DatasourceNode($nodeId,$event,$datasourceInternal);  
         
         $node->acceptVisitor($visitor);
+        
+        $this->assertTrue(true);
         
     }
     
@@ -67,9 +68,9 @@ class DatasourceNodeTest extends AbstractProject
     */ 
    public function testNodeNotAcceptChildren()
    {
-        $event  = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $datasourceInternal = $this->getMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
-        $childNode         = $this->getMock('Faker\Components\Engine\Common\Composite\CompositeInterface');   
+        $event  = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $datasourceInternal = $this->createMock('Faker\Components\Engine\Common\Datasource\DatasourceInterface');
+        $childNode         = $this->createMock('Faker\Components\Engine\Common\Composite\CompositeInterface');   
         $nodeId     = 'mynode';
         
         $node = new DatasourceNode($nodeId,$event,$datasourceInternal);  

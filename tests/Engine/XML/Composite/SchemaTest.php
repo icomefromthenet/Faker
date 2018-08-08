@@ -181,9 +181,9 @@ class SchemaTest extends AbstractProject
         $event      = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $node       = new SchemaNode($id,$event); 
         
-        $utilities  = $this->getMock('Faker\Components\Engine\Common\Utilities');
-        $generator  = $this->getMock('PHPStats\Generator\GeneratorInterface');
-        $locale     = $this->getMock('Faker\Locale\LocaleInterface');
+        $utilities  = $this->createMock('Faker\Components\Engine\Common\Utilities');
+        $generator  = $this->createMock('PHPStats\Generator\GeneratorInterface');
+        $locale     = $this->createMock('Faker\Locale\LocaleInterface');
         
         $node->setUtilities($utilities);
         $node->setLocale($locale);
