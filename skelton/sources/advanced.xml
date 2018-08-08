@@ -448,12 +448,12 @@
   -->
   <column name="active" type="boolean">
    <swap>
-     <when at="900">
+     <when until="900">
       <datatype name="boolean">
        <option name="value" value="true" />
       </datatype>
      </when>
-     <when at="100">
+     <when until="100">
         <datatype name="boolean">
        <option name="value" value="false" />
       </datatype>
@@ -1048,12 +1048,12 @@
   -->
   <column name="active" type="boolean">
    <swap>
-     <when at="900">
+     <when until="900">
       <datatype name="boolean">
        <option name="value" value="true" />
       </datatype>
      </when>
-     <when at="100">
+     <when until="100">
         <datatype name="boolean">
        <option name="value" value="false" />
       </datatype>
