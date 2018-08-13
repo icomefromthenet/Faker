@@ -38,7 +38,7 @@ class ExceptionHandler
     //  -------------------------------------------------------------------------
     # Global Exception Handler
 
-    public function exceptionHandler(\Exception $exception)
+    public function exceptionHandler(\Throwable $exception)
     {
 
         #Send the error to the log file

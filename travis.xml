@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true" 
+         stopOnFailure="false" 
+         bootstrap="vendor/autoload.php"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+>
+<php>
+    <env name="DB_DSN" value="mysql:dbname=general_ledger;host=localhost" />
+    <env name="DB_USER" value="root" />
+    <env name="DB_PASSWD" value="" />
+    <env name="DB_HOST" value="localhost" />
+    <env name="DB_DBNAME" value="sakila" />
+    <server name="APP_ENVIRONMENT" value="travis" />
+    
+</php> 
+  
+    <testsuites>
+        <testsuite>
+            <directory>tests/*</directory>
+            <exclude>
+                <directory>tests/base</directory>
+            </exclude>
+        </testsuite>
+  </testsuites>  
+    
+</phpunit>

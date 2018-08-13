@@ -10,3 +10,4 @@ composer.lock
 examples/dump/*.sql
 examples/dump/*.xml
 .c9
+phpunit.xml
