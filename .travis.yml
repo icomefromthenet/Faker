@@ -6,6 +6,6 @@ php:
 before_script:
   - composer install 
   - mysql -e 'CREATE DATABASE sakila;'
-  - mysql sakila < tests/base/sakila-schema.sql
+  - mysql sakila < tests/Base/sakila-schema.sql 
   
 script: vendor/bin/phpunit --configuration="travis.xml"
